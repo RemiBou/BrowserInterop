@@ -1,0 +1,33 @@
+trigger:
+- master
+
+pool:
+  vmImage: 'vs2017-win2016'
+
+variables:
+  buildConfiguration: 'Release'
+
+steps:
+- task: DotNetCoreInstaller@0
+  displayName: 'Install SDK'
+  inputs:
+    version: 2.2.100	
+- task: NuGetToolInstaller@0
+  inputs:
+    versionSpec: '4.9.2' 
+- task: DotNetCoreCLI@2
+  displayName: 'dotnet pack'
+  inputs:
+    command: pack
+    packagesToPack: RemiBou.Blazor.BrowserProfiling/RemiBou.Blazor.BrowserProfiling.csproj
+    versioningScheme: byPrereleaseNumber
+    configuration: $(buildConfiguration)
+    majorVersion: '0' 
+    minorVersion: '0' 
+    patchVersion: '0'
+    verbosityPack: Detailed
+- task: NuGetCommand@2
+  inputs:
+    command: push
+    nuGetFeedType: external
+    publishFeedCredentials: 'Nuget'
