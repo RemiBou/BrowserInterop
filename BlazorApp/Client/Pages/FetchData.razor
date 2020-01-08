@@ -41,7 +41,7 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        await using(await jsRuntime.ProfileStep("Get weather"))
+        using(jsRuntime.ProfileStepSync("Get weather"))
         {
             forecasts = await Http.GetJsonAsync<WeatherForecast[]>("WeatherForecast");
         }

@@ -15,8 +15,16 @@ namespace RemiBou.Blazor.BrowserProfiling
             return new BlazorProfilingStep(jsRuntime, stepName);
 
         }
+        public static IDisposable ProfileStepSync(this IJSRuntime jsRuntime, string stepName)
+        {
+            var stepId = Interlocked.Increment(ref CallCount);
+            stepName = stepName+"#"+stepId;
+            Task.Run(() => jsRuntime.InvokeAsync<string>("console.time", stepName));
+            return new BlazorProfilingStep(jsRuntime, stepName);
 
-        private class BlazorProfilingStep : IAsyncDisposable
+        }
+
+        private class BlazorProfilingStep : IAsyncDisposable, IDisposable
         {
             private string stepName;
             private IJSRuntime jsRuntime;
@@ -28,6 +36,11 @@ namespace RemiBou.Blazor.BrowserProfiling
             public async ValueTask DisposeAsync ()
             {
                 await jsRuntime.InvokeAsync<string>("console.timeEnd", stepName);
+
+            }
+            public void Dispose ()
+            {
+                Task.Run(() => jsRuntime.InvokeAsync<string>("console.timeEnd", stepName));
 
             }
             
