@@ -55,8 +55,17 @@ Welcome to your new app.</span>
             await Task.Delay(100);
         }
 
-        await window.Console.Tab(new List<SampleClass>{new SampleClass(1,"Log object"), new SampleClass(2,"Log object2")}, "id");
-        
+        await window.Console.Table(new List<SampleClass>{new SampleClass(1,"Log object"), new SampleClass(2,"Log object2")}, "id");
+
+      
+        await using(await window.Console.Time("sub task"))
+        {
+            await Task.Delay(100);
+            await window.Console.TimeLog("sub task");
+            await Task.Delay(100);
+        }
+        await window.Console.TimeStamp("a timestamp");
+        await window.Console.Trace(new []{new SampleClass(1,"dir object"), new SampleClass(2,"dir object2")});
     }
 
     public class SampleClass{

@@ -214,7 +214,7 @@ namespace RemiBou.Blazor.BrowserInterop
         ///  the profiling session will be closed when Dispose is called.
         /// You can see a profiling session by going in dev tool => 3 dots menu => more tools => Javascript Profiler
         /// </summary>
-        /// <param name="label">group label</param>
+        /// <param name="label">profiler name</param>
         /// <returns></returns>
         public async Task<IAsyncDisposable> Profile(string name = null)
         {
@@ -228,9 +228,71 @@ namespace RemiBou.Blazor.BrowserInterop
         /// <param name="objectToDisplay">Objects to display</param>
         /// <param name="columns">Columns to display, if no parameters then all the columns are displayed</param>
         /// <returns></returns>
-        public async Task Tab<T>(IEnumerable<T> objectToDisplay, params string[] columns)
+        public async Task Table<T>(IEnumerable<T> objectToDisplay, params string[] columns)
         {
             await jsRuntime.InvokeVoidAsync("console.table", objectToDisplay, columns);
+        }
+
+        /// <summary>
+        /// Start a timer, it's label and execution time will be shown on the profiling session (only the ones in the Performance tab, not the ones started with the Profile lethod) and on the console
+        /// </summary>
+        /// <param name="name">The label displayed</param>
+        /// <returns></returns>
+        public async Task TimeStart(string label)
+        {
+            await jsRuntime.InvokeVoidAsync("console.time", label);
+        }
+
+        /// <summary>
+        /// End a timer, it's label and execution time will be shown on the profiling (not the one started) session and on the console
+        /// </summary>
+        /// <param name="name">The label displayed</param>
+        /// <returns></returns>
+        public async Task TimeEnd(string label)
+        {
+            await jsRuntime.InvokeVoidAsync("console.timeEnd", label);
+        }
+
+        /// <summary>
+        /// Conveniant method for starting and ending a timer around a piece of code with the using syntax :
+        ///  the timer session will be ended when Dispose is called.
+        /// </summary>
+        /// <param name="label">The label displayed</param>
+        /// <returns></returns>
+        public async Task<IAsyncDisposable> Time(string label)
+        {
+            await TimeStart(label);
+            return new ActionAsyncDisposable(() => TimeEnd(label));
+        }
+
+        /// <summary>
+        /// Display the given timer time in the console, it must be done when the timer is running
+        /// </summary>
+        /// <param name="name">The label displayed</param>
+        /// <returns></returns>
+        public async Task TimeLog(string label)
+        {
+            await jsRuntime.InvokeVoidAsync("console.timeLog", label);
+        }
+
+        /// <summary>
+        /// Display a marker on the profiling sessions
+        /// </summary>
+        /// <param name="name">The label displayed</param>
+        /// <returns></returns>
+        public async Task TimeStamp(string label)
+        {
+            await jsRuntime.InvokeVoidAsync("console.timeStamp", label);
+        }
+
+        /// <summary>
+        /// Will print the current browser stack trace (not the .net runtime stacktrace, for this use Environment.StackTrace) with this objects 
+        /// </summary>
+        /// <param name="printedObjects">objects to print in the console</param>
+        /// <returns></returns>
+        public async Task Trace(params object[] printedObjects)
+        {
+            await jsRuntime.InvokeVoidAsync("console.trace", printedObjects);
         }
 
         private class ActionAsyncDisposable : IAsyncDisposable
