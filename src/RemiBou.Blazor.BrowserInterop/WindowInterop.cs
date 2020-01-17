@@ -1,17 +1,19 @@
 ﻿using Microsoft.JSInterop;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
+using System;
 
 namespace RemiBou.Blazor.BrowserInterop
 {
 
     public class WindowInterop
     {
-        private IJSRuntime jsRuntime;
-        private ConsoleInterop consoleInterop;
+        private readonly Lazy<ConsoleInterop> consoleInteropLazy;
+        private readonly Lazy<NavigatorInterop> navigatorInteropLazy;
         internal WindowInterop(IJSRuntime jsRuntime)
         {
-            this.jsRuntime = jsRuntime;
+            consoleInteropLazy = new Lazy<ConsoleInterop>(() => new ConsoleInterop(jsRuntime));
+            navigatorInteropLazy = new Lazy<NavigatorInterop>(() => new NavigatorInterop(jsRuntime));
         }
 
         /// <summary>
@@ -22,11 +24,19 @@ namespace RemiBou.Blazor.BrowserInterop
         {
             get
             {
-                if (consoleInterop == null)
-                {
-                    consoleInterop = new ConsoleInterop(jsRuntime);
-                }
-                return consoleInterop;
+                return consoleInteropLazy.Value;
+            }
+        }
+
+        /// <summary>
+        /// Will return an instance of NavigatorInterop that'll give access to window.navigator API
+        /// </summary>
+        /// <value></value>
+        public NavigatorInterop Navigator
+        {
+            get
+            {
+                return navigatorInteropLazy.Value;
             }
         }
     }
