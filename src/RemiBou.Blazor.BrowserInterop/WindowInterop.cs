@@ -8,6 +8,7 @@ namespace RemiBou.Blazor.BrowserInterop
 
     public class WindowInterop
     {
+
         private readonly Lazy<ConsoleInterop> consoleInteropLazy;
         private readonly Lazy<NavigatorInterop> navigatorInteropLazy;
         internal WindowInterop(IJSRuntime jsRuntime)
@@ -15,6 +16,8 @@ namespace RemiBou.Blazor.BrowserInterop
             consoleInteropLazy = new Lazy<ConsoleInterop>(() => new ConsoleInterop(jsRuntime));
             navigatorInteropLazy = new Lazy<NavigatorInterop>(() => new NavigatorInterop(jsRuntime));
         }
+
+
 
         /// <summary>
         /// Will return an instance of ConsoleInteorp that'll give access to window.console API

@@ -1,24 +1,22 @@
 ﻿@page "/"
 @inject IJSRuntime jsRuntime;
 @using RemiBou.Blazor.BrowserInterop
-<h1>Hello, world!</h1>
+<h1>Console API Interop Demo, look at the console to see what we are talking about</h1>
 <div @ref="block">
     <div>
         <span>
-Welcome to your new app.</span>
+WA demo HTML block for window.Console.DirXml</span>
     </div>
 </div>
-
-<SurveyPrompt Title="How is Blazor working for you?" />
 
 
 @code {
     ElementReference block;
     protected override async Task OnInitializedAsync()
     {
-        var window = jsRuntime.Window();
+        var window = await jsRuntime.Window();
 
-        await window.Console.Clear();
+        //await window.Console.Clear();
 
         await window.Console.Assert(false,new SampleClass(1,"should be displayed as object"), new SampleClass(2,"should be displayed as object"));
         await window.Console.Assert(false,"should be displayed as {0} {1}", "text","and text also");
