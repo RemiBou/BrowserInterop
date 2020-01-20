@@ -43,10 +43,7 @@ namespace RemiBou.Blazor.BrowserInterop
         /// Return a JS Interop wrapper for getting information about the network connection of a device.
         /// </summary>
         /// <returns></returns>
-        public NetworkInformationInterop Connection()
-        {
-            return new NetworkInformationInterop(jsRuntime);
-        }
+        public NetworkInformationInterop Connection { get; set; }
 
         /// <summary>
         /// Returns false if setting a cookie will be ignored and true otherwise.
