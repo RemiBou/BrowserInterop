@@ -49,83 +49,55 @@ namespace RemiBou.Blazor.BrowserInterop
         /// Returns false if setting a cookie will be ignored and true otherwise.
         /// </summary>
         /// <returns></returns>
-        public async Task<bool> CookieEnabled()
-        {
-            return await jsRuntime.InvokeAsync<bool>("navigator.cookieEnabled");
-        }
-
+        public bool CookieEnabled{get;set;}
 
         /// <summary>
         /// Returns the number of logical processor cores available.
         /// </summary>
         /// <returns></returns>
-        public async Task<int> HardwareConcurrency()
-        {
-            return await jsRuntime.InvokeAsync<int>("navigator.hardwareConcurrency");
-        }
+        public int HardwareConcurrency{get;set;}
 
         /// <summary>
         /// Returns false if the browser enables java
         /// </summary>
         /// <returns></returns>
-        public async Task<bool> JavaEnabled()
-        {
-            return await jsRuntime.InvokeAsync<bool>("navigator.javaEnabled");
-        }
+        public bool JavaEnabled{get;set;}
 
         /// <summary>
         /// The user prefred language
         /// </summary>
         /// <returns></returns>
-        public async Task<string> Language()
-        {
-            return await jsRuntime.InvokeAsync<string>("navigator.language");
-        }
+        public string Language{get;set;}
 
         /// <summary>
         /// Return all the user set languages
         /// </summary>
         /// <returns></returns>
-        public async Task<string[]> Languages()
-        {
-            return await jsRuntime.InvokeAsync<string[]>("navigator.languages");
-        }
+        public string[] Languages{get;set;}
 
         /// <summary>
         /// Returns the maximum number of touch point supported by the current device
         /// </summary>
         /// <returns></returns>
-        public async Task<int> MaxTouchPoints()
-        {
-            return await jsRuntime.InvokeAsync<int>("navigator.maxTouchPoints");
-        }
+        public int MaxTouchPoints{get;set;}
 
         /// <summary>
         /// Returns the mime types supported by the browser
         /// </summary>
         /// <returns></returns>
-        public async Task<MimeTypeInterop[]> MimeTypes()
-        {
-            return await jsRuntime.InvokeAsync<MimeTypeInterop[]>("browserInterop.navigator.mimeTypes");
-        }
+        public MimeTypeInterop[] MimeTypes{get;set;}
 
         /// <summary>
         /// Returns true if the user is online
         /// </summary>
         /// <returns></returns>
-        public async Task<bool> Online()
-        {
-            return await jsRuntime.InvokeAsync<bool>("navigator.online");
-        }
+        public bool Online{get;set;}
 
         /// <summary>
         /// Returns a string representing the platform of the browser.
         /// </summary>
         /// <value></value>
-        public async Task<string> Platform()
-        {
-            return await jsRuntime.InvokeAsync<string>("navigator.platform");
-        }
+        public string Platform{get;set;}
 
 
         /// <summary>
@@ -133,19 +105,13 @@ namespace RemiBou.Blazor.BrowserInterop
         /// </summary>
         /// <returns></returns>
 
-        protected async Task<PluginInterop[]> Plugins()
-        {
-            return await jsRuntime.InvokeAsync<PluginInterop[]>("browserInterop.navigator.plugins");
-        }
+        public PluginInterop[] Plugins{get;set;}
 
         /// <summary>
         /// Return the user agent string for the browser
         /// </summary>
         /// <value></value>
-        public async Task<string> UserAgent()
-        {
-            return await jsRuntime.InvokeAsync<string>("navigator.userAgent");
-        }
+        public string UserAgent{get;set;}
 
     }
 

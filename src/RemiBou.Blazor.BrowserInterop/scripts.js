@@ -1,3 +1,4 @@
+
 browserInterop = {
     getProperty: function (propertyName) {
         var splitProperty = propertyName.split('.');
@@ -6,6 +7,46 @@ browserInterop = {
             currentProperty = currentProperty[splitProperty[i]];
         }
         return currentProperty;
+    },
+    getAsJson: function (propertyName) {
+        var alreadySerialized = [];//this is for avoiding infinite loop
+        function getSerializableObject(data) {
+            var res = {};
+            for (var i in data) {
+                var currentMember = data[i];
+
+                if (typeof currentMember === 'function' || currentMember === null) {
+                    continue;
+                } else if (typeof currentMember === 'object') {
+                    if (alreadySerialized.indexOf(currentMember) < 0) {
+                        alreadySerialized.push(currentMember);
+                        if (Array.isArray(currentMember) || currentMember.length) {
+                            res[i] = [];
+                            for (var j = 0; j < currentMember.length; j++) {
+                                const arrayItem = currentMember[j];
+                                if (typeof arrayItem === 'object') {
+                                    res[i].push(getSerializableObject(arrayItem));
+                                } else {
+                                    res[i].push(arrayItem);
+                                }
+                            }
+                        } else {
+                            res[i] = getSerializableObject(currentMember);
+
+                        }
+                    }
+                
+                } else {
+                    // string, number or boolean
+                    res[i] = currentMember;
+                }
+            }
+            return res;
+        }
+        var data = browserInterop.getProperty(propertyName);
+        var res = getSerializableObject(data);
+        console.log(res, JSON.stringify(res));
+        return res;
     },
     navigator: {
         mimeTypes: function () {

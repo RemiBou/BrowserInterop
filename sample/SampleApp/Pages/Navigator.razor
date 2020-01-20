@@ -5,20 +5,28 @@
 <h1>Navigator API Interop Demo</h1>
 <h2>Navigator : </h2>
 @if(navigator != null){
-    <ul>
-        <li id="navigator-app-code-name">@navigator.AppCodeName</li>  
-        <li id="navigator-app-name">@navigator.AppName</li>
-        <li id="navigator-app-version">@navigator.AppVersion</li>
-        <li>
-            Connection :
-            <ul>
-                <li id="navigator-connection-downlink">@navigator.Connection.Downlink.ToString(CultureInfo.InvariantCulture)</li>
-                <li id="navigator-connection-downlinkmax">@navigator.Connection.DownlinkMax.ToString(CultureInfo.InvariantCulture)</li>
-                <li id="navigator-connection-effectiveType">@navigator.Connection.EffectiveType</li>
-                <li>@navigator.Connection.EffectiveTypeEnum</li>
-            </ul>
-        </li>
-    </ul>
+<ul>
+    <li id="navigator-app-code-name">@navigator.AppCodeName</li>
+    <li id="navigator-app-name">@navigator.AppName</li>
+    <li id="navigator-app-version">@navigator.AppVersion</li>
+    <li>
+        Connection :
+        <ul>
+            <li id="navigator-connection-downlink">@navigator.Connection.Downlink.ToString(CultureInfo.InvariantCulture)</li>
+            <li id="navigator-connection-downlinkmax">@navigator.Connection.DownlinkMax.ToString(CultureInfo.InvariantCulture)</li>
+            <li id="navigator-connection-effectiveType">@navigator.Connection.EffectiveType</li>
+            <li>@navigator.Connection.EffectiveTypeEnum</li>
+            <li id="navigator-connection-rtt">@navigator.Connection.Rtt</li>
+            <li id="navigator-connection-saveData">@navigator.Connection.SaveData.ToString().ToLower()</li>
+            <li id="navigator-connection-type">@navigator.Connection.Type</li>
+            <li id="navigator-connection-typeEnum">@navigator.Connection.TypeEnum</li>
+            <li id="navigator-cookieEnabled">@navigator.CookieEnabled.ToString().ToLower()</li>
+            <li id="navigator-hardwareConcurrency">@navigator.HardwareConcurrency</li>
+            <li id="navigator-javaEnabled">@navigator.JavaEnabled.ToString().ToLower()</li>
+            <li id="navigator-language">@navigator.Language</li>
+        </ul>
+    </li>
+</ul>
 }
 
 @code {

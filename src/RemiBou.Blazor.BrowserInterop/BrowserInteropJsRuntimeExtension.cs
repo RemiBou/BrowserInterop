@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Reflection;
 using System.Runtime.CompilerServices;
@@ -27,7 +28,9 @@ namespace RemiBou.Blazor.BrowserInterop
             // I don't handle concurrent access, multiple initialization are not a problem and we can't await in a lock
             if (!ScriptInitialized)
             {
-                using var ressourceStream = typeof(BrowserInteropJsRuntimeExtension).GetType().Assembly.GetManifestResourceStream("scripts.js");
+                var assembly = typeof(WindowInterop).Assembly;
+
+                using var ressourceStream =assembly.GetManifestResourceStream("RemiBou.Blazor.BrowserInterop.scripts.js");
                 using var ressourceReader = new StreamReader(ressourceStream);
                 await jSRuntime.InvokeVoidAsync("eval",ressourceReader.ReadToEnd());
                 ScriptInitialized = true;
