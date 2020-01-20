@@ -21,6 +21,28 @@ namespace RemiBou.Blazor.BrowserInterop
                 }
                 return currentProperty;
             },
+            getAsJson: function(propertyName){
+                var alreadySerialized = [];//this is for avoiding infinite loop
+                function getSerializableObject(data){
+                    var res = {};                    
+                    for (var i in data) {
+                        if (typeof data[i] === 'function') {
+                            continue;
+                        } else if (typeof data[i] === 'object') {      
+                            if(alreadySerialized.indexOf(data[i]) < 0){
+                                alreadySerialized.push(data[i]) ;                     
+                                res[i] = getSerializableObject(data[i]);
+                            }
+                        } else {
+                            // string, number or boolean
+                            res[i] = data[i];
+                        }
+                    }
+                    return res;
+                }
+                var data = browserInterop.getProperty(propertyName);
+                return getSerializableObject(data);                
+            },
             navigator: {
                 mimeTypes: function(){
                     var res = [];

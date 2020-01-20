@@ -3,24 +3,19 @@
 @using RemiBou.Blazor.BrowserInterop
 <h1>Navigator API Interop Demo</h1>
 <h2>Navigator : </h2>
-<ul>
-    <li>@navigatorAppCodeName</li>
-    <li>@navigatorAppName</li>
-    <li>@navigatorAppVersion</li>
-    <li>        
-    </li>
-</ul>
+@if(navigator != null){
+    <ul>
+        <li id="navigator-app-code-name">@navigator.AppCodeName</li>  
+        <li id="navigator-app-name">@navigator.AppName</li>
+        <li id="navigator-app-version">@navigator.AppVersion</li>
+    </ul>
+}
 
 @code {
     private NavigatorInterop navigator;
-    private string navigatorAppCodeName;
-    private string navigatorAppName;
-    private string navigatorAppVersion;
     protected override async Task OnInitializedAsync()
     {
         var window = await jsRuntime.Window();
-        navigatorAppCodeName = await window.Navigator.AppCodeName();
-        navigatorAppName = await window.Navigator.AppName();
-        navigatorAppVersion = await window.Navigator.AppVersion();
+        navigator = await window.Navigator();
     }
 }
