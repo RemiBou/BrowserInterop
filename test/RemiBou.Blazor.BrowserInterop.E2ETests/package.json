@@ -1,0 +1,14 @@
+{
+  "name": "remibou.blazor.browserinterop.e2etests",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "./node_modules/.bin/cypress open"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "cypress": "^3.8.2"
+  }
+}

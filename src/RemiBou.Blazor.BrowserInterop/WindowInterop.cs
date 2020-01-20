@@ -10,11 +10,12 @@ namespace RemiBou.Blazor.BrowserInterop
     {
 
         private readonly Lazy<ConsoleInterop> consoleInteropLazy;
-        private readonly Lazy<NavigatorInterop> navigatorInteropLazy;
+        private readonly IJSRuntime jsRuntime;
+
         internal WindowInterop(IJSRuntime jsRuntime)
         {
             consoleInteropLazy = new Lazy<ConsoleInterop>(() => new ConsoleInterop(jsRuntime));
-            navigatorInteropLazy = new Lazy<NavigatorInterop>(() => new NavigatorInterop(jsRuntime));
+            this.jsRuntime = jsRuntime;
         }
 
 
@@ -35,12 +36,11 @@ namespace RemiBou.Blazor.BrowserInterop
         /// Will return an instance of NavigatorInterop that'll give access to window.navigator API
         /// </summary>
         /// <value></value>
-        public NavigatorInterop Navigator
+        public async Task<NavigatorInterop> Navigator()
         {
-            get
-            {
-                return navigatorInteropLazy.Value;
-            }
+            NavigatorInterop navigatorInterop = await jsRuntime.InvokeAsync<NavigatorInterop>("browserInterop.getAsJson", "navigator");
+            navigatorInterop.SetJSRuntime(jsRuntime);
+            return navigatorInterop;
         }
     }
 }

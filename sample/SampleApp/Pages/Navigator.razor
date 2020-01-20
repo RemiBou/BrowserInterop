@@ -1,26 +1,31 @@
 @page "/navigator"
 @inject IJSRuntime jsRuntime;
 @using RemiBou.Blazor.BrowserInterop
+@using System.Globalization
 <h1>Navigator API Interop Demo</h1>
 <h2>Navigator : </h2>
-<ul>
-    <li>@navigatorAppCodeName</li>
-    <li>@navigatorAppName</li>
-    <li>@navigatorAppVersion</li>
-    <li>        
-    </li>
-</ul>
+@if(navigator != null){
+    <ul>
+        <li id="navigator-app-code-name">@navigator.AppCodeName</li>  
+        <li id="navigator-app-name">@navigator.AppName</li>
+        <li id="navigator-app-version">@navigator.AppVersion</li>
+        <li>
+            Connection :
+            <ul>
+                <li id="navigator-connection-downlink">@navigator.Connection.Downlink.ToString(CultureInfo.InvariantCulture)</li>
+                <li id="navigator-connection-downlinkmax">@navigator.Connection.DownlinkMax.ToString(CultureInfo.InvariantCulture)</li>
+                <li id="navigator-connection-effectiveType">@navigator.Connection.EffectiveType</li>
+                <li>@navigator.Connection.EffectiveTypeEnum</li>
+            </ul>
+        </li>
+    </ul>
+}
 
 @code {
     private NavigatorInterop navigator;
-    private string navigatorAppCodeName;
-    private string navigatorAppName;
-    private string navigatorAppVersion;
     protected override async Task OnInitializedAsync()
     {
         var window = await jsRuntime.Window();
-        navigatorAppCodeName = await window.Navigator.AppCodeName();
-        navigatorAppName = await window.Navigator.AppName();
-        navigatorAppVersion = await window.Navigator.AppVersion();
+        navigator = await window.Navigator();
     }
 }

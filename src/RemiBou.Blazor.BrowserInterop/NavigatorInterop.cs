@@ -1,3 +1,6 @@
+using System;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using Microsoft.JSInterop;
 
@@ -5,9 +8,13 @@ namespace RemiBou.Blazor.BrowserInterop
 {
     public class NavigatorInterop
     {
-        private readonly IJSRuntime jsRuntime;
+        private IJSRuntime jsRuntime;
 
-        internal NavigatorInterop(IJSRuntime jsRuntime)
+        public NavigatorInterop()
+        {
+        }
+
+        internal void SetJSRuntime(IJSRuntime jsRuntime)
         {
             this.jsRuntime = jsRuntime;
         }
@@ -16,28 +23,19 @@ namespace RemiBou.Blazor.BrowserInterop
         /// Returns the internal "code" name of the current browser. Do not rely on this property to return the correct value.
         /// </summary>
         /// <returns></returns>
-        public async Task<string> AppCodeName()
-        {
-            return await jsRuntime.InvokeAsync<string>("browserInterop.getProperty", "navigator.appCodeName");
-        }
+        public string AppCodeName { get; set; }
 
         /// <summary>
         /// Returns  the official name of the browser. Do not rely on this property to return the correct value.
         /// </summary>
         /// <returns></returns>
-        public async Task<string> AppName()
-        {
-            return await jsRuntime.InvokeAsync<string>("browserInterop.getProperty", "navigator.appName");
-        }
+        public string AppName { get; set; }
 
         /// <summary>
         /// Returns  the official name of the browser. Do not rely on this property to return the correct value.
         /// </summary>
         /// <returns></returns>
-        public async Task<string> AppVersion()
-        {
-            return await jsRuntime.InvokeAsync<string>("browserInterop.getProperty", "navigator.appVersion");
-        }
+        public string AppVersion { get; set; }
 
 
 
@@ -45,10 +43,7 @@ namespace RemiBou.Blazor.BrowserInterop
         /// Return a JS Interop wrapper for getting information about the network connection of a device.
         /// </summary>
         /// <returns></returns>
-        public NetworkInformationInterop Connection()
-        {
-            return new NetworkInformationInterop(jsRuntime);
-        }
+        public NetworkInformationInterop Connection { get; set; }
 
         /// <summary>
         /// Returns false if setting a cookie will be ignored and true otherwise.
@@ -153,4 +148,5 @@ namespace RemiBou.Blazor.BrowserInterop
         }
 
     }
+
 }
