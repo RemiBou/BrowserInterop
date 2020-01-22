@@ -8,11 +8,26 @@ browserInterop = {
         }
         return currentProperty;
     },
+    credential: {
+        create: function (param) {
+            return new Promise(function (resolve, reject) {
+                navigator.credentials.create(param).then(
+                    credential => resolve(browserInterop.getSerializableObject(credential, []))
+                );
+            })
+        },
+    },
     getBattery: function () {
         return new Promise(function (resolve, reject) {
+            if (navigator.battery) {//some browser does not implement getBattery but battery instead see https://developer.mozilla.org/en-US/docs/Web/API/Navigator/battery
+                var res = browserInterop.getSerializableObject(navigator.battery, []);
+                resolve(res);
+                return;
+            }
             navigator.getBattery().then(
                 function (battery) {
-                    resolve(browserInterop.getSerializableObject(battery, []));
+                    var res = browserInterop.getSerializableObject(battery, []);
+                    resolve(res);
                 }
             );
         });
@@ -44,8 +59,8 @@ browserInterop = {
 
             } else {
                 // string, number or boolean
-                if (currentMember == Infinity) { //inifity is not serializable in 
-                    currentMember = "PositiveInfinity";
+                if (currentMember === Infinity) { //inifity is not serialized by JSON.stringify
+                    currentMember = "Infinity";
                 }
                 res[i] = currentMember;
             }
@@ -56,7 +71,6 @@ browserInterop = {
 
         var data = browserInterop.getProperty(propertyName);
         var res = browserInterop.getSerializableObject(data, []);
-        console.log(res, JSON.stringify(res));
         return res;
     },
     navigator: {

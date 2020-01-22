@@ -12,6 +12,7 @@ namespace RemiBou.Blazor.BrowserInterop
 
         public NavigatorInterop()
         {
+            _lazyCredentialContainer = new Lazy<CredentialsContainer>(() => new CredentialsContainer(jsRuntime));
         }
 
         internal void SetJSRuntime(IJSRuntime jsRuntime)
@@ -38,6 +39,12 @@ namespace RemiBou.Blazor.BrowserInterop
         /// <returns></returns>
         public string AppVersion { get; set; }
 
+        /// <summary>
+        /// NON STANDARD Returns the build identifier of the browser. In modern browsers this property now returns a fixed timestamp as a privacy measure, e.g. 20181001000000 in Firefox 64 onwards.
+        /// </summary>
+        /// <value></value>
+        public string BuildID { get; set; }
+
 
 
         /// <summary>
@@ -63,6 +70,12 @@ namespace RemiBou.Blazor.BrowserInterop
         /// </summary>
         /// <returns></returns>
         public bool CookieEnabled { get; set; }
+        private Lazy<CredentialsContainer> _lazyCredentialContainer;
+
+        /// <summary>
+        /// Returns the CredentialsContainer interface which exposes methods to request credentials and notify the user agent when interesting events occur such as successful sign in or sign out. 
+        /// </summary>
+        public CredentialsContainer Credentials => _lazyCredentialContainer.Value;
 
         /// <summary>
         /// Returns the number of logical processor cores available.
@@ -129,6 +142,42 @@ namespace RemiBou.Blazor.BrowserInterop
         /// <value></value>
         public string UserAgent { get; set; }
 
+    }
+    //from https://github.com/dotnet/corefx/issues/41442#issuecomment-553196880
+    internal class HandleSpecialDoublesAsStrings : JsonConverter<double>
+    {
+        public override double Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        {
+            if (reader.TokenType == JsonTokenType.String)
+            {
+                string specialDouble = reader.GetString();
+                if (specialDouble == "Infinity")
+                {
+                    return double.PositiveInfinity;
+                }
+                else if (specialDouble == "-Infinity")
+                {
+                    return double.NegativeInfinity;
+                }
+                else
+                {
+                    return double.NaN;
+                }
+            }
+            return reader.GetDouble();
+        }
+
+        public override void Write(Utf8JsonWriter writer, double value, JsonSerializerOptions options)
+        {
+            if (double.IsFinite(value))
+            {
+                writer.WriteNumberValue(value);
+            }
+            else
+            {
+                writer.WriteStringValue(value.ToString());
+            }
+        }
     }
 
 }

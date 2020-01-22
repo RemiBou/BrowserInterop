@@ -9,6 +9,7 @@
     <li id="navigator-app-code-name">@navigator.AppCodeName</li>
     <li id="navigator-app-name">@navigator.AppName</li>
     <li id="navigator-app-version">@navigator.AppVersion</li>
+    <li id="navigator-build-id">@navigator.BuildID</li>
     <li>
         Connection :
         <ul>
@@ -53,25 +54,48 @@
                 Battery :
                 <ul>
                     <li id="navigator-battery-charging">@battery.Charging.ToString().ToLower()</li>
-                    <li id="navigator-battery-chargingTime">@battery.ChargingTime</li>
-                    <li id="navigator-battery-dischargingTime">@battery.DischargingTime</li>
-                    <li id="navigator-battery-level">@battery.Level</li>
+                    <li id="navigator-battery-chargingTime">@battery.ChargingTime.ToString(CultureInfo.InvariantCulture)</li>
+                    <li id="navigator-battery-dischargingTime">@battery.DischargingTime.ToString(CultureInfo.InvariantCulture)</li>
+                    <li id="navigator-battery-level">@battery.Level.ToString(CultureInfo.InvariantCulture)</li>
                 </ul>
             </li>
         </ul>
     </li>
 </ul>
+    @if(passwordCredential != null){
+        <text>Created Password credentails :</text>
+        <ul>
+            <li  id="navigator-creadentials-created-password-id">@passwordCredential.Id</li>
+            <li id="navigator-creadentials-created-password-name">@passwordCredential.Name</li>
+            <li  id="navigator-creadentials-created-password-password">@passwordCredential.Password</li>
+            <li  id="navigator-creadentials-created-password-iconURL">@passwordCredential.IconURL</li>
+        </ul>
+    }
+    @if(federatedCredential != null){
+        <text>Created Federated credentails :</text>
+        <ul>
+            <li  id="navigator-creadentials-created-federated-id">@federatedCredential.Id</li>
+            <li id="navigator-creadentials-created-federated-name">@federatedCredential.Name</li>
+            <li  id="navigator-creadentials-created-federated-provider">@federatedCredential.Provider</li>
+            <li  id="navigator-creadentials-created-federated-protocol">@federatedCredential.Protocol</li>
+            <li  id="navigator-creadentials-created-federated-iconURL">@federatedCredential.IconURL</li>
+        </ul>
+    }
 }
 
 @code {
     private NavigatorInterop navigator;
     private BatteryManager battery;
     private bool? javaEnabled;
+    private CredentialsContainer.PasswordCredential passwordCredential;
+    private CredentialsContainer.FederatedCredential federatedCredential;
     protected override async Task OnInitializedAsync()
     {
         var window = await jsRuntime.Window();
         navigator = await window.Navigator();
         battery = await navigator.GetBattery();
         javaEnabled = await navigator.JavaEnabled();
+        passwordCredential = await navigator.Credentials.CreatePassword("id","credential","https://google.com","test123");
+        federatedCredential = await navigator.Credentials.CreateFederatedCredential("id","credential","https://google.com","memyself","http");
     }
 }

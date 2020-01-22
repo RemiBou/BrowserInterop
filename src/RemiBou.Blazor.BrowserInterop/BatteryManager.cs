@@ -1,6 +1,7 @@
 namespace RemiBou.Blazor.BrowserInterop
 {
     using System;
+    using System.Text.Json.Serialization;
     public class BatteryManager
     {
         /// <summary>
@@ -13,7 +14,8 @@ namespace RemiBou.Blazor.BrowserInterop
         /// A number representing the remaining time in seconds until the battery is fully charged, or 0 if the battery is already fully charged.
         /// </summary>
         /// <value></value>
-        public int ChargingTime { get; set; }
+        [JsonConverter(typeof(HandleSpecialDoublesAsStrings))]
+        public double ChargingTime { get; set; }
 
         /// <summary>
         /// TimeSpan value of ChargingTime
@@ -25,7 +27,8 @@ namespace RemiBou.Blazor.BrowserInterop
         /// A number representing the remaining time in seconds until the battery is completely discharged and the system will suspend.
         /// </summary>
         /// <value></value>
-        public int DischargingTime { get; set; }
+        [JsonConverter(typeof(HandleSpecialDoublesAsStrings))]
+        public double DischargingTime { get; set; }
 
         /// <summary>
         /// TimeSpan value of DischargingTime
