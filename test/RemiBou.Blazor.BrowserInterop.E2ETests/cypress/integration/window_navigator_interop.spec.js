@@ -41,12 +41,16 @@ context('window.navigator', () => {
 
             }
             cy.get("#navigator-userAgent").should('have.text', w.navigator.userAgent);
-            var battery;
-            w.navigator.getBattery().then(function (res) { batteryManager = res; });
-            cy.get("#navigator-battery-charging").should('have.text', battery.charging);
-            cy.get("#navigator-battery-chargingTime").should('have.text', battery.chargingTime);
-            cy.get("#navigator-battery-dischargingTime").should('have.text', battery.dischargingTime);
-            cy.get("#navigator-battery-level").should('have.text', battery.level);
+
+
+            w.navigator.getBattery().then(function (battery) {
+
+                console.log(battery);
+                cy.get("#navigator-battery-charging").should('have.text', battery.charging);
+                cy.get("#navigator-battery-chargingTime").should('have.text', battery.chargingTime);
+                cy.get("#navigator-battery-dischargingTime").should('have.text', battery.dischargingTime);
+                cy.get("#navigator-battery-level").should('have.text', battery.level);
+            });
         });
     });
 })

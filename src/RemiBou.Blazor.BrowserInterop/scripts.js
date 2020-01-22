@@ -8,43 +8,54 @@ browserInterop = {
         }
         return currentProperty;
     },
-    getAsJson: function (propertyName) {
-        var alreadySerialized = [];//this is for avoiding infinite loop
-        function getSerializableObject(data) {
-            var res = {};
-            for (var i in data) {
-                var currentMember = data[i];
-
-                if (typeof currentMember === 'function' || currentMember === null) {
-                    continue;
-                } else if (typeof currentMember === 'object') {
-                    if (alreadySerialized.indexOf(currentMember) < 0) {
-                        alreadySerialized.push(currentMember);
-                        if (Array.isArray(currentMember) || currentMember.length) {
-                            res[i] = [];
-                            for (var j = 0; j < currentMember.length; j++) {
-                                const arrayItem = currentMember[j];
-                                if (typeof arrayItem === 'object') {
-                                    res[i].push(getSerializableObject(arrayItem));
-                                } else {
-                                    res[i].push(arrayItem);
-                                }
-                            }
-                        } else {
-                            res[i] = getSerializableObject(currentMember);
-
-                        }
-                    }
-                
-                } else {
-                    // string, number or boolean
-                    res[i] = currentMember;
+    getBattery: function () {
+        return new Promise(function (resolve, reject) {
+            navigator.getBattery().then(
+                function (battery) {
+                    resolve(browserInterop.getSerializableObject(battery, []));
                 }
+            );
+        });
+    },
+    getSerializableObject: function (data, alreadySerialized) {
+        var res = {};
+        for (var i in data) {
+            var currentMember = data[i];
+
+            if (typeof currentMember === 'function' || currentMember === null) {
+                continue;
+            } else if (typeof currentMember === 'object') {
+                if (alreadySerialized.indexOf(currentMember) < 0) {
+                    alreadySerialized.push(currentMember);
+                    if (Array.isArray(currentMember) || currentMember.length) {
+                        res[i] = [];
+                        for (var j = 0; j < currentMember.length; j++) {
+                            const arrayItem = currentMember[j];
+                            if (typeof arrayItem === 'object') {
+                                res[i].push(browserInterop.getSerializableObject(arrayItem, alreadySerialized));
+                            } else {
+                                res[i].push(arrayItem);
+                            }
+                        }
+                    } else {
+                        res[i] = browserInterop.getSerializableObject(currentMember, alreadySerialized);
+                    }
+                }
+
+            } else {
+                // string, number or boolean
+                if (currentMember == Infinity) { //inifity is not serializable in 
+                    currentMember = "PositiveInfinity";
+                }
+                res[i] = currentMember;
             }
-            return res;
         }
+        return res;
+    },
+    getAsJson: function (propertyName) {
+
         var data = browserInterop.getProperty(propertyName);
-        var res = getSerializableObject(data);
+        var res = browserInterop.getSerializableObject(data, []);
         console.log(res, JSON.stringify(res));
         return res;
     },

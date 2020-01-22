@@ -46,7 +46,7 @@ namespace RemiBou.Blazor.BrowserInterop
         /// <returns></returns>
         public async Task<BatteryManager> GetBattery()
         {
-            return await jsRuntime.InvokeAsync<BatteryManager>("navigator.getBattery");
+            return await jsRuntime.InvokeAsync<BatteryManager>("browserInterop.getBattery");
 
         }
 
