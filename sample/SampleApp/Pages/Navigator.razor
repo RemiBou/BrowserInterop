@@ -22,8 +22,42 @@
             <li id="navigator-connection-typeEnum">@navigator.Connection.TypeEnum</li>
             <li id="navigator-cookieEnabled">@navigator.CookieEnabled.ToString().ToLower()</li>
             <li id="navigator-hardwareConcurrency">@navigator.HardwareConcurrency</li>
-            <li id="navigator-javaEnabled">@navigator.JavaEnabled.ToString().ToLower()</li>
+            <li id="navigator-javaEnabled">@javaEnabled?.ToString()?.ToLower()</li>
             <li id="navigator-language">@navigator.Language</li>
+            <li id="navigator-languages">Languages :
+                <ul>
+                @foreach(var lang in navigator.Languages){
+                    <li lang="@lang">@lang</li>    
+                }
+                </ul>
+            </li>
+             <li id="navigator-maxTouchPoints">@navigator.MaxTouchPoints</li>
+            <li id="navigator-mimeTypes">MimeTypes :
+                <ul>
+                @foreach(var mime in navigator.MimeTypes){
+                    <li mime="@mime.Type">@mime.Type</li>    
+                }
+                </ul>
+            </li>
+             <li id="navigator-plugins">Plugins :
+                <ul>
+                @foreach(var plugin in navigator.Plugins){
+                    <li filename="@plugin.FileName">@plugin.FileName</li>    
+                }
+                </ul>
+            </li>
+            <li id="navigator-online">@navigator.Online.ToString().ToLower()</li>
+            <li id="navigator-platform">@navigator.Platform</li>
+            <li id="navigator-userAgent">@navigator.UserAgent</li>
+            <li>
+                Battery :
+                <ul>
+                    <li id="navigator-battery-charging">@battery.Charging.ToString().ToLower()</li>
+                    <li id="navigator-battery-chargingTime">@battery.ChargingTime</li>
+                    <li id="navigator-battery-dischargingTime">@battery.DischargingTime</li>
+                    <li id="navigator-battery-level">@battery.Level</li>
+                </ul>
+            </li>
         </ul>
     </li>
 </ul>
@@ -31,9 +65,13 @@
 
 @code {
     private NavigatorInterop navigator;
+    private BatteryManager battery;
+    private bool? javaEnabled;
     protected override async Task OnInitializedAsync()
     {
         var window = await jsRuntime.Window();
         navigator = await window.Navigator();
+        battery = await navigator.GetBattery();
+        javaEnabled = await navigator.JavaEnabled();
     }
 }

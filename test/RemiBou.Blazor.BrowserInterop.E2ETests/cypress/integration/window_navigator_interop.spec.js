@@ -23,9 +23,30 @@ context('window.navigator', () => {
             cy.get("#navigator-connection-type").should('have.text', w.navigator.connection.type ? w.navigator.connection.type : '');
             cy.get("#navigator-cookieEnabled").should('have.text', w.navigator.cookieEnabled.toString());
             cy.get("#navigator-hardwareConcurrency").should('have.text', w.navigator.hardwareConcurrency.toString());
-            cy.get("#navigator-javaEnabled").should('have.text', w.navigator.javaEnabled.toString());
+            cy.get("#navigator-javaEnabled").should('have.text', w.navigator.javaEnabled().toString());
             cy.get("#navigator-language").should('have.text', w.navigator.language);
+            w.navigator.languages.forEach(lang => {
+                cy.get("#navigator-languages li[lang='" + lang + "']").should("exist");
+            });
+            cy.get("#navigator-maxTouchPoints").should('have.text', w.navigator.maxTouchPoints.toString());
+            for (let index = 0; index < w.navigator.mimeTypes.length; index++) {
+                const element = w.navigator.mimeTypes[index];
+                cy.get("#navigator-mimeTypes li[mime='" + element.type + "']").should("exist");
+            }
+            cy.get("#navigator-online").should('have.text', w.navigator.onLine.toString());
+            cy.get("#navigator-platform").should('have.text', w.navigator.platform);
+            for (let index = 0; index < w.navigator.plugins.length; index++) {
+                const element = w.navigator.plugins[index];
+                cy.get("#navigator-plugins li[filename='" + element.filename + "']").should("exist");
 
+            }
+            cy.get("#navigator-userAgent").should('have.text', w.navigator.userAgent);
+            var battery;
+            w.navigator.getBattery().then(function (res) { batteryManager = res; });
+            cy.get("#navigator-battery-charging").should('have.text', battery.charging);
+            cy.get("#navigator-battery-chargingTime").should('have.text', battery.chargingTime);
+            cy.get("#navigator-battery-dischargingTime").should('have.text', battery.dischargingTime);
+            cy.get("#navigator-battery-level").should('have.text', battery.level);
         });
     });
 })
