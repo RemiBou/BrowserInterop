@@ -42,18 +42,17 @@ namespace RemiBou.Blazor.BrowserInterop
         /// Creates a new FederatedCredential instance 
         /// </summary>
         /// <returns></returns>
-        public async Task<FederatedCredential> CreateFederatedCredential(string id, string name, string iconURL, string provider, string protocol)
+        public async Task<FederatedCredential> CreateFederatedCredential(string id, string name, string iconURL, string provider)
         {
             return await jsRuntime.InvokeAsync<FederatedCredential>("browserInterop.credential.create",
             new
             {
-                Password = new
+                Federated = new
                 {
                     id,
                     name,
                     iconURL,
-                    provider,
-                    protocol
+                    provider
                 }
             });
         }
@@ -110,12 +109,6 @@ namespace RemiBou.Blazor.BrowserInterop
             /// </summary>
             /// <value></value>
             public string Provider { get; set; }
-
-            /// <summary>
-            /// credential's federated identity protocol.
-            /// </summary>
-            /// <value></value>
-            public string Protocol { get; set; }
 
             public string IconURL { get; set; }
 

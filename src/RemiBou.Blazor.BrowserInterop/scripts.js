@@ -10,9 +10,13 @@ browserInterop = {
     },
     credential: {
         create: function (param) {
+            console.log(param);
             return new Promise(function (resolve, reject) {
                 navigator.credentials.create(param).then(
-                    credential => resolve(browserInterop.getSerializableObject(credential, []))
+                    credential => {
+                        console.log(credential);
+                        return resolve(browserInterop.getSerializableObject(credential, []));
+                    }
                 );
             })
         },

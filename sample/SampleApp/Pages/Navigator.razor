@@ -65,20 +65,19 @@
     @if(passwordCredential != null){
         <text>Created Password credentails :</text>
         <ul>
-            <li  id="navigator-creadentials-created-password-id">@passwordCredential.Id</li>
-            <li id="navigator-creadentials-created-password-name">@passwordCredential.Name</li>
-            <li  id="navigator-creadentials-created-password-password">@passwordCredential.Password</li>
-            <li  id="navigator-creadentials-created-password-iconURL">@passwordCredential.IconURL</li>
+            <li  id="navigator-credentials-created-password-id">@passwordCredential.Id</li>
+            <li id="navigator-credentials-created-password-name">@passwordCredential.Name</li>
+            <li  id="navigator-credentials-created-password-password">@passwordCredential.Password</li>
+            <li  id="navigator-credentials-created-password-iconURL">@passwordCredential.IconURL</li>
         </ul>
     }
     @if(federatedCredential != null){
         <text>Created Federated credentails :</text>
         <ul>
-            <li  id="navigator-creadentials-created-federated-id">@federatedCredential.Id</li>
-            <li id="navigator-creadentials-created-federated-name">@federatedCredential.Name</li>
-            <li  id="navigator-creadentials-created-federated-provider">@federatedCredential.Provider</li>
-            <li  id="navigator-creadentials-created-federated-protocol">@federatedCredential.Protocol</li>
-            <li  id="navigator-creadentials-created-federated-iconURL">@federatedCredential.IconURL</li>
+            <li  id="navigator-credentials-created-federated-id">@federatedCredential.Id</li>
+            <li id="navigator-credentials-created-federated-name">@federatedCredential.Name</li>
+            <li  id="navigator-credentials-created-federated-provider">@federatedCredential.Provider</li>
+            <li  id="navigator-credentials-created-federated-iconURL">@federatedCredential.IconURL</li>
         </ul>
     }
 }
@@ -96,6 +95,6 @@
         battery = await navigator.GetBattery();
         javaEnabled = await navigator.JavaEnabled();
         passwordCredential = await navigator.Credentials.CreatePassword("id","credential","https://google.com","test123");
-        federatedCredential = await navigator.Credentials.CreateFederatedCredential("id","credential","https://google.com","memyself","http");
+        federatedCredential = await navigator.Credentials.CreateFederatedCredential("id","credential","https://google.com/iconURL","https://google.com");
     }
 }
