@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using Microsoft.JSInterop;
 
@@ -5,11 +6,16 @@ namespace RemiBou.Blazor.BrowserInterop
 {
     public class NetworkInformationInterop
     {
+        private IJSRuntime jSRuntime;
 
         public NetworkInformationInterop()
         {
         }
 
+        internal void SetJsRuntime(IJSRuntime jSRuntime)
+        {
+            this.jSRuntime = jSRuntime;
+        }
 
         /// <summary>
         /// Returns the effective bandwidth estimate in megabits per second, rounded to the nearest multiple of 25 kilobits per seconds.
@@ -81,7 +87,18 @@ namespace RemiBou.Blazor.BrowserInterop
                 };
             }
         }
+
+        /// <summary>
+        /// toDo will be called when the network informations changes
+        /// </summary>
+        /// <param name="toDo">Action to call</param>
+        /// <returns></returns>
+        public async Task<IAsyncDisposable> OnChange(Func<Task> toDo)
+        {
+            return await jSRuntime.AddEventListener("navigator.connection", "change", toDo);
+        }
     }
+
 
     public enum EffectiveTypeEnum
     {

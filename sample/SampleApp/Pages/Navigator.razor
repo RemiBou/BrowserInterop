@@ -63,16 +63,26 @@
     </li>
 </ul>
 }
-
+<span id="navigator-connection-event-change-handled">@connectionChangedEventHandled</span>
+<button id="navigator-connection-event-change-stop" type="button" @onclick="async () => await connectionChangeEventHandler.DisposeAsync()">Dispose event handler</button>
 @code {
     private NavigatorInterop navigator;
     private BatteryManager battery;
     private bool? javaEnabled;
+
+    private IAsyncDisposable connectionChangeEventHandler;
+    private int connectionChangedEventHandled = 0;
     protected override async Task OnInitializedAsync()
     {
         var window = await jsRuntime.Window();
         navigator = await window.Navigator();
         battery = await navigator.GetBattery();
         javaEnabled = await navigator.JavaEnabled();
+        connectionChangeEventHandler =  await navigator.Connection.OnChange(async () => {
+            await window.Console.Log("Connection Change");
+            connectionChangedEventHandled++;
+            StateHasChanged();
+            
+        });
     }
 }

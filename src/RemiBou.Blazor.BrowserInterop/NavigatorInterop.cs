@@ -17,6 +17,7 @@ namespace RemiBou.Blazor.BrowserInterop
         internal void SetJSRuntime(IJSRuntime jsRuntime)
         {
             this.jsRuntime = jsRuntime;
+            this.Connection?.SetJsRuntime(jsRuntime);
         }
 
 

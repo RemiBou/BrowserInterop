@@ -1,5 +1,7 @@
 
 browserInterop = {
+    eventListenersId: 0,
+    eventListeners: {},
     getProperty: function (propertyName) {
         var splitProperty = propertyName.split('.');
         var currentProperty = window;
@@ -12,25 +14,19 @@ browserInterop = {
         }
         return currentProperty;
     },
-    callMethodPromise: function (methodPath) {
-
+    addEventListener: function (propertyPath, eventName, dotnetAction) {
+        var target = browserInterop.getProperty(propertyPath);
+        var methodRef = function () {
+            return dotnetAction.invokeMethodAsync('Invoke');
+        }
+        target.addEventListener(eventName, methodRef);
+        var eventId = browserInterop.eventListenersId++;
+        browserInterop.eventListeners[eventId] = methodRef;
+        return eventId;
     },
-    credential: {
-        create: function (param) {
-            param = browserInterop.getSerializableObject(param, []);
-            /*if (param.publicKey) {
-                param.publicKey.challenge = new Uint8Array(param.publicKey.challenge);
-                param.publicKey.user.id = new Uint8Array(param.publicKey.user.id);
-            }*/
-            return new Promise(function (resolve, reject) {
-                navigator.credentials.create(param).then(
-                    credential => {
-                        console.log(param);
-                        return resolve(browserInterop.getSerializableObject(credential, []));
-                    }
-                );
-            })
-        },
+    removeEventListener: function (propertyPath, eventName, eventListenersId) {
+        var target = browserInterop.getProperty(propertyPath);
+        target.removeEventListener(eventName, browserInterop.eventListeners[eventListenersId]);
     },
     getBattery: function () {
         return new Promise(function (resolve, reject) {

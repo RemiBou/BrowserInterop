@@ -50,5 +50,13 @@ namespace RemiBou.Blazor.BrowserInterop
         {
             return await jsRuntime.InvokeAsync<bool>("browserInterop.hasProperty", propertyPath);
         }
+
+        public static async Task<IAsyncDisposable> AddEventListener(this IJSRuntime jsRuntime, string propertyName, string eventName, Func<Task> callBack)
+        {
+            JSInteropActionWrapper actionWrapper = new JSInteropActionWrapper(jsRuntime, callBack);
+            var listenerId = await jsRuntime.InvokeAsync<int>("browserInterop.addEventListener", propertyName, eventName, DotNetObjectReference.Create(actionWrapper));
+            actionWrapper.SeListenerId(listenerId);
+            return actionWrapper;
+        }
     }
 }

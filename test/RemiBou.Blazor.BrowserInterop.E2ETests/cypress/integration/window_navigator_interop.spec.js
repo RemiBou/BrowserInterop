@@ -12,13 +12,6 @@ context('window.navigator', () => {
             cy.get("#navigator-app-code-name").should('have.text', w.navigator.appCodeName);
             cy.get("#navigator-app-name").should('have.text', w.navigator.appName);
             cy.get("#navigator-app-version").should('have.text', w.navigator.appVersion);
-            cy.get("#navigator-connection-downlink").should('have.text', w.navigator.connection.downlink.toString());
-            cy.get("#navigator-connection-effectiveType").should('have.text', w.navigator.connection.effectiveType.toString());
-            cy.get("#navigator-connection-rtt").should('have.text', w.navigator.connection.rtt.toString());
-            cy.get("#navigator-connection-saveData").should('have.text', w.navigator.connection.saveData.toString());
-
-
-            cy.get("#navigator-connection-type").should('have.text', w.navigator.connection.type ? w.navigator.connection.type : '');
             cy.get("#navigator-cookieEnabled").should('have.text', w.navigator.cookieEnabled.toString());
             cy.get("#navigator-hardwareConcurrency").should('have.text', w.navigator.hardwareConcurrency.toString());
             cy.get("#navigator-javaEnabled").should('have.text', w.navigator.javaEnabled().toString());
@@ -34,7 +27,25 @@ context('window.navigator', () => {
 
         });
     });
-    if ('Check non standard properties', () => {
+    it('Check window.navigator.connection properties', () => {
+        cy.window().then(w => {
+            cy.get("#navigator-connection-downlink").should('have.text', w.navigator.connection.downlink.toString());
+            cy.get("#navigator-connection-effectiveType").should('have.text', w.navigator.connection.effectiveType.toString());
+            cy.get("#navigator-connection-rtt").should('have.text', w.navigator.connection.rtt.toString());
+            cy.get("#navigator-connection-saveData").should('have.text', w.navigator.connection.saveData.toString());
+            cy.get("#navigator-connection-type").should('have.text', w.navigator.connection.type ? w.navigator.connection.type : '');
+            cy.get("#navigator-connection-event-change-handled").should('have.text', '0').then(() => {
+                w.navigator.connection.dispatchEvent(new Event("change"));
+                cy.get("#navigator-connection-event-change-handled").should('have.text', '1').then(() => {
+                    cy.get("#navigator-connection-event-change-stop").click().then(() => {
+                        w.navigator.connection.dispatchEvent(new Event("change"));
+                        cy.get("#navigator-connection-event-change-handled").should('have.text', '1');
+                    });
+                });
+            });
+        });
+    });
+    it('Check non standard properties', () => {
         cy.window().then(w => {
             if ('downlinkMax' in w.navigator.connection) {// this property is not available in every browser
                 cy.get("#navigator-connection-downlinkmax").should('have.text', w.navigator.connection.downlinkMax.toString());
