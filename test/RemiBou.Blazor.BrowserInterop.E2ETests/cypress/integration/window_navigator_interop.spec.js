@@ -82,20 +82,26 @@ context('window.navigator', () => {
     });
     it('Check navigator position', () => {
         cy.window().then(w => {
+            const coordinates = {
+                timestamp: 1606859690000,
+                coords: {
+                    latitude: 43.5,
+                    longitude: 13.2,
+                    altitude: 150.6,
+                    accuracy: 1.9,
+                    altitudeAccuracy: 2.6,
+                    heading: 90.9,
+                    speed: 100.7
+                }
+            };
             cy.stub(w.navigator.geolocation, "getCurrentPosition", (cb, err, opt) => {
                 expect(opt).to.deep.equal({ maximumAge: 3600000, timeout: 60000, enableHighAccuracy: true });
-                return cb({
-                    timestamp: 1606859690000,
-                    coords: {
-                        latitude: 43.5,
-                        longitude: 13.2,
-                        altitude: 150.6,
-                        accuracy: 1.9,
-                        altitudeAccuracy: 2.6,
-                        heading: 90.9,
-                        speed: 100.7
-                    }
-                });
+                return cb(coordinates);
+            });
+            var watchCallBack;
+            cy.stub(w.navigator.geolocation, "watchPosition", (cb, err, opt) => {
+                watchCallBack = cb;
+                return 90;
             });
             cy.get("#navigator-geolocation-get").click().then(() => {
                 cy.get("#navigator-geolocation-timestamp").should('have.text', '01/12/2020 21:54:50 +00:00');
@@ -106,7 +112,17 @@ context('window.navigator', () => {
                 cy.get("#navigator-geolocation-coords-altitudeAccuracy").should('have.text', '2.6');
                 cy.get("#navigator-geolocation-coords-heading").should('have.text', '90.9');
                 cy.get("#navigator-geolocation-coords-speed").should('have.text', '100.7');
-
+                watchCallBack(coordinates);
+                cy.get("#navigator-geolocation-changed").should('have.text', '1')
+                    .then(() => {
+                        var watcherId = 0;
+                        cy.stub(w.navigator.geolocation, "clearWatch", (id) => {
+                            watcherId = id;
+                        });
+                        cy.get("#navigator-geolocation-event-change-stop").click().then(() => {
+                            expect(watcherId).to.be.eq(90);
+                        })
+                    });
             });
 
         });

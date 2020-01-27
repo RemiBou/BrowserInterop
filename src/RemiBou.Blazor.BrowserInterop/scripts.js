@@ -83,9 +83,24 @@ browserInterop = {
                 return new Promise(function (resolve) {
                     navigator.geolocation.getCurrentPosition(
                         position => resolve({ location: browserInterop.getSerializableObject(position) }),
-                        error => resolve({ location: browserInterop.getSerializableObject(error) }),
+                        error => resolve({ error: browserInterop.getSerializableObject(error) }),
                         options)
                 });
+            },
+            ///This is because JSInterop doe snot recognize  window.navigator.geolocation.clearWatch as a method
+            clearWatch: function (id) {
+                window.navigator.geolocation.clearWatch(id);
+            },
+            watchPosition: function (options, wrapper) {
+                return navigator.geolocation.watchPosition(
+                    position => {
+                        const result = { location: browserInterop.getSerializableObject(position) };
+                        console.log(result);
+                        return wrapper.invokeMethodAsync('Invoke', result);
+                    },
+                    error => wrapper.invokeMethodAsync('Invoke', { error: browserInterop.getSerializableObject(error) }),
+                    options
+                );
             }
         },
         getBattery: function () {

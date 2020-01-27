@@ -68,7 +68,12 @@
 <button id="navigator-geolocation-get" type="button" @onclick="async () => await GetGeolocation()">Get Geolocation</button>
 
 @if(geolocationResult != null){
+    
+
   <text>  GeolocationCoordinates :</text>
+  <span id="navigator-geolocation-changed">@geopositionChanged</span>
+  <button id="navigator-geolocation-event-change-stop" type="button" @onclick="async () => await geopositionWatcher.DisposeAsync()">Dispose geoposition event handler</button>
+
   @if(geolocationResult.Location != null){
     <ul>
         <li id="navigator-geolocation-timestamp">@geolocationResult.Location.TimestampDateTime</li>
@@ -94,11 +99,17 @@
     private bool? javaEnabled;
 
     private IAsyncDisposable connectionChangeEventHandler;
+    private IAsyncDisposable geopositionWatcher;
     private int connectionChangedEventHandled = 0;
     private  GeolocationResult geolocationResult;
+
+    private WindowInterop window;
+
+    private int geopositionChanged;
+
     protected override async Task OnInitializedAsync()
     {
-        var window = await jsRuntime.Window();
+        window = await jsRuntime.Window();
         navigator = await window.Navigator();
         battery = await navigator.GetBattery();
         javaEnabled = await navigator.JavaEnabled();
@@ -117,5 +128,12 @@
             MaximumAgeTimeSpan = TimeSpan.FromHours(1),
             TimeoutTimeSpan = TimeSpan.FromMinutes(1)
         });
+        geopositionWatcher = await navigator.Geolocation.WatchPosition(async (p) =>
+            {
+                geopositionChanged++;
+                StateHasChanged();
+                await window.Console.Log(p);
+            }  
+        );
     }
 }
