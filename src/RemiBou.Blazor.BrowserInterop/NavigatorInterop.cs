@@ -3,7 +3,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using Microsoft.JSInterop;
-
+using RemiBou.Blazor.BrowserInterop.Geolocation;
 namespace RemiBou.Blazor.BrowserInterop
 {
     public class NavigatorInterop
@@ -17,6 +17,7 @@ namespace RemiBou.Blazor.BrowserInterop
         internal void SetJSRuntime(IJSRuntime jsRuntime)
         {
             this.jsRuntime = jsRuntime;
+            Geolocation = new GeolocationInterop(jsRuntime);
             this.Connection?.SetJsRuntime(jsRuntime);
         }
 
@@ -39,11 +40,6 @@ namespace RemiBou.Blazor.BrowserInterop
         /// <returns></returns>
         public string AppVersion { get; set; }
 
-        /// <summary>
-        /// NON STANDARD Returns the build identifier of the browser. In modern browsers this property now returns a fixed timestamp as a privacy measure, e.g. 20181001000000 in Firefox 64 onwards.
-        /// </summary>
-        /// <value></value>
-        public string BuildID { get; set; }
 
 
 
@@ -53,7 +49,7 @@ namespace RemiBou.Blazor.BrowserInterop
         /// <returns></returns>
         public async Task<BatteryManager> GetBattery()
         {
-            return await jsRuntime.InvokeAsync<BatteryManager>("browserInterop.getBattery");
+            return await jsRuntime.InvokeAsync<BatteryManager>("browserInterop.navigator.getBattery");
 
         }
 
@@ -76,6 +72,8 @@ namespace RemiBou.Blazor.BrowserInterop
         /// </summary>
         /// <returns></returns>
         public int HardwareConcurrency { get; set; }
+
+        public GeolocationInterop Geolocation { get; private set; }
 
         /// <summary>
         /// Returns false if the browser enables java

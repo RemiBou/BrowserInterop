@@ -2,8 +2,17 @@ namespace RemiBou.Blazor.BrowserInterop
 {
     using System;
     using System.Text.Json.Serialization;
+    using System.Threading.Tasks;
+    using Microsoft.JSInterop;
+
     public class BatteryManager
     {
+        private IJSRuntime jSRuntime;
+
+        internal void SetJsRuntime(IJSRuntime jSRuntime)
+        {
+            this.jSRuntime = jSRuntime;
+        }
         /// <summary>
         /// A Boolean value indicating whether or not the battery is currently being charged.
         /// </summary>

@@ -28,25 +28,13 @@ browserInterop = {
         var target = browserInterop.getProperty(propertyPath);
         target.removeEventListener(eventName, browserInterop.eventListeners[eventListenersId]);
     },
-    getBattery: function () {
-        return new Promise(function (resolve, reject) {
-            if (navigator.battery) {//some browser does not implement getBattery but battery instead see https://developer.mozilla.org/en-US/docs/Web/API/Navigator/battery
-                var res = browserInterop.getSerializableObject(navigator.battery, []);
-                resolve(res);
-                return;
-            }
-            navigator.getBattery().then(
-                function (battery) {
-                    var res = browserInterop.getSerializableObject(battery, []);
-                    resolve(res);
-                }
-            );
-        });
-    },
     hasProperty: function (propertyPath) {
         return browserInterop.getProperty(propertyPath) !== null;
     },
     getSerializableObject: function (data, alreadySerialized) {
+        if (!alreadySerialized) {
+            alreadySerialized = [];
+        }
         var res = {};
         for (var i in data) {
             var currentMember = data[i];
@@ -86,10 +74,35 @@ browserInterop = {
     getAsJson: function (propertyName) {
 
         var data = browserInterop.getProperty(propertyName);
-        var res = browserInterop.getSerializableObject(data, []);
+        var res = browserInterop.getSerializableObject(data);
         return res;
     },
     navigator: {
+        geolocation: {
+            getCurrentPosition: function (options) {
+                return new Promise(function (resolve) {
+                    navigator.geolocation.getCurrentPosition(
+                        position => resolve({ location: browserInterop.getSerializableObject(position) }),
+                        error => resolve({ location: browserInterop.getSerializableObject(error) }),
+                        options)
+                });
+            }
+        },
+        getBattery: function () {
+            return new Promise(function (resolve, reject) {
+                if (navigator.battery) {//some browser does not implement getBattery but battery instead see https://developer.mozilla.org/en-US/docs/Web/API/Navigator/battery
+                    var res = browserInterop.getSerializableObject(navigator.battery);
+                    resolve(res);
+                    return;
+                }
+                navigator.getBattery().then(
+                    function (battery) {
+                        var res = browserInterop.getSerializableObject(battery);
+                        resolve(res);
+                    }
+                );
+            });
+        },
         mimeTypes: function () {
             var res = [];
             for (i = 0; i <= navigator.mimeTypes.length; i++) {

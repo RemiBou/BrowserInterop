@@ -50,9 +50,6 @@ context('window.navigator', () => {
             if ('downlinkMax' in w.navigator.connection) {// this property is not available in every browser
                 cy.get("#navigator-connection-downlinkmax").should('have.text', w.navigator.connection.downlinkMax.toString());
             }
-            if ('buildID' in w.navigator) {
-                cy.get("#navigator-build-id").should('have.text', w.navigator.buildID);
-            }
         });
     });
     it('Check navigator plugins', () => {
@@ -81,6 +78,37 @@ context('window.navigator', () => {
                 cy.get("#navigator-battery-dischargingTime").should('have.text', battery.dischargingTime.toString());
                 cy.get("#navigator-battery-level").should('have.text', battery.level.toString());
             });
+        });
+    });
+    it('Check navigator position', () => {
+        cy.window().then(w => {
+            cy.stub(w.navigator.geolocation, "getCurrentPosition", (cb, err, opt) => {
+                expect(opt).to.deep.equal({ maximumAge: 3600000, timeout: 60000, enableHighAccuracy: true });
+                return cb({
+                    timestamp: 1606859690000,
+                    coords: {
+                        latitude: 43.5,
+                        longitude: 13.2,
+                        altitude: 150.6,
+                        accuracy: 1.9,
+                        altitudeAccuracy: 2.6,
+                        heading: 90.9,
+                        speed: 100.7
+                    }
+                });
+            });
+            cy.get("#navigator-geolocation-get").click().then(() => {
+                cy.get("#navigator-geolocation-timestamp").should('have.text', '01/12/2020 21:54:50 +00:00');
+                cy.get("#navigator-geolocation-coords-latitude").should('have.text', '43.5');
+                cy.get("#navigator-geolocation-coords-longitude").should('have.text', '13.2');
+                cy.get("#navigator-geolocation-coords-altitude").should('have.text', '150.6');
+                cy.get("#navigator-geolocation-coords-accuracy").should('have.text', '1.9');
+                cy.get("#navigator-geolocation-coords-altitudeAccuracy").should('have.text', '2.6');
+                cy.get("#navigator-geolocation-coords-heading").should('have.text', '90.9');
+                cy.get("#navigator-geolocation-coords-speed").should('have.text', '100.7');
+
+            });
+
         });
     });
 })
