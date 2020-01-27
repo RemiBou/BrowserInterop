@@ -72,16 +72,4 @@ context('window.navigator', () => {
             });
         });
     });
-    it('check credentials API', () => {
-        //password credential creation
-        cy.get("#navigator-credentials-created-password-id").should('have.text', 'id');
-        cy.get("#navigator-credentials-created-password-password").should('have.text', 'test123');
-        cy.get("#navigator-credentials-created-password-name").should('have.text', 'credential');
-        cy.get("#navigator-credentials-created-password-iconURL").should('have.text', 'https://google.com/');
-        //ferated credential creation
-        cy.get("#navigator-credentials-created-federated-id").should('have.text', 'id');
-        cy.get("#navigator-credentials-created-federated-provider").should('have.text', 'https://google.com');
-        cy.get("#navigator-credentials-created-federated-name").should('have.text', 'credential');
-        cy.get("#navigator-credentials-created-federated-iconURL").should('have.text', 'https://google.com/iconURL');
-    });
 })

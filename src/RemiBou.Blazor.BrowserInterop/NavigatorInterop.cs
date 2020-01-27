@@ -3,7 +3,6 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using Microsoft.JSInterop;
-using RemiBou.Blazor.BrowserInterop.Credentials;
 
 namespace RemiBou.Blazor.BrowserInterop
 {
@@ -13,7 +12,6 @@ namespace RemiBou.Blazor.BrowserInterop
 
         public NavigatorInterop()
         {
-            _lazyCredentialContainer = new Lazy<CredentialsContainer>(() => new CredentialsContainer(jsRuntime));
         }
 
         internal void SetJSRuntime(IJSRuntime jsRuntime)
@@ -71,12 +69,6 @@ namespace RemiBou.Blazor.BrowserInterop
         /// </summary>
         /// <returns></returns>
         public bool CookieEnabled { get; set; }
-        private Lazy<CredentialsContainer> _lazyCredentialContainer;
-
-        /// <summary>
-        /// Returns the CredentialsContainer interface which exposes methods to request credentials and notify the user agent when interesting events occur such as successful sign in or sign out. 
-        /// </summary>
-        public CredentialsContainer Credentials => _lazyCredentialContainer.Value;
 
         /// <summary>
         /// Returns the number of logical processor cores available.

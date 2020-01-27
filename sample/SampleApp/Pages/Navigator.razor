@@ -1,7 +1,6 @@
 @page "/navigator"
 @inject IJSRuntime jsRuntime;
 @using RemiBou.Blazor.BrowserInterop
-@using RemiBou.Blazor.BrowserInterop.Credentials
 @using System.Globalization
 <h1>Navigator API Interop Demo</h1>
 <h2>Navigator : </h2>
@@ -63,65 +62,17 @@
         </ul>
     </li>
 </ul>
-    @if(passwordCredential != null){
-        <text>Created Password credentails :</text>
-        <ul>
-            <li  id="navigator-credentials-created-password-id">@passwordCredential.Id</li>
-            <li id="navigator-credentials-created-password-name">@passwordCredential.Name</li>
-            <li  id="navigator-credentials-created-password-password">@passwordCredential.Password</li>
-            <li  id="navigator-credentials-created-password-iconURL">@passwordCredential.IconURL</li>
-        </ul>
-    }
-    @if(passwordCredentialGet != null){
-        <text>Get Password credentails :</text>
-        <ul>
-            <li id="navigator-credentials-get-password-id">@passwordCredentialGet.Id</li>
-            <li id="navigator-credentials-get-password-name">@passwordCredentialGet.Name</li>
-            <li id="navigator-credentials-get-password-password">@passwordCredentialGet.Password</li>
-            <li id="navigator-credentials-get-password-iconURL">@passwordCredentialGet.IconURL</li>
-        </ul>
-    }
-    @if(federatedCredential != null){
-        <text>Created Federated credentails :</text>
-        <ul>
-            <li  id="navigator-credentials-created-federated-id">@federatedCredential.Id</li>
-            <li id="navigator-credentials-created-federated-name">@federatedCredential.Name</li>
-            <li  id="navigator-credentials-created-federated-provider">@federatedCredential.Provider</li>
-            <li  id="navigator-credentials-created-federated-iconURL">@federatedCredential.IconURL</li>
-        </ul>
-    }
 }
 
 @code {
     private NavigatorInterop navigator;
     private BatteryManager battery;
     private bool? javaEnabled;
-    private PasswordCredential passwordCredential;
-    private PasswordCredential passwordCredentialGet;
-    private FederatedCredential federatedCredential;
-    private PublicKeyCredential publicKeyCredential;
     protected override async Task OnInitializedAsync()
     {
         var window = await jsRuntime.Window();
         navigator = await window.Navigator();
         battery = await navigator.GetBattery();
         javaEnabled = await navigator.JavaEnabled();
-        passwordCredential = await navigator.Credentials.CreatePassword("id","test123","credential","https://google.com");
-        federatedCredential = await navigator.Credentials.CreateFederatedCredential("id","https://google.com","credential","https://google.com/iconURL");
-        passwordCredentialGet = await navigator.Credentials.GetPassword();
-        
-        //this code is disabled because we can't test it automaticcally but it serves here as a code sample for usage
-        publicKeyCredential = await navigator.Credentials.CreatePublicKeyCredential(new PublicKeyCredentialCreationOptions(
-            rp :new PublicKeyCredentialCreationOptionsRelyingPary("localhost","RP name"),
-            user: new PublicKeyCredentialCreationOptionsUser("us8FAAAAAAAAAA==","User name","User name display"),
-            challengeStr: "5GDePEtpjrhLbYk/s9x/awMMWSLTM6vb4OMPeWBYXk8=",
-            pubKeyCredParams: new List<PublicKeyCredentialsCreationPubKeyCredParam>
-                {
-                    new PublicKeyCredentialsCreationPubKeyCredParam(-7),
-
-                    new PublicKeyCredentialsCreationPubKeyCredParam(-257)
-                }
-        ));
-        
     }
 }
