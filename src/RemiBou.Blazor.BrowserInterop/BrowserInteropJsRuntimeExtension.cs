@@ -15,7 +15,7 @@ namespace RemiBou.Blazor.BrowserInterop
 
         private static bool ScriptInitialized = false;
 
-       
+
 
         /// <summary>
         /// Create a WIndowInterop instance that can be used for using Browser API
@@ -30,9 +30,9 @@ namespace RemiBou.Blazor.BrowserInterop
             {
                 var assembly = typeof(WindowInterop).Assembly;
 
-                using var ressourceStream =assembly.GetManifestResourceStream("RemiBou.Blazor.BrowserInterop.scripts.js");
+                using var ressourceStream = assembly.GetManifestResourceStream("RemiBou.Blazor.BrowserInterop.scripts.js");
                 using var ressourceReader = new StreamReader(ressourceStream);
-                await jSRuntime.InvokeVoidAsync("eval",ressourceReader.ReadToEnd());
+                await jSRuntime.InvokeVoidAsync("eval", ressourceReader.ReadToEnd());
                 ScriptInitialized = true;
             }
 
@@ -42,8 +42,13 @@ namespace RemiBou.Blazor.BrowserInterop
 
         public static async Task<T> GetWindowProperty<T>(this IJSRuntime jsRuntime, string propertyPath)
         {
-            return await jsRuntime.InvokeAsync<T>("browserInterop.getProperty",propertyPath);
+            return await jsRuntime.InvokeAsync<T>("browserInterop.getProperty", propertyPath);
 
+        }
+
+        public static async Task<bool> HasProperty(this IJSRuntime jsRuntime, string propertyPath)
+        {
+            return await jsRuntime.InvokeAsync<bool>("browserInterop.hasProperty", propertyPath);
         }
     }
 }

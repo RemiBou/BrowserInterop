@@ -4,17 +4,28 @@ browserInterop = {
         var splitProperty = propertyName.split('.');
         var currentProperty = window;
         for (i = 0; i < splitProperty.length; i++) {
-            currentProperty = currentProperty[splitProperty[i]];
+            if (splitProperty[i] in currentProperty) {
+                currentProperty = currentProperty[splitProperty[i]];
+            } else {
+                return null;
+            }
         }
         return currentProperty;
     },
+    callMethodPromise: function (methodPath) {
+
+    },
     credential: {
         create: function (param) {
-            console.log(param);
+            param = browserInterop.getSerializableObject(param, []);
+            /*if (param.publicKey) {
+                param.publicKey.challenge = new Uint8Array(param.publicKey.challenge);
+                param.publicKey.user.id = new Uint8Array(param.publicKey.user.id);
+            }*/
             return new Promise(function (resolve, reject) {
                 navigator.credentials.create(param).then(
                     credential => {
-                        console.log(credential);
+                        console.log(param);
                         return resolve(browserInterop.getSerializableObject(credential, []));
                     }
                 );
@@ -35,6 +46,9 @@ browserInterop = {
                 }
             );
         });
+    },
+    hasProperty: function (propertyPath) {
+        return browserInterop.getProperty(propertyPath) !== null;
     },
     getSerializableObject: function (data, alreadySerialized) {
         var res = {};
@@ -66,7 +80,9 @@ browserInterop = {
                 if (currentMember === Infinity) { //inifity is not serialized by JSON.stringify
                     currentMember = "Infinity";
                 }
-                res[i] = currentMember;
+                if (currentMember !== null) { //needed because the default json serializer in jsinterop serialize null values
+                    res[i] = currentMember;
+                }
             }
         }
         return res;
