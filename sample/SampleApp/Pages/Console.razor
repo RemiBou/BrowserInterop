@@ -1,4 +1,4 @@
-﻿@page "/"
+﻿@page "/console"
 @inject IJSRuntime jsRuntime;
 @using RemiBou.Blazor.BrowserInterop
 <h1>Console API Interop Demo, look at the console to see what we are talking about</h1>
@@ -8,11 +8,11 @@
 WA demo HTML block for window.Console.DirXml</span>
     </div>
 </div>
-
+<button type="button" id="btn-console-do-test" @onclic="DoTests">Launch console Tests</button>
 
 @code {
     ElementReference block;
-    protected override async Task OnInitializedAsync()
+    protected async Task DoTests()
     {
         var window = await jsRuntime.Window();
 
