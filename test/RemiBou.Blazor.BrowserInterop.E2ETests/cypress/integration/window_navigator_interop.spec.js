@@ -103,6 +103,7 @@ context('window.navigator', () => {
                 watchCallBack = cb;
                 return 90;
             });
+
             cy.get("#navigator-geolocation-get").click().then(() => {
                 cy.get("#navigator-geolocation-timestamp").should('have.text', '01/12/2020 21:54:50 +00:00');
                 cy.get("#navigator-geolocation-coords-latitude").should('have.text', '43.5');
@@ -115,12 +116,9 @@ context('window.navigator', () => {
                 watchCallBack(coordinates);
                 cy.get("#navigator-geolocation-changed").should('have.text', '1')
                     .then(() => {
-                        var watcherId = 0;
-                        cy.stub(w.navigator.geolocation, "clearWatch", (id) => {
-                            watcherId = id;
-                        });
+                        cy.spy(w.navigator.geolocation, "clearWatch");
                         cy.get("#navigator-geolocation-event-change-stop").click().then(() => {
-                            expect(watcherId).to.be.eq(90);
+                            expect(w.navigator.geolocation.clearWatch).to.be.calledWith(90);
                         })
                     });
             });
