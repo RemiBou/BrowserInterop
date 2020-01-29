@@ -67,7 +67,7 @@ namespace RemiBou.Blazor.BrowserInterop.Geolocation
 
             public async ValueTask DisposeAsync()
             {
-                await this.jSRuntime.InvokeVoidAsync("browserInterop.navigator.geolocation.clearWatch", watchId);
+                await this.jSRuntime.InvokeVoidAsync("navigator.geolocation.clearWatch", watchId);
             }
         }
     }

@@ -116,7 +116,7 @@ context('window.navigator', () => {
                 watchCallBack(coordinates);
                 cy.get("#navigator-geolocation-changed").should('have.text', '1')
                     .then(() => {
-                        cy.spy(w.navigator.geolocation, "clearWatch");
+                        cy.spyFix(w.navigator.geolocation, "clearWatch", w);
                         cy.get("#navigator-geolocation-event-change-stop").click().then(() => {
                             expect(w.navigator.geolocation.clearWatch).to.be.calledWith(90);
                         })

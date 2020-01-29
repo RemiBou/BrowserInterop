@@ -87,10 +87,6 @@ browserInterop = {
                         options)
                 });
             },
-            ///This is because JSInterop doe snot recognize  window.navigator.geolocation.clearWatch as a method
-            clearWatch: function (id) {
-                window.navigator.geolocation.clearWatch(id);
-            },
             watchPosition: function (options, wrapper) {
                 return navigator.geolocation.watchPosition(
                     position => {
