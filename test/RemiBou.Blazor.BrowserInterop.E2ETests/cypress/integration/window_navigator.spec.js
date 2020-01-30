@@ -125,4 +125,16 @@ context('window.navigator', () => {
 
         });
     });
+    it('Check storage', function () {
+        cy.window().then(w => {
+            cy.get("#navigator-storage-getStorageEstimate").click()
+                .then(() => {
+                    cy.wrap(w.navigator.storage.estimate()).then(e => {
+                        cy.get("#navigator-storage-estimate-quota").should('have.text', e.quota.toString());
+                        cy.get("#navigator-storage-estimate-usage").should('have.text', e.usage.toString());
+
+                    });
+                });
+        });
+    });
 })

@@ -2,6 +2,7 @@
 @inject IJSRuntime jsRuntime;
 @using RemiBou.Blazor.BrowserInterop
 @using RemiBou.Blazor.BrowserInterop.Geolocation;
+@using RemiBou.Blazor.BrowserInterop.Storage;
 @using System.Globalization
 <h1>Navigator API Interop Demo</h1>
 <h2>Navigator : </h2>
@@ -12,6 +13,8 @@
     <li id="navigator-app-version">@navigator.AppVersion</li>
     <li>
         Connection :
+        <span id="navigator-connection-event-change-handled">@connectionChangedEventHandled</span>
+        <button id="navigator-connection-event-change-stop" type="button" @onclick="async () => await connectionChangeEventHandler.DisposeAsync()">Dispose event handler</button>
         <ul>
             <li id="navigator-connection-downlink">@navigator.Connection.Downlink.ToString(CultureInfo.InvariantCulture)</li>
             <li id="navigator-connection-downlinkmax">@navigator.Connection.DownlinkMax.ToString(CultureInfo.InvariantCulture)</li>
@@ -63,10 +66,7 @@
     </li>
 </ul>
 }
-<span id="navigator-connection-event-change-handled">@connectionChangedEventHandled</span>
-<button id="navigator-connection-event-change-stop" type="button" @onclick="async () => await connectionChangeEventHandler.DisposeAsync()">Dispose event handler</button>
-<button id="navigator-geolocation-get" type="button" @onclick="async () => await GetGeolocation()">Get Geolocation</button>
-
+<button id="navigator-geolocation-get" type="button" @onclick="GetGeolocation">Get Geolocation</button>
 @if(geolocationResult != null){
     
 
@@ -93,6 +93,16 @@
     </ul>
   }
 }
+
+<button id="navigator-storage-getStorageEstimate" type="button" @onclick="GetStorageEstimate">Get storage estimate</button>
+@if(storageEstimate != null){
+    <text> Storage</text>
+    <ul>
+        <li id="navigator-storage-estimate-quota">@storageEstimate.Quota.ToString(CultureInfo.InvariantCulture)</li>
+        <li id="navigator-storage-estimate-usage">@storageEstimate.Usage.ToString(CultureInfo.InvariantCulture)</li>
+    </ul>
+}
+
 @code {
     private NavigatorInterop navigator;
     private BatteryManager battery;
@@ -135,5 +145,9 @@
                 await window.Console.Log(p);
             }  
         );
+    }
+    private StorageEstimate storageEstimate;
+    public async Task GetStorageEstimate(){
+        storageEstimate = await  navigator.Storage.Estimate();
     }
 }

@@ -4,6 +4,8 @@ using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using Microsoft.JSInterop;
 using RemiBou.Blazor.BrowserInterop.Geolocation;
+using RemiBou.Blazor.BrowserInterop.Storage;
+
 namespace RemiBou.Blazor.BrowserInterop
 {
     public class NavigatorInterop
@@ -18,6 +20,7 @@ namespace RemiBou.Blazor.BrowserInterop
         {
             this.jsRuntime = jsRuntime;
             Geolocation = new GeolocationInterop(jsRuntime);
+            Storage = new StorageInterop(jsRuntime);
             this.Connection?.SetJsRuntime(jsRuntime);
         }
 
@@ -127,6 +130,12 @@ namespace RemiBou.Blazor.BrowserInterop
         /// <returns></returns>
 
         public PluginInterop[] Plugins { get; set; }
+
+        /// <summary>
+        /// Provides an interface for managing persistance permissions and estimating available storage
+        /// </summary>
+        /// <value></value>
+        public StorageInterop Storage { get; private set; }
 
         /// <summary>
         /// Return the user agent string for the browser
