@@ -132,7 +132,8 @@ context('window.navigator', () => {
                     cy.wrap(w.navigator.storage.estimate()).then(e => {
                         cy.get("#navigator-storage-estimate-quota").should('have.text', e.quota.toString());
                         cy.get("#navigator-storage-estimate-usage").should('have.text', e.usage.toString());
-
+                        cy.get("#navigator-storage-storagePersist").should('have.text', 'false');
+                        cy.get("#navigator-storage-storagePersisted").should('have.text', 'false');
                     });
                 });
         });

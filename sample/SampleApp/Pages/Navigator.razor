@@ -95,13 +95,15 @@
 }
 
 <button id="navigator-storage-getStorageEstimate" type="button" @onclick="GetStorageEstimate">Get storage estimate</button>
-@if(storageEstimate != null){
-    <text> Storage</text>
-    <ul>
-        <li id="navigator-storage-estimate-quota">@storageEstimate.Quota.ToString(CultureInfo.InvariantCulture)</li>
-        <li id="navigator-storage-estimate-usage">@storageEstimate.Usage.ToString(CultureInfo.InvariantCulture)</li>
-    </ul>
-}
+
+Storage
+<ul>
+    <li id="navigator-storage-estimate-quota">@storageEstimate?.Quota.ToString(CultureInfo.InvariantCulture)</li>
+    <li id="navigator-storage-estimate-usage">@storageEstimate?.Usage.ToString(CultureInfo.InvariantCulture)</li>
+    <li id="navigator-storage-storagePersist">@storagePersist.ToString().ToLower()</li>
+    <li id="navigator-storage-storagePersisted">@storagePersisted.ToString().ToLower()</li>
+</ul>
+
 
 @code {
     private NavigatorInterop navigator;
@@ -147,7 +149,11 @@
         );
     }
     private StorageEstimate storageEstimate;
+    private bool? storagePersist;
+    private bool? storagePersisted;
     public async Task GetStorageEstimate(){
         storageEstimate = await  navigator.Storage.Estimate();
+        storagePersist = await navigator.Storage.Persist();
+        storagePersisted = await navigator.Storage.Persisted();
     }
 }
