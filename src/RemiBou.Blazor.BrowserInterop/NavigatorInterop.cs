@@ -143,6 +143,48 @@ namespace RemiBou.Blazor.BrowserInterop
         /// <value></value>
         public string UserAgent { get; set; }
 
+        /// <summary>
+        /// Returns true if a call to Share() would succeed.
+        /// Returns false if it would fail or sharing is not supported
+        /// </summary>
+        /// <returns></returns>
+        public async Task<bool> CanShare(ShareData shareData)
+        {
+            return await jsRuntime.HasProperty("navigator.canShare") && await jsRuntime.InvokeAsync<bool>("navigator.canShare", shareData);
+        }
+
+        /// <summary>
+        /// Lets web sites register their ability to open or handle particular URL schemes (aka protocols).
+        /// 
+        /// For example, this API lets webmail sites open mailto: URLs, or VoIP sites open tel: URLs.
+        /// </summary>
+        /// <param name="protocol">A string containing the protocol the site wishes to handle. For example, you can register to handle SMS text message links by passing the "sms" scheme.</param>
+        /// <param name="url">A string containing the URL of the handler. This URL must include %s, as a placeholder that will be replaced with the escaped URL to be handled.</param>
+        /// <param name="title">A human-readable title string for the handler. This will be displayed to the user, such as prompting “Allow this site to handle [scheme] links?” or listing registered handlers in the browser’s settings.</param>
+        /// <returns></returns>
+        public async Task RegisterProtocolHandler(string protocol, string url, string title)
+        {
+            if (string.IsNullOrEmpty(protocol))
+            {
+                throw new ArgumentException("Protocol parameter is mandatory", nameof(protocol));
+            }
+
+            if (string.IsNullOrEmpty(url))
+            {
+                throw new ArgumentException("URL parameter is mandatory", nameof(url));
+            }
+
+            if (string.IsNullOrEmpty(title))
+            {
+                throw new ArgumentException("Title parameter is mandatory", nameof(title));
+            }
+
+            if (await jsRuntime.HasProperty("navigator.registerProtocolHandler"))
+            {
+                await jsRuntime.InvokeVoidAsync("navigator.registerProtocolHandler", protocol, url, title);
+            }
+        }
+
     }
     //from https://github.com/dotnet/corefx/issues/41442#issuecomment-553196880
     internal class HandleSpecialDoublesAsStrings : JsonConverter<double>

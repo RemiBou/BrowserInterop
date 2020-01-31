@@ -138,4 +138,19 @@ context('window.navigator', () => {
                 });
         });
     });
+    it('Check methods', function () {
+        cy.window().then(w => {
+            if (w.navigator.canShare)
+                cy.wrap(w.navigator.canShare()).then(
+                    (v) => cy.get("#navigator-canShare").should('have.text', v.toString())
+                )
+            if (w.navigator.registerProtocolHandler) {
+                cy.spyFix(w.navigator, 'registerProtocolHandler', w);
+                cy.get("#navigator-registerProtocolHandler").click().then(() => {
+                    expect(w.navigator.registerProtocolHandler).to.be.calledOnce;
+                });
+            }
+        });
+
+    });
 })

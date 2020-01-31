@@ -8,58 +8,58 @@
 <h2>Navigator : </h2>
 @if(navigator != null){
 <ul>
-    <li id="navigator-app-code-name">@navigator.AppCodeName</li>
-    <li id="navigator-app-name">@navigator.AppName</li>
-    <li id="navigator-app-version">@navigator.AppVersion</li>
+    <li>AppCodeName: <span id="navigator-app-code-name">@navigator.AppCodeName</span></li>
+    <li>AppName: <span id="navigator-app-name">@navigator.AppName</span></li>
+    <li>AppVersion: <span id="navigator-app-version">@navigator.AppVersion</span></li>
     <li>
         Connection :
         <span id="navigator-connection-event-change-handled">@connectionChangedEventHandled</span>
         <button id="navigator-connection-event-change-stop" type="button" @onclick="async () => await connectionChangeEventHandler.DisposeAsync()">Dispose event handler</button>
         <ul>
-            <li id="navigator-connection-downlink">@navigator.Connection.Downlink.ToString(CultureInfo.InvariantCulture)</li>
-            <li id="navigator-connection-downlinkmax">@navigator.Connection.DownlinkMax.ToString(CultureInfo.InvariantCulture)</li>
-            <li id="navigator-connection-effectiveType">@navigator.Connection.EffectiveType</li>
-            <li>@navigator.Connection.EffectiveTypeEnum</li>
-            <li id="navigator-connection-rtt">@navigator.Connection.Rtt</li>
-            <li id="navigator-connection-saveData">@navigator.Connection.SaveData.ToString().ToLower()</li>
-            <li id="navigator-connection-type">@navigator.Connection.Type</li>
-            <li id="navigator-connection-typeEnum">@navigator.Connection.TypeEnum</li>
-            <li id="navigator-cookieEnabled">@navigator.CookieEnabled.ToString().ToLower()</li>
-            <li id="navigator-hardwareConcurrency">@navigator.HardwareConcurrency</li>
-            <li id="navigator-javaEnabled">@javaEnabled?.ToString()?.ToLower()</li>
-            <li id="navigator-language">@navigator.Language</li>
-            <li id="navigator-languages">Languages :
+            <li>Downlink: <span id="navigator-connection-downlink">@navigator.Connection.Downlink.ToString(CultureInfo.InvariantCulture)</span></li>
+            <li>DownlinkMax: <span id="navigator-connection-downlinkmax">@navigator.Connection.DownlinkMax.ToString(CultureInfo.InvariantCulture)</span></li>
+            <li>EffectiveType: <span id="navigator-connection-effectiveType">@navigator.Connection.EffectiveType</span> (@navigator.Connection.EffectiveTypeEnum)</li>
+            <li>Rtt: <span id="navigator-connection-rtt">@navigator.Connection.Rtt</span></li>
+            <li>SaveData: <span id="navigator-connection-saveData">@navigator.Connection.SaveData.ToString().ToLower()</span></li>
+            <li>Type: <span id="navigator-connection-type">@navigator.Connection.Type</span></li>
+            <li>TypeEnum: <span id="navigator-connection-typeEnum">@navigator.Connection.TypeEnum</span></li>
+            <li>CookieEnabled: <span id="navigator-cookieEnabled">@navigator.CookieEnabled.ToString().ToLower()</span></li>
+            <li>HardwareConcurrency: <span id="navigator-hardwareConcurrency">@navigator.HardwareConcurrency</span></li>
+            <li>javaEnabled: <span id="navigator-javaEnabled">@javaEnabled?.ToString()?.ToLower()</span></li>
+            <li>Language: <span id="navigator-language">@navigator.Language</span></li>
+            <li id="navigator-languages">
+                Languages :
                 <ul>
                 @foreach(var lang in navigator.Languages){
-                    <li lang="@lang">@lang</li>    
+                    <li lang="@lang"><span>@lang</span></li>    
                 }
                 </ul>
             </li>
-             <li id="navigator-maxTouchPoints">@navigator.MaxTouchPoints</li>
+             <li>MaxTouchPoints: <span id="navigator-maxTouchPoints">@navigator.MaxTouchPoints</span></li>
             <li id="navigator-mimeTypes">MimeTypes :
                 <ul>
                 @foreach(var mime in navigator.MimeTypes){
-                    <li mime="@mime.Type">@mime.Type</li>    
+                    <li  mime="@mime.Type"><span>@mime.Type</span></li>    
                 }
                 </ul>
-            </li>
+                </li>
              <li id="navigator-plugins">Plugins :
                 <ul>
                 @foreach(var plugin in navigator.Plugins){
-                    <li filename="@plugin.FileName">@plugin.FileName</li>    
+                    <li filename="@plugin.FileName"><span >@plugin.FileName</span></li>    
                 }
                 </ul>
-            </li>
-            <li id="navigator-online">@navigator.Online.ToString().ToLower()</li>
-            <li id="navigator-platform">@navigator.Platform</li>
-            <li id="navigator-userAgent">@navigator.UserAgent</li>
+                </li>
+            <li>Online: <span id="navigator-online">@navigator.Online.ToString().ToLower()</span></li>
+            <li>Platform: <span id="navigator-platform">@navigator.Platform</span></li>
+            <li>UserAgent: <span id="navigator-userAgent">@navigator.UserAgent</span></li>
             <li>
                 Battery :
                 <ul>
-                    <li id="navigator-battery-charging">@battery.Charging.ToString().ToLower()</li>
-                    <li id="navigator-battery-chargingTime">@battery.ChargingTime.ToString(CultureInfo.InvariantCulture)</li>
-                    <li id="navigator-battery-dischargingTime">@battery.DischargingTime.ToString(CultureInfo.InvariantCulture)</li>
-                    <li id="navigator-battery-level">@battery.Level.ToString(CultureInfo.InvariantCulture)</li>
+                    <li>Charging: <span id="navigator-battery-charging">@battery.Charging.ToString().ToLower()</span></li>
+                    <li>ChargingTime: <span id="navigator-battery-chargingTime">@battery.ChargingTime.ToString(CultureInfo.InvariantCulture)</span></li>
+                    <li>DischargingTime: <span id="navigator-battery-dischargingTime">@battery.DischargingTime.ToString(CultureInfo.InvariantCulture)</span></li>
+                    <li>Level: <span id="navigator-battery-level">@battery.Level.ToString(CultureInfo.InvariantCulture)</span></li>
                 </ul>
             </li>
         </ul>
@@ -71,25 +71,26 @@
     
 
   <text>  GeolocationCoordinates :</text>
-  <span id="navigator-geolocation-changed">@geopositionChanged</span>
+  geopositionChanged: <span id="navigator-geolocation-changed">@geopositionChanged</span>
   <button id="navigator-geolocation-event-change-stop" type="button" @onclick="async () => await geopositionWatcher.DisposeAsync()">Dispose geoposition event handler</button>
 
   @if(geolocationResult.Location != null){
     <ul>
-        <li id="navigator-geolocation-timestamp">@geolocationResult.Location.TimestampDateTime</li>
-        <li id="navigator-geolocation-coords-latitude">@geolocationResult.Location.Coords.Latitude.ToString(CultureInfo.InvariantCulture)</li>
-        <li id="navigator-geolocation-coords-longitude">@geolocationResult.Location.Coords.Longitude.ToString(CultureInfo.InvariantCulture)</li>
-        <li id="navigator-geolocation-coords-accuracy">@geolocationResult.Location.Coords.Accuracy.ToString(CultureInfo.InvariantCulture)</li>
-        <li id="navigator-geolocation-coords-altitude">@geolocationResult.Location.Coords.Altitude.Value.ToString(CultureInfo.InvariantCulture)</li>
-        <li id="navigator-geolocation-coords-altitudeAccuracy">@geolocationResult.Location.Coords.AltitudeAccuracy.Value.ToString(CultureInfo.InvariantCulture)</li>
-        <li id="navigator-geolocation-coords-heading">@geolocationResult.Location.Coords.Heading.Value.ToString(CultureInfo.InvariantCulture)</li>
-        <li id="navigator-geolocation-coords-speed">@geolocationResult.Location.Coords.Speed.Value.ToString(CultureInfo.InvariantCulture)</li>
+        <li>TimestampDateTime: <span id="navigator-geolocation-timestamp">@geolocationResult.Location.TimestampDateTime</span></li>
+        <li>Latitude: <span id="navigator-geolocation-coords-latitude">@geolocationResult.Location.Coords.Latitude.ToString(CultureInfo.InvariantCulture)</span></li>
+        <li>Longitude: <span id="navigator-geolocation-coords-longitude">@geolocationResult.Location.Coords.Longitude.ToString(CultureInfo.InvariantCulture)</span></li>
+        <li>Accuracy: <span id="navigator-geolocation-coords-accuracy">@geolocationResult.Location.Coords.Accuracy.ToString(CultureInfo.InvariantCulture)</span></li>
+        <li>Altitude: <span id="navigator-geolocation-coords-altitude">@geolocationResult.Location.Coords.Altitude.Value.ToString(CultureInfo.InvariantCulture)</span></li>
+        <li>AltitudeAccuracy: <span id="navigator-geolocation-coords-altitudeAccuracy">@geolocationResult.Location.Coords.AltitudeAccuracy.Value.ToString(CultureInfo.InvariantCulture)</span></li>
+        <li>Heading: <span id="navigator-geolocation-coords-heading">@geolocationResult.Location.Coords.Heading.Value.ToString(CultureInfo.InvariantCulture)</span></li>
+        <li>Speed: <span id="navigator-geolocation-coords-speed">@geolocationResult.Location.Coords.Speed.Value.ToString(CultureInfo.InvariantCulture)</span></li>
     </ul>
   }
   @if(geolocationResult.Error != null){
+    <text>   ErrorEventArgs :</text>
     <ul>
-        <li>@geolocationResult.Error.CodeEnum</li>
-        <li>@geolocationResult.Error.Message</li>
+        <li>CodeEnum: @geolocationResult.Error.CodeEnum</li>
+        <li>Message: @geolocationResult.Error.Message</li>
     </ul>
   }
 }
@@ -98,12 +99,17 @@
 
 Storage
 <ul>
-    <li id="navigator-storage-estimate-quota">@storageEstimate?.Quota.ToString(CultureInfo.InvariantCulture)</li>
-    <li id="navigator-storage-estimate-usage">@storageEstimate?.Usage.ToString(CultureInfo.InvariantCulture)</li>
-    <li id="navigator-storage-storagePersist">@storagePersist.ToString().ToLower()</li>
-    <li id="navigator-storage-storagePersisted">@storagePersisted.ToString().ToLower()</li>
+    <li>Quota: <span id="navigator-storage-estimate-quota">@storageEstimate?.Quota.ToString(CultureInfo.InvariantCulture)</span></li>
+    <li>Usage: <span id="navigator-storage-estimate-usage">@storageEstimate?.Usage.ToString(CultureInfo.InvariantCulture)</span></li>
+    <li>storagePersist: <span id="navigator-storage-storagePersist">@storagePersist.ToString().ToLower()</span></li>
+    <li>storagePersisted: <span id="navigator-storage-storagePersisted">@storagePersisted.ToString().ToLower()</span></li>
 </ul>
 
+Method calls
+<button id="navigator-registerProtocolHandler" type="button" @onclick="RegisterProtocolHandler">RegisterProtocolHandler</button>
+<ul>
+    <li>canShare :<span id="navigator-canShare">@canShare</span></li>
+</ul>
 
 @code {
     private NavigatorInterop navigator;
@@ -118,6 +124,7 @@ Storage
     private WindowInterop window;
 
     private int geopositionChanged;
+    private bool? canShare;
 
     protected override async Task OnInitializedAsync()
     {
@@ -131,9 +138,12 @@ Storage
             StateHasChanged();
             
         });
-        
+        canShare = await navigator.CanShare(new ShareData());
+      
     }
-
+    public async Task RegisterProtocolHandler(){
+         await navigator.RegisterProtocolHandler("web+browserinterop","http://localhost:5000/navigator?%s","Browser Interop");
+    }
     public async Task GetGeolocation(){
         geolocationResult =await  navigator.Geolocation.GetCurrentPosition(new PositionOptions(){
             EnableHighAccuracy = true,
