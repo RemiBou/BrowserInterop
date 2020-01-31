@@ -12,9 +12,14 @@ steps:
   displayName: 'Install SDK'
   inputs:
     version: 3.1.100	
+- task: 
+  inputs: 
+    targetType: file
+    filePath: ci-test.sh
+      - cd 
 - task: NuGetToolInstaller@0
   inputs:
-    versionSpec: '4.9.2' 
+    versionSpec: '4.9.2'     
 - task: DotNetCoreCLI@2
   displayName: 'dotnet pack'
   inputs:
