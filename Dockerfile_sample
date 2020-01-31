@@ -1,6 +1,0 @@
-FROM  mcr.microsoft.com/dotnet/core/sdk:3.1
-COPY sample/SampleApp /src/sample/SampleApp
-COPY src/BrowserInterop /src/src/BrowserInterop
-WORKDIR /src/sample/SampleApp
-RUN dotnet build
-CMD dotnet run
