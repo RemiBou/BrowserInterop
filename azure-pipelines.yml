@@ -13,9 +13,11 @@ steps:
   inputs:
     version: 3.1.100	
 - task: Bash@3 
+  displayName: 'Tests'
   inputs: 
     targetType: file
-    script: (cd sample/SampleApp; dotnet run) & (cd test/BrowserInterop.E2ETests; docker run -it -v $PWD:/e2e -w /e2e cypress/included:3.8.3 --config baseUrl=http://host.docker.internal:5000)
+    workingDirectory: test/BrowserInterop.E2ETests
+    script: docker-compose up --exit-code-from cypress
 - task: NuGetToolInstaller@0
   inputs:
     versionSpec: '4.9.2'     
