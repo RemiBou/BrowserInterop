@@ -5,10 +5,10 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using Microsoft.JSInterop;
-using RemiBou.Blazor.BrowserInterop.Geolocation;
-using RemiBou.Blazor.BrowserInterop.Storage;
+using BrowserInterop.Geolocation;
+using BrowserInterop.Storage;
 
-namespace RemiBou.Blazor.BrowserInterop
+namespace BrowserInterop
 {
     public class NavigatorInterop
     {

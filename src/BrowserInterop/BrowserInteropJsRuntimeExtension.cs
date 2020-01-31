@@ -5,7 +5,7 @@ using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Microsoft.JSInterop;
 
-namespace RemiBou.Blazor.BrowserInterop
+namespace BrowserInterop
 {
     /// <summary>
     /// Extension to the JSRuntime for using Browser API
@@ -30,7 +30,7 @@ namespace RemiBou.Blazor.BrowserInterop
             {
                 var assembly = typeof(WindowInterop).Assembly;
 
-                using var ressourceStream = assembly.GetManifestResourceStream("RemiBou.Blazor.BrowserInterop.scripts.js");
+                using var ressourceStream = assembly.GetManifestResourceStream("BrowserInterop.scripts.js");
                 using var ressourceReader = new StreamReader(ressourceStream);
                 await jSRuntime.InvokeVoidAsync("eval", ressourceReader.ReadToEnd());
                 ScriptInitialized = true;

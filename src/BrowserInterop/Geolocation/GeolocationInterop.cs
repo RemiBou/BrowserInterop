@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Microsoft.JSInterop;
 
-namespace RemiBou.Blazor.BrowserInterop.Geolocation
+namespace BrowserInterop.Geolocation
 {
     public class GeolocationInterop
     {

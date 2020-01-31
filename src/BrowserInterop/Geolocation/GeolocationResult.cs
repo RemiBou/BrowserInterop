@@ -1,4 +1,4 @@
-namespace RemiBou.Blazor.BrowserInterop.Geolocation
+namespace BrowserInterop.Geolocation
 {
     /// <summary>
     /// Resultof a GetCurrentPosition call

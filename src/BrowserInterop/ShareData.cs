@@ -1,4 +1,4 @@
-namespace RemiBou.Blazor.BrowserInterop
+namespace BrowserInterop
 {
     /// <summary>
     /// An object containing data to share. At least one of the fields must be specified.

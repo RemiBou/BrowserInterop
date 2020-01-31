@@ -1,4 +1,4 @@
-namespace RemiBou.Blazor.BrowserInterop.Storage
+namespace BrowserInterop.Storage
 {
     /// <summary>
     /// breakdown of usage by storage system.  All included members will have a usage greater than 0 and any storage system with 0 usage will be excluded from the dictionary.  

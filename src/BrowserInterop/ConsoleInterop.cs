@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 
-namespace RemiBou.Blazor.BrowserInterop
+namespace BrowserInterop
 {
     /// <summary>
     /// Give access to window.console API https://developer.mozilla.org/en-US/docs/Web/API/Console/

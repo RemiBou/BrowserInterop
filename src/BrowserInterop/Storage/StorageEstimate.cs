@@ -1,4 +1,4 @@
-namespace RemiBou.Blazor.BrowserInterop.Storage
+namespace BrowserInterop.Storage
 {
     /// <summary>
     /// Provide estimates of the size of a site's or application's data store and how much of it is in use.

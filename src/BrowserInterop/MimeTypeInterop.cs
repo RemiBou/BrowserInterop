@@ -1,4 +1,4 @@
-namespace RemiBou.Blazor.BrowserInterop
+namespace BrowserInterop
 {
     public class MimeTypeInterop
     {

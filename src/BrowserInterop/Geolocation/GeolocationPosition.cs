@@ -1,6 +1,6 @@
 using System;
 
-namespace RemiBou.Blazor.BrowserInterop.Geolocation
+namespace BrowserInterop.Geolocation
 {
     /// <summary>
     /// represents the position of the concerned device at a given time. The position, represented by a GeolocationCoordinates object, comprehends the 2D position of the device, on a spheroid representing the Earth, but also its altitude and its speed.

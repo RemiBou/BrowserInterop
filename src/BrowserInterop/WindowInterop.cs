@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 
-namespace RemiBou.Blazor.BrowserInterop
+namespace BrowserInterop
 {
 
     public class WindowInterop

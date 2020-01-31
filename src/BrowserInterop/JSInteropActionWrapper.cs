@@ -2,7 +2,7 @@ using System;
 using System.Threading.Tasks;
 using Microsoft.JSInterop;
 
-namespace RemiBou.Blazor.BrowserInterop
+namespace BrowserInterop
 {
     internal class JSInteropActionWrapper : IAsyncDisposable
     {

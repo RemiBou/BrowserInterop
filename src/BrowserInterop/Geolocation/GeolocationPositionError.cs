@@ -1,6 +1,6 @@
 using System;
 
-namespace RemiBou.Blazor.BrowserInterop.Geolocation
+namespace BrowserInterop.Geolocation
 {
     public class GeolocationPositionError
     {

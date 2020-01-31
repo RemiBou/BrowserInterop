@@ -1,4 +1,4 @@
-namespace RemiBou.Blazor.BrowserInterop
+namespace BrowserInterop
 {
     using System;
     using System.Text.Json.Serialization;

@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
 using Microsoft.JSInterop;
 
-namespace RemiBou.Blazor.BrowserInterop.Storage
+namespace BrowserInterop.Storage
 {
     /// <summary>
     /// provides an interface for managing persistance permissions and estimating available storage

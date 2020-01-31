@@ -1,8 +1,8 @@
 @page "/navigator"
 @inject IJSRuntime jsRuntime;
-@using RemiBou.Blazor.BrowserInterop
-@using RemiBou.Blazor.BrowserInterop.Geolocation;
-@using RemiBou.Blazor.BrowserInterop.Storage;
+@using BrowserInterop
+@using BrowserInterop.Geolocation;
+@using BrowserInterop.Storage;
 @using System.Globalization
 <h1>Navigator API Interop Demo</h1>
 <h2>Navigator : </h2>
@@ -71,7 +71,7 @@
     
 
   <text>  GeolocationCoordinates :</text>
-  geopositionChanged: <span id="navigator-geolocation-changed">@geopositionChanged</span>
+  GeopositionChanged : <span id="navigator-geolocation-changed">@geopositionChanged</span>
   <button id="navigator-geolocation-event-change-stop" type="button" @onclick="async () => await geopositionWatcher.DisposeAsync()">Dispose geoposition event handler</button>
 
   @if(geolocationResult.Location != null){

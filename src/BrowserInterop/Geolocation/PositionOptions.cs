@@ -1,7 +1,7 @@
 using System;
 using System.Text.Json.Serialization;
 
-namespace RemiBou.Blazor.BrowserInterop.Geolocation
+namespace BrowserInterop.Geolocation
 {
     /// <summary>
     /// Position getting options
