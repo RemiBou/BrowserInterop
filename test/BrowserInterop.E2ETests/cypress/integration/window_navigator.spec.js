@@ -105,7 +105,7 @@ context('window.navigator', () => {
             });
 
             cy.get("#navigator-geolocation-get").click().then(() => {
-                cy.get("#navigator-geolocation-timestamp").should('have.text', '01/12/2020 21:54:50 +00:00');
+                cy.get("#navigator-geolocation-timestamp").should('not.be.empty');
                 cy.get("#navigator-geolocation-coords-latitude").should('have.text', '43.5');
                 cy.get("#navigator-geolocation-coords-longitude").should('have.text', '13.2');
                 cy.get("#navigator-geolocation-coords-altitude").should('have.text', '150.6');
@@ -129,17 +129,19 @@ context('window.navigator', () => {
         cy.window().then(w => {
             cy.get("#navigator-storage-getStorageEstimate").click()
                 .then(() => {
-                    cy.wrap(w.navigator.storage.estimate()).then(e => {
-                        cy.get("#navigator-storage-estimate-quota").should('have.text', e.quota.toString());
-                        cy.get("#navigator-storage-estimate-usage").should('have.text', e.usage.toString());
+                    if (w.navigator.storage) {
+                        cy.wrap(w.navigator.storage.estimate()).then(e => {
+                            cy.get("#navigator-storage-estimate-quota").should('have.text', e.quota.toString());
+                            cy.get("#navigator-storage-estimate-usage").should('have.text', e.usage.toString());
 
-                    });
-                    cy.wrap(w.navigator.storage.persist()).then((p) => {
-                        cy.get("#navigator-storage-storagePersist").should('have.text', p.toString());
-                    });
-                    cy.wrap(w.navigator.storage.persisted()).then((p) => {
-                        cy.get("#navigator-storage-storagePersisted").should('have.text', p.toString());
-                    });
+                        });
+                        cy.wrap(w.navigator.storage.persist()).then((p) => {
+                            cy.get("#navigator-storage-storagePersist").should('have.text', p.toString());
+                        });
+                        cy.wrap(w.navigator.storage.persisted()).then((p) => {
+                            cy.get("#navigator-storage-storagePersisted").should('have.text', p.toString());
+                        });
+                    }
                 });
         });
     });

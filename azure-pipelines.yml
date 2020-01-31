@@ -15,7 +15,7 @@ steps:
 - task: Bash@3 
   inputs: 
     targetType: file
-    script: (cd sample/SampleApp; dotnet run) & (cd test/BrowserInterop.E2ETests; npm install; npm run-script run)
+    script: (cd sample/SampleApp; dotnet run) & (cd test/BrowserInterop.E2ETests; docker run -it -v $PWD:/e2e -w /e2e cypress/included:3.8.3 --config baseUrl=http://host.docker.internal:5000)
 - task: NuGetToolInstaller@0
   inputs:
     versionSpec: '4.9.2'     
