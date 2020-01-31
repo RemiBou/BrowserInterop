@@ -15,7 +15,7 @@ steps:
 - task: Bash@3 
   inputs: 
     targetType: file
-    filePath: 'ci-test.sh'
+    script: (cd sample/SampleApp; dotnet run) & (cd test/BrowserInterop.E2ETests; npm run-script run)
 - task: NuGetToolInstaller@0
   inputs:
     versionSpec: '4.9.2'     
