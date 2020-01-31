@@ -12,11 +12,10 @@ steps:
   displayName: 'Install SDK'
   inputs:
     version: 3.1.100	
-- task: 
+- task: Bash@3 
   inputs: 
     targetType: file
-    filePath: ci-test.sh
-      - cd 
+    filePath: 'ci-test.sh'
 - task: NuGetToolInstaller@0
   inputs:
     versionSpec: '4.9.2'     
