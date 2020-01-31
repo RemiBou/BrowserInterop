@@ -16,7 +16,7 @@ steps:
   displayName: 'Run Tests'
   inputs: 	 
     targetType: inline
-    script: (cd sample/SampleApp; dotnet run) & (cd test/BrowserInterop.E2ETests; npx wait-for http://localhost:5000; docker run -it -v $PWD:/e2e -w /e2e cypress/included:3.8.3 --config baseUrl=http://host.docker.internal:5000)
+    script: (cd sample/SampleApp; dotnet run) & (cd test/BrowserInterop.E2ETests; npx wait-on http://localhost:5000; docker run -it -v $PWD:/e2e -w /e2e cypress/included:3.8.3 --config baseUrl=http://host.docker.internal:5000; return 0)
 - task: NuGetToolInstaller@0
   inputs:
     versionSpec: '4.9.2'     
