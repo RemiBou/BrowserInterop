@@ -107,6 +107,7 @@ Storage
 
 Method calls
 <button id="navigator-registerProtocolHandler" type="button" @onclick="RegisterProtocolHandler">RegisterProtocolHandler</button>
+<button id="navigator-sendBeacon" type="button" @onclick="SendBeacon">SendBeacon</button>
 <ul>
     <li>canShare :<span id="navigator-canShare">@canShare</span></li>
 </ul>
@@ -140,6 +141,9 @@ Method calls
         });
         canShare = await navigator.CanShare(new ShareData());
       
+    }
+    public async Task SendBeacon(){
+         await navigator.SendBeacon("/test","BLBLA");
     }
     public async Task RegisterProtocolHandler(){
          await navigator.RegisterProtocolHandler("web+browserinterop","http://localhost:5000/navigator?%s","Browser Interop");

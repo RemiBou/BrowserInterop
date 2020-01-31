@@ -185,6 +185,21 @@ namespace RemiBou.Blazor.BrowserInterop
             }
         }
 
+        /// <summary>
+        /// Sends a small amount of data over HTTP to a web server. Returns true if the method is supported and succeeds
+        /// 
+        /// This method is for analytics and diagnostics that send data to a server before the document is unloaded, where sending the data any sooner may miss some possible data collection. For example, which link the user clicked before navigating away and unloading the page.
+        /// Ensuring that data has been sent during the unloading of a document has traditionally been difficult, because user agents typically ignore asynchronous XMLHttpRequests made in an unload handler.
+        /// See https://developer.mozilla.org/en-US/docs/Web/API/Navigator/sendBeacon
+        /// </summary>
+        /// <param name="url"></param>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        public async Task<bool> SendBeacon(string url, object data)
+        {
+            return await jsRuntime.HasProperty("navigator.sendBeacon") && await jsRuntime.InvokeAsync<bool>("navigator.sendBeacon", url, data);
+        }
+
     }
     //from https://github.com/dotnet/corefx/issues/41442#issuecomment-553196880
     internal class HandleSpecialDoublesAsStrings : JsonConverter<double>

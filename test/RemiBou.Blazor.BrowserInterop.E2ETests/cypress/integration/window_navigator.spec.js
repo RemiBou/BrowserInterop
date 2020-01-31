@@ -150,6 +150,13 @@ context('window.navigator', () => {
                     expect(w.navigator.registerProtocolHandler).to.be.calledOnce;
                 });
             }
+
+            if (w.navigator.sendBeacon) {
+                cy.spyFix(w.navigator, 'sendBeacon', w);
+                cy.get("#navigator-sendBeacon").click().then(() => {
+                    expect(w.navigator.sendBeacon).to.be.to.be.calledWith("/test", "BLBLA");
+                });
+            }
         });
 
     });
