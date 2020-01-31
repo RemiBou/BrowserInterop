@@ -22,10 +22,9 @@ steps:
     packagesToPack: src/BrowserInterop/BrowserInterop.csproj
     versioningScheme: 'off'
     configuration: Release
-- task: DotNetCoreCLI@2
-  displayName: 'dotnet push'
+- task: NuGetCommand@2
   inputs:
     command: push
     nuGetFeedType: external
-    externalEndPoint: 'Nuget'
+    publishFeedCredentials: 'Nuget'
   condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'), contains(variables['Build.SourceVersionMessage'], '#nuget'))
