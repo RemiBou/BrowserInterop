@@ -15,7 +15,7 @@ This library aim at providing some added value which are :
 - Func for event subscription
 - Check for method implementation
 
-I use the following website for discoering API description https://developer.mozilla.org/en-US/docs/Web/API and this one for finding out if it is implemented  https://caniuse.com/.
+I use the following website for discovering API description https://developer.mozilla.org/en-US/docs/Web/API and this one for finding out if it is implemented  https://caniuse.com/.
 
 ## Quick Start
 
