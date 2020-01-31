@@ -200,6 +200,16 @@ namespace RemiBou.Blazor.BrowserInterop
             return await jsRuntime.HasProperty("navigator.sendBeacon") && await jsRuntime.InvokeAsync<bool>("navigator.sendBeacon", url, data);
         }
 
+        /// <summary>
+        /// Invokes the native sharing mechanism of the device.
+        /// Use CanShare to check if this is allowed
+        /// </summary>
+        /// <returns></returns>
+        public async Task Share(ShareData shareData)
+        {
+            await jsRuntime.InvokeAsync<bool>("navigator.share", shareData);
+        }
+
     }
     //from https://github.com/dotnet/corefx/issues/41442#issuecomment-553196880
     internal class HandleSpecialDoublesAsStrings : JsonConverter<double>

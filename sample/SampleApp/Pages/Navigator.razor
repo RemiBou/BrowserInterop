@@ -108,8 +108,10 @@ Storage
 Method calls
 <button id="navigator-registerProtocolHandler" type="button" @onclick="RegisterProtocolHandler">RegisterProtocolHandler</button>
 <button id="navigator-sendBeacon" type="button" @onclick="SendBeacon">SendBeacon</button>
+<button id="navigator-canShare-button" type="button" @onclick="CanShare">CanShare</button>
+<button id="navigator-share" type="button" @onclick="Share">Share</button>
 <ul>
-    <li>canShare :<span id="navigator-canShare">@canShare</span></li>
+    <li>canShare :<span id="navigator-canShare">@canShare.ToString().ToLower()</span></li>
 </ul>
 
 @code {
@@ -139,8 +141,15 @@ Method calls
             StateHasChanged();
             
         });
-        canShare = await navigator.CanShare(new ShareData());
       
+    }
+    public async Task CanShare(){
+        canShare = await navigator.CanShare(new ShareData());
+    }
+    public async Task Share(){
+         await navigator.Share(new ShareData(){
+             Url = "http://google.com"
+         });
     }
     public async Task SendBeacon(){
          await navigator.SendBeacon("/test","BLBLA");

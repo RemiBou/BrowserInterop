@@ -140,10 +140,23 @@ context('window.navigator', () => {
     });
     it('Check methods', function () {
         cy.window().then(w => {
-            if (w.navigator.canShare)
-                cy.wrap(w.navigator.canShare()).then(
-                    (v) => cy.get("#navigator-canShare").should('have.text', v.toString())
-                )
+            if (!w.navigator.canShare) {
+                w.navigator.canShare = function (data) { return true; };
+            }
+            cy.spyFix(w.navigator, 'canShare', w);
+            cy.get("#navigator-canShare-button").click().then(() => {
+                expect(w.navigator.canShare).to.be.calledOnce;
+                cy.get("#navigator-canShare").should('have.text', 'true');
+            });
+
+
+            if (!w.navigator.share) {
+                w.navigator.share = function (data) { return true; }
+            }
+            cy.spyFix(w.navigator, 'share', w);
+            cy.get("#navigator-share").click().then(() => {
+                expect(w.navigator.share).to.be.calledOnce;
+            });
             if (w.navigator.registerProtocolHandler) {
                 cy.spyFix(w.navigator, 'registerProtocolHandler', w);
                 cy.get("#navigator-registerProtocolHandler").click().then(() => {
