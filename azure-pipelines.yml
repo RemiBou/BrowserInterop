@@ -15,7 +15,7 @@ steps:
 - task: Bash@3 
   inputs: 
     targetType: file
-    script: (cd sample/SampleApp; dotnet run) & (cd test/BrowserInterop.E2ETests; npm run-script run)
+    script: (cd sample/SampleApp; dotnet run) & (cd test/BrowserInterop.E2ETests; npm install; npm run-script run)
 - task: NuGetToolInstaller@0
   inputs:
     versionSpec: '4.9.2'     
