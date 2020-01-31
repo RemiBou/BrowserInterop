@@ -170,6 +170,11 @@ context('window.navigator', () => {
                     expect(w.navigator.sendBeacon).to.be.to.be.calledWith("/test", "BLBLA");
                 });
             }
+
+            cy.spyFix(w.navigator, 'vibrate', w);
+            cy.get("#navigator-vibrate").click().then(() => {
+                expect(w.navigator.vibrate).to.be.to.be.calledWith([100, 50, 1000]);
+            });
         });
 
     });

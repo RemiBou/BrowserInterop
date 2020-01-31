@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
@@ -208,6 +210,16 @@ namespace RemiBou.Blazor.BrowserInterop
         public async Task Share(ShareData shareData)
         {
             await jsRuntime.InvokeAsync<bool>("navigator.share", shareData);
+        }
+
+        /// <summary>
+        /// Pulses the vibration hardware on the device, if such hardware exists. If the device doesn't support vibration, this method has no effect. If a vibration pattern is already in progress when this method is called, the previous pattern is halted and the new one begins instead.
+        /// </summary>
+        /// <param name="pattern">Each value indicates a number of milliseconds to vibrate or pause, in alternation. An array of values to alternately vibrate, pause, then vibrate again.</param>
+        /// <returns></returns>
+        public async Task Vibrate(IEnumerable<TimeSpan> pattern)
+        {
+            await jsRuntime.InvokeAsync<bool>("navigator.vibrate", pattern.Select(t => t.TotalMilliseconds).ToArray());
         }
 
     }

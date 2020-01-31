@@ -110,6 +110,7 @@ Method calls
 <button id="navigator-sendBeacon" type="button" @onclick="SendBeacon">SendBeacon</button>
 <button id="navigator-canShare-button" type="button" @onclick="CanShare">CanShare</button>
 <button id="navigator-share" type="button" @onclick="Share">Share</button>
+<button id="navigator-vibrate" type="button" @onclick="Vibrate">Vibrate</button>
 <ul>
     <li>canShare :<span id="navigator-canShare">@canShare.ToString().ToLower()</span></li>
 </ul>
@@ -142,6 +143,13 @@ Method calls
             
         });
       
+    }
+    public async Task Vibrate(){
+        await navigator.Vibrate(new []{
+            TimeSpan.FromMilliseconds(100),
+            TimeSpan.FromMilliseconds(50),
+            TimeSpan.FromSeconds(1)
+        });
     }
     public async Task CanShare(){
         canShare = await navigator.CanShare(new ShareData());
