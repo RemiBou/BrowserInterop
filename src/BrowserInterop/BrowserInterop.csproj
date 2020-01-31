@@ -3,6 +3,13 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
     <RazorLangVersion>3.0</RazorLangVersion>
+    <PackageId>BrowserInterop</PackageId>
+    <Authors>Rémi BOURGAREL</Authors>
+    <Company>Rémi BOURGAREL</Company>
+    <PackageDescription>Library wrapping Blazor JSInterop call for browser API : console, navigator, battery, geolocation ... see repository README for list of supported API</PackageDescription>
+    <Copyright>Rémi BOURGAREL</Copyright>
+    <PackageTags>blazor, browser, navigator, geolocation, console, jsinterop</PackageTags>
+    <RepositoryUrl>https://github.com/RemiBou/BrowserInterop</RepositoryUrl>
   </PropertyGroup>
 
 
