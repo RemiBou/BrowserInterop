@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start": "cypress open",
-    "run": "wait-on -l http://localhost:5000 && cypress run"
+    "run": "wait-on -l http://localhost:5000 && cypress run",
+    "wait-local": "wait-on -l http://localhost:5000"
   },
   "author": "",
   "license": "ISC",
