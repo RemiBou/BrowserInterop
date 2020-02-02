@@ -39,3 +39,18 @@ steps:
     nuGetFeedType: external
     publishFeedCredentials: 'Nuget'
   condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'), contains(variables['Build.SourceVersionMessage'], '#nuget'))
+
+  
+- task: PublishPipelineArtifact@1
+  displayName: 'Publish Cypress videos'
+  inputs:
+    targetPath: test/BrowserInterop.E2ETests/cypress/videos/
+    artifact: 'Cypress videos'
+  condition: succeededOrFailed()
+  
+- task: PublishPipelineArtifact@1
+  displayName: 'Publish Cypress screenshot'
+  inputs:
+    targetPath: test/BrowserInterop.E2ETests/cypress/screenshots/
+    artifact: 'Cypress screenshot'
+  condition: succeededOrFailed()
