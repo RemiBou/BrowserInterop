@@ -21,7 +21,7 @@ steps:
 - task: Bash@3 
   inputs: 	 
     targetType: inline	      
-    script: (cd sample/SampleApp && dotnet run) & (set DEBUG=cypress*; unset NODE_OPTIONS  && cd test/BrowserInterop.E2ETests && npm install && npm run-script run && exit 0)
+    script: (cd sample/SampleApp && dotnet run) & (set DEBUG=cypress* && unset NODE_OPTIONS  && cd test/BrowserInterop.E2ETests && npm install && npm run-script run && exit 0)
 
 - task: NuGetToolInstaller@0
   inputs:
