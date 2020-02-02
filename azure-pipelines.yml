@@ -18,7 +18,7 @@ steps:
     script: |
       sudo apt-get -y -q update || exit 1
       sudo apt-get -y -q install libgtk2.0-0 libgtk-3-0 libnotify-dev libgconf-2-4 libnss3 libxss1 libasound2 libxtst6 xauth xvfb || exit 1
-      (cd sample/SampleApp && dotnet run) & (cd test/BrowserInterop.E2ETests && npm install && npm run-script run && exit 0)
+      (cd sample/SampleApp && dotnet run) & (unset NODE_OPTIONS  && cd test/BrowserInterop.E2ETests && npm install && npm run-script run && exit 0)
 
 - task: NuGetToolInstaller@0
   inputs:
