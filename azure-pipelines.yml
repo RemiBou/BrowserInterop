@@ -12,16 +12,16 @@ steps:
   displayName: 'Install SDK'
   inputs:
     version: 3.1.100	
-- task: Bash@3
-  displayName: 'CYpres Deps'
-  inputs:
-    targetType: inline
-    script : sudo apt-get -qq -y update && sudo apt-get -qq -y install xvfb libgtk2.0-0 libnotify-dev libgconf-2-4 libnss3 libxss1 libasound2
+# - task: Bash@3
+#   displayName: 'CYpres Deps'
+#   inputs:
+#     targetType: inline
+#     script : sudo apt-get -qq -y update && sudo apt-get -qq -y install xvfb libgtk2.0-0 libnotify-dev libgconf-2-4 libnss3 libxss1 libasound2
 
 - task: Bash@3 
   inputs: 	 
     targetType: inline	      
-    script: (cd sample/SampleApp && dotnet run) & (set DEBUG=cypress* && unset NODE_OPTIONS  && cd test/BrowserInterop.E2ETests && npm install && npm run-script run && exit 0)
+    script: (cd sample/SampleApp && dotnet run) & (cd test/BrowserInterop.E2ETests; npm install wait-on; npm run-script wait-local; docker run -v $PWD:/e2e -w /e2e cypress/included:3.8.3 --network="host" && exit 0)
 
 - task: NuGetToolInstaller@0
   inputs:
