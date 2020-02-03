@@ -1,7 +1,9 @@
 
 browserInterop = new (function () {
     var me = this;
-    this.eventListenersId = 0;
+    var weakMap = new WeakMap();
+
+    var eventListenersIdCurrent = 0;
     this.eventListeners = {};
     this.getProperty = function (propertyName) {
         var splitProperty = propertyName.split('.');
@@ -21,13 +23,14 @@ browserInterop = new (function () {
             return dotnetAction.invokeMethodAsync('Invoke');
         }
         target.addEventListener(eventName, methodRef);
-        var eventId = me.eventListenersId++;
+        var eventId = eventListenersIdCurrent++;
         me.eventListeners[eventId] = methodRef;
         return eventId;
     };
     this.removeEventListener = function (propertyPath, eventName, eventListenersId) {
         var target = me.getProperty(propertyPath);
         target.removeEventListener(eventName, me.eventListeners[eventListenersId]);
+        delete me.eventListeners[eventListenersId];
     };
     this.hasProperty = function (propertyPath) {
         return me.getProperty(propertyPath) !== null;
@@ -122,4 +125,3 @@ browserInterop = new (function () {
         }
     })();
 })();
-console.log('Init done', browserInterop);
