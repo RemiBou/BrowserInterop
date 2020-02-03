@@ -12,10 +12,17 @@ steps:
   displayName: 'Install SDK'
   inputs:
     version: 3.1.100	
+# - task: Bash@3
+#   displayName: 'CYpres Deps'
+#   inputs:
+#     targetType: inline
+#     script : sudo apt-get -qq -y update && sudo apt-get -qq -y install xvfb libgtk2.0-0 libnotify-dev libgconf-2-4 libnss3 libxss1 libasound2
+
 - task: Bash@3 
-  inputs: 
-    targetType: file
-    script: (cd sample/SampleApp; dotnet run) & (cd test/BrowserInterop.E2ETests; docker run -it -v $PWD:/e2e -w /e2e cypress/included:3.8.3 --config baseUrl=http://host.docker.internal:5000)
+  inputs: 	 
+    targetType: inline	      
+    script: (cd sample/SampleApp && dotnet run) & (cd test/BrowserInterop.E2ETests; npm install wait-on; npm run-script wait-local; docker run  --network="host" -v $PWD:/e2e -w /e2e cypress/included:3.8.3 && exit 0)
+
 - task: NuGetToolInstaller@0
   inputs:
     versionSpec: '4.9.2'     
@@ -32,3 +39,18 @@ steps:
     nuGetFeedType: external
     publishFeedCredentials: 'Nuget'
   condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'), contains(variables['Build.SourceVersionMessage'], '#nuget'))
+
+  
+- task: PublishPipelineArtifact@1
+  displayName: 'Publish Cypress videos'
+  inputs:
+    targetPath: test/BrowserInterop.E2ETests/cypress/videos/
+    artifact: 'Cypress videos'
+  condition: succeededOrFailed()
+  
+- task: PublishPipelineArtifact@1
+  displayName: 'Publish Cypress screenshot'
+  inputs:
+    targetPath: test/BrowserInterop.E2ETests/cypress/screenshots/
+    artifact: 'Cypress screenshot'
+  condition: succeededOrFailed()

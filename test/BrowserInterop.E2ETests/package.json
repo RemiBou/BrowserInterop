@@ -5,11 +5,13 @@
   "main": "index.js",
   "scripts": {
     "start": "cypress open",
-    "run": "cypress run"
+    "run": "wait-on -l http://localhost:5000 && cypress run",
+    "wait-local": "wait-on -l http://localhost:5000"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "cypress": "^3.8.2"
+    "cypress": "^3.8.2",
+    "wait-on": "^4.0.0"
   }
 }

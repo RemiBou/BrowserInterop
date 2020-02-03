@@ -1,0 +1,17 @@
+.env
+.git
+.gitignore
+.vs
+.vscode
+docker-compose.yml
+**/bin/
+**/obj/
+**/videos/
+**/screenshots/
+test
+Dockerfile
+**/node_modules/
+**/TestResults/
+**/NuGetScratch/
+**/.DS_Store
+**/package.json
