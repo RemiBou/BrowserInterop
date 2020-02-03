@@ -131,7 +131,10 @@ context('window.navigator', () => {
                 .then(() => {
                     if (w.navigator.storage) {
                         cy.wrap(w.navigator.storage.estimate()).then(e => {
-                            cy.get("#navigator-storage-estimate-quota").should('have.text', e.quota.toString());
+                            cy.get("#navigator-storage-estimate-quota").invoke('text').should(v => {
+                                expect(parseInt(v, 10)).to.be.below(e.quota * 1.1);
+                                expect(parseInt(v, 10)).to.be.above(e.quota * 0.9);
+                            });
                             cy.get("#navigator-storage-estimate-usage").should('have.text', e.usage.toString());
 
                         });
