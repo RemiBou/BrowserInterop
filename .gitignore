@@ -348,3 +348,8 @@ MigrationBackup/
 
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
+
+#custom
+test/BrowserInterop.E2ETests/cypress/videos/
+test/BrowserInterop.E2ETests/cypress/screenshots/
+.DS_Store
