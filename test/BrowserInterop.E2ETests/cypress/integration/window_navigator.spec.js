@@ -131,6 +131,7 @@ context('window.navigator', () => {
                 .then(() => {
                     if (w.navigator.storage) {
                         cy.wrap(w.navigator.storage.estimate()).then(e => {
+                            //quota might change between code execution and etst execution so we test only for range -/+ 10%
                             cy.get("#navigator-storage-estimate-quota").invoke('text').should(v => {
                                 expect(parseInt(v, 10)).to.be.below(e.quota * 1.1);
                                 expect(parseInt(v, 10)).to.be.above(e.quota * 0.9);
