@@ -9,13 +9,13 @@ namespace BrowserInterop.Storage
         /// Provides a conservative approximation of the total storage the user's device or computer has available for the site origin or Web app. It's possible that there's more than this amount of space available though you can't rely on that being the case.
         /// </summary>
         /// <value></value>
-        public decimal Quota { get; set; }
+        public long Quota { get; set; }
 
         /// <summary>
         /// A numeric value approximating the amount of storage space currently being used by the site or Web app, out of the available space as indicated by quota.
         /// </summary>
         /// <value></value>
-        public decimal Usage { get; set; }
+        public long Usage { get; set; }
 
         /// <summary>
         /// breakdown of usage by storage system.  All included members will have a usage greater than 0 and any storage system with 0 usage will be excluded from the dictionary.  
