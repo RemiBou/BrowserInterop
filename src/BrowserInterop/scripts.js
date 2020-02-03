@@ -1,8 +1,9 @@
 
-browserInterop = {
-    eventListenersId: 0,
-    eventListeners: {},
-    getProperty: function (propertyName) {
+browserInterop = new (function () {
+    var me = this;
+    this.eventListenersId = 0;
+    this.eventListeners = {};
+    this.getProperty = function (propertyName) {
         var splitProperty = propertyName.split('.');
         var currentProperty = window;
         for (i = 0; i < splitProperty.length; i++) {
@@ -13,25 +14,25 @@ browserInterop = {
             }
         }
         return currentProperty;
-    },
-    addEventListener: function (propertyPath, eventName, dotnetAction) {
-        var target = browserInterop.getProperty(propertyPath);
+    };
+    this.addEventListener = function (propertyPath, eventName, dotnetAction) {
+        var target = me.getProperty(propertyPath);
         var methodRef = function () {
             return dotnetAction.invokeMethodAsync('Invoke');
         }
         target.addEventListener(eventName, methodRef);
-        var eventId = browserInterop.eventListenersId++;
-        browserInterop.eventListeners[eventId] = methodRef;
+        var eventId = me.eventListenersId++;
+        me.eventListeners[eventId] = methodRef;
         return eventId;
-    },
-    removeEventListener: function (propertyPath, eventName, eventListenersId) {
-        var target = browserInterop.getProperty(propertyPath);
-        target.removeEventListener(eventName, browserInterop.eventListeners[eventListenersId]);
-    },
-    hasProperty: function (propertyPath) {
-        return browserInterop.getProperty(propertyPath) !== null;
-    },
-    getSerializableObject: function (data, alreadySerialized) {
+    };
+    this.removeEventListener = function (propertyPath, eventName, eventListenersId) {
+        var target = me.getProperty(propertyPath);
+        target.removeEventListener(eventName, me.eventListeners[eventListenersId]);
+    };
+    this.hasProperty = function (propertyPath) {
+        return me.getProperty(propertyPath) !== null;
+    };
+    this.getSerializableObject = function (data, alreadySerialized) {
         if (!alreadySerialized) {
             alreadySerialized = [];
         }
@@ -49,7 +50,7 @@ browserInterop = {
                         for (var j = 0; j < currentMember.length; j++) {
                             const arrayItem = currentMember[j];
                             if (typeof arrayItem === 'object') {
-                                res[i].push(browserInterop.getSerializableObject(arrayItem, alreadySerialized));
+                                res[i].push(me.getSerializableObject(arrayItem, alreadySerialized));
                             } else {
                                 res[i].push(arrayItem);
                             }
@@ -59,7 +60,7 @@ browserInterop = {
                         if (currentMember.length === 0) {
                             res[i] = [];
                         } else {
-                            res[i] = browserInterop.getSerializableObject(currentMember, alreadySerialized);
+                            res[i] = me.getSerializableObject(currentMember, alreadySerialized);
                         }
                     }
                 }
@@ -75,49 +76,50 @@ browserInterop = {
             }
         }
         return res;
-    },
-    getAsJson: function (propertyName) {
+    };
+    this.getAsJson = function (propertyName) {
 
-        var data = browserInterop.getProperty(propertyName);
-        var res = browserInterop.getSerializableObject(data);
+        var data = me.getProperty(propertyName);
+        var res = me.getSerializableObject(data);
         return res;
-    },
-    navigator: {
-        geolocation: {
-            getCurrentPosition: function (options) {
+    };
+    this.navigator = new (function () {
+        this.geolocation = new (function () {
+            this.getCurrentPosition = function (options) {
                 return new Promise(function (resolve) {
                     navigator.geolocation.getCurrentPosition(
-                        position => resolve({ location: browserInterop.getSerializableObject(position) }),
-                        error => resolve({ error: browserInterop.getSerializableObject(error) }),
+                        position => resolve({ location: me.getSerializableObject(position) }),
+                        error => resolve({ error: me.getSerializableObject(error) }),
                         options)
                 });
-            },
-            watchPosition: function (options, wrapper) {
+            };
+            this.watchPosition = function (options, wrapper) {
                 return navigator.geolocation.watchPosition(
                     position => {
-                        const result = { location: browserInterop.getSerializableObject(position) };
+                        const result = { location: me.getSerializableObject(position) };
                         console.log(result);
                         return wrapper.invokeMethodAsync('Invoke', result);
                     },
-                    error => wrapper.invokeMethodAsync('Invoke', { error: browserInterop.getSerializableObject(error) }),
+                    error => wrapper.invokeMethodAsync('Invoke', { error: me.getSerializableObject(error) }),
                     options
                 );
-            }
-        },
-        getBattery: function () {
+            };
+        })();
+        this.getBattery = function () {
             return new Promise(function (resolve, reject) {
                 if (navigator.battery) {//some browser does not implement getBattery but battery instead see https://developer.mozilla.org/en-US/docs/Web/API/Navigator/battery
-                    var res = browserInterop.getSerializableObject(navigator.battery);
+                    var res = me.getSerializableObject(navigator.battery);
                     resolve(res);
                     return;
                 }
                 navigator.getBattery().then(
                     function (battery) {
-                        var res = browserInterop.getSerializableObject(battery);
+                        var res = me.getSerializableObject(battery);
                         resolve(res);
                     }
                 );
             });
         }
-    }
-}
+    })();
+})();
+console.log('Init done', browserInterop);
