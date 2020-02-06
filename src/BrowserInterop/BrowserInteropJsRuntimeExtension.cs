@@ -59,4 +59,16 @@ namespace BrowserInterop
             return actionWrapper;
         }
     }
+
+    public readonly struct JsRuntimeObjectRef
+    {
+        private readonly int id;
+
+        public JsRuntimeObjectRef(int id)
+        {
+            this.id = id;
+        }
+
+        internal int Id => id;
+    }
 }

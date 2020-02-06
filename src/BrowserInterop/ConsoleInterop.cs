@@ -12,7 +12,11 @@ namespace BrowserInterop
     /// </summary>
     public class ConsoleInterop
     {
-        private IJSRuntime jsRuntime;
+        /// <summary>
+        /// Set to false if you want to disable all the calls to a console function
+        /// </summary>
+        public static bool IsEnabled = true;
+        private readonly IJSRuntime jsRuntime;
 
         internal ConsoleInterop(IJSRuntime jsRuntime)
         {
@@ -27,7 +31,8 @@ namespace BrowserInterop
         /// <returns></returns>
         public async Task Assert(bool assertion, params object[] printedObjects)
         {
-            await jsRuntime.InvokeVoidAsync("console.assert", assertion, printedObjects);
+            if (IsEnabled)
+                await jsRuntime.InvokeVoidAsync("console.assert", assertion, printedObjects);
         }
 
         /// <summary>
@@ -40,7 +45,8 @@ namespace BrowserInterop
         /// <returns></returns>
         public async Task Assert(bool assertion, string message, params object[] formatParameters)
         {
-            await jsRuntime.InvokeVoidAsync("console.assert", assertion, string.Format(message, formatParameters));
+            if (IsEnabled)
+                await jsRuntime.InvokeVoidAsync("console.assert", assertion, string.Format(message, formatParameters));
 
         }
 
@@ -50,7 +56,8 @@ namespace BrowserInterop
         /// <returns></returns>
         public async Task Clear()
         {
-            await jsRuntime.InvokeVoidAsync("console.clear");
+            if (IsEnabled)
+                await jsRuntime.InvokeVoidAsync("console.clear");
         }
 
         /// <summary>
@@ -60,7 +67,8 @@ namespace BrowserInterop
         /// <returns></returns>
         public async Task Count(string label = null)
         {
-            await jsRuntime.InvokeVoidAsync("console.count", label ?? "default");
+            if (IsEnabled)
+                await jsRuntime.InvokeVoidAsync("console.count", label ?? "default");
         }
 
         /// <summary>
@@ -70,7 +78,8 @@ namespace BrowserInterop
         /// <returns></returns>
         public async Task CountReset(string label = null)
         {
-            await jsRuntime.InvokeVoidAsync("console.countReset", label ?? "default");
+            if (IsEnabled)
+                await jsRuntime.InvokeVoidAsync("console.countReset", label ?? "default");
         }
 
         /// <summary>
@@ -80,7 +89,8 @@ namespace BrowserInterop
         /// <returns></returns>
         public async Task Debug(params object[] printedObjects)
         {
-            await jsRuntime.InvokeVoidAsync("console.debug", printedObjects);
+            if (IsEnabled)
+                await jsRuntime.InvokeVoidAsync("console.debug", printedObjects);
         }
 
         /// <summary>
@@ -92,7 +102,8 @@ namespace BrowserInterop
         /// <returns></returns>
         public async Task Debug(string message, params object[] formatParameters)
         {
-            await jsRuntime.InvokeVoidAsync("console.debug", string.Format(message, formatParameters));
+            if (IsEnabled)
+                await jsRuntime.InvokeVoidAsync("console.debug", string.Format(message, formatParameters));
 
         }
 
@@ -103,7 +114,8 @@ namespace BrowserInterop
         /// <returns></returns>
         public async Task Dir(object data)
         {
-            await jsRuntime.InvokeVoidAsync("console.dir", data);
+            if (IsEnabled)
+                await jsRuntime.InvokeVoidAsync("console.dir", data);
         }
 
         /// <summary>
@@ -113,7 +125,8 @@ namespace BrowserInterop
         /// <returns></returns>
         public async Task DirXml(ElementReference element)
         {
-            await jsRuntime.InvokeVoidAsync("console.dirxml", element);
+            if (IsEnabled)
+                await jsRuntime.InvokeVoidAsync("console.dirxml", element);
         }
 
         /// <summary>
@@ -123,7 +136,8 @@ namespace BrowserInterop
         /// <returns></returns>
         public async Task Error(params object[] printedObjects)
         {
-            await jsRuntime.InvokeVoidAsync("console.error", printedObjects);
+            if (IsEnabled)
+                await jsRuntime.InvokeVoidAsync("console.error", printedObjects);
         }
 
         /// <summary>
@@ -135,7 +149,8 @@ namespace BrowserInterop
         /// <returns></returns>
         public async Task Error(string message, params object[] formatParameters)
         {
-            await jsRuntime.InvokeVoidAsync("console.error", string.Format(message, formatParameters));
+            if (IsEnabled)
+                await jsRuntime.InvokeVoidAsync("console.error", string.Format(message, formatParameters));
         }
 
         /// <summary>
@@ -145,7 +160,8 @@ namespace BrowserInterop
         /// <returns></returns>
         public async Task GroupStart(string label)
         {
-            await jsRuntime.InvokeVoidAsync("console.group", label);
+            if (IsEnabled)
+                await jsRuntime.InvokeVoidAsync("console.group", label);
         }
 
         /// <summary>
@@ -154,7 +170,8 @@ namespace BrowserInterop
         /// <returns></returns>
         public async Task GroupEnd()
         {
-            await jsRuntime.InvokeVoidAsync("console.groupEnd");
+            if (IsEnabled)
+                await jsRuntime.InvokeVoidAsync("console.groupEnd");
         }
 
         /// <summary>
@@ -164,6 +181,8 @@ namespace BrowserInterop
         /// <returns></returns>
         public async Task<IAsyncDisposable> Group(string label)
         {
+
+            if (!IsEnabled) return EmptyAsyncDisposable.Instance;
             await GroupStart(label);
             return new ActionAsyncDisposable(() => GroupEnd());
         }
@@ -175,7 +194,8 @@ namespace BrowserInterop
         /// <returns></returns>
         public async Task Log(params object[] printedObjects)
         {
-            await jsRuntime.InvokeVoidAsync("console.log", printedObjects);
+            if (IsEnabled)
+                await jsRuntime.InvokeVoidAsync("console.log", printedObjects);
         }
 
         /// <summary>
@@ -187,7 +207,8 @@ namespace BrowserInterop
         /// <returns></returns>
         public async Task Log(string message, params object[] formatParameters)
         {
-            await jsRuntime.InvokeVoidAsync("console.log", string.Format(message, formatParameters));
+            if (IsEnabled)
+                await jsRuntime.InvokeVoidAsync("console.log", string.Format(message, formatParameters));
         }
 
         /// <summary>
@@ -197,7 +218,8 @@ namespace BrowserInterop
         /// <returns></returns>
         public async Task ProfileStart(string name = null)
         {
-            await jsRuntime.InvokeVoidAsync("console.profile", name);
+            if (IsEnabled)
+                await jsRuntime.InvokeVoidAsync("console.profile", name);
         }
 
         /// <summary>
@@ -206,7 +228,8 @@ namespace BrowserInterop
         /// <returns></returns>
         public async Task ProfileEnd(string name = null)
         {
-            await jsRuntime.InvokeVoidAsync("console.profileEnd", name);
+            if (IsEnabled)
+                await jsRuntime.InvokeVoidAsync("console.profileEnd", name);
         }
 
         /// <summary>
@@ -218,6 +241,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public async Task<IAsyncDisposable> Profile(string name = null)
         {
+            if (!IsEnabled) return EmptyAsyncDisposable.Instance;
             await ProfileStart(name);
             return new ActionAsyncDisposable(() => ProfileEnd(name));
         }
@@ -230,7 +254,8 @@ namespace BrowserInterop
         /// <returns></returns>
         public async Task Table<T>(IEnumerable<T> objectToDisplay, params string[] columns)
         {
-            await jsRuntime.InvokeVoidAsync("console.table", objectToDisplay, columns);
+            if (IsEnabled)
+                await jsRuntime.InvokeVoidAsync("console.table", objectToDisplay, columns);
         }
 
         /// <summary>
@@ -240,7 +265,8 @@ namespace BrowserInterop
         /// <returns></returns>
         public async Task TimeStart(string label)
         {
-            await jsRuntime.InvokeVoidAsync("console.time", label);
+            if (IsEnabled)
+                await jsRuntime.InvokeVoidAsync("console.time", label);
         }
 
         /// <summary>
@@ -250,7 +276,8 @@ namespace BrowserInterop
         /// <returns></returns>
         public async Task TimeEnd(string label)
         {
-            await jsRuntime.InvokeVoidAsync("console.timeEnd", label);
+            if (IsEnabled)
+                await jsRuntime.InvokeVoidAsync("console.timeEnd", label);
         }
 
         /// <summary>
@@ -261,6 +288,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public async Task<IAsyncDisposable> Time(string label)
         {
+            if (!IsEnabled) return EmptyAsyncDisposable.Instance;
             await TimeStart(label);
             return new ActionAsyncDisposable(() => TimeEnd(label));
         }
@@ -272,7 +300,8 @@ namespace BrowserInterop
         /// <returns></returns>
         public async Task TimeLog(string label)
         {
-            await jsRuntime.InvokeVoidAsync("console.timeLog", label);
+            if (IsEnabled)
+                await jsRuntime.InvokeVoidAsync("console.timeLog", label);
         }
 
         /// <summary>
@@ -282,7 +311,8 @@ namespace BrowserInterop
         /// <returns></returns>
         public async Task TimeStamp(string label)
         {
-            await jsRuntime.InvokeVoidAsync("console.timeStamp", label);
+            if (IsEnabled)
+                await jsRuntime.InvokeVoidAsync("console.timeStamp", label);
         }
 
         /// <summary>
@@ -292,9 +322,20 @@ namespace BrowserInterop
         /// <returns></returns>
         public async Task Trace(params object[] printedObjects)
         {
-            await jsRuntime.InvokeVoidAsync("console.trace", printedObjects);
+            if (IsEnabled)
+                await jsRuntime.InvokeVoidAsync("console.trace", printedObjects);
         }
-
+        private class EmptyAsyncDisposable : IAsyncDisposable
+        {
+            internal static EmptyAsyncDisposable Instance = new EmptyAsyncDisposable();
+            internal EmptyAsyncDisposable()
+            {
+            }
+            public ValueTask DisposeAsync()
+            {
+                return new ValueTask();
+            }
+        }
         private class ActionAsyncDisposable : IAsyncDisposable
         {
             private Func<Task> todoOnDispose;

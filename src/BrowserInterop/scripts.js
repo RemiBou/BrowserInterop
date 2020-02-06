@@ -1,8 +1,6 @@
 
 browserInterop = new (function () {
     var me = this;
-    var weakMap = new WeakMap();
-
     var eventListenersIdCurrent = 0;
     this.eventListeners = {};
     this.getProperty = function (propertyName) {
