@@ -2,6 +2,8 @@
 
 [![Build Status](https://dev.azure.com/remibou/toss/_apis/build/status/RemiBou.BrowserInterop?branchName=master)](https://dev.azure.com/remibou/toss/_build/latest?definitionId=9&branchName=master)
 
+![BrowserInterop](https://img.shields.io/nuget/v/BrowserInterop.svg)
+
 This library provides access to browser API in a Blazor App. 
 
 The following criteria are taken into account for choosing if an API must be handled :
