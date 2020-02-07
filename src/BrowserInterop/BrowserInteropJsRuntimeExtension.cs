@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using Microsoft.JSInterop;
 
@@ -35,9 +36,10 @@ namespace BrowserInterop
                 await jSRuntime.InvokeVoidAsync("eval", ressourceReader.ReadToEnd());
                 ScriptInitialized = true;
             }
+            var jsObjectRef = await jSRuntime.InvokeAsync<JsRuntimeObjectRef>("browserInterop.getPropertyRef", "window");
 
 
-            return new WindowInterop(jSRuntime);
+            return new WindowInterop(jSRuntime, jsObjectRef);
         }
 
         public static async Task<T> GetWindowProperty<T>(this IJSRuntime jsRuntime, string propertyPath)
@@ -88,13 +90,11 @@ namespace BrowserInterop
 
     public readonly struct JsRuntimeObjectRef
     {
-        private readonly int id;
-
         public JsRuntimeObjectRef(int id)
         {
-            this.id = id;
+            this.JsObjectRefId = id;
         }
-
-        internal int Id => id;
+        [JsonPropertyName("__jsObjectRefId")]
+        public int JsObjectRefId { get; }
     }
 }

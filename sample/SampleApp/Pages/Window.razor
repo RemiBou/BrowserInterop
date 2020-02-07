@@ -1,0 +1,12 @@
+@page "/window"
+@inject IJSRuntime jsRuntime;
+@using BrowserInterop
+<iframe src="/window"></iframe>
+@code{
+    private WindowInterop window;
+    protected override async Task OnInitializedAsync()
+    {
+        window = await jsRuntime.Window();
+    }
+
+}

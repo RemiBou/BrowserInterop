@@ -1,11 +1,44 @@
 
 browserInterop = new (function () {
+    var weakMap = new WeakMap();
+    var weakMapKeys = {};
+    var jsObjectRefId = 0;
+
+    const jsRefKey = '__jsObjectRefId'; // Keep in sync with ElementRef.cs
+
+    //reviver will help me store js object ref on .net like the .net do with elementreference or dotnetobjectreference
+    DotNet.attachReviver((key, value) => {
+        if (value &&
+            typeof value === 'object' &&
+            value.hasOwnProperty(jsRefKey) &&
+            typeof value[jsRefKey] === 'number') {
+            var id = value[jsRefKey];
+            if (!(id in weakMapKeys) && !weakMap.has(weakMapKeys[id])) {
+                throw new Error("This JS object reference does not exists : " + id);
+            }
+            return weakMap.get(weakMapKeys[id]);
+        } else {
+            return value;
+        }
+    });
     var me = this;
     var eventListenersIdCurrent = 0;
     this.eventListeners = {};
+    this.getPropertyRef = function (propertyName) {
+        var res = getInstanceProperty(window, propertyName);
+        var id = jsObjectRefId++;
+        weakMapKeys[id] = { id: id };
+        weakMap.set(weakMapKeys[id], res);
+        var jsRef = {};
+        jsRef[jsRefKey] = id;
+        return jsRef;
+    };
     this.getProperty = function (propertyName) {
-        var splitProperty = propertyName.split('.');
-        var currentProperty = window;
+        return getInstanceProperty(window, propertyName);
+    };
+    function getInstanceProperty(instance, propertyPath) {
+        var currentProperty = instance;
+        var splitProperty = propertyPath.split('.');
         for (i = 0; i < splitProperty.length; i++) {
             if (splitProperty[i] in currentProperty) {
                 currentProperty = currentProperty[splitProperty[i]];
@@ -14,7 +47,7 @@ browserInterop = new (function () {
             }
         }
         return currentProperty;
-    };
+    }
     this.addEventListener = function (propertyPath, eventName, dotnetAction) {
         var target = me.getProperty(propertyPath);
         var methodRef = function () {
@@ -78,9 +111,10 @@ browserInterop = new (function () {
         }
         return res;
     };
-    this.getAsJson = function (propertyName) {
+    this.getAsJson = function (instance, propertyName) {
 
-        var data = me.getProperty(propertyName);
+        var data = getInstanceProperty(instance, propertyName);
+        console.log(instance, propertyName, data);
         var res = me.getSerializableObject(data);
         return res;
     };
