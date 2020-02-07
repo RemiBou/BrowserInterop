@@ -32,7 +32,7 @@ namespace BrowserInterop.Storage
         /// <returns></returns>
         public async Task<bool> Persist(TimeSpan? timeout = null)
         {
-            return await (timeout.HasValue ? jsRuntime.InvokeAsync<bool>("navigator.storage.persist", timeout.Value, null) : jsRuntime.InvokeAsync<bool>("navigator.storage.persist", null));
+            return await (timeout.HasValue ? jsRuntime.InvokeOrDefaultAsync<bool>("navigator.storage.persist", timeout.Value, null) : jsRuntime.InvokeAsync<bool>("navigator.storage.persist", null));
         }
 
         /// <summary>
@@ -41,7 +41,7 @@ namespace BrowserInterop.Storage
         /// <returns></returns>
         public async Task<bool> Persisted(TimeSpan? timeout = null)
         {
-            return await (timeout.HasValue ? jsRuntime.InvokeAsync<bool>("navigator.storage.persisted", timeout.Value, null) : jsRuntime.InvokeAsync<bool>("navigator.storage.persisted", null));
+            return await (timeout.HasValue ? jsRuntime.InvokeOrDefaultAsync<bool>("navigator.storage.persisted", timeout.Value, null) : jsRuntime.InvokeAsync<bool>("navigator.storage.persisted", null));
         }
 
     }

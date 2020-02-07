@@ -58,6 +58,23 @@ namespace BrowserInterop
             actionWrapper.SeListenerId(listenerId);
             return actionWrapper;
         }
+
+        public static async ValueTask<T> InvokeOrDefaultAsync<T>(this IJSRuntime jsRuntime, string identifier, TimeSpan timeout, params object[] args)
+        {
+            try
+            {
+                return await JSRuntimeExtensions.InvokeAsync<T>(
+                    jsRuntime: jsRuntime,
+                    identifier: identifier,
+                    timeout: timeout,
+                    args: args);
+            }
+            catch (TaskCanceledException)
+            {
+                //when timeout is reached it raises an exception
+                return await Task.FromResult(default(T));
+            }
+        }
     }
 
     public readonly struct JsRuntimeObjectRef
