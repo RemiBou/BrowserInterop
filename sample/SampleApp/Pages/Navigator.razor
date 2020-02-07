@@ -109,8 +109,11 @@
 
 Storage
 <ul>
-    <li>Quota: <span id="navigator-storage-estimate-quota">@storageEstimate?.Quota.ToString(CultureInfo.InvariantCulture)</span></li>
-    <li>Usage: <span id="navigator-storage-estimate-usage">@storageEstimate?.Usage.ToString(CultureInfo.InvariantCulture)</span></li>
+    @if(storageEstimate != null)
+    {
+        <li>Quota: <span id="navigator-storage-estimate-quota">@storageEstimate.Quota.ToString(CultureInfo.InvariantCulture)</span></li>
+        <li>Usage: <span id="navigator-storage-estimate-usage">@storageEstimate.Usage.ToString(CultureInfo.InvariantCulture)</span></li>
+    }
     <li>storagePersist: <span id="navigator-storage-storagePersist">@storagePersist.ToString().ToLower()</span></li>
     <li>storagePersisted: <span id="navigator-storage-storagePersisted">@storagePersisted.ToString().ToLower()</span></li>
 </ul>
@@ -193,8 +196,12 @@ Method calls
     private bool? storagePersist;
     private bool? storagePersisted;
     public async Task GetStorageEstimate(){
+        System.Console.WriteLine("GetStorageEstimate");
         storageEstimate = await  navigator.Storage.Estimate();
+        StateHasChanged();
         storagePersist = await navigator.Storage.Persist();
         storagePersisted = await navigator.Storage.Persisted();
+        await window.Console.Log(storageEstimate, "Storage Estimate");
+
     }
 }

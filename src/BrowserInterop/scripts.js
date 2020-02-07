@@ -98,7 +98,6 @@ browserInterop = new (function () {
                 return navigator.geolocation.watchPosition(
                     position => {
                         const result = { location: me.getSerializableObject(position) };
-                        console.log(result);
                         return wrapper.invokeMethodAsync('Invoke', result);
                     },
                     error => wrapper.invokeMethodAsync('Invoke', { error: me.getSerializableObject(error) }),
