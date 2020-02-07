@@ -17,10 +17,12 @@ namespace BrowserInterop
         /// </summary>
         public static bool IsEnabled = true;
         private readonly IJSRuntime jsRuntime;
+        private readonly JsRuntimeObjectRef windowObject;
 
-        internal ConsoleInterop(IJSRuntime jsRuntime)
+        internal ConsoleInterop(IJSRuntime jsRuntime, JsRuntimeObjectRef windowObject)
         {
             this.jsRuntime = jsRuntime;
+            this.windowObject = windowObject;
         }
 
         /// <summary>
@@ -195,7 +197,7 @@ namespace BrowserInterop
         public async Task Log(params object[] printedObjects)
         {
             if (IsEnabled)
-                await jsRuntime.InvokeVoidAsync("console.log", printedObjects);
+                await jsRuntime.InvokeVoidAsync("browserInterop.callInstanceMethod", windowObject, "console.log", printedObjects);
         }
 
         /// <summary>
@@ -208,7 +210,7 @@ namespace BrowserInterop
         public async Task Log(string message, params object[] formatParameters)
         {
             if (IsEnabled)
-                await jsRuntime.InvokeVoidAsync("console.log", string.Format(message, formatParameters));
+                await jsRuntime.InvokeVoidAsync("browserInterop.callInstanceMethod", windowObject, "console.log", string.Format(message, formatParameters));
         }
 
         /// <summary>

@@ -88,13 +88,9 @@ namespace BrowserInterop
         }
     }
 
-    public readonly struct JsRuntimeObjectRef
+    public struct JsRuntimeObjectRef
     {
-        public JsRuntimeObjectRef(int id)
-        {
-            this.JsObjectRefId = id;
-        }
         [JsonPropertyName("__jsObjectRefId")]
-        public int JsObjectRefId { get; }
+        public int JsObjectRefId { get; set; }
     }
 }

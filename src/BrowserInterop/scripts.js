@@ -12,11 +12,14 @@ browserInterop = new (function () {
             typeof value === 'object' &&
             value.hasOwnProperty(jsRefKey) &&
             typeof value[jsRefKey] === 'number') {
+
             var id = value[jsRefKey];
             if (!(id in weakMapKeys) && !weakMap.has(weakMapKeys[id])) {
                 throw new Error("This JS object reference does not exists : " + id);
             }
-            return weakMap.get(weakMapKeys[id]);
+            const instance = weakMap.get(weakMapKeys[id]);
+            console.log(value, instance);
+            return instance;
         } else {
             return value;
         }
@@ -24,21 +27,32 @@ browserInterop = new (function () {
     var me = this;
     var eventListenersIdCurrent = 0;
     this.eventListeners = {};
-    this.getPropertyRef = function (propertyName) {
-        var res = getInstanceProperty(window, propertyName);
+    this.getPropertyRef = function (propertyPath) {
+        return me.getInstancePropertyRef(window, propertyPath);
+    };
+    this.getInstancePropertyRef = function (instance, propertyPath) {
+        var res = me.getInstanceProperty(instance, propertyPath);
         var id = jsObjectRefId++;
         weakMapKeys[id] = { id: id };
         weakMap.set(weakMapKeys[id], res);
         var jsRef = {};
         jsRef[jsRefKey] = id;
+
+        console.log('getInstancePropertyRef', propertyPath, res);
         return jsRef;
     };
-    this.getProperty = function (propertyName) {
-        return getInstanceProperty(window, propertyName);
+    this.getProperty = function (propertyPath) {
+        return me.getInstanceProperty(window, propertyPath);
     };
-    function getInstanceProperty(instance, propertyPath) {
+    this.callInstanceMethod = function (instance, methodPath, ...args) {
+        var method = me.getInstanceProperty(instance, methodPath);
+        console.log('callInstanceMethod', instance, methodPath, method, args);
+        return method(...args);
+    }
+    this.getInstanceProperty = function (instance, propertyPath) {
         var currentProperty = instance;
-        var splitProperty = propertyPath.split('.');
+        var splitProperty = propertyPath.replace('[', '.').replace(']', '').split('.');
+
         for (i = 0; i < splitProperty.length; i++) {
             if (splitProperty[i] in currentProperty) {
                 currentProperty = currentProperty[splitProperty[i]];
@@ -46,6 +60,7 @@ browserInterop = new (function () {
                 return null;
             }
         }
+
         return currentProperty;
     }
     this.addEventListener = function (propertyPath, eventName, dotnetAction) {
@@ -113,8 +128,7 @@ browserInterop = new (function () {
     };
     this.getAsJson = function (instance, propertyName) {
 
-        var data = getInstanceProperty(instance, propertyName);
-        console.log(instance, propertyName, data);
+        var data = me.getInstanceProperty(instance, propertyName);
         var res = me.getSerializableObject(data);
         return res;
     };

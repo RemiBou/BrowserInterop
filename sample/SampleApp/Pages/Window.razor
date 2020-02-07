@@ -1,12 +1,18 @@
 @page "/window"
 @inject IJSRuntime jsRuntime;
 @using BrowserInterop
-<iframe src="/window"></iframe>
+<iframe src="/navigator"></iframe>
 @code{
     private WindowInterop window;
+    private WindowInterop child;
     protected override async Task OnInitializedAsync()
     {
         window = await jsRuntime.Window();
+        child = await window.Frames.Get(0);
+        await window.Console.Log("test parent");
+        await child.Console.Log("test child");
+        //Frames() is an arrray of WindowsInterop
+        //Frames[i] returns the good WindowInterop + FramesLength
     }
 
 }
