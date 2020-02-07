@@ -111,14 +111,18 @@ browserInterop = new (function () {
                 if (navigator.battery) {//some browser does not implement getBattery but battery instead see https://developer.mozilla.org/en-US/docs/Web/API/Navigator/battery
                     var res = me.getSerializableObject(navigator.battery);
                     resolve(res);
-                    return;
                 }
-                navigator.getBattery().then(
-                    function (battery) {
-                        var res = me.getSerializableObject(battery);
-                        resolve(res);
-                    }
-                );
+                else if ('getBattery' in navigator) {
+                    navigator.getBattery().then(
+                        function (battery) {
+                            var res = me.getSerializableObject(battery);
+                            resolve(res);
+                        }
+                    );
+                }
+                else {
+                    resolve(null);
+                }
             });
         }
     })();

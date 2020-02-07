@@ -29,26 +29,31 @@ context('window.navigator', () => {
     });
     it('Check window.navigator.connection properties', () => {
         cy.window().then(w => {
-            cy.get("#navigator-connection-downlink").should('have.text', w.navigator.connection.downlink.toString());
-            cy.get("#navigator-connection-effectiveType").should('have.text', w.navigator.connection.effectiveType.toString());
-            cy.get("#navigator-connection-rtt").should('have.text', w.navigator.connection.rtt.toString());
-            cy.get("#navigator-connection-saveData").should('have.text', w.navigator.connection.saveData.toString());
-            cy.get("#navigator-connection-type").should('have.text', w.navigator.connection.type ? w.navigator.connection.type : '');
-            cy.get("#navigator-connection-event-change-handled").should('have.text', '0').then(() => {
-                w.navigator.connection.dispatchEvent(new Event("change"));
-                cy.get("#navigator-connection-event-change-handled").should('have.text', '1').then(() => {
-                    cy.get("#navigator-connection-event-change-stop").click().then(() => {
-                        w.navigator.connection.dispatchEvent(new Event("change"));
-                        cy.get("#navigator-connection-event-change-handled").should('have.text', '1');
+            if ('connection' in w.navigator) {
+                if ('downlinkMax' in w.navigator.connection) {// this property is not available in every browser
+                    cy.get("#navigator-connection-downlinkmax").should('have.text', w.navigator.connection.downlinkMax.toString());
+                }
+                cy.get("#navigator-connection-downlink").should('have.text', w.navigator.connection.downlink.toString());
+                cy.get("#navigator-connection-effectiveType").should('have.text', w.navigator.connection.effectiveType.toString());
+                cy.get("#navigator-connection-rtt").should('have.text', w.navigator.connection.rtt.toString());
+                cy.get("#navigator-connection-saveData").should('have.text', w.navigator.connection.saveData.toString());
+                cy.get("#navigator-connection-type").should('have.text', w.navigator.connection.type ? w.navigator.connection.type : '');
+                cy.get("#navigator-connection-event-change-handled").should('have.text', '0').then(() => {
+                    w.navigator.connection.dispatchEvent(new Event("change"));
+                    cy.get("#navigator-connection-event-change-handled").should('have.text', '1').then(() => {
+                        cy.get("#navigator-connection-event-change-stop").click().then(() => {
+                            w.navigator.connection.dispatchEvent(new Event("change"));
+                            cy.get("#navigator-connection-event-change-handled").should('have.text', '1');
+                        });
                     });
                 });
-            });
-        });
-    });
-    it('Check non standard properties', () => {
-        cy.window().then(w => {
-            if ('downlinkMax' in w.navigator.connection) {// this property is not available in every browser
-                cy.get("#navigator-connection-downlinkmax").should('have.text', w.navigator.connection.downlinkMax.toString());
+            } else {
+                cy.get("#navigator-connection-downlink").should('not.exist');
+                cy.get("#navigator-connection-effectiveType").should('not.exist');
+                cy.get("#navigator-connection-rtt").should('not.exist');
+                cy.get("#navigator-connection-saveData").should('not.exist');
+                cy.get("#navigator-connection-type").should('not.exist');
+                cy.get("#navigator-connection-event-change-handled").should('not.exist');
             }
         });
     });
@@ -71,13 +76,21 @@ context('window.navigator', () => {
     });
     it('Check navigator battery', () => {
         cy.window().then(w => {
-            cy.wrap(w.navigator.getBattery()).then(function (battery) {
+            if (w.navigator.getBattery) {
+                cy.wrap(w.navigator.getBattery()).then(function (battery) {
 
-                cy.get("#navigator-battery-charging").should('have.text', battery.charging.toString());
-                cy.get("#navigator-battery-chargingTime").should('have.text', battery.chargingTime.toString());
-                cy.get("#navigator-battery-dischargingTime").should('have.text', battery.dischargingTime.toString());
-                cy.get("#navigator-battery-level").should('have.text', battery.level.toString());
-            });
+                    cy.get("#navigator-battery-charging").should('have.text', battery.charging.toString());
+                    cy.get("#navigator-battery-chargingTime").should('have.text', battery.chargingTime.toString());
+                    cy.get("#navigator-battery-dischargingTime").should('have.text', battery.dischargingTime.toString());
+                    cy.get("#navigator-battery-level").should('have.text', battery.level.toString());
+                });
+            } else {
+
+                cy.get("#navigator-battery-charging").should('not.exist');
+                cy.get("#navigator-battery-chargingTime").should('not.exist');
+                cy.get("#navigator-battery-dischargingTime").should('not.exist');
+                cy.get("#navigator-battery-level").should('not.exist');
+            }
         });
     });
     it('Check navigator position', () => {

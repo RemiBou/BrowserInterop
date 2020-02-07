@@ -54,7 +54,7 @@ WA demo HTML block for window.Console.DirXml</span>
         ConsoleInterop.IsEnabled = true;
 
         await using(await window.Console.Profile("test")){
-            await Task.Delay(100);
+            await Task.Delay(200);
         }
 
         await window.Console.Table(new List<SampleClass>{new SampleClass(1,"Log object"), new SampleClass(2,"Log object2")}, "id");
@@ -62,9 +62,7 @@ WA demo HTML block for window.Console.DirXml</span>
       
         await using(await window.Console.Time("sub task"))
         {
-            await Task.Delay(100);
-            await window.Console.TimeLog("sub task");
-            await Task.Delay(100);
+            await Task.Delay(200);
         }
         await window.Console.TimeStamp("a timestamp");
         await window.Console.Trace(new []{new SampleClass(1,"dir object"), new SampleClass(2,"dir object2")});

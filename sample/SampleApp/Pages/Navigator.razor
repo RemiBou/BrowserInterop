@@ -12,18 +12,23 @@
     <li>AppName: <span id="navigator-app-name">@navigator.AppName</span></li>
     <li>AppVersion: <span id="navigator-app-version">@navigator.AppVersion</span></li>
     <li>
-        Connection :
-        <span id="navigator-connection-event-change-handled">@connectionChangedEventHandled</span>
-        <button id="navigator-connection-event-change-stop" type="button" @onclick="async () => await connectionChangeEventHandler.DisposeAsync()">Dispose event handler</button>
+
+        @if(navigator.Connection != null)
+        {
+            <text>Connection :</text>
+            <span id="navigator-connection-event-change-handled">@connectionChangedEventHandled</span>
+            <button id="navigator-connection-event-change-stop" type="button" @onclick="async () => await connectionChangeEventHandler.DisposeAsync()">Dispose event handler</button>
+            <ul>
+                <li>Downlink: <span id="navigator-connection-downlink">@navigator.Connection.Downlink.ToString(CultureInfo.InvariantCulture)</span></li>
+                <li>DownlinkMax: <span id="navigator-connection-downlinkmax">@navigator.Connection.DownlinkMax.ToString(CultureInfo.InvariantCulture)</span></li>
+                <li>EffectiveType: <span id="navigator-connection-effectiveType">@navigator.Connection.EffectiveType</span> (@navigator.Connection.EffectiveTypeEnum)</li>
+                <li>Rtt: <span id="navigator-connection-rtt">@navigator.Connection.Rtt</span></li>
+                <li>SaveData: <span id="navigator-connection-saveData">@navigator.Connection.SaveData.ToString().ToLower()</span></li>
+                <li>Type: <span id="navigator-connection-type">@navigator.Connection.Type</span></li>
+                <li>TypeEnum: <span id="navigator-connection-typeEnum">@navigator.Connection.TypeEnum</span></li>
+            </ul>
+        }
         <ul>
-        
-            <li>Downlink: <span id="navigator-connection-downlink">@navigator.Connection.Downlink.ToString(CultureInfo.InvariantCulture)</span></li>
-            <li>DownlinkMax: <span id="navigator-connection-downlinkmax">@navigator.Connection.DownlinkMax.ToString(CultureInfo.InvariantCulture)</span></li>
-            <li>EffectiveType: <span id="navigator-connection-effectiveType">@navigator.Connection.EffectiveType</span> (@navigator.Connection.EffectiveTypeEnum)</li>
-            <li>Rtt: <span id="navigator-connection-rtt">@navigator.Connection.Rtt</span></li>
-            <li>SaveData: <span id="navigator-connection-saveData">@navigator.Connection.SaveData.ToString().ToLower()</span></li>
-            <li>Type: <span id="navigator-connection-type">@navigator.Connection.Type</span></li>
-            <li>TypeEnum: <span id="navigator-connection-typeEnum">@navigator.Connection.TypeEnum</span></li>
             <li>CookieEnabled: <span id="navigator-cookieEnabled">@navigator.CookieEnabled.ToString().ToLower()</span></li>
             <li>HardwareConcurrency: <span id="navigator-hardwareConcurrency">@navigator.HardwareConcurrency</span></li>
             <li>javaEnabled: <span id="navigator-javaEnabled">@javaEnabled?.ToString()?.ToLower()</span></li>
@@ -74,8 +79,9 @@
 @if(geolocationResult != null){
     
 
-  <text>  GeolocationCoordinates :</text>
-  GeopositionChanged : <span id="navigator-geolocation-changed">@geopositionChanged</span>
+  <text>  GeolocationCoordinates :
+  Geoposition Changed :
+  </text> <span id="navigator-geolocation-changed">@geopositionChanged</span>
   <button id="navigator-geolocation-event-change-stop" type="button" @onclick="async () => await geopositionWatcher.DisposeAsync()">Dispose geoposition event handler</button>
 
   @if(geolocationResult.Location != null){
@@ -140,13 +146,13 @@ Method calls
         navigator = await window.Navigator();
         battery = await navigator.GetBattery();
         javaEnabled = await navigator.JavaEnabled();
-        connectionChangeEventHandler =  await navigator.Connection.OnChange(async () => {
-            await window.Console.Log("Connection Change");
-            connectionChangedEventHandled++;
-            StateHasChanged();
-            
-        });
-      
+        if(navigator.Connection != null){
+            connectionChangeEventHandler =  await navigator.Connection.OnChange(async () => {
+                await window.Console.Log("Connection Change");
+                connectionChangedEventHandled++;
+                StateHasChanged();                
+            });
+        }      
     }
     public async Task Vibrate(){
         await navigator.Vibrate(new []{
