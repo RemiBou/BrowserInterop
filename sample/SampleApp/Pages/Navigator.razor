@@ -196,12 +196,9 @@ Method calls
     private bool? storagePersist;
     private bool? storagePersisted;
     public async Task GetStorageEstimate(){
-        System.Console.WriteLine("GetStorageEstimate");
         storageEstimate = await  navigator.Storage.Estimate();
-        StateHasChanged();
-        storagePersist = await navigator.Storage.Persist();
-        storagePersisted = await navigator.Storage.Persisted();
-        await window.Console.Log(storageEstimate, "Storage Estimate");
+        storagePersist = await navigator.Storage.Persist(TimeSpan.FromSeconds(1));
+        storagePersisted = await navigator.Storage.Persisted(TimeSpan.FromSeconds(1));
 
     }
 }
