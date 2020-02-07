@@ -59,6 +59,15 @@ namespace BrowserInterop
             return actionWrapper;
         }
 
+        /// <summary>
+        /// Invoke the specified method with JSInterop and returns default(T) if the timeout is reached
+        /// </summary>
+        /// <param name="jsRuntime">js runtime on which we'll execute the query</param>
+        /// <param name="identifier">method identifier</param>
+        /// <param name="timeout">timeout until e return default(T)</param>
+        /// <param name="args">method arguments</param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
         public static async ValueTask<T> InvokeOrDefaultAsync<T>(this IJSRuntime jsRuntime, string identifier, TimeSpan timeout, params object[] args)
         {
             try
