@@ -44,6 +44,9 @@ namespace BrowserInterop
             return navigatorInterop;
         }
 
+        /// <summary>
+        /// Give access to the direct sub-frames of the current window.
+        /// </summary>
         public FramesArrayInterop Frames => framesArrayInteropLazy.Value;
     }
 }
