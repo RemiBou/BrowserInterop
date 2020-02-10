@@ -13,14 +13,16 @@ namespace BrowserInterop
     public class NavigatorInterop
     {
         private IJSRuntime jsRuntime;
+        private JsRuntimeObjectRef jsRuntimeObjectRef;
 
         public NavigatorInterop()
         {
         }
 
-        internal void SetJSRuntime(IJSRuntime jsRuntime)
+        internal void SetJSRuntime(IJSRuntime jsRuntime, JsRuntimeObjectRef jsRuntimeObjectRef)
         {
             this.jsRuntime = jsRuntime;
+            this.jsRuntimeObjectRef = jsRuntimeObjectRef;
             Geolocation = new GeolocationInterop(jsRuntime);
             Storage = new StorageInterop(jsRuntime);
             this.Connection?.SetJsRuntime(jsRuntime);

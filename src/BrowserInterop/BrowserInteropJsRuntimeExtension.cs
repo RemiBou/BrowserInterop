@@ -1,7 +1,9 @@
 using System;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using Microsoft.JSInterop;
 
@@ -35,15 +37,49 @@ namespace BrowserInterop
                 await jSRuntime.InvokeVoidAsync("eval", ressourceReader.ReadToEnd());
                 ScriptInitialized = true;
             }
+            var jsObjectRef = await jSRuntime.InvokeAsync<JsRuntimeObjectRef>("browserInterop.getPropertyRef", "window");
 
 
-            return new WindowInterop(jSRuntime);
+            return new WindowInterop(jSRuntime, jsObjectRef);
         }
 
-        public static async Task<T> GetWindowProperty<T>(this IJSRuntime jsRuntime, string propertyPath)
+        /// <summary>
+        /// Get the js object property value
+        /// </summary>
+        /// <param name="jsRuntime"></param>
+        /// <param name="propertyPath"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public static async Task<T> GetInstancePropertyAsync<T>(this IJSRuntime jsRuntime, JsRuntimeObjectRef jsObjectRef, string propertyPath)
         {
-            return await jsRuntime.InvokeAsync<T>("browserInterop.getProperty", propertyPath);
+            return await jsRuntime.InvokeAsync<T>("browserInterop.getInstancePropertySerializable", jsObjectRef, propertyPath);
 
+        }
+
+        /// <summary>
+        /// Return a reference to the JS instance located on the given property 
+        /// </summary>
+        /// <param name="jsRuntime">Current JS rntime</param>
+        /// <param name="jsObjectRef">Refernece to the parent instance</param>
+        /// <param name="propertyPath">property path</param>
+        /// <returns></returns>
+        public static async Task<JsRuntimeObjectRef> GetInstancePropertyRefAsync(this IJSRuntime jsRuntime, JsRuntimeObjectRef jsObjectRef, string propertyPath)
+        {
+            return await jsRuntime.InvokeAsync<JsRuntimeObjectRef>("browserInterop.getInstancePropertyRef", jsObjectRef, propertyPath);
+        }
+
+
+        /// <summary>
+        /// Call the method on the js instance
+        /// </summary>
+        /// <param name="jsRuntime1">Curent JS Runtime</param>
+        /// <param name="windowObject">Reference to the JS instance</param>
+        /// <param name="methodName">Methdod name/path </param>
+        /// <param name="arguments">method arguments</param>
+        /// <returns></returns>
+        public static async Task InvokeInstanceMethodAsync(this IJSRuntime jsRuntime, JsRuntimeObjectRef windowObject, string methodName, params object[] arguments)
+        {
+            await jsRuntime.InvokeVoidAsync("browserInterop.callInstanceMethod", new object[] { windowObject, methodName }.Concat(arguments).ToArray());
         }
 
         public static async Task<bool> HasProperty(this IJSRuntime jsRuntime, string propertyPath)
@@ -86,15 +122,9 @@ namespace BrowserInterop
         }
     }
 
-    public readonly struct JsRuntimeObjectRef
+    public struct JsRuntimeObjectRef
     {
-        private readonly int id;
-
-        public JsRuntimeObjectRef(int id)
-        {
-            this.id = id;
-        }
-
-        internal int Id => id;
+        [JsonPropertyName("__jsObjectRefId")]
+        public int JsObjectRefId { get; set; }
     }
 }
