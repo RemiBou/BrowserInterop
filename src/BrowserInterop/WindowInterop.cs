@@ -40,7 +40,7 @@ namespace BrowserInterop
         public async Task<NavigatorInterop> Navigator()
         {
             NavigatorInterop navigatorInterop = await jsRuntime.GetInstancePropertyAsync<NavigatorInterop>(jsRuntimeObjectRef, "navigator");
-            navigatorInterop.SetJSRuntime(jsRuntime);
+            navigatorInterop.SetJSRuntime(jsRuntime, this.jsRuntimeObjectRef);
             return navigatorInterop;
         }
 

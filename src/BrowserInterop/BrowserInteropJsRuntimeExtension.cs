@@ -44,7 +44,7 @@ namespace BrowserInterop
         }
 
         /// <summary>
-        /// Get the window property value
+        /// Get the js object property value
         /// </summary>
         /// <param name="jsRuntime"></param>
         /// <param name="propertyPath"></param>
@@ -54,6 +54,18 @@ namespace BrowserInterop
         {
             return await jsRuntime.InvokeAsync<T>("browserInterop.getInstancePropertySerializable", jsObjectRef, propertyPath);
 
+        }
+
+        /// <summary>
+        /// Return a reference to the JS instance located on the given property 
+        /// </summary>
+        /// <param name="jsRuntime">Current JS rntime</param>
+        /// <param name="jsObjectRef">Refernece to the parent instance</param>
+        /// <param name="propertyPath">property path</param>
+        /// <returns></returns>
+        public static async Task<JsRuntimeObjectRef> GetInstancePropertyRefAsync(this IJSRuntime jsRuntime, JsRuntimeObjectRef jsObjectRef, string propertyPath)
+        {
+            return await jsRuntime.InvokeAsync<JsRuntimeObjectRef>("browserInterop.getInstancePropertyRef", jsObjectRef, propertyPath);
         }
 
 

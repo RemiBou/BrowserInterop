@@ -16,14 +16,14 @@ namespace BrowserInterop
 
         public async Task<WindowInterop> Get(int index)
         {
-            var jsObjectRef = await jsRuntime.InvokeAsync<JsRuntimeObjectRef>("browserInterop.getInstancePropertyRef", jsRuntimeObjectRef, "frames[" + index + "]");
+            var jsObjectRef = await jsRuntime.GetInstancePropertyRefAsync(jsRuntimeObjectRef, $"frames[{index}]");
 
             return new WindowInterop(jsRuntime, jsObjectRef);
         }
 
         public async Task<int> Length()
         {
-            return await jsRuntime.InvokeAsync<int>("browserInterop.getInstanceProperty", jsRuntimeObjectRef, "frames.length");
+            return await jsRuntime.GetInstancePropertyAsync<int>(jsRuntimeObjectRef, "frames.length");
         }
     }
 }
