@@ -28,3 +28,11 @@ Cypress.Commands.add('spyFix', (object, method, window) => {
     cy.spy(object, method);
     object[method].__proto__ = window.Function;
 });
+// thanks : https://github.com/cypress-io/cypress/issues/136#issuecomment-342391119
+Cypress.Commands.add('iframe', { prevSubject: 'element' }, $iframe => {
+    return new Cypress.Promise(resolve => {
+        $iframe.on('load', () => {
+            resolve($iframe.contents().find('body'));
+        });
+    });
+});

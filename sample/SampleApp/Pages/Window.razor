@@ -1,0 +1,18 @@
+@page "/window"
+@inject IJSRuntime jsRuntime;
+@using BrowserInterop
+<button id="btn-window-child-frame-console" @onclick="ChildFrameConsole">Child frame console</button>
+<iframe id="child-iframe" src="/navigator"></iframe>
+@code{
+    private WindowInterop window;
+    private WindowInterop child;
+    protected override async Task OnInitializedAsync()
+    {
+        window = await jsRuntime.Window();
+    }
+    protected async Task ChildFrameConsole()
+    {
+        child = await window.Frames.Get(0);
+        await child.Console.Log("test child");
+    }
+}
