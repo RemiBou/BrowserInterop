@@ -1,8 +1,6 @@
 # BrowserInterop
 
-[![Build Status](https://dev.azure.com/remibou/toss/_apis/build/status/RemiBou.BrowserInterop?branchName=master)](https://dev.azure.com/remibou/toss/_build/latest?definitionId=9&branchName=master)
-
-[![BrowserInterop](https://img.shields.io/nuget/v/BrowserInterop.svg)](https://www.nuget.org/packages/BrowserInterop/)
+[![Build Status](https://dev.azure.com/remibou/toss/_apis/build/status/RemiBou.BrowserInterop?branchName=master)](https://dev.azure.com/remibou/toss/_build/latest?definitionId=9&branchName=master) [![BrowserInterop](https://img.shields.io/nuget/v/BrowserInterop.svg)](https://www.nuget.org/packages/BrowserInterop/)
 
 This library provides access to browser API in a Blazor App. 
 
@@ -46,75 +44,78 @@ You can find more usage here : https://github.com/RemiBou/BrowserInterop/tree/ma
 
 ## API covered
 Those are the first API covered, more will come, please open an issue if you think some API might be valuable.
-
-- console
-    - console.assert
-    - console.clear
-    - console.count
-    - console.countReset
-    - console.debug
-    - console.dir
-    - console.dirXml
-    - console.error
-    - console.group
-    - console.groupEnd
-    - console.log
-    - console.profile
-    - console.profileEnd
-    - console.table
-    - console.time
-    - console.timeEnd
-    - console.timeLog
-    - console.timeStamp
-    - console.trace
-- navigator
-    - navigator.appCodeName
-    - navigator.appName
-    - navigator.appVersion
-    - navigator.getBattery()
-        - battery.charging
-        - battery.chargingTime
-        - battery.dischargingTime
-        - battery.level
-    - navigator.connection
-        - navigator.connection.downLink
-        - navigator.connection.downLinkMax
-        - navigator.connection.effectiveType
-        - navigator.connection.rtt
-        - navigator.connection.saveData
-        - navigator.connection.type
-        - navigator.connection.onchange
-    - navigator.cookieEnabled
-    - navigator.hardwareConcurrency
-    - navigator.geolocation
-        - navigator.geolocation.getCurrentPosition()
-        - navigator.geolocation.watchPosition()
-    - navigator.javaEnabled()
-    - navigator.language
-    - navigator.languages
-    - navigator.maxTouchPoints
-    - navigator.mimeTypes
-        - mimeType.type
-        - mimeType.suffix
-        - mimeType.description
-        - mimeType.plugin
-    - navigator.online
-    - navigator.platform
-    - navigator.plugins
-        - plugin.name
-        - plugin.fileName
-        - plugin.description
-        - plugin.version
-    - navigator.storage
-        - navigator.storage.estimate()
-        - navigator.storage.persist()
-        - navigator.storage.persisted()
-    - navigator.userAgent
-    - navigator.canShare()
-    - navigator.registerProtocolHandler()
-    - navigator.sendBeacon()
-    - navigator.share()
-    - navigator.vibrate()
+- window
+    - window.frames
+        - window.frames[i]
+        - window.frames.length
+    - window.console
+        - window.console.assert
+        - window.console.clear
+        - window.console.count
+        - window.console.countReset
+        - window.console.debug
+        - window.console.dir
+        - window.console.dirXml
+        - window.console.error
+        - window.console.group
+        - window.console.groupEnd
+        - window.console.log
+        - window.console.profile
+        - window.console.profileEnd
+        - window.console.table
+        - window.console.time
+        - window.console.timeEnd
+        - window.console.timeLog
+        - window.console.timeStamp
+        - window.console.trace
+    - navigator
+        - navigator.appCodeName
+        - navigator.appName
+        - navigator.appVersion
+        - navigator.getBattery()
+            - battery.charging
+            - battery.chargingTime
+            - battery.dischargingTime
+            - battery.level
+        - navigator.connection
+            - navigator.connection.downLink
+            - navigator.connection.downLinkMax
+            - navigator.connection.effectiveType
+            - navigator.connection.rtt
+            - navigator.connection.saveData
+            - navigator.connection.type
+            - navigator.connection.onchange
+        - navigator.cookieEnabled
+        - navigator.hardwareConcurrency
+        - navigator.geolocation
+            - navigator.geolocation.getCurrentPosition()
+            - navigator.geolocation.watchPosition()
+        - navigator.javaEnabled()
+        - navigator.language
+        - navigator.languages
+        - navigator.maxTouchPoints
+        - navigator.mimeTypes
+            - mimeType.type
+            - mimeType.suffix
+            - mimeType.description
+            - mimeType.plugin
+        - navigator.online
+        - navigator.platform
+        - navigator.plugins
+            - plugin.name
+            - plugin.fileName
+            - plugin.description
+            - plugin.version
+        - navigator.storage
+            - navigator.storage.estimate()
+            - navigator.storage.persist()
+            - navigator.storage.persisted()
+        - navigator.userAgent
+        - navigator.canShare()
+        - navigator.registerProtocolHandler()
+        - navigator.sendBeacon()
+        - navigator.share()
+        - navigator.vibrate()
 
     
 
