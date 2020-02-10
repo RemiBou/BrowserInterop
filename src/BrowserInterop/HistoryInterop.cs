@@ -37,7 +37,7 @@ namespace BrowserInterop
 
         public async Task SetScrollRestauration(ScrollRestaurationEnum value)
         {
-            this.jsRuntime.SetInstancePropertyAsync(jsRuntimeObjectRef, "history.scrollRestoration", value.ToString().ToLower());
+            await jsRuntime.SetInstancePropertyAsync(jsRuntimeObjectRef, "history.scrollRestoration", value.ToString().ToLower());
         }
 
 
