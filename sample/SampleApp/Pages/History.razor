@@ -1,0 +1,41 @@
+@page "/history"
+@inject IJSRuntime jsRuntime;
+@using BrowserInterop
+@if(history != null){
+    <text>History :</text>
+    <button type="button" @onclick="State">State</button>
+    <button type="button" @onclick="PushState">PushState</button>
+    <button type="button" @onclick="Back">Back</button>
+    <button type="button" @onclick="Go">Go</button>
+    <button type="button" @onclick="Forward">PushState</button>
+    <ul>
+        <li><span id="window-history-length">@history.Length</span></li>
+        <li><span id="window-history-scrollRestaurationEnum">@history.ScrollRestaurationEnum.ToString().ToLower()</span></li>
+        @if(stateClass != null){
+            <li><span id="window-history-state">@stateClass.Id</span></li>
+        }
+    </ul>
+
+}
+@code{
+    private WindowInterop window;
+    private HistoryInterop history;
+    private StateClass stateClass;
+    protected override async Task OnInitializedAsync()
+    {
+        window = await jsRuntime.Window();
+        history =await window.History();
+    }
+
+    protected async Task PushState(){
+        await history.PushState(new StateClass(){Id = 123456},"test");
+    }
+
+    protected async Task State(){
+        stateClass = await history.State<StateClass>();
+    }
+
+    protected class StateClass{
+        public int Id { get; set; }
+    }
+}
