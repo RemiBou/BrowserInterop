@@ -18,7 +18,6 @@ browserInterop = new (function () {
                 throw new Error("This JS object reference does not exists : " + id);
             }
             const instance = weakMap.get(weakMapKeys[id]);
-            console.log(value, instance);
             return instance;
         } else {
             return value;
@@ -38,7 +37,6 @@ browserInterop = new (function () {
         var jsRef = {};
         jsRef[jsRefKey] = id;
 
-        console.log('getInstancePropertyRef', propertyPath, res);
         return jsRef;
     };
     this.getProperty = function (propertyPath) {
@@ -46,7 +44,6 @@ browserInterop = new (function () {
     };
     this.callInstanceMethod = function (instance, methodPath, ...args) {
         var method = me.getInstanceProperty(instance, methodPath);
-        console.log('callInstanceMethod', instance, methodPath, method, args);
         return method(...args);
     }
     this.getInstanceProperty = function (instance, propertyPath) {

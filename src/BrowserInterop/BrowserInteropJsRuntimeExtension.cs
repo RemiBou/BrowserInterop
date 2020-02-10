@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text.Json.Serialization;
@@ -42,10 +43,31 @@ namespace BrowserInterop
             return new WindowInterop(jSRuntime, jsObjectRef);
         }
 
+        /// <summary>
+        /// Get the window property value
+        /// </summary>
+        /// <param name="jsRuntime"></param>
+        /// <param name="propertyPath"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
         public static async Task<T> GetWindowProperty<T>(this IJSRuntime jsRuntime, string propertyPath)
         {
             return await jsRuntime.InvokeAsync<T>("browserInterop.getProperty", propertyPath);
 
+        }
+
+
+        /// <summary>
+        /// Call the method on the js instance
+        /// </summary>
+        /// <param name="jsRuntime1">Curent JS Runtime</param>
+        /// <param name="windowObject">Reference to the JS instance</param>
+        /// <param name="methodName">Methdod name/path </param>
+        /// <param name="arguments">method arguments</param>
+        /// <returns></returns>
+        public static async Task InvokeInstanceMethodAsync(this IJSRuntime jsRuntime, JsRuntimeObjectRef windowObject, string methodName, params object[] arguments)
+        {
+            await jsRuntime.InvokeVoidAsync("browserInterop.callInstanceMethod", new object[] { windowObject, methodName }.Concat(arguments).ToArray());
         }
 
         public static async Task<bool> HasProperty(this IJSRuntime jsRuntime, string propertyPath)
