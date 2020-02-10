@@ -50,9 +50,9 @@ namespace BrowserInterop
         /// <param name="propertyPath"></param>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public static async Task<T> GetWindowProperty<T>(this IJSRuntime jsRuntime, string propertyPath)
+        public static async Task<T> GetInstancePropertyAsync<T>(this IJSRuntime jsRuntime, JsRuntimeObjectRef jsObjectRef, string propertyPath)
         {
-            return await jsRuntime.InvokeAsync<T>("browserInterop.getProperty", propertyPath);
+            return await jsRuntime.InvokeAsync<T>("browserInterop.getInstancePropertySerializable", jsObjectRef, propertyPath);
 
         }
 

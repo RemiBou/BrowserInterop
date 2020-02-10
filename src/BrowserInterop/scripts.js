@@ -123,7 +123,7 @@ browserInterop = new (function () {
         }
         return res;
     };
-    this.getAsJson = function (instance, propertyName) {
+    this.getInstancePropertySerializable = function (instance, propertyName) {
 
         var data = me.getInstanceProperty(instance, propertyName);
         var res = me.getSerializableObject(data);
