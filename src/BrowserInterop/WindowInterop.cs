@@ -48,5 +48,12 @@ namespace BrowserInterop
         /// Give access to the direct sub-frames of the current window.
         /// </summary>
         public FramesArrayInterop Frames => framesArrayInteropLazy.Value;
+
+        public async Task<HistoryInterop> History()
+        {
+            HistoryInterop navigatorInterop = await jsRuntime.GetInstancePropertyAsync<HistoryInterop>(jsRuntimeObjectRef, "navigator");
+            navigatorInterop.SetJSRuntime(jsRuntime, this.jsRuntimeObjectRef);
+            return navigatorInterop;
+        }
     }
 }

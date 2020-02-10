@@ -57,6 +57,19 @@ namespace BrowserInterop
         }
 
         /// <summary>
+        /// Set the js object property value
+        /// </summary>
+        /// <param name="jsRuntime"></param>
+        /// <param name="propertyPath"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public static async Task SetInstancePropertyAsync(this IJSRuntime jsRuntime, JsRuntimeObjectRef jsObjectRef, string propertyPath, object value)
+        {
+            await jsRuntime.InvokeVoidAsync("browserInterop.setInstanceProperty", jsObjectRef, propertyPath);
+
+        }
+
+        /// <summary>
         /// Return a reference to the JS instance located on the given property 
         /// </summary>
         /// <param name="jsRuntime">Current JS rntime</param>
