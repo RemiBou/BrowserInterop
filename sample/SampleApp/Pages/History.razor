@@ -6,9 +6,9 @@
     <button type="button" id="window-history-scrollRestoration-set" @onclick="SetScrollRestoration">SetScrollRestoration</button>
     <button type="button" id="window-history-state-get" @onclick="State">State</button>
     <button type="button" id="window-history-state-pushState"  @onclick="PushState">PushState</button>
-    <button type="button" @onclick="async () => await history.Back()">Back</button>
-    <button type="button" @onclick="async () => await history.Go(-2)">Go</button>
-    <button type="button" @onclick="async () => await history.Forward()">PushState</button>
+    <button type="button" id="window-history-back" @onclick="async () => await history.Back()">Back</button>
+    <button type="button" id="window-history-go" @onclick="async () => await history.Go(-2)">Go</button>
+    <button type="button" id="window-history-forward" @onclick="async () => await history.Forward()">PushState</button>
     <ul>
         <li><span id="window-history-length">@history.Length</span></li>
         <li><span id="window-history-scrollRestaurationEnum">@history.ScrollRestorationEnum.ToString().ToLower()</span></li>

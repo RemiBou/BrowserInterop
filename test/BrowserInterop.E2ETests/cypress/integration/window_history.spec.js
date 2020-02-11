@@ -11,6 +11,38 @@ context('window.history', () => {
             });
 
     });
+
+    it('window history back', () => {
+        cy.window()
+            .then(w => {
+                cy.stubFix(w.history, 'back', w, () => { });
+                cy.get("#window-history-back")
+                    .click()
+                    .then(() => expect(w.history.back).to.be.calledOnce);
+            });
+
+    });
+    it('window history forward', () => {
+        cy.window()
+            .then(w => {
+                cy.stubFix(w.history, 'forward', w, () => { });
+                cy.get("#window-history-forward")
+                    .click()
+                    .then(() => expect(w.history.forward).to.be.calledOnce);
+            });
+
+    });
+
+    it('window history go', () => {
+        cy.window()
+            .then(w => {
+                cy.stubFix(w.history, 'go', w, () => { });
+                cy.get("#window-history-go")
+                    .click()
+                    .then(() => expect(w.history.go).to.be.calledWith(-2));
+            });
+
+    });
     it('window history scrollRestoration', () => {
         cy.window()
             .then(w => {
