@@ -76,4 +76,25 @@ context('window.history', () => {
             });
 
     });
+
+    it('window history replaceState', () => {
+        cy.window()
+            .then(w => {
+                cy.get('#window-history-state-pushState').click()
+                    .then(() => {
+                        cy.get('#window-history-state-replaceState')
+                            .click()
+                            .then(() => {
+
+                                cy.get('#window-history-state-get')
+                                    .click()
+                                    .then(() => {
+                                        cy.get('#window-history-state').should('have.text', '1234567');
+                                    });
+                            });
+
+                    });
+            });
+
+    });
 });
