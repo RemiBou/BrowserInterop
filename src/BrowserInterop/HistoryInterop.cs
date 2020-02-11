@@ -46,7 +46,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public async Task SetScrollRestoration(ScrollRestorationEnum value)
         {
-            await jsRuntime.SetInstancePropertyAsync(jsRuntimeObjectRef, "history.scrollRestoration", value.ToString().ToLower());
+            await jsRuntime.SetInstancePropertyAsync(jsRuntimeObjectRef, "scrollRestoration", value.ToString().ToLower());
         }
 
         /// <summary>
@@ -56,7 +56,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public async Task<T> State<T>()
         {
-            return await jsRuntime.GetInstancePropertyAsync<T>(jsRuntimeObjectRef, "history.state");
+            return await jsRuntime.GetInstancePropertyAsync<T>(jsRuntimeObjectRef, "state");
         }
 
         /// <summary>
@@ -65,7 +65,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public async Task Back()
         {
-            await jsRuntime.InvokeInstanceMethodAsync(jsRuntimeObjectRef, "history.back");
+            await jsRuntime.InvokeInstanceMethodAsync(jsRuntimeObjectRef, "back");
         }
 
         /// <summary>
@@ -74,7 +74,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public async Task Forward()
         {
-            await jsRuntime.InvokeInstanceMethodAsync(jsRuntimeObjectRef, "history.forward");
+            await jsRuntime.InvokeInstanceMethodAsync(jsRuntimeObjectRef, "forward");
         }
 
         /// <summary>
@@ -84,7 +84,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public async Task Go(int delta = 0)
         {
-            await jsRuntime.InvokeInstanceMethodAsync(jsRuntimeObjectRef, "history.go", delta);
+            await jsRuntime.InvokeInstanceMethodAsync(jsRuntimeObjectRef, "go", delta);
         }
 
         /// <summary>

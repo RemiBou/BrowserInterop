@@ -44,7 +44,7 @@ browserInterop = new (function () {
     };
     this.callInstanceMethod = function (instance, methodPath, ...args) {
         var method = me.getInstanceProperty(instance, methodPath);
-        return method(...args);
+        return method.apply(instance, args);
     }
     this.getInstanceProperty = function (instance, propertyPath) {
         var currentProperty = instance;
