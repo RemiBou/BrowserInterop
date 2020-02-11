@@ -23,4 +23,21 @@ context('window.history', () => {
             });
 
     });
+
+    it('window history state', () => {
+        cy.window()
+            .then(w => {
+                cy.get('#window-history-state-get')
+                    .click()
+                    .then(() => {
+                        cy.get('#window-history-state').should('not.exist');
+                        cy.get('#window-history-state-pushState').click()
+                            .then(() => {
+                                cy.get('#window-history-state').should('have.text', '123456');
+
+                            });
+                    })
+            });
+
+    });
 });

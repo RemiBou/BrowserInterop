@@ -44,7 +44,8 @@ browserInterop = new (function () {
     };
     this.callInstanceMethod = function (instance, methodPath, ...args) {
         var method = me.getInstanceProperty(instance, methodPath);
-        return method(...args);
+        console.log(method, args);
+        return method.apply(instance, args);
     }
     this.getInstanceProperty = function (instance, propertyPath) {
         var currentProperty = instance;
@@ -81,6 +82,9 @@ browserInterop = new (function () {
     this.getSerializableObject = function (data, alreadySerialized) {
         if (!alreadySerialized) {
             alreadySerialized = [];
+        }
+        if (!data) {
+            return null;
         }
         var res = {};
         for (var i in data) {
