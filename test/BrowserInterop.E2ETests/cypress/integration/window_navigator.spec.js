@@ -7,7 +7,7 @@ context('window.navigator', () => {
 
     // https://on.cypress.io/interacting-with-elements
 
-    it('Check window.navigator properties', () => {
+    it('window.navigator properties', () => {
         cy.window().then(w => {
             cy.get("#navigator-app-code-name").should('have.text', w.navigator.appCodeName);
             cy.get("#navigator-app-name").should('have.text', w.navigator.appName);
@@ -27,7 +27,7 @@ context('window.navigator', () => {
 
         });
     });
-    it('Check window.navigator.connection properties', () => {
+    it('window.navigator.connection properties', () => {
         cy.window().then(w => {
             if ('connection' in w.navigator) {
                 if ('downlinkMax' in w.navigator.connection) {// this property is not available in every browser
@@ -57,7 +57,7 @@ context('window.navigator', () => {
             }
         });
     });
-    it('Check navigator plugins', () => {
+    it('navigator plugins', () => {
         cy.window().then(w => {
             for (let index = 0; index < w.navigator.plugins.length; index++) {
                 const element = w.navigator.plugins[index];
@@ -66,7 +66,7 @@ context('window.navigator', () => {
             }
         });
     });
-    it('Check navigator mimeTypes', () => {
+    it('navigator mimeTypes', () => {
         cy.window().then(w => {
             for (let index = 0; index < w.navigator.mimeTypes.length; index++) {
                 const element = w.navigator.mimeTypes[index];
@@ -74,7 +74,7 @@ context('window.navigator', () => {
             }
         });
     });
-    it('Check navigator battery', () => {
+    it('navigator getBattery', () => {
         cy.window().then(w => {
             if (w.navigator.getBattery) {
                 cy.wrap(w.navigator.getBattery()).then(function (battery) {
@@ -93,7 +93,7 @@ context('window.navigator', () => {
             }
         });
     });
-    it('Check navigator position', () => {
+    it('navigator geolocation API', () => {
         cy.window().then(w => {
             const coordinates = {
                 timestamp: 1606859690000,
@@ -138,7 +138,7 @@ context('window.navigator', () => {
 
         });
     });
-    it('Check storage', function () {
+    it('navigator storage', function () {
         cy.window().then(w => {
             cy.get("#navigator-storage-getStorageEstimate").click()
                 .then(() => {
@@ -159,7 +159,7 @@ context('window.navigator', () => {
                 });
         });
     });
-    it('Check methods', function () {
+    it('navigator other methods', function () {
         cy.window().then(w => {
             if (!w.navigator.canShare) {
                 w.navigator.canShare = function (data) { return true; };

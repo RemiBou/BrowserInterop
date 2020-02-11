@@ -65,7 +65,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public static async Task SetInstancePropertyAsync(this IJSRuntime jsRuntime, JsRuntimeObjectRef jsObjectRef, string propertyPath, object value)
         {
-            await jsRuntime.InvokeVoidAsync("browserInterop.setInstanceProperty", jsObjectRef, propertyPath);
+            await jsRuntime.InvokeVoidAsync("browserInterop.setInstanceProperty", jsObjectRef, propertyPath, value);
 
         }
 

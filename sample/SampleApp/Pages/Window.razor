@@ -1,8 +1,8 @@
 @page "/window"
 @inject IJSRuntime jsRuntime;
 @using BrowserInterop
+<iframe id="child-iframe" src="/navigator"></iframe><br/>
 <button id="btn-window-child-frame-console" @onclick="ChildFrameConsole">Child frame console</button>
-<iframe id="child-iframe" src="/navigator"></iframe>
 @code{
     private WindowInterop window;
     private WindowInterop child;
@@ -10,6 +10,7 @@
     {
         window = await jsRuntime.Window();
     }
+
     protected async Task ChildFrameConsole()
     {
         child = await window.Frames.Get(0);

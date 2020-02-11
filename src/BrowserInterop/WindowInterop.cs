@@ -51,7 +51,7 @@ namespace BrowserInterop
 
         public async Task<HistoryInterop> History()
         {
-            HistoryInterop navigatorInterop = await jsRuntime.GetInstancePropertyAsync<HistoryInterop>(jsRuntimeObjectRef, "navigator");
+            HistoryInterop navigatorInterop = await jsRuntime.GetInstancePropertyAsync<HistoryInterop>(jsRuntimeObjectRef, "history");
             navigatorInterop.SetJSRuntime(jsRuntime, this.jsRuntimeObjectRef);
             return navigatorInterop;
         }

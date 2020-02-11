@@ -4,7 +4,7 @@ context('window.navigator', () => {
     before(() => {
         cy.visit('/window');
     });
-    it('Check window frames', () => {
+    it('Call child frame method', () => {
         cy.get('#child-iframe')
             .iframe()
             .then((i) => {

@@ -3,14 +3,15 @@
 @using BrowserInterop
 @if(history != null){
     <text>History :</text>
+    <button type="button" id="window-history-scrollRestoration-set" @onclick="SetScrollRestoration">SetScrollRestoration</button>
     <button type="button" @onclick="State">State</button>
     <button type="button" @onclick="PushState">PushState</button>
-    <button type="button" @onclick="Back">Back</button>
-    <button type="button" @onclick="Go">Go</button>
-    <button type="button" @onclick="Forward">PushState</button>
+    <button type="button" @onclick="async () => await history.Back()">Back</button>
+    <button type="button" @onclick="async () => await history.Go(-2)">Go</button>
+    <button type="button" @onclick="async () => await history.Forward()">PushState</button>
     <ul>
         <li><span id="window-history-length">@history.Length</span></li>
-        <li><span id="window-history-scrollRestaurationEnum">@history.ScrollRestaurationEnum.ToString().ToLower()</span></li>
+        <li><span id="window-history-scrollRestaurationEnum">@history.ScrollRestorationEnum.ToString().ToLower()</span></li>
         @if(stateClass != null){
             <li><span id="window-history-state">@stateClass.Id</span></li>
         }
@@ -37,5 +38,11 @@
 
     protected class StateClass{
         public int Id { get; set; }
+    }    
+    
+    protected async Task SetScrollRestoration()
+    {
+        await history.SetScrollRestoration(ScrollRestorationEnum.Manual);
+        history = await window.History();
     }
 }

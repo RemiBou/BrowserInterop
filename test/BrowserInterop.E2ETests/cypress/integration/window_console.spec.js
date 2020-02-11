@@ -5,7 +5,7 @@ context('window.console', () => {
         cy.visit('/console');
     });
 
-    it('Check console methods called', () => {
+    it('console methods called', () => {
         cy.window()
             .then((w) => {
                 cy.spyFix(w.console, "log", w);

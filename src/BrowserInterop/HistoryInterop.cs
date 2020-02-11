@@ -25,17 +25,26 @@ namespace BrowserInterop
         ///  allows web applications to explicitly set default scroll restoration behavior on history navigation.
         /// </summary>
         /// <value></value>
-        public string ScrollRestauration { get; set; }
+        public string ScrollRestoration { get; set; }
 
-        public ScrollRestaurationEnum ScrollRestaurationEnum
+        /// <summary>
+        /// Enum accessor for history.scrollRestoration
+        /// </summary>
+        /// <value></value>
+        public ScrollRestorationEnum ScrollRestorationEnum
         {
             get
             {
-                return Enum.Parse<ScrollRestaurationEnum>(ScrollRestauration);
+                return Enum.Parse<ScrollRestorationEnum>(ScrollRestoration, true);
             }
         }
 
-        public async Task SetScrollRestauration(ScrollRestaurationEnum value)
+        /// <summary>
+        /// Set the current value of history.scrollRestoration
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public async Task SetScrollRestoration(ScrollRestorationEnum value)
         {
             await jsRuntime.SetInstancePropertyAsync(jsRuntimeObjectRef, "history.scrollRestoration", value.ToString().ToLower());
         }
@@ -104,7 +113,7 @@ namespace BrowserInterop
             await jsRuntime.InvokeInstanceMethodAsync(jsRuntimeObjectRef, "history.replaceState", state, title, url.ToString());
         }
     }
-    public enum ScrollRestaurationEnum
+    public enum ScrollRestorationEnum
     {
         ///<summary>The location on the page to which the user has scrolled will be restored.</summary>
         Auto,

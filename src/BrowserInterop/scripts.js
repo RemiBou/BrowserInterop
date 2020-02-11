@@ -124,10 +124,8 @@ browserInterop = new (function () {
         return res;
     };
     this.setInstanceProperty = function (instance, propertyPath, value) {
-
         var currentProperty = instance;
         var splitProperty = propertyPath.replace('[', '.').replace(']', '').split('.');
-
         for (i = 0; i < splitProperty.length; i++) {
             if (splitProperty[i] in currentProperty) {
                 if (i === splitProperty.length - 1) {
