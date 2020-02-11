@@ -24,6 +24,10 @@
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
 
+Cypress.Commands.add('stubFix', (object, method, window, replaceFn) => {
+    cy.stub(object, method, replaceFn);
+    object[method].__proto__ = window.Function;
+});
 Cypress.Commands.add('spyFix', (object, method, window) => {
     cy.spy(object, method);
     object[method].__proto__ = window.Function;

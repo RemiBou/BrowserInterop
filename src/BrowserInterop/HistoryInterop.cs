@@ -98,7 +98,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public async Task PushState(object state, string title, Uri url = null)
         {
-            await jsRuntime.InvokeInstanceMethodAsync(jsRuntimeObjectRef, "history.pushState", state, title, url.ToString());
+            await jsRuntime.InvokeInstanceMethodAsync(jsRuntimeObjectRef, "pushState", state, title, url?.ToString());
         }
 
         /// <summary>

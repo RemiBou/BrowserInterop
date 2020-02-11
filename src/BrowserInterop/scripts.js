@@ -82,6 +82,9 @@ browserInterop = new (function () {
         if (!alreadySerialized) {
             alreadySerialized = [];
         }
+        if (!data) {
+            return null;
+        }
         var res = {};
         for (var i in data) {
             var currentMember = data[i];
