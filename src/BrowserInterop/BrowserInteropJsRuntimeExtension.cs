@@ -22,9 +22,9 @@ namespace BrowserInterop
         /// <summary>
         /// Create a WIndowInterop instance that can be used for using Browser API
         /// </summary>
-        /// <param name="jSRuntime"></param>
+        /// <param name="jsRuntime"></param>
         /// <returns></returns>
-        public static async Task<WindowInterop> Window(this IJSRuntime jSRuntime)
+        public static async Task<WindowInterop> Window(this IJSRuntime jsRuntime)
         {
 
             // I don't handle concurrent access, multiple initialization are not a problem and we can't await in a lock
@@ -34,25 +34,27 @@ namespace BrowserInterop
 
                 using var ressourceStream = assembly.GetManifestResourceStream("BrowserInterop.scripts.js");
                 using var ressourceReader = new StreamReader(ressourceStream);
-                await jSRuntime.InvokeVoidAsync("eval", ressourceReader.ReadToEnd());
+                await jsRuntime.InvokeVoidAsync("eval", ressourceReader.ReadToEnd());
                 ScriptInitialized = true;
             }
-            var jsObjectRef = await jSRuntime.InvokeAsync<JsRuntimeObjectRef>("browserInterop.getPropertyRef", "window");
-
-
-            return new WindowInterop(jSRuntime, jsObjectRef);
+            var jsObjectRef = await jsRuntime.InvokeAsync<JsRuntimeObjectRef>("browserInterop.getPropertyRef", "window");
+            var wsInterop = await jsRuntime.GetInstancePropertyAsync<WindowInterop>(jsObjectRef, "self", false);
+            wsInterop.SetJsRuntime(jsRuntime, jsObjectRef);
+            return wsInterop;
         }
 
         /// <summary>
         /// Get the js object property value
         /// </summary>
-        /// <param name="jsRuntime"></param>
-        /// <param name="propertyPath"></param>
+        /// <param name="jsRuntime">current js runtime</param>
+        /// <param name="propertyPath">path of the property</param>
+        /// <param name="jsObjectRef">Ref to the js object from which we'll get the property</param>
+        /// <param name="deep">If true,(default) then the full object is received.await If false, only the object root</param>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public static async Task<T> GetInstancePropertyAsync<T>(this IJSRuntime jsRuntime, JsRuntimeObjectRef jsObjectRef, string propertyPath)
+        public static async Task<T> GetInstancePropertyAsync<T>(this IJSRuntime jsRuntime, JsRuntimeObjectRef jsObjectRef, string propertyPath, bool deep = true)
         {
-            return await jsRuntime.InvokeAsync<T>("browserInterop.getInstancePropertySerializable", jsObjectRef, propertyPath);
+            return await jsRuntime.InvokeAsync<T>("browserInterop.getInstancePropertySerializable", jsObjectRef, propertyPath, deep);
 
         }
 
@@ -93,6 +95,19 @@ namespace BrowserInterop
         public static async Task InvokeInstanceMethodAsync(this IJSRuntime jsRuntime, JsRuntimeObjectRef windowObject, string methodName, params object[] arguments)
         {
             await jsRuntime.InvokeVoidAsync("browserInterop.callInstanceMethod", new object[] { windowObject, methodName }.Concat(arguments).ToArray());
+        }
+
+        /// <summary>
+        /// Call the method on the js instance and return the result
+        /// </summary>
+        /// <param name="jsRuntime1">Curent JS Runtime</param>
+        /// <param name="windowObject">Reference to the JS instance</param>
+        /// <param name="methodName">Methdod name/path </param>
+        /// <param name="arguments">method arguments</param>
+        /// <returns></returns>
+        public static async Task<T> InvokeInstanceMethodAsync<T>(this IJSRuntime jsRuntime, JsRuntimeObjectRef windowObject, string methodName, params object[] arguments)
+        {
+            return await jsRuntime.InvokeAsync<T>("browserInterop.callInstanceMethod", new object[] { windowObject, methodName }.Concat(arguments).ToArray());
         }
 
         public static async Task<bool> HasProperty(this IJSRuntime jsRuntime, string propertyPath)

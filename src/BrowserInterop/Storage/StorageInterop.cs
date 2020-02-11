@@ -1,48 +1,82 @@
-using System;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.JSInterop;
 
-namespace BrowserInterop.Storage
+namespace BrowserInterop
 {
     /// <summary>
-    /// provides an interface for managing persistance permissions and estimating available storage
+    /// provides access to a particular domain's session or local storage. It allows, for example, the addition, modification, or deletion of stored data items.
     /// </summary>
     public class StorageInterop
     {
-        private readonly IJSRuntime jsRuntime;
+        private IJSRuntime jsRuntime;
+        private JsRuntimeObjectRef jsRuntimeObjectRef;
+        private readonly string memberName;
 
-        internal StorageInterop(IJSRuntime jsRuntime)
+        internal StorageInterop(IJSRuntime jsRuntime, JsRuntimeObjectRef jsRuntimeObjectRef, string memberName)
         {
             this.jsRuntime = jsRuntime;
+            this.jsRuntimeObjectRef = jsRuntimeObjectRef;
+            this.memberName = memberName;
         }
 
         /// <summary>
-        /// Returns a StorageEstimate object containing usage and quota numbers for your origin.
-        /// </summary>
+        ///  the number of data items stored in the Storage object.
+        ///  </summary>
         /// <returns></returns>
-        public async Task<StorageEstimate> Estimate()
+        public async Task<int> Length()
         {
-            return await jsRuntime.InvokeAsync<StorageEstimate>("navigator.storage.estimate");
+            return await jsRuntime.GetInstancePropertyAsync<int>(jsRuntimeObjectRef, memberName + ".length");
         }
 
         /// <summary>
-        /// Requests permission to use persistent storage, and returns  true if permission is granted and box mode is persistent, and false otherwise.
+        /// returns the name of the nth key in a given Storage object. The order of keys is user-agent defined, so you should not rely on it.
         /// </summary>
-        /// <param name="timeout">In some browser the user will be prompted for validation, this method will return false if the user did not povide an swner before</param>
+        /// <param name="index"></param>
         /// <returns></returns>
-        public async Task<bool> Persist(TimeSpan? timeout = null)
+        public async Task<string> Key(int index)
         {
-            return await (timeout.HasValue ? jsRuntime.InvokeOrDefaultAsync<bool>("navigator.storage.persist", timeout.Value, null) : jsRuntime.InvokeAsync<bool>("navigator.storage.persist", null));
+            return await jsRuntime.InvokeInstanceMethodAsync<string>(jsRuntimeObjectRef, memberName + ".key", index);
         }
 
         /// <summary>
-        /// Returns true if box mode is persistent for your site's storage.
+        /// will return that key's value, or null if the key does not exist, in the given Storage object. As the data is stored serialized in json, we'll try to deserialize it
         /// </summary>
+        /// <param name="keyName"></param>
         /// <returns></returns>
-        public async Task<bool> Persisted(TimeSpan? timeout = null)
+        public async Task<T> GetItem<T>(string keyName)
         {
-            return await (timeout.HasValue ? jsRuntime.InvokeOrDefaultAsync<bool>("navigator.storage.persisted", timeout.Value, null) : jsRuntime.InvokeAsync<bool>("navigator.storage.persisted", null));
+            var strValue = await jsRuntime.InvokeInstanceMethodAsync<string>(jsRuntimeObjectRef, memberName + ".getItem", keyName);
+            return JsonSerializer.Deserialize<T>(strValue);
         }
 
+        /// <summary>
+        ///  will add that key to the storage (serialized as json), or update that key's value if it already exists.
+        /// </summary>
+        /// <param name="keyName"></param>
+        /// <returns></returns>
+        public async Task SetItem(string keyName, object value)
+        {
+            await jsRuntime.InvokeInstanceMethodAsync(jsRuntimeObjectRef, memberName + ".setItem", keyName, JsonSerializer.Serialize(value));
+        }
+
+        /// <summary>
+        ///  will remove that key from the storage.
+        /// </summary>
+        /// <param name="keyName"></param>
+        /// <returns></returns>
+        public async Task RemoveItem(string keyName)
+        {
+            await jsRuntime.InvokeInstanceMethodAsync(jsRuntimeObjectRef, memberName + ".removeItem", keyName);
+        }
+
+        /// <summary>
+        ///  will empty all keys out of the storage..
+        /// </summary>
+        /// <returns></returns>
+        public async Task Clear()
+        {
+            await jsRuntime.InvokeInstanceMethodAsync(jsRuntimeObjectRef, memberName + ".clear");
+        }
     }
 }

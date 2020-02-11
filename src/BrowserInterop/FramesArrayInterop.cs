@@ -26,7 +26,9 @@ namespace BrowserInterop
         {
             var jsObjectRef = await jsRuntime.GetInstancePropertyRefAsync(jsRuntimeObjectRef, $"frames[{index}]");
 
-            return new WindowInterop(jsRuntime, jsObjectRef);
+            var windowInterop = await jsRuntime.GetInstancePropertyAsync<WindowInterop>(jsRuntimeObjectRef, $"frames[{index}]", false);
+            windowInterop.SetJsRuntime(jsRuntime, jsObjectRef);
+            return windowInterop;
         }
         /// <summary>
         /// Count of direct subframes

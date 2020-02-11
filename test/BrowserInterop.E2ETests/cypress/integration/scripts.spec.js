@@ -43,4 +43,60 @@ context('scripts', () => {
                 expect(obj.method).to.be.called.calledWith("A", "B");
             });
     });
+    it('getSerializableObject return only first layer when deep is false', () => {
+        cy.window()
+            .its('browserInterop')
+            .then(b => {
+                var obj = { id: 1, inner: { id: 2 } };
+                var res = b.getSerializableObject(obj, [], false);
+                expect(res).to.have.property('id');
+                expect(res).to.not.have.property('inner');
+            });
+    });
+
+    it('getSerializableObject return all layer when deep is true', () => {
+        cy.window()
+            .its('browserInterop')
+            .then(b => {
+                var obj = { id: 1, inner: { id: 2 } };
+                var res = b.getSerializableObject(obj, [], true);
+                expect(res).to.have.property('id');
+                expect(res).to.have.property('inner');
+            });
+    });
+
+
+    it('getSerializableObject return all layer when deep is not given', () => {
+        cy.window()
+            .its('browserInterop')
+            .then(b => {
+                var obj = { id: 1, inner: { id: 2 } };
+                var res = b.getSerializableObject(obj, []);
+                expect(res).to.have.property('id');
+                expect(res).to.have.property('inner');
+            });
+    });
+
+    it('getInstancePropertySerializable returns swalow property copy if deep is false', () => {
+
+        cy.window()
+            .its('browserInterop')
+            .then(b => {
+                var obj = { inner: { id: 2, deeper: { id: 3 } } };
+                var res = b.getInstancePropertySerializable(obj, 'inner', false);
+                expect(res).to.have.property('id');
+                expect(res).to.not.have.property('deeper');
+            });
+    });
+    it('getInstancePropertySerializable returns deep property copy if deep is true', () => {
+
+        cy.window()
+            .its('browserInterop')
+            .then(b => {
+                var obj = { inner: { id: 2, deeper: { id: 3 } } };
+                var res = b.getInstancePropertySerializable(obj, 'inner', true);
+                expect(res).to.have.property('id');
+                expect(res).to.have.property('deeper');
+            });
+    });
 });

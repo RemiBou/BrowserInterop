@@ -24,7 +24,7 @@ namespace BrowserInterop
             this.jsRuntime = jsRuntime;
             this.jsRuntimeObjectRef = jsRuntimeObjectRef;
             Geolocation = new GeolocationInterop(jsRuntime);
-            Storage = new StorageInterop(jsRuntime);
+            Storage = new StorageManagerInterop(jsRuntime);
             this.Connection?.SetJsRuntime(jsRuntime);
         }
 
@@ -139,7 +139,7 @@ namespace BrowserInterop
         /// Provides an interface for managing persistance permissions and estimating available storage
         /// </summary>
         /// <value></value>
-        public StorageInterop Storage { get; private set; }
+        public StorageManagerInterop Storage { get; private set; }
 
         /// <summary>
         /// Return the user agent string for the browser

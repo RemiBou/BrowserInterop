@@ -10,17 +10,21 @@ namespace BrowserInterop
 
     public class WindowInterop
     {
-        private readonly JsRuntimeObjectRef jsRuntimeObjectRef;
+        private JsRuntimeObjectRef jsRuntimeObjectRef;
+        private Lazy<FramesArrayInterop> framesArrayInteropLazy;
+        private Lazy<StorageInterop> localStorageLazy;
+        private Lazy<ConsoleInterop> consoleInteropLazy;
+        private Lazy<BarPropInterop> locationBarLazy;
+        private Lazy<BarPropInterop> menuBarLazy;
+        private IJSRuntime jsRuntime;
 
-        private readonly Lazy<FramesArrayInterop> framesArrayInteropLazy;
-        private readonly Lazy<ConsoleInterop> consoleInteropLazy;
-        private readonly IJSRuntime jsRuntime;
-
-        internal WindowInterop(IJSRuntime jsRuntime, JsRuntimeObjectRef jsRuntimeObjectRef)
+        internal void SetJsRuntime(IJSRuntime jsRuntime, JsRuntimeObjectRef jsRuntimeObjectRef)
         {
+            localStorageLazy = new Lazy<StorageInterop>(() => new StorageInterop(jsRuntime, jsRuntimeObjectRef, "localStorage"));
             consoleInteropLazy = new Lazy<ConsoleInterop>(() => new ConsoleInterop(jsRuntime, jsRuntimeObjectRef));
             framesArrayInteropLazy = new Lazy<FramesArrayInterop>(() => new FramesArrayInterop(jsRuntimeObjectRef, jsRuntime));
-
+            locationBarLazy = new Lazy<BarPropInterop>(() => new BarPropInterop(jsRuntimeObjectRef, "locationbar", jsRuntime));
+            menuBarLazy = new Lazy<BarPropInterop>(() => new BarPropInterop(jsRuntimeObjectRef, "menubar", jsRuntime));
             this.jsRuntime = jsRuntime;
             this.jsRuntimeObjectRef = jsRuntimeObjectRef;
         }
@@ -55,6 +59,67 @@ namespace BrowserInterop
             var historyRef = await jsRuntime.GetInstancePropertyRefAsync(jsRuntimeObjectRef, "history");
             navigatorInterop.SetJSRuntime(jsRuntime, historyRef);
             return navigatorInterop;
+        }
+
+        /// <summary>
+        /// Gets the height of the content area of the browser window including, if rendered, the horizontal scrollbar.
+        /// </summary>
+        /// <value></value>
+        public int InnerHeight { get; set; }
+
+        /// <summary>
+        /// Gets the width of the content area of the browser window including, if rendered, the vertical scrollbar.
+        /// </summary>
+        /// <value></value>
+        public int InnerWidth { get; set; }
+
+        /// <summary>
+        /// Returns the locationbar object, whose visibility can be checked.
+        /// </summary>
+        public BarPropInterop LocationBar => locationBarLazy.Value;
+
+        /// <summary>
+        /// Returns the menubar object, whose visibility can be checked.
+        /// </summary>
+        public BarPropInterop MenuBar => menuBarLazy.Value;
+
+        public StorageInterop LocalStorage => localStorageLazy.Value;
+
+    }
+
+    /// <summary>
+    /// Represent property of a menu element
+    /// </summary>
+    public class BarPropInterop
+    {
+        private JsRuntimeObjectRef jsRuntimeObjectRef;
+        private string propertyName;
+        private IJSRuntime jSRuntime;
+
+        internal BarPropInterop(JsRuntimeObjectRef jsRuntimeObjectRef, string propertyName, IJSRuntime jSRuntime)
+        {
+            this.jsRuntimeObjectRef = jsRuntimeObjectRef;
+            this.propertyName = propertyName;
+            this.jSRuntime = jSRuntime;
+        }
+
+        /// <summary>
+        /// Return true if the element is visible or not
+        /// </summary>
+        /// <returns></returns>
+        public async Task<bool> GetVisible()
+        {
+            return await jSRuntime.GetInstancePropertyAsync<bool>(jsRuntimeObjectRef, $"{propertyName}.visible");
+        }
+
+        /// <summary>
+        /// Tries to change visibility of the element
+        /// </summary>
+        /// <param name="visible"></param>
+        /// <returns></returns>
+        public async Task SetVisible(bool visible)
+        {
+            await jSRuntime.SetInstancePropertyAsync(jsRuntimeObjectRef, $"{propertyName}.visible", visible);
         }
     }
 }

@@ -26,6 +26,12 @@ browserInterop = new (function () {
     var me = this;
     var eventListenersIdCurrent = 0;
     this.eventListeners = {};
+    this.getProperty = function (propertyPath) {
+        return me.getInstanceProperty(window, propertyPath);
+    };
+    this.hasProperty = function (propertyPath) {
+        return me.getProperty(propertyPath) !== null;
+    };
     this.getPropertyRef = function (propertyPath) {
         return me.getInstancePropertyRef(window, propertyPath);
     };
@@ -39,13 +45,6 @@ browserInterop = new (function () {
 
         return jsRef;
     };
-    this.getProperty = function (propertyPath) {
-        return me.getInstanceProperty(window, propertyPath);
-    };
-    this.callInstanceMethod = function (instance, methodPath, ...args) {
-        var method = me.getInstanceProperty(instance, methodPath);
-        return method.apply(instance, args);
-    }
     this.getInstanceProperty = function (instance, propertyPath) {
         var currentProperty = instance;
         var splitProperty = propertyPath.replace('[', '.').replace(']', '').split('.');
@@ -59,6 +58,31 @@ browserInterop = new (function () {
         }
 
         return currentProperty;
+    };
+    this.setInstanceProperty = function (instance, propertyPath, value) {
+        var currentProperty = instance;
+        var splitProperty = propertyPath.replace('[', '.').replace(']', '').split('.');
+        for (i = 0; i < splitProperty.length; i++) {
+            if (splitProperty[i] in currentProperty) {
+                if (i === splitProperty.length - 1) {
+                    currentProperty[splitProperty[i]] = value;
+                    return;
+                } else {
+                    currentProperty = currentProperty[splitProperty[i]];
+                }
+            } else {
+                return;
+            }
+        }
+    };
+    this.getInstancePropertySerializable = function (instance, propertyName, deep) {
+        var data = me.getInstanceProperty(instance, propertyName);
+        var res = me.getSerializableObject(data, [], deep);
+        return res;
+    };
+    this.callInstanceMethod = function (instance, methodPath, ...args) {
+        var method = me.getInstanceProperty(instance, methodPath);
+        return method.apply(instance, args);
     }
     this.addEventListener = function (propertyPath, eventName, dotnetAction) {
         var target = me.getProperty(propertyPath);
@@ -75,10 +99,10 @@ browserInterop = new (function () {
         target.removeEventListener(eventName, me.eventListeners[eventListenersId]);
         delete me.eventListeners[eventListenersId];
     };
-    this.hasProperty = function (propertyPath) {
-        return me.getProperty(propertyPath) !== null;
-    };
-    this.getSerializableObject = function (data, alreadySerialized) {
+    this.getSerializableObject = function (data, alreadySerialized, deep) {
+        if (typeof deep == "undefined") {
+            deep = true;
+        }
         if (!alreadySerialized) {
             alreadySerialized = [];
         }
@@ -92,7 +116,7 @@ browserInterop = new (function () {
             if (typeof currentMember === 'function' || currentMember === null) {
                 continue;
             } else if (typeof currentMember === 'object') {
-                if (alreadySerialized.indexOf(currentMember) < 0) {
+                if (deep && alreadySerialized.indexOf(currentMember) < 0) {
                     alreadySerialized.push(currentMember);
                     if (Array.isArray(currentMember) || currentMember.length) {
                         res[i] = [];
@@ -124,28 +148,6 @@ browserInterop = new (function () {
                 }
             }
         }
-        return res;
-    };
-    this.setInstanceProperty = function (instance, propertyPath, value) {
-        var currentProperty = instance;
-        var splitProperty = propertyPath.replace('[', '.').replace(']', '').split('.');
-        for (i = 0; i < splitProperty.length; i++) {
-            if (splitProperty[i] in currentProperty) {
-                if (i === splitProperty.length - 1) {
-                    currentProperty[splitProperty[i]] = value;
-                    return;
-                } else {
-                    currentProperty = currentProperty[splitProperty[i]];
-                }
-            } else {
-                return;
-            }
-        }
-    };
-    this.getInstancePropertySerializable = function (instance, propertyName) {
-
-        var data = me.getInstanceProperty(instance, propertyName);
-        var res = me.getSerializableObject(data);
         return res;
     };
     this.navigator = new (function () {
