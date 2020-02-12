@@ -7,14 +7,15 @@
     "start": "cypress open",
     "run": "wait-on -l http://localhost:5000 && cypress run",
     "wait-local": "wait-on -l http://localhost:5000",
-    "start-server": "cd ../../sample/SampleApp && dotnet run",
-    "test": "docker run  --network=host -v $PWD:/e2e -w /e2e cypress/included:4.0.0 --browser chrome && docker run  --network=host -v $PWD:/e2e -w /e2e cypress/included:4.0.0 --browser firefox",
+    "start-server": "cd ../../sample/SampleApp && dotnet run  /Logging:LogLevel:Microsoft.AspNetCore Warning",
+    "test": "docker pull --quiet cypress/included:4.0.0 && docker run --network='host' -v $PWD:/e2e -w /e2e cypress/included:4.0.0 --browser chrome && docker run --network='host' -v $PWD:/e2e -w /e2e cypress/included:4.0.0 --browser firefox",
     "ci": "start-server-and-test start-server http://localhost:5000 test"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "cypress": "^4.0.0",
+    "start-server-and-test": "^1.10.8",
     "wait-on": "^4.0.0"
   }
 }
