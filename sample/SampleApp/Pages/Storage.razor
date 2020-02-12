@@ -3,15 +3,17 @@
 @using BrowserInterop
 Local Storage :
 <button type="button" id="window-localStorage-setItem" @onclick="SetItem" >localStorage.setItem</button>
-<button type="button" id="window-localStorage-getItem" @onclick="GetItem" >localStorage.setItem</button>
+<button type="button" id="window-localStorage-getItem" @onclick="GetItem" >localStorage.getItem</button>
+<button type="button" id="window-localStorage-key-get" @onclick="Key" >localStorage.key</button>
 <ul>
     <li>Length : <span id="window-localStorage-length">@length</span></li>
     <li>storageTest : <span id="window-localStorage-getItem-test">@storageTest?.Id</span></li>
+    <li>key : <span id="window-localStorage-key">@key</span></li>
 </ul>
 @code{
     private int? length;
     private WindowInterop window;
-
+    private string key;
     StorageTestClass storageTest;
     protected override async Task OnInitializedAsync()
     {
@@ -25,6 +27,9 @@ Local Storage :
     
     private async Task GetItem(){
         storageTest = await window.LocalStorage.GetItem<StorageTestClass>("test");
+    }    
+    private async Task Key(){
+        key = await window.LocalStorage.Key(0);
     }
 
     public class StorageTestClass{

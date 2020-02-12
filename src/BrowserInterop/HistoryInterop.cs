@@ -4,39 +4,37 @@ using Microsoft.JSInterop;
 
 namespace BrowserInterop
 {
+    /// <summary>
+    /// reference to the History object, which provides an interface for manipulating the browser session history (pages visited in the tab or frame that the current page is loaded in).
+    /// </summary>
     public class HistoryInterop
     {
         private IJSRuntime jsRuntime;
         private JsRuntimeObjectRef jsRuntimeObjectRef;
 
-        /// <summary>
-        /// Represents the number of elements in the session history, including the currently loaded page. For example, for a page loaded in a new tab this property returns 1.
-        /// </summary>
-        /// <value></value>
-        public int Length { get; set; }
-
-        internal void SetJSRuntime(IJSRuntime jsRuntime, JsRuntimeObjectRef jsRuntimeObjectRef)
+        internal HistoryInterop(IJSRuntime jsRuntime, JsRuntimeObjectRef jsRuntimeObjectRef)
         {
             this.jsRuntime = jsRuntime;
             this.jsRuntimeObjectRef = jsRuntimeObjectRef;
         }
 
-        /// <summary>
-        ///  allows web applications to explicitly set default scroll restoration behavior on history navigation.
-        /// </summary>
-        /// <value></value>
-        public string ScrollRestoration { get; set; }
 
         /// <summary>
-        /// Enum accessor for history.scrollRestoration
+        /// Represents the number of elements in the session history, including the currently loaded page. For example, for a page loaded in a new tab this property returns 1.
         /// </summary>
         /// <value></value>
-        public ScrollRestorationEnum ScrollRestorationEnum
+        public async Task<int> Length()
         {
-            get
-            {
-                return Enum.Parse<ScrollRestorationEnum>(ScrollRestoration, true);
-            }
+            return await jsRuntime.GetInstancePropertyAsync<int>(jsRuntimeObjectRef, "history.length");
+        }
+
+        /// <summary>
+        ///allows web applications to explicitly set default scroll restoration behavior on history navigation.
+        /// </summary>
+        /// <returns></returns>
+        public async Task<ScrollRestorationEnum> ScrollRestoration()
+        {
+            return Enum.Parse<ScrollRestorationEnum>(await jsRuntime.GetInstancePropertyAsync<string>(jsRuntimeObjectRef, "history.scrollRestoration"), true);
         }
 
         /// <summary>
@@ -44,9 +42,9 @@ namespace BrowserInterop
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public async Task SetScrollRestoration(ScrollRestorationEnum value)
+        public async Task ScrollRestoration(ScrollRestorationEnum value)
         {
-            await jsRuntime.SetInstancePropertyAsync(jsRuntimeObjectRef, "scrollRestoration", value.ToString().ToLower());
+            await jsRuntime.SetInstancePropertyAsync(jsRuntimeObjectRef, "history.scrollRestoration", value.ToString().ToLower());
         }
 
         /// <summary>
@@ -56,7 +54,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public async Task<T> State<T>()
         {
-            return await jsRuntime.GetInstancePropertyAsync<T>(jsRuntimeObjectRef, "state");
+            return await jsRuntime.GetInstancePropertyAsync<T>(jsRuntimeObjectRef, "history.state");
         }
 
         /// <summary>
@@ -65,7 +63,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public async Task Back()
         {
-            await jsRuntime.InvokeInstanceMethodAsync(jsRuntimeObjectRef, "back");
+            await jsRuntime.InvokeInstanceMethodAsync(jsRuntimeObjectRef, "history.back");
         }
 
         /// <summary>
@@ -74,7 +72,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public async Task Forward()
         {
-            await jsRuntime.InvokeInstanceMethodAsync(jsRuntimeObjectRef, "forward");
+            await jsRuntime.InvokeInstanceMethodAsync(jsRuntimeObjectRef, "history.forward");
         }
 
         /// <summary>
@@ -84,7 +82,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public async Task Go(int delta = 0)
         {
-            await jsRuntime.InvokeInstanceMethodAsync(jsRuntimeObjectRef, "go", delta);
+            await jsRuntime.InvokeInstanceMethodAsync(jsRuntimeObjectRef, "history.go", delta);
         }
 
         /// <summary>
@@ -98,7 +96,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public async Task PushState(object state, string title, Uri url = null)
         {
-            await jsRuntime.InvokeInstanceMethodAsync(jsRuntimeObjectRef, "pushState", state, title, url?.ToString());
+            await jsRuntime.InvokeInstanceMethodAsync(jsRuntimeObjectRef, "history.pushState", state, title, url?.ToString());
         }
 
         /// <summary>
@@ -110,7 +108,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public async Task ReplaceState(object state, string title, Uri url = null)
         {
-            await jsRuntime.InvokeInstanceMethodAsync(jsRuntimeObjectRef, "replaceState", state, title, url?.ToString());
+            await jsRuntime.InvokeInstanceMethodAsync(jsRuntimeObjectRef, "history.replaceState", state, title, url?.ToString());
         }
     }
     public enum ScrollRestorationEnum

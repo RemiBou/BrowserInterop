@@ -13,6 +13,14 @@ context('window.storage', () => {
     });
 
     it('localStorage key', () => {
+        cy.window()
+            .then(w => {
+                w.localStorage.clear();
+                w.localStorage.setItem("aaa", "zzz");
+                cy.get("#window-localStorage-key-get").click().then(() => {
+                    cy.get("#window-localStorage-key").should("have.text", "aaa");
+                });
+            });
     });
 
     it('localStorage setItem', () => {

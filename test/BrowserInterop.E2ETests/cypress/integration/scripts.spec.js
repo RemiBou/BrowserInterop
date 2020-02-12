@@ -108,4 +108,21 @@ context('scripts', () => {
                 expect(res).to.be.eq(0);
             });
     });
+    it('callInstanceMethod apply to sub property if method is in child', () => {
+        cy.window()
+            .its('browserInterop')
+            .then(b => {
+                var obj = new (function () {
+                    this.id = 1;
+                    this.child = new (function () {
+                        this.id = 2;
+                        this.getId = function () {
+                            return this.id;
+                        };
+                    })();
+                })();
+                var res = b.callInstanceMethod(obj, 'child.getId');
+                expect(res).to.be.eq(2);
+            });
+    });
 });

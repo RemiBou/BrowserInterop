@@ -11,6 +11,8 @@ namespace BrowserInterop
     public class WindowInterop
     {
         private JsRuntimeObjectRef jsRuntimeObjectRef;
+
+        private Lazy<HistoryInterop> historyInteropLazy;
         private Lazy<FramesArrayInterop> framesArrayInteropLazy;
         private Lazy<StorageInterop> localStorageLazy;
         private Lazy<ConsoleInterop> consoleInteropLazy;
@@ -22,6 +24,7 @@ namespace BrowserInterop
         {
             localStorageLazy = new Lazy<StorageInterop>(() => new StorageInterop(jsRuntime, jsRuntimeObjectRef, "localStorage"));
             consoleInteropLazy = new Lazy<ConsoleInterop>(() => new ConsoleInterop(jsRuntime, jsRuntimeObjectRef));
+            historyInteropLazy = new Lazy<HistoryInterop>(() => new HistoryInterop(jsRuntime, jsRuntimeObjectRef));
             framesArrayInteropLazy = new Lazy<FramesArrayInterop>(() => new FramesArrayInterop(jsRuntimeObjectRef, jsRuntime));
             locationBarLazy = new Lazy<BarPropInterop>(() => new BarPropInterop(jsRuntimeObjectRef, "locationbar", jsRuntime));
             menuBarLazy = new Lazy<BarPropInterop>(() => new BarPropInterop(jsRuntimeObjectRef, "menubar", jsRuntime));
@@ -53,14 +56,10 @@ namespace BrowserInterop
         /// </summary>
         public FramesArrayInterop Frames => framesArrayInteropLazy.Value;
 
-        public async Task<HistoryInterop> History()
-        {
-            HistoryInterop navigatorInterop = await jsRuntime.GetInstancePropertyAsync<HistoryInterop>(jsRuntimeObjectRef, "history");
-            var historyRef = await jsRuntime.GetInstancePropertyRefAsync(jsRuntimeObjectRef, "history");
-            navigatorInterop.SetJSRuntime(jsRuntime, historyRef);
-            return navigatorInterop;
-        }
-
+        /// <summary>
+        /// reference to the History object, which provides an interface for manipulating the browser session history (pages visited in the tab or frame that the current page is loaded in).
+        /// </summary>
+        public HistoryInterop History => historyInteropLazy.Value;
         /// <summary>
         /// Gets the height of the content area of the browser window including, if rendered, the horizontal scrollbar.
         /// </summary>

@@ -1,44 +1,45 @@
 @page "/history"
 @inject IJSRuntime jsRuntime;
 @using BrowserInterop
-@if(history != null){
     <text>History :</text>
     <button type="button" id="window-history-scrollRestoration-set" @onclick="SetScrollRestoration">SetScrollRestoration</button>
     <button type="button" id="window-history-state-get" @onclick="State">State</button>
     <button type="button" id="window-history-state-pushState"  @onclick="PushState">PushState</button>
     <button type="button" id="window-history-state-replaceState"  @onclick="ReplaceState">replaceState</button>
-    <button type="button" id="window-history-back" @onclick="async () => await history.Back()">Back</button>
-    <button type="button" id="window-history-go" @onclick="async () => await history.Go(-2)">Go</button>
-    <button type="button" id="window-history-forward" @onclick="async () => await history.Forward()">PushState</button>
+    <button type="button" id="window-history-back" @onclick="async () => await window.History.Back()">Back</button>
+    <button type="button" id="window-history-go" @onclick="async () => await  window.History.Go(-2)">Go</button>
+    <button type="button" id="window-history-forward" @onclick="async () => await  window.History.Forward()">PushState</button>
     <ul>
-        <li><span id="window-history-length">@history.Length</span></li>
-        <li><span id="window-history-scrollRestaurationEnum">@history.ScrollRestorationEnum.ToString().ToLower()</span></li>
+        <li><span id="window-history-length">@length</span></li>
+        <li><span id="window-history-scrollRestaurationEnum">@scrollRestauration?.ToString().ToLower()</span></li>
         @if(stateClass != null){
             <li>State : <span id="window-history-state">@stateClass.Id</span></li>
         }
     </ul>
-
-}
 @code{
     private WindowInterop window;
-    private HistoryInterop history;
+    private int length;
     private StateClass stateClass;
+
+    private ScrollRestorationEnum? scrollRestauration;
     protected override async Task OnInitializedAsync()
     {
         window = await jsRuntime.Window();
-        history =await window.History();
+        length = await window.History.Length();
+                scrollRestauration = await window.History.ScrollRestoration();
+
     }
 
     protected async Task PushState(){
-        await history.PushState(new StateClass(){Id = 123456},"test");
+        await window.History.PushState(new StateClass(){Id = 123456},"test");
     }
 
     protected async Task ReplaceState(){
-        await history.ReplaceState(new StateClass(){Id = 1234567},"test");
+        await  window.History.ReplaceState(new StateClass(){Id = 1234567},"test");
     }
 
     protected async Task State(){
-        stateClass = await history.State<StateClass>();
+        stateClass = await  window.History.State<StateClass>();
     }
 
     protected class StateClass{
@@ -47,7 +48,7 @@
     
     protected async Task SetScrollRestoration()
     {
-        await history.SetScrollRestoration(ScrollRestorationEnum.Manual);
-        history = await window.History();
+        await window.History.ScrollRestoration(ScrollRestorationEnum.Manual);
+                scrollRestauration = await window.History.ScrollRestoration();
     }
 }

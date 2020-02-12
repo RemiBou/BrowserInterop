@@ -80,6 +80,13 @@ browserInterop = new (function () {
         return res;
     };
     this.callInstanceMethod = function (instance, methodPath, ...args) {
+        if (methodPath.indexOf('.') >= 0) {
+            //if it's a method call on a child object we get this child object so the method call will happen in the context of the child object
+            //some method like window.locaStorage.setItem  will throw an exception if the context is not expected
+            var instancePath = methodPath.substring(0, methodPath.lastIndexOf('.'));
+            instance = me.getInstanceProperty(instance, instancePath);
+            methodPath = methodPath.substring(methodPath.lastIndexOf('.') + 1);
+        }
         var method = me.getInstanceProperty(instance, methodPath);
         return method.apply(instance, args);
     }
