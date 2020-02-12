@@ -1,0 +1,17 @@
+@page "/performance"
+@inject IJSRuntime jsRuntime;
+@using BrowserInterop
+    <text>Performance : </text>
+    <ul>
+        <li>TimeOrigin : <span id="window-performance-timeorigin">@timeOrigin?.ToUnixTimeMilliseconds()</span></li>
+    </ul>
+@code{
+    private WindowInterop window;
+    private DateTimeOffset? timeOrigin;
+    protected override async Task OnInitializedAsync()
+    {
+        window = await jsRuntime.Window();
+        timeOrigin = await window.Performance.TimeOrigin();
+
+    }
+}

@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Collections;
+using BrowserInterop.Performance;
 
 namespace BrowserInterop
 {
@@ -17,6 +18,7 @@ namespace BrowserInterop
         private Lazy<StorageInterop> localStorageLazy;
         private Lazy<StorageInterop> sessionStorageLazy;
         private Lazy<ConsoleInterop> consoleInteropLazy;
+        private Lazy<PerformanceInterop> performanceInteropLazy;
         private Lazy<BarPropInterop> locationBarLazy;
         private Lazy<BarPropInterop> menuBarLazy;
         private IJSRuntime jsRuntime;
@@ -28,6 +30,7 @@ namespace BrowserInterop
 
             consoleInteropLazy = new Lazy<ConsoleInterop>(() => new ConsoleInterop(jsRuntime, jsRuntimeObjectRef));
             historyInteropLazy = new Lazy<HistoryInterop>(() => new HistoryInterop(jsRuntime, jsRuntimeObjectRef));
+            performanceInteropLazy = new Lazy<PerformanceInterop>(() => new PerformanceInterop(jsRuntime, jsRuntimeObjectRef));
             framesArrayInteropLazy = new Lazy<FramesArrayInterop>(() => new FramesArrayInterop(jsRuntimeObjectRef, jsRuntime));
             locationBarLazy = new Lazy<BarPropInterop>(() => new BarPropInterop(jsRuntimeObjectRef, "locationbar", jsRuntime));
             menuBarLazy = new Lazy<BarPropInterop>(() => new BarPropInterop(jsRuntimeObjectRef, "menubar", jsRuntime));
@@ -147,5 +150,11 @@ namespace BrowserInterop
             window?.SetJsRuntime(jsRuntime, propertyRef);
             return window;
         }
+
+        /// <summary>
+        ///  can be used to gather performance information about the current document.
+        /// </summary>
+        public PerformanceInterop Performance => performanceInteropLazy.Value;
+
     }
 }
