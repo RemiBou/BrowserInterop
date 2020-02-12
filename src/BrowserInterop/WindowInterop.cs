@@ -85,8 +85,14 @@ namespace BrowserInterop
         /// </summary>
         public BarPropInterop MenuBar => menuBarLazy.Value;
 
+        /// <summary>
+        /// reference to the local storage object used to store data that may only be accessed by the origin that created it.
+        /// </summary>
         public StorageInterop LocalStorage => localStorageLazy.Value;
 
+        /// <summary>
+        /// Returns a reference to the session storage object used to store data that may only be accessed by the origin that created it.
+        /// </summary>
         public StorageInterop SessionStorage => sessionStorageLazy.Value;
 
     }
