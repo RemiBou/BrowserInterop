@@ -28,6 +28,16 @@ context('window.navigator', () => {
             .then(w => {
                 cy.get("#window-innerWidth").should("have.text", w.innerWidth.toString());
                 cy.get("#window-innerHeight").should("have.text", w.innerHeight.toString());
+                cy.get("#window-name").should("have.text", w.name.toString());
+            });
+    });
+
+    it('window set name', () => {
+        cy.window()
+            .then(w => {
+                cy.get("#btn-window-name-set").click().then(
+                    () => expect(w.name).to.be.eq("Bla bla bla")
+                );
             });
     });
 });

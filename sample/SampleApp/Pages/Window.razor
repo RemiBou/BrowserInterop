@@ -3,10 +3,13 @@
 @using BrowserInterop
 <iframe id="child-iframe" src="/navigator"></iframe><br/>
 <button id="btn-window-child-frame-console" @onclick="ChildFrameConsole">Child frame console</button>
+<button id="btn-window-name-set" @onclick="SetName">Set name</button>
 Window :
 <ul>
     <li>InnerHeight: <span id="window-innerHeight">@window?.InnerHeight</span></li>
-    <li>InnerWidth: <span id="window-innerWidth">@window?.InnerWidth</span></li>
+    <li>InnerWidth: <span id="window-innerWidth">@window?.InnerWidth</span></li>  
+    <li>Name: <span id="window-name">@window?.Name</span></li>
+
 </ul>
 @code{
     private WindowInterop window;
@@ -16,7 +19,9 @@ Window :
         window = await jsRuntime.Window();
         
     }
-
+    protected async Task SetName(){
+        await window.SetName("Bla bla bla");
+    }
     protected async Task ChildFrameConsole()
     {
         child = await window.Frames.Get(0);

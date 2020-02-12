@@ -95,41 +95,21 @@ namespace BrowserInterop
         /// </summary>
         public StorageInterop SessionStorage => sessionStorageLazy.Value;
 
-    }
-
-    /// <summary>
-    /// Represent property of a menu element
-    /// </summary>
-    public class BarPropInterop
-    {
-        private JsRuntimeObjectRef jsRuntimeObjectRef;
-        private string propertyName;
-        private IJSRuntime jSRuntime;
-
-        internal BarPropInterop(JsRuntimeObjectRef jsRuntimeObjectRef, string propertyName, IJSRuntime jSRuntime)
-        {
-            this.jsRuntimeObjectRef = jsRuntimeObjectRef;
-            this.propertyName = propertyName;
-            this.jSRuntime = jSRuntime;
-        }
+        /// <summary>
+        /// Gets the name of the window.
+        /// </summary>
+        /// <value></value>
+        public string Name { get; set; }
 
         /// <summary>
-        /// Return true if the element is visible or not
+        /// Set the name of the window
         /// </summary>
+        /// <param name="name"></param>
         /// <returns></returns>
-        public async Task<bool> GetVisible()
+        public async Task SetName(string name)
         {
-            return await jSRuntime.GetInstancePropertyAsync<bool>(jsRuntimeObjectRef, $"{propertyName}.visible");
+            await jsRuntime.SetInstancePropertyAsync(jsRuntimeObjectRef, "name", name);
         }
 
-        /// <summary>
-        /// Tries to change visibility of the element
-        /// </summary>
-        /// <param name="visible"></param>
-        /// <returns></returns>
-        public async Task SetVisible(bool visible)
-        {
-            await jSRuntime.SetInstancePropertyAsync(jsRuntimeObjectRef, $"{propertyName}.visible", visible);
-        }
     }
 }
