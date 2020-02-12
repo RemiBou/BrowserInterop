@@ -8,7 +8,7 @@
     "run": "wait-on -l http://localhost:5000 && cypress run",
     "wait-local": "wait-on -l http://localhost:5000",
     "start-server": "cd ../../sample/SampleApp && dotnet run",
-    "test": "docker run  --network="host" -v $PWD:/e2e -w /e2e cypress/included:4.0.0 --browser chrome && docker run  --network="host" -v $PWD:/e2e -w /e2e cypress/included:4.0.0 --browser firefox",
+    "test": "docker run  --network=host -v $PWD:/e2e -w /e2e cypress/included:4.0.0 --browser chrome && docker run  --network=host -v $PWD:/e2e -w /e2e cypress/included:4.0.0 --browser firefox",
     "ci": "start-server-and-test start-server http://localhost:5000 test"
   },
   "author": "",
