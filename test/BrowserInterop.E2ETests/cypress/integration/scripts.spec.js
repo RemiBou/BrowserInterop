@@ -99,4 +99,13 @@ context('scripts', () => {
                 expect(res).to.have.property('deeper');
             });
     });
+    it('getSerializableObject serialize 0', () => {
+        cy.window()
+            .its('browserInterop')
+            .then(b => {
+                var obj = { id: 0 };
+                var res = b.getInstancePropertySerializable(obj, 'id', false);
+                expect(res).to.be.eq(0);
+            });
+    });
 });

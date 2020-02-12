@@ -56,7 +56,6 @@ browserInterop = new (function () {
                 return null;
             }
         }
-        console.log(instance, propertyPath, currentProperty);
         return currentProperty;
     };
     this.setInstanceProperty = function (instance, propertyPath, value) {
@@ -106,8 +105,12 @@ browserInterop = new (function () {
         if (!alreadySerialized) {
             alreadySerialized = [];
         }
-        if (!data) {
+        if (typeof data == "undefined" ||
+            data === null) {
             return null;
+        }
+        if (typeof data === "number" || typeof data === "string") {
+            return data;
         }
         var res = {};
         for (var i in data) {
