@@ -14,15 +14,24 @@ steps:
     version: 3.1.100	
 
 - task: CacheBeta@1
+  displayName: 'Cache NPM'
   inputs:
-    key: npm | $(Agent.OS) | package-lock.json
+    key: npm | $(Agent.OS) | test/BrowserInterop.E2ETests/package-lock.json
     path: /home/vsts/.npm
-    restoreKeys: npm | $(Agent.OS) | package-lock.json
+    restoreKeys: npm | $(Agent.OS) | test/BrowserInterop.E2ETests/package-lock.json
   displayName: Cache NPM packages
+
 - task: Bash@3 
+  displayName: 'Run Cypress Tests'
   inputs: 	 
     targetType: inline	      
-    script: cd  test/BrowserInterop.E2ETests/ && npm install --save-dev start-server-and-test && npm run ci
+    script: |
+      cd  test/BrowserInterop.E2ETests/ 
+      npm install --save-dev start-server-and-test 
+      npm run ci
+  env:
+    # avoid warnings about terminal
+    TERM: xterm
 
 - task: NuGetToolInstaller@0
   inputs:
