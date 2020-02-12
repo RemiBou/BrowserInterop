@@ -21,7 +21,7 @@ steps:
 - task: Bash@3 
   inputs: 	 
     targetType: inline	      
-    script: (cd sample/SampleApp && dotnet run) & (cd test/BrowserInterop.E2ETests; npm install wait-on; npm run-script wait-local; docker run  --network="host" -v $PWD:/e2e -w /e2e cypress/included:4.0.0 --browser chrome && docker run  --network="host" -v $PWD:/e2e -w /e2e cypress/included:4.0.0 --browser firefox && exit 0)
+    script: (cd sample/SampleApp && dotnet run) & (cd test/BrowserInterop.E2ETests; npm install wait-on; npm run-script wait-local; docker run  --network="host" -v $PWD:/e2e -w /e2e cypress/included:4.0.0 --browser chrome && docker run  --network="host" -v $PWD:/e2e -w /e2e cypress/included:4.0.0 --browser firefox && echo "test done" && jobs && kill %1 && exit 0)
 
 - task: NuGetToolInstaller@0
   inputs:
