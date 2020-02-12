@@ -36,6 +36,15 @@ steps:
     # avoid warnings about terminal
     TERM: xterm
 
+- task: PublishTestResults@2
+  displayName: 'Publish Angular E2E test results'
+  condition: succeededOrFailed()
+  inputs:
+    searchFolder: $(System.DefaultWorkingDirectory)/test/BrowserInterop.E2ETests/
+    testRunTitle: LibTest
+    testResultsFormat: JUnit
+    testResultsFiles: "**/junit-result.xml"
+
 - task: DotNetCoreCLI@2
   displayName: 'Create nuget package'
   inputs:
