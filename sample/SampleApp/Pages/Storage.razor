@@ -1,0 +1,33 @@
+@page "/storage"
+@inject IJSRuntime jsRuntime;
+@using BrowserInterop
+Local Storage :
+<button type="button" id="window-localStorage-setItem" @onclick="SetItem" >localStorage.setItem</button>
+<button type="button" id="window-localStorage-getItem" @onclick="GetItem" >localStorage.setItem</button>
+<ul>
+    <li>Length : <span id="window-localStorage-length">@length</span></li>
+    <li>storageTest : <span id="window-localStorage-getItem-test">@storageTest?.Id</span></li>
+</ul>
+@code{
+    private int? length;
+    private WindowInterop window;
+
+    StorageTestClass storageTest;
+    protected override async Task OnInitializedAsync()
+    {
+        window = await jsRuntime.Window();
+        length = await window.LocalStorage.Length();
+    }
+
+    private async Task SetItem(){
+        await window.LocalStorage.SetItem("test",new StorageTestClass(){Id = 978789});
+    }    
+    
+    private async Task GetItem(){
+        storageTest = await window.LocalStorage.GetItem<StorageTestClass>("test");
+    }
+
+    public class StorageTestClass{
+        public int Id { get; set; }
+    }
+}

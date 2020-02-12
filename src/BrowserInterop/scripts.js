@@ -56,7 +56,7 @@ browserInterop = new (function () {
                 return null;
             }
         }
-
+        console.log(instance, propertyPath, currentProperty);
         return currentProperty;
     };
     this.setInstanceProperty = function (instance, propertyPath, value) {

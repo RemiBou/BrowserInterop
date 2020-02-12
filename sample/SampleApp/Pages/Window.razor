@@ -3,12 +3,18 @@
 @using BrowserInterop
 <iframe id="child-iframe" src="/navigator"></iframe><br/>
 <button id="btn-window-child-frame-console" @onclick="ChildFrameConsole">Child frame console</button>
+Window :
+<ul>
+    <li>InnerHeight: <span id="window-innerHeight">@window?.InnerHeight</span></li>
+    <li>InnerWidth: <span id="window-innerWidth">@window?.InnerWidth</span></li>
+</ul>
 @code{
     private WindowInterop window;
     private WindowInterop child;
     protected override async Task OnInitializedAsync()
     {
         window = await jsRuntime.Window();
+        
     }
 
     protected async Task ChildFrameConsole()

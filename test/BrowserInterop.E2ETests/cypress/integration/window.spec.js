@@ -22,4 +22,12 @@ context('window.navigator', () => {
                     });
             });
     });
+
+    it('window properties', () => {
+        cy.window()
+            .then(w => {
+                cy.get("#window-innerWidth").should("have.text", w.innerWidth.toString());
+                cy.get("#window-innerHeight").should("have.text", w.innerHeight.toString());
+            });
+    });
 });
