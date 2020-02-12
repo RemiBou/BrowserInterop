@@ -21,7 +21,7 @@ steps:
 - task: Bash@3 
   inputs: 	 
     targetType: inline	      
-    script: npm install --save-dev start-server-and-test && npm run ci
+    script: cd  test/BrowserInterop.E2ETests/ && npm install --save-dev start-server-and-test && npm run ci
 
 - task: NuGetToolInstaller@0
   inputs:
