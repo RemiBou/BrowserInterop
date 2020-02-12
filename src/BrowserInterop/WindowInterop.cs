@@ -15,6 +15,7 @@ namespace BrowserInterop
         private Lazy<HistoryInterop> historyInteropLazy;
         private Lazy<FramesArrayInterop> framesArrayInteropLazy;
         private Lazy<StorageInterop> localStorageLazy;
+        private Lazy<StorageInterop> sessionStorageLazy;
         private Lazy<ConsoleInterop> consoleInteropLazy;
         private Lazy<BarPropInterop> locationBarLazy;
         private Lazy<BarPropInterop> menuBarLazy;
@@ -23,6 +24,8 @@ namespace BrowserInterop
         internal void SetJsRuntime(IJSRuntime jsRuntime, JsRuntimeObjectRef jsRuntimeObjectRef)
         {
             localStorageLazy = new Lazy<StorageInterop>(() => new StorageInterop(jsRuntime, jsRuntimeObjectRef, "localStorage"));
+            sessionStorageLazy = new Lazy<StorageInterop>(() => new StorageInterop(jsRuntime, jsRuntimeObjectRef, "sessionStorage"));
+
             consoleInteropLazy = new Lazy<ConsoleInterop>(() => new ConsoleInterop(jsRuntime, jsRuntimeObjectRef));
             historyInteropLazy = new Lazy<HistoryInterop>(() => new HistoryInterop(jsRuntime, jsRuntimeObjectRef));
             framesArrayInteropLazy = new Lazy<FramesArrayInterop>(() => new FramesArrayInterop(jsRuntimeObjectRef, jsRuntime));
@@ -83,6 +86,8 @@ namespace BrowserInterop
         public BarPropInterop MenuBar => menuBarLazy.Value;
 
         public StorageInterop LocalStorage => localStorageLazy.Value;
+
+        public StorageInterop SessionStorage => sessionStorageLazy.Value;
 
     }
 

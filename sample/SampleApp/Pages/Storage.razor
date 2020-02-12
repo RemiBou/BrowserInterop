@@ -2,16 +2,23 @@
 @inject IJSRuntime jsRuntime;
 @using BrowserInterop
 Local Storage :
+<button type="button" id="window-sessionStorage-length-get" @onclick="SessionLength" >sessionStorage.setItem</button>
+<button type="button" id="window-localStorage-length-get" @onclick="Length" >localStorage.setItem</button>
 <button type="button" id="window-localStorage-setItem" @onclick="SetItem" >localStorage.setItem</button>
 <button type="button" id="window-localStorage-getItem" @onclick="GetItem" >localStorage.getItem</button>
+<button type="button" id="window-localStorage-clear" @onclick="async () => await window.LocalStorage.Clear()" >localStorage.clear</button>
+
+<button type="button" id="window-localStorage-removeItem" @onclick="RemoveItem" >localStorage.removeItem</button>
 <button type="button" id="window-localStorage-key-get" @onclick="Key" >localStorage.key</button>
 <ul>
-    <li>Length : <span id="window-localStorage-length">@length</span></li>
+    <li>Local Length : <span id="window-localStorage-length">@length</span></li>
+    <li>session length :  <span id="window-sessionStorage-length">@sessionLength</span></li>
     <li>storageTest : <span id="window-localStorage-getItem-test">@storageTest?.Id</span></li>
     <li>key : <span id="window-localStorage-key">@key</span></li>
 </ul>
 @code{
     private int? length;
+    private int? sessionLength;
     private WindowInterop window;
     private string key;
     StorageTestClass storageTest;
@@ -20,11 +27,21 @@ Local Storage :
         window = await jsRuntime.Window();
         length = await window.LocalStorage.Length();
     }
+    private async Task Length(){
+        length = await window.LocalStorage.Length();
 
+    }
+    private async Task SessionLength(){
+        sessionLength = await window.SessionStorage.Length();
+
+    }
     private async Task SetItem(){
         await window.LocalStorage.SetItem("test",new StorageTestClass(){Id = 978789});
     }    
     
+    private async Task RemoveItem(){
+        await window.LocalStorage.RemoveItem("test");
+    }    
     private async Task GetItem(){
         storageTest = await window.LocalStorage.GetItem<StorageTestClass>("test");
     }    
