@@ -111,5 +111,41 @@ namespace BrowserInterop
             await jsRuntime.SetInstancePropertyAsync(jsRuntimeObjectRef, "name", name);
         }
 
+        /// <summary>
+        /// Returns a reference to the window that opened this current window.
+        /// </summary>
+        /// <returns></returns>
+        public async Task<WindowInterop> Opener()
+        {
+            var propertyRef = await jsRuntime.GetInstancePropertyRefAsync(jsRuntimeObjectRef, "opener");
+            var window = await jsRuntime.GetInstancePropertyAsync<WindowInterop>(jsRuntimeObjectRef, "opener", false);
+            window?.SetJsRuntime(jsRuntime, propertyRef);
+            return window;
+        }
+
+        /// <summary>
+        /// Gets the height of the outside of the browser window.
+        /// </summary>
+        /// <value></value>
+        public int OuterHeight { get; set; }
+
+        /// <summary>
+        /// Gets the width of the outside of the browser window.
+        /// </summary>
+        /// <value></value>
+        public int OuterWidth { get; set; }
+
+
+        /// <summary>
+        /// Returns a reference to the parent of the current window or subframe
+        /// </summary>
+        /// <returns></returns>
+        public async Task<WindowInterop> Parent()
+        {
+            var propertyRef = await jsRuntime.GetInstancePropertyRefAsync(jsRuntimeObjectRef, "parent");
+            var window = await jsRuntime.GetInstancePropertyAsync<WindowInterop>(jsRuntimeObjectRef, "parent", false);
+            window?.SetJsRuntime(jsRuntime, propertyRef);
+            return window;
+        }
     }
 }

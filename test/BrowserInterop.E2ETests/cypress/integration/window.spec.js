@@ -28,6 +28,8 @@ context('window.navigator', () => {
             .then(w => {
                 cy.get("#window-innerWidth").should("have.text", w.innerWidth.toString());
                 cy.get("#window-innerHeight").should("have.text", w.innerHeight.toString());
+                cy.get("#window-outerWidth").should("have.text", w.outerWidth.toString());
+                cy.get("#window-outerHeight").should("have.text", w.outerHeight.toString());
                 cy.get("#window-name").should("have.text", w.name.toString());
             });
     });
@@ -37,6 +39,26 @@ context('window.navigator', () => {
             .then(w => {
                 cy.get("#btn-window-name-set").click().then(
                     () => expect(w.name).to.be.eq("Bla bla bla")
+                );
+            });
+    });
+
+    /*
+        it('window get opener', () => {
+            cy.window()
+                .then(w => {
+                    cy.get("#btn-window-opener").click().then(
+                        () => cy.get("#window-opener-name").should("have.text", w.opener.name.toString())
+                    );
+                });
+        });*/
+
+
+    it('window get parent', () => {
+        cy.window()
+            .then(w => {
+                cy.get("#btn-window-parent").click().then(
+                    () => cy.get("#window-parent-name").should("have.text", w.parent.name.toString())
                 );
             });
     });

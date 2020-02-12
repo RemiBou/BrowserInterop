@@ -4,20 +4,34 @@
 <iframe id="child-iframe" src="/navigator"></iframe><br/>
 <button id="btn-window-child-frame-console" @onclick="ChildFrameConsole">Child frame console</button>
 <button id="btn-window-name-set" @onclick="SetName">Set name</button>
+<button id="btn-window-opener" @onclick="GetOpener">Get Opener</button>
+<button id="btn-window-parent" @onclick="GetParent">Get Parent</button><br/>
 Window :
 <ul>
     <li>InnerHeight: <span id="window-innerHeight">@window?.InnerHeight</span></li>
     <li>InnerWidth: <span id="window-innerWidth">@window?.InnerWidth</span></li>  
+    <li>OuterHeight: <span id="window-outerHeight">@window?.OuterHeight</span></li>
+    <li>OuterWidth: <span id="window-outerWidth">@window?.OuterWidth</span></li>  
     <li>Name: <span id="window-name">@window?.Name</span></li>
+    <li>Opener Name: <span id="window-opener-name">@opener?.Name</span></li>
+    <li>Parent Name: <span id="window-parent-name">@parent?.Name</span></li>
 
 </ul>
 @code{
     private WindowInterop window;
     private WindowInterop child;
+    private WindowInterop opener;
+    private WindowInterop parent;
     protected override async Task OnInitializedAsync()
     {
         window = await jsRuntime.Window();
         
+    }
+    protected async Task GetOpener(){
+        opener = await window.Opener();
+    }
+    protected async Task GetParent(){
+        parent = await window.Parent();
     }
     protected async Task SetName(){
         await window.SetName("Bla bla bla");
