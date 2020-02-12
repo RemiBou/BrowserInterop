@@ -8,7 +8,7 @@ context('window.storage', () => {
     it('localStorage length', () => {
         cy.window()
             .then(w => {
-                cy.get("#window-localStorage-length").should("have.text", w.localStorage.length);
+                cy.get("#window-localStorage-length").should("have.text", w.localStorage.length.toString());
             });
     });
 
