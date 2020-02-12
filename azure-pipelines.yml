@@ -13,13 +13,16 @@ steps:
   inputs:
     version: 3.1.100	
 
+- task: NuGetToolInstaller@0
+  inputs:
+    versionSpec: '4.9.2' 
+
 - task: CacheBeta@1
-  displayName: 'Cache NPM'
+  displayName: Cache NPM packages
   inputs:
     key: npm | $(Agent.OS) | test/BrowserInterop.E2ETests/package-lock.json
     path: /home/vsts/.npm
     restoreKeys: npm | $(Agent.OS) | test/BrowserInterop.E2ETests/package-lock.json
-  displayName: Cache NPM packages
 
 - task: Bash@3 
   displayName: 'Run Cypress Tests'
@@ -33,24 +36,22 @@ steps:
     # avoid warnings about terminal
     TERM: xterm
 
-- task: NuGetToolInstaller@0
-  inputs:
-    versionSpec: '4.9.2'     
 - task: DotNetCoreCLI@2
-  displayName: 'dotnet pack'
+  displayName: 'Create nuget package'
   inputs:
     command: pack
     packagesToPack: src/BrowserInterop/BrowserInterop.csproj
     versioningScheme: 'off'
     configuration: Release
+
 - task: NuGetCommand@2
+  displayName: 'Publish nuget package'
   inputs:
     command: push
     nuGetFeedType: external
     publishFeedCredentials: 'Nuget'
   condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'), contains(variables['Build.SourceVersionMessage'], '#nuget'))
-
-  
+ 
 - task: PublishPipelineArtifact@1
   displayName: 'Publish Cypress videos'
   inputs:
