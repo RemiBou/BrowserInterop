@@ -1,15 +1,26 @@
 @page "/performance"
 @inject IJSRuntime jsRuntime;
+@using BrowserInterop.Performance
 @using BrowserInterop
     <text>Performance : </text> 
     <button id="btn-window-performance-clearMarks" type="button" @onclick="@(async () => await window.Performance.ClearMarks("test"))">ClearMarks</button>
     <button id="btn-window-performance-clearMeasures" type="button" @onclick="@(async () => await window.Performance.ClearMeasures("test2"))">ClearMeasures</button>
     <button id="btn-window-performance-clearResourceTimings" type="button" @onclick="@(async () => await window.Performance.ClearResourceTimings())">ClearResourceTimings</button>
+    <button id="btn-window-performance-getEntries" type="button" @onclick="@(async () => entries = await window.Performance.GetEntries())">GetEntries</button>
 
     <ul>
         <li>TimeOrigin : <span id="window-performance-timeorigin">@timeOrigin?.ToUnixTimeMilliseconds()</span></li>
     </ul>
+    @if(entries != null){
+        <text>Entries : </text>
+        <ul>
+            @foreach(var entry in entries){
+                <li>@entry.Name - @entry.EntryType - @entry.StartTimeTimeSpan - @entry.DurationTimeSpan</li>
+            }
+        </ul>
+    }
 @code{
+    private PerformanceEntry[] entries;
     private WindowInterop window;
     private DateTimeOffset? timeOrigin;
     protected override async Task OnInitializedAsync()

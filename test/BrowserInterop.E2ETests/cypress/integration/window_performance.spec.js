@@ -45,5 +45,20 @@ context('window.performance', () => {
                 });
         });
     })
+
+
+    it('window performance getEntries', () => {
+        cy.window().then((w) => {
+            var entries = w.performance.getEntries();
+            cy.spyFix(w.performance, 'getEntries', w);
+            cy.get('#btn-window-performance-getEntries')
+                .click()
+                .then(() => {
+                    expect(w.performance.getEntries).to.be.calledOnce;
+                    expect(w.performance.getEntries).to.be.calledWith();
+
+                });
+        });
+    })
 }
 );

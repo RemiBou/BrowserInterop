@@ -163,6 +163,30 @@ namespace BrowserInterop
                 return await Task.FromResult(default(T));
             }
         }
+
+        /// <summary>
+        /// Return the value of a DOMHighResTimeStamp to DateTimeOffset
+        /// </summary>
+        /// <param name="timeStamp">value of a DOMHighResTimeStamp</param>
+        /// <returns></returns>
+        public static DateTimeOffset HighResolutionTimeStampToDateTimeOffset(this decimal timeStamp)
+        {
+            var ms = (long)Math.Floor(timeStamp);
+            var tick = (long)Math.Floor((timeStamp - ms) * 10000);
+            return DateTimeOffset.FromUnixTimeMilliseconds(ms).AddTicks(tick);
+        }
+
+        /// <summary>
+        /// Return the value of a DOMHighResTimeStamp to DateTimeOffset
+        /// </summary>
+        /// <param name="timeStamp">value of a DOMHighResTimeStamp</param>
+        /// <returns></returns>
+        public static TimeSpan HighResolutionTimeStampToTimeSpan(this decimal timeStamp)
+        {
+            var ms = (long)Math.Floor(timeStamp);
+            var tick = (long)Math.Floor((timeStamp - ms) * 10000);
+            return TimeSpan.FromMilliseconds(ms).Add(TimeSpan.FromTicks(tick));
+        }
     }
 
     public struct JsRuntimeObjectRef

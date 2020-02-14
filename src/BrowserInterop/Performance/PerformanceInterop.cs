@@ -25,10 +25,7 @@ namespace BrowserInterop.Performance
         /// <value></value>
         public async Task<DateTimeOffset> TimeOrigin()
         {
-            var time = await jsRuntime.GetInstancePropertyAsync<decimal>(jsRuntimeObjectRef, "performance.timeOrigin");
-            var ms = (long)Math.Floor(time);
-            var tick = (long)Math.Floor((time - ms) * 10000);
-            return DateTimeOffset.FromUnixTimeMilliseconds(ms).AddTicks(tick);
+            return (await jsRuntime.GetInstancePropertyAsync<decimal>(jsRuntimeObjectRef, "performance.timeOrigin")).HighResolutionTimeStampToDateTimeOffset();
         }
 
         /// <summary>
@@ -59,6 +56,15 @@ namespace BrowserInterop.Performance
         public async Task ClearResourceTimings()
         {
             await jsRuntime.InvokeInstanceMethodAsync(jsRuntimeObjectRef, "performance.clearResourceTimings");
+        }
+
+        /// <summary>
+        /// returns a list of all PerformanceEntry objects for the page.
+        /// </summary>
+        /// <returns></returns>
+        public async Task<PerformanceEntry[]> GetEntries()
+        {
+            return await jsRuntime.InvokeInstanceMethodAsync<PerformanceEntry[]>(jsRuntimeObjectRef, "performance.getEntries");
         }
     }
 }
