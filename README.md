@@ -152,6 +152,7 @@ Those are the first API covered, more will come, please open an issue if you thi
         - performance.mark
         - performance.measure
         - performance.now
+        - performance.setResourceTimingBufferSize
 ## Utility method
 
 With the development of the library I needed a few utilities method :

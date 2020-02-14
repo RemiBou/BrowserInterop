@@ -150,5 +150,17 @@ context('window.performance', () => {
                 });
         });
     });
+
+    it('window performance setResourceTimingBufferSize', () => {
+        cy.window().then((w) => {
+            cy.spyFix(w.performance, 'setResourceTimingBufferSize', w);
+            cy.get('#btn-window-performance-setResourceTimingBufferSize')
+                .click()
+                .then(() => {
+                    expect(w.performance.setResourceTimingBufferSize).to.be.calledOnce;
+                    expect(w.performance.setResourceTimingBufferSize).to.be.calledWith(123456789);
+                });
+        });
+    });
 }
 );

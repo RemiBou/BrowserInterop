@@ -124,6 +124,17 @@ namespace BrowserInterop.Performance
         {
             return await jsRuntime.InvokeInstanceMethodAsync<double>(jsRuntimeObjectRef, "performance.now");
         }
+
+        /// <summary>
+        /// sets the browser's resource timing buffer size to the specified number of "resource" performance entry type objects.
+        /// </summary>
+        /// <param name="maxSize"></param>
+        /// <returns></returns>
+        public async Task SetResourceTimingBufferSize(long maxSize)
+        {
+            await jsRuntime.InvokeInstanceMethodAsync(jsRuntimeObjectRef, "performance.setResourceTimingBufferSize", maxSize);
+        }
+
         internal static Type ConvertStringToType(string str)
         {
             return str switch

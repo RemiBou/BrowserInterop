@@ -15,6 +15,7 @@
     <button id="btn-window-performance-measure" type="button" @onclick="@(async () => await window.Performance.Measure("testmeasure"))">Measure</button>
     <button id="btn-window-performance-now" type="button" @onclick="@(async () => now = await window.Performance.Now())">Now</button>
 
+    <button id="btn-window-performance-setResourceTimingBufferSize" type="button" @onclick="@(async () => await window.Performance.SetResourceTimingBufferSize(123456789))">SetResourceTimingBufferSize</button>
     <ul>
         <li>TimeOrigin : <span id="window-performance-timeorigin">@timeOrigin?.ToString(System.Globalization.CultureInfo.InvariantCulture)</span></li>
         <li>Now : <span id="window-performance-now">@now?.ToString(System.Globalization.CultureInfo.InvariantCulture)</span></li>
