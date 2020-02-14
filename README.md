@@ -148,6 +148,7 @@ Those are the first API covered, more will come, please open an issue if you thi
         - performance.clearResourceTimings
         - performance.getEntries
         - performance.getEntriesByName
+        - performance.getEntriesByType
 ## Utility method
 
 With the development of the library I needed a few utilities method :

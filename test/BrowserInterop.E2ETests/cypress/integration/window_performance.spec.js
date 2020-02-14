@@ -95,5 +95,21 @@ context('window.performance', () => {
                 });
         });
     });
+
+    it('window performance getEntriesByType', () => {
+        cy.window().then((w) => {
+            var entries = w.performance.getEntriesByType("paint");
+            cy.spyFix(w.performance, 'getEntriesByType', w);
+            cy.get('#btn-window-performance-getEntriesByType')
+                .click()
+                .then(() => {
+                    expect(w.performance.getEntriesByType).to.be.calledOnce;
+                    expect(w.performance.getEntriesByType).to.be.calledWith("paint");
+                    //we check only the item count, if there is some bug we'll had more check
+                    cy.get("li[performance-type]").should('have.length', entries.length);
+
+                });
+        });
+    });
 }
 );

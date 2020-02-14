@@ -67,10 +67,8 @@ namespace BrowserInterop.Performance
             return await jsRuntime.InvokeInstanceMethodAsync<PerformanceEntry[]>(jsRuntimeObjectRef, "performance.getEntries");
         }
 
-
-
         /// <summary>
-        /// returns a list of all PerformanceEntry objects for the page.
+        /// Returns a list of PerformanceEntry objects based on the given name
         /// </summary>
         /// <returns></returns>
         public async Task<PerformanceEntry[]> GetEntriesByName(string name)
@@ -79,12 +77,21 @@ namespace BrowserInterop.Performance
         }
 
         /// <summary>
-        /// returns a list of all PerformanceEntry objects for the page.
+        /// Returns a list of PerformanceEntry objects based on the given name and entry type.
         /// </summary>
         /// <returns></returns>
         public async Task<T[]> GetEntriesByName<T>(string name) where T : PerformanceEntry
         {
             return await jsRuntime.InvokeInstanceMethodAsync<T[]>(jsRuntimeObjectRef, "performance.getEntriesByName", name, ConvertTypeToString(typeof(T)));
+        }
+
+        /// <summary>
+        /// returns a list of all PerformanceEntry objects for the page.
+        /// </summary>
+        /// <returns></returns>
+        public async Task<T[]> GetEntriesByType<T>() where T : PerformanceEntry
+        {
+            return await jsRuntime.InvokeInstanceMethodAsync<T[]>(jsRuntimeObjectRef, "performance.getEntriesByType", ConvertTypeToString(typeof(T)));
         }
 
         internal static Type ConvertStringToType(string str)

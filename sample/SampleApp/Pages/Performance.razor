@@ -10,6 +10,8 @@
     <button id="btn-window-performance-getEntriesByName" type="button" @onclick="@(async () => entries = await window.Performance.GetEntriesByName("first-paint"))">GetEntriesByName</button>
     <button id="btn-window-performance-getEntriesByNameWithType" type="button" @onclick="@(async () => entries = await window.Performance.GetEntriesByName<PerformancePaintTiming>("first-paint"))">GetEntriesByNameWithType</button>
 
+    <button id="btn-window-performance-getEntriesByType" type="button" @onclick="@(async () => entries = await window.Performance.GetEntriesByType<PerformancePaintTiming>())">GetEntriesByType</button>
+
     <ul>
         <li>TimeOrigin : <span id="window-performance-timeorigin">@timeOrigin?.ToUnixTimeMilliseconds()</span></li>
     </ul>
