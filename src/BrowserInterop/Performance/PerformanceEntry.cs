@@ -24,13 +24,13 @@ namespace BrowserInterop.Performance
         /// A DOMHighResTimeStamp representing the starting time for the performance metric.
         /// </summary>
         /// <value></value>
-        public decimal StartTime { get; set; }
+        public double StartTime { get; set; }
 
         /// <summary>
         /// A DOMHighResTimeStamp representing the time value of the duration of the performance event.
         /// </summary>
         /// <returns></returns>
-        public decimal Duration { get; set; }
+        public double Duration { get; set; }
     }
 
     public class PerformanceMark : PerformanceEntry

@@ -23,9 +23,9 @@ namespace BrowserInterop.Performance
         /// Represents the time at which the location was retrieved.
         /// </summary>
         /// <value></value>
-        public async Task<DateTimeOffset> TimeOrigin()
+        public async Task<double> TimeOrigin()
         {
-            return (await jsRuntime.GetInstancePropertyAsync<decimal>(jsRuntimeObjectRef, "performance.timeOrigin")).HighResolutionTimeStampToDateTimeOffset();
+            return await jsRuntime.GetInstancePropertyAsync<double>(jsRuntimeObjectRef, "performance.timeOrigin");
         }
 
         /// <summary>
@@ -116,6 +116,14 @@ namespace BrowserInterop.Performance
             await jsRuntime.InvokeInstanceMethodAsync(jsRuntimeObjectRef, "performance.measure", name, startMark, endMark);
         }
 
+        /// <summary>
+        ///  returns a DOMHighResTimeStamp, measured in milliseconds. The returned value represents the time elapsed since the time origin
+        /// </summary>
+        /// <returns></returns>
+        public async Task<double> Now()
+        {
+            return await jsRuntime.InvokeInstanceMethodAsync<double>(jsRuntimeObjectRef, "performance.now");
+        }
         internal static Type ConvertStringToType(string str)
         {
             return str switch

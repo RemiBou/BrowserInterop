@@ -6,7 +6,7 @@ context('window.performance', () => {
     });
     it('window performance timeOrigin', () => {
         cy.window().then((w) => {
-            cy.get('#window-performance-timeorigin').should('have.text', (Math.floor(w.performance.timeOrigin)).toString());
+            cy.get('#window-performance-timeorigin').should('have.text', w.performance.timeOrigin.toFixed(2).toString());
         });
     });
 
@@ -133,6 +133,20 @@ context('window.performance', () => {
                 .then(() => {
                     expect(w.performance.measure).to.be.calledOnce;
                     expect(w.performance.measure).to.be.calledWith("testmeasure");
+                });
+        });
+    });
+
+
+
+    it('window performance now', () => {
+        cy.window().then((w) => {
+            cy.stubFix(w.performance, 'now', w, function () { return 1.123456789 });
+            cy.get('#btn-window-performance-now')
+                .click()
+                .then(() => {
+                    //c# timespan is precise to Ticks
+                    cy.get('#window-performance-now').should('have.text', '1.123456789');
                 });
         });
     });

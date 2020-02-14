@@ -12,10 +12,12 @@
 
     <button id="btn-window-performance-getEntriesByType" type="button" @onclick="@(async () => entries = await window.Performance.GetEntriesByType<PerformancePaintTiming>())">GetEntriesByType</button>
     <button id="btn-window-performance-mark" type="button" @onclick="@(async () => await window.Performance.Mark("testmark"))">Mark</button>
-    <button id="btn-window-performance-measure" type="button" @onclick="@(async () => await window.Performance.Measure("testmeasure"))">Mark</button>
+    <button id="btn-window-performance-measure" type="button" @onclick="@(async () => await window.Performance.Measure("testmeasure"))">Measure</button>
+    <button id="btn-window-performance-now" type="button" @onclick="@(async () => now = await window.Performance.Now())">Now</button>
 
     <ul>
-        <li>TimeOrigin : <span id="window-performance-timeorigin">@timeOrigin?.ToUnixTimeMilliseconds()</span></li>
+        <li>TimeOrigin : <span id="window-performance-timeorigin">@timeOrigin?.ToString(System.Globalization.CultureInfo.InvariantCulture)</span></li>
+        <li>Now : <span id="window-performance-now">@now?.ToString(System.Globalization.CultureInfo.InvariantCulture)</span></li>
     </ul>
     @if(entries != null){
         <text>Entries : </text>
@@ -28,11 +30,13 @@
 @code{
     private PerformanceEntry[] entries;
     private WindowInterop window;
-    private DateTimeOffset? timeOrigin;
+    private double? timeOrigin;
+    private double? now;
     protected override async Task OnInitializedAsync()
     {
         window = await jsRuntime.Window();
         timeOrigin = await window.Performance.TimeOrigin();
+        now = await window.Performance.Now();
 
     }
 }

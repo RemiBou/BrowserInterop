@@ -169,7 +169,7 @@ namespace BrowserInterop
         /// </summary>
         /// <param name="timeStamp">value of a DOMHighResTimeStamp</param>
         /// <returns></returns>
-        public static DateTimeOffset HighResolutionTimeStampToDateTimeOffset(this decimal timeStamp)
+        public static DateTimeOffset HighResolutionTimeStampToDateTimeOffset(this double timeStamp)
         {
             var ms = (long)Math.Floor(timeStamp);
             var tick = (long)Math.Floor((timeStamp - ms) * 10000);
@@ -177,15 +177,13 @@ namespace BrowserInterop
         }
 
         /// <summary>
-        /// Return the value of a DOMHighResTimeStamp to DateTimeOffset
+        /// Return the value of a DOMHighResTimeStamp to TimeSpan
         /// </summary>
         /// <param name="timeStamp">value of a DOMHighResTimeStamp</param>
         /// <returns></returns>
-        public static TimeSpan HighResolutionTimeStampToTimeSpan(this decimal timeStamp)
+        public static TimeSpan HighResolutionTimeStampToTimeSpan(this double timeStamp)
         {
-            var ms = (long)Math.Floor(timeStamp);
-            var tick = (long)Math.Floor((timeStamp - ms) * 10000);
-            return TimeSpan.FromMilliseconds(ms).Add(TimeSpan.FromTicks(tick));
+            return TimeSpan.FromTicks((long)timeStamp * 10000);
         }
     }
 
