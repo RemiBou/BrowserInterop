@@ -155,6 +155,17 @@ Those are the first API covered, more will come, please open an issue if you thi
         - performance.setResourceTimingBufferSize
         - performance.onResourceTimingBufferFull
     - window.personalbar
+    - window.screen
+        - screen.availWidth
+        - screen.availHeight
+        - screen.colorDepth
+        - screen.orientation.type
+        - screen.orientation.angle
+        - screen.orientation.onchange
+        - screen.orientation.lock
+        - screen.orientation.unlock
+        - screen.pixelDepth
+        - screen.width
 ## Utility method
 
 With the development of the library I needed a few utilities method :

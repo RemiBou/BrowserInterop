@@ -2,13 +2,14 @@
 using System.Threading.Tasks;
 using System;
 using BrowserInterop.Performance;
+using BrowserInterop.Screen;
 
 namespace BrowserInterop
 {
 
     public class WindowInterop
     {
-        private JsRuntimeObjectRef jsRuntimeObjectRef;
+        private JsRuntimeObjectRef windowRef;
 
         private Lazy<HistoryInterop> historyInteropLazy;
         private Lazy<FramesArrayInterop> framesArrayInteropLazy;
@@ -21,20 +22,20 @@ namespace BrowserInterop
         private Lazy<BarPropInterop> personalBarLazy;
         private IJSRuntime jsRuntime;
 
-        internal void SetJsRuntime(IJSRuntime jsRuntime, JsRuntimeObjectRef jsRuntimeObjectRef)
+        internal void SetJsRuntime(IJSRuntime jsRuntime, JsRuntimeObjectRef windowRef)
         {
-            localStorageLazy = new Lazy<StorageInterop>(() => new StorageInterop(jsRuntime, jsRuntimeObjectRef, "localStorage"));
-            sessionStorageLazy = new Lazy<StorageInterop>(() => new StorageInterop(jsRuntime, jsRuntimeObjectRef, "sessionStorage"));
+            localStorageLazy = new Lazy<StorageInterop>(() => new StorageInterop(jsRuntime, windowRef, "localStorage"));
+            sessionStorageLazy = new Lazy<StorageInterop>(() => new StorageInterop(jsRuntime, windowRef, "sessionStorage"));
 
-            consoleInteropLazy = new Lazy<ConsoleInterop>(() => new ConsoleInterop(jsRuntime, jsRuntimeObjectRef));
-            historyInteropLazy = new Lazy<HistoryInterop>(() => new HistoryInterop(jsRuntime, jsRuntimeObjectRef));
-            performanceInteropLazy = new Lazy<PerformanceInterop>(() => new PerformanceInterop(jsRuntime, jsRuntimeObjectRef));
-            framesArrayInteropLazy = new Lazy<FramesArrayInterop>(() => new FramesArrayInterop(jsRuntimeObjectRef, jsRuntime));
-            personalBarLazy = new Lazy<BarPropInterop>(() => new BarPropInterop(jsRuntimeObjectRef, "personalbar", jsRuntime));
-            locationBarLazy = new Lazy<BarPropInterop>(() => new BarPropInterop(jsRuntimeObjectRef, "locationbar", jsRuntime));
-            menuBarLazy = new Lazy<BarPropInterop>(() => new BarPropInterop(jsRuntimeObjectRef, "menubar", jsRuntime));
+            consoleInteropLazy = new Lazy<ConsoleInterop>(() => new ConsoleInterop(jsRuntime, windowRef));
+            historyInteropLazy = new Lazy<HistoryInterop>(() => new HistoryInterop(jsRuntime, windowRef));
+            performanceInteropLazy = new Lazy<PerformanceInterop>(() => new PerformanceInterop(jsRuntime, windowRef));
+            framesArrayInteropLazy = new Lazy<FramesArrayInterop>(() => new FramesArrayInterop(windowRef, jsRuntime));
+            personalBarLazy = new Lazy<BarPropInterop>(() => new BarPropInterop(windowRef, "personalbar", jsRuntime));
+            locationBarLazy = new Lazy<BarPropInterop>(() => new BarPropInterop(windowRef, "locationbar", jsRuntime));
+            menuBarLazy = new Lazy<BarPropInterop>(() => new BarPropInterop(windowRef, "menubar", jsRuntime));
             this.jsRuntime = jsRuntime;
-            this.jsRuntimeObjectRef = jsRuntimeObjectRef;
+            this.windowRef = windowRef;
         }
 
 
@@ -51,8 +52,8 @@ namespace BrowserInterop
         /// <value></value>
         public async Task<NavigatorInterop> Navigator()
         {
-            NavigatorInterop navigatorInterop = await jsRuntime.GetInstancePropertyAsync<NavigatorInterop>(jsRuntimeObjectRef, "navigator");
-            navigatorInterop.SetJSRuntime(jsRuntime, this.jsRuntimeObjectRef);
+            NavigatorInterop navigatorInterop = await jsRuntime.GetInstancePropertyAsync<NavigatorInterop>(windowRef, "navigator");
+            navigatorInterop.SetJSRuntime(jsRuntime, this.windowRef);
             return navigatorInterop;
         }
 
@@ -110,7 +111,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public async Task SetName(string name)
         {
-            await jsRuntime.SetInstancePropertyAsync(jsRuntimeObjectRef, "name", name);
+            await jsRuntime.SetInstancePropertyAsync(windowRef, "name", name);
         }
 
         /// <summary>
@@ -119,8 +120,8 @@ namespace BrowserInterop
         /// <returns></returns>
         public async Task<WindowInterop> Opener()
         {
-            var propertyRef = await jsRuntime.GetInstancePropertyRefAsync(jsRuntimeObjectRef, "opener");
-            var window = await jsRuntime.GetInstancePropertyAsync<WindowInterop>(jsRuntimeObjectRef, "opener", false);
+            var propertyRef = await jsRuntime.GetInstancePropertyRefAsync(windowRef, "opener");
+            var window = await jsRuntime.GetInstancePropertyAsync<WindowInterop>(windowRef, "opener", false);
             window?.SetJsRuntime(jsRuntime, propertyRef);
             return window;
         }
@@ -144,8 +145,8 @@ namespace BrowserInterop
         /// <returns></returns>
         public async Task<WindowInterop> Parent()
         {
-            var propertyRef = await jsRuntime.GetInstancePropertyRefAsync(jsRuntimeObjectRef, "parent");
-            var window = await jsRuntime.GetInstancePropertyAsync<WindowInterop>(jsRuntimeObjectRef, "parent", false);
+            var propertyRef = await jsRuntime.GetInstancePropertyRefAsync(windowRef, "parent");
+            var window = await jsRuntime.GetInstancePropertyAsync<WindowInterop>(windowRef, "parent", false);
             window?.SetJsRuntime(jsRuntime, propertyRef);
             return window;
         }
@@ -159,6 +160,17 @@ namespace BrowserInterop
         /// Returns the personalbar object, whose visibility can be toggled in the window.
         /// </summary>
         public BarPropInterop PersonalBar => personalBarLazy.Value;
+
+        /// <summary>
+        /// Will return an instance of NavigatorInterop that'll give access to window.navigator API
+        /// </summary>
+        /// <value></value>
+        public async Task<ScreenInterop> Screen()
+        {
+            ScreenInterop screeninterop = await jsRuntime.GetInstancePropertyAsync<ScreenInterop>(windowRef, "screen");
+            screeninterop.SetJSRuntime(jsRuntime, this.windowRef);
+            return screeninterop;
+        }
 
     }
 }

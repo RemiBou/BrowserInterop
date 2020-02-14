@@ -1,0 +1,25 @@
+@page "/screen"
+@inject IJSRuntime jsRuntime;
+@using BrowserInterop
+@using BrowserInterop.Screen
+Screen :
+<ul>
+    <li>AvailWidth : <span id="window-screen-AvailWidth">@screen?.AvailWidth</span></li>
+    <li>AvailHeight : <span id="window-screen-AvailHeight">@screen?.AvailHeight</span></li>
+    <li>ColorDepth : <span id="window-screen-ColorDepth">@screen?.ColorDepth</span></li>
+    <li>Height : <span id="window-screen-Height">@screen?.Height</span></li>
+    <li>Orientation.Type : <span id="window-screen-Orientation-Type">@screen?.Orientation.Type</span></li>
+    <li>Orientation.TypeEnum : <span id="window-screen-Orientation-TypeEnum">@screen?.Orientation.TypeEnum</span></li>
+    <li>Orientation.Angle : <span id="window-screen-Orientation-Angle">@screen?.Orientation.Angle</span></li>
+    <li>PixelDepth : <span id="window-screen-PixelDepth">@screen?.PixelDepth</span></li>
+    <li>Width : <span id="window-screen-Width">@screen?.Width</span></li>
+</ul>
+@code{
+    private WindowInterop window;
+    private ScreenInterop screen;
+    protected override async Task OnInitializedAsync()
+    {
+        window = await jsRuntime.Window();
+        screen = await window.Screen();
+    }
+}
