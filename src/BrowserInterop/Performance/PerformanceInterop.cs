@@ -40,5 +40,15 @@ namespace BrowserInterop.Performance
         {
             await jsRuntime.InvokeInstanceMethodAsync(jsRuntimeObjectRef, "performance.clearMarks", name);
         }
+
+        /// <summary>
+        /// emoves the named measure from the browser's performance entry buffer. If the method is called with no arguments, all performance entries with an entry type of "measure" will be removed from the performance entry buffer.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public async Task ClearMeasures(string name = null)
+        {
+            await jsRuntime.InvokeInstanceMethodAsync(jsRuntimeObjectRef, "performance.clearMeasures", name);
+        }
     }
 }

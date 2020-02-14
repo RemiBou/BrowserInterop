@@ -21,6 +21,17 @@ context('window.performance', () => {
                     expect(w.performance.clearMarks).to.be.calledWith('test');
                 });
         });
+    });
+    it('window performance clearMeasures', () => {
+        cy.window().then((w) => {
+            cy.spyFix(w.performance, 'clearMeasures', w);
+            cy.get('#btn-window-performance-clearMeasures')
+                .click()
+                .then(() => {
+                    expect(w.performance.clearMeasures).to.be.calledOnce;
+                    expect(w.performance.clearMeasures).to.be.calledWith('test2');
+                });
+        });
     })
 }
 );
