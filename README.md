@@ -141,6 +141,9 @@ Those are the first API covered, more will come, please open an issue if you thi
     - window.name
     - window.outerHeight
     - window.outerWidth
+    - window.performance
+        - performance.timeOrigin
+        - performance.clearMarks
 
 ## Utility method
 

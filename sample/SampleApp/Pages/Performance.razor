@@ -1,7 +1,8 @@
 @page "/performance"
 @inject IJSRuntime jsRuntime;
 @using BrowserInterop
-    <text>Performance : </text>
+    <text>Performance : </text> 
+    <button id="btn-window-performance-clearMarks" type="button" @onclick="@(async () => await window.Performance.ClearMarks("test"))">ClearMarks</button>
     <ul>
         <li>TimeOrigin : <span id="window-performance-timeorigin">@timeOrigin?.ToUnixTimeMilliseconds()</span></li>
     </ul>

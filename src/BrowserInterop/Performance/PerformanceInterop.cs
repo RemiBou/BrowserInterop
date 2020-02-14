@@ -9,7 +9,7 @@ namespace BrowserInterop.Performance
     /// </summary>
     public class PerformanceInterop
     {
-        private IJSRuntime jsRuntime;
+        private readonly IJSRuntime jsRuntime;
         private JsRuntimeObjectRef jsRuntimeObjectRef;
 
         internal PerformanceInterop(IJSRuntime jsRuntime, JsRuntimeObjectRef jsRuntimeObjectRef)
@@ -28,7 +28,6 @@ namespace BrowserInterop.Performance
             var time = await jsRuntime.GetInstancePropertyAsync<decimal>(jsRuntimeObjectRef, "performance.timeOrigin");
             var ms = (long)Math.Floor(time);
             var tick = (long)Math.Floor((time - ms) * 10000);
-            Console.WriteLine($"time {time} md {ms} tick {tick}");
             return DateTimeOffset.FromUnixTimeMilliseconds(ms).AddTicks(tick);
         }
 
@@ -39,7 +38,7 @@ namespace BrowserInterop.Performance
         /// <returns></returns>
         public async Task ClearMarks(string name = null)
         {
-            await jsRuntime.InvokeInstanceMethodAsync(jsRuntimeObjectRef, "clearMarks", name);
+            await jsRuntime.InvokeInstanceMethodAsync(jsRuntimeObjectRef, "performance.clearMarks", name);
         }
     }
 }
