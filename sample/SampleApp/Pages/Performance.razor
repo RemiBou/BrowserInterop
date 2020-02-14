@@ -11,6 +11,7 @@
     <button id="btn-window-performance-getEntriesByNameWithType" type="button" @onclick="@(async () => entries = await window.Performance.GetEntriesByName<PerformancePaintTiming>("first-paint"))">GetEntriesByNameWithType</button>
 
     <button id="btn-window-performance-getEntriesByType" type="button" @onclick="@(async () => entries = await window.Performance.GetEntriesByType<PerformancePaintTiming>())">GetEntriesByType</button>
+    <button id="btn-window-performance-mark" type="button" @onclick="@(async () => await window.Performance.Mark("testmark"))">Mark</button>
 
     <ul>
         <li>TimeOrigin : <span id="window-performance-timeorigin">@timeOrigin?.ToUnixTimeMilliseconds()</span></li>

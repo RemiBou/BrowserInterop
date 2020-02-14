@@ -111,5 +111,17 @@ context('window.performance', () => {
                 });
         });
     });
+
+    it('window performance mark', () => {
+        cy.window().then((w) => {
+            cy.spyFix(w.performance, 'mark', w);
+            cy.get('#btn-window-performance-mark')
+                .click()
+                .then(() => {
+                    expect(w.performance.mark).to.be.calledOnce;
+                    expect(w.performance.mark).to.be.calledWith("testmark");
+                });
+        });
+    });
 }
 );

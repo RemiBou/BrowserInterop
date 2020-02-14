@@ -94,6 +94,16 @@ namespace BrowserInterop.Performance
             return await jsRuntime.InvokeInstanceMethodAsync<T[]>(jsRuntimeObjectRef, "performance.getEntriesByType", ConvertTypeToString(typeof(T)));
         }
 
+        /// <summary>
+        /// creates a timestamp in the browser's performance entry buffer with the given name. The application defined timestamp can be retrieved by one of the Performance interface's getEntries*() methods
+        /// </summary>
+        /// <param name="name">the name of the mark.</param>
+        /// <returns></returns>
+        public async Task Mark(string name)
+        {
+            await jsRuntime.InvokeInstanceMethodAsync(jsRuntimeObjectRef, "performance.mark", name);
+        }
+
         internal static Type ConvertStringToType(string str)
         {
             return str switch
