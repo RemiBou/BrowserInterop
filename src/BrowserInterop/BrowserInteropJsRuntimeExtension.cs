@@ -37,10 +37,25 @@ namespace BrowserInterop
                 await jsRuntime.InvokeVoidAsync("eval", ressourceReader.ReadToEnd());
                 ScriptInitialized = true;
             }
-            var jsObjectRef = await jsRuntime.InvokeAsync<JsRuntimeObjectRef>("browserInterop.getPropertyRef", "window");
+            var jsObjectRef = await jsRuntime.GetInstancePropertyAsync<JsRuntimeObjectRef>("window");
             var wsInterop = await jsRuntime.GetInstancePropertyAsync<WindowInterop>(jsObjectRef, "self", false);
             wsInterop.SetJsRuntime(jsRuntime, jsObjectRef);
             return wsInterop;
+        }
+
+        /// <summary>
+        /// Get the window js object property value reference
+        /// </summary>
+        /// <param name="jsRuntime">current js runtime</param>
+        /// <param name="propertyPath">path of the property</param>
+        /// <param name="jsObjectRef">Ref to the js object from which we'll get the property</param>
+        /// <param name="deep">If true,(default) then the full object is received.await If false, only the object root</param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public static async Task<T> GetInstancePropertyAsync<T>(this IJSRuntime jsRuntime, string propertyPath)
+        {
+            return await jsRuntime.InvokeAsync<T>("browserInterop.getPropertyRef", propertyPath);
+
         }
 
         /// <summary>

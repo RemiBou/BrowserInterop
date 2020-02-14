@@ -45,6 +45,15 @@ You can find more usage here : https://github.com/RemiBou/BrowserInterop/tree/ma
 ## API covered
 Those are the first API covered, more will come, please open an issue if you think some API might be valuable.
 - window
+    - window.history
+        - history.length
+        - history.scrollRestoration
+        - history.go
+        - history.back
+        - history.forward
+        - history.state
+        - history.pushState
+        - history.replaceState
     - window.frames
         - window.frames[i]
         - window.frames.length
@@ -68,7 +77,7 @@ Those are the first API covered, more will come, please open an issue if you thi
         - window.console.timeLog
         - window.console.timeStamp
         - window.console.trace
-    - navigator
+    - window.navigator
         - navigator.appCodeName
         - navigator.appName
         - navigator.appVersion
@@ -116,6 +125,50 @@ Those are the first API covered, more will come, please open an issue if you thi
         - navigator.sendBeacon()
         - navigator.share()
         - navigator.vibrate()
+    - window.parent
+    - window.opener
+    - window.innerHeight
+    - window.innerWidth
+    - window.locationBar
+    - window.menuBar
+    - window.localStorage / window.sessionStorage
+        - storage.length
+        - storage.key
+        - storage.getItem
+        - storage.setItem
+        - storage.clear
+        - storage.removeItem
+    - window.name
+    - window.outerHeight
+    - window.outerWidth
+
+## Utility method
+
+With the development of the library I needed a few utilities method :
+
+```cs
+IJSRuntime jsRuntime;
+// this will get a reference to the js window object that you can use later, it works like ElementReference ofr DotNetRef : you can add it to any method parameter and it 
+// will be changed in the corresponding js object 
+var windowObjectRef = await jsRuntime.GetInstancePropertyAsync<JsRuntimeObjectRef>("window");
+// get the value of window.performance.timeOrigin
+var time = await jsRuntime.GetInstancePropertyAsync<decimal>(windowObjectRef, "performance.timeOrigin");
+// set the value of the property window.history.scrollRestoration
+await jsRuntime.SetInstancePropertyAsync(windowObjectRef, "history.scrollRestoration", "auto");
+//get a reference to window.parent
+var parentRef = await jsRuntime.GetInstancePropertyRefAsync(windowObjectRef, "parent");
+// call the method window.console.clear with window.console as scope
+await jsRuntime.InvokeInstanceMethodAsync(windowObjectRef, "console.clear");
+// call the method window.history.key(1) with window.history as scope
+await jsRuntime.InvokeInstanceMethodAsync<string>(windowObjectRef, "history.key",1 );
+// will call the method navigator.storage.persist and will return default(bool) if there is no response after 3 secs
+jsRuntime.InvokeOrDefaultAsync<bool>("navigator.storage.persist",TimeSpan.FromSeconds(3), null)
+//will listen for the event until DisposeAsync is called on the result
+var listener = wait jSRuntime.AddEventListener("navigator.connection", "change", () => Console.WriteLine("navigator connection change"));
+await listener.DisposeAsync();
+//will return true if window.navigator.registerProtocolHandler property exists
+await jsRuntime.HasProperty("navigator.registerProtocolHandler")
+```
 
     
 
