@@ -10,12 +10,12 @@ namespace BrowserInterop.Performance
     public class PerformanceInterop
     {
         private readonly IJSRuntime jsRuntime;
-        private JsRuntimeObjectRef jsRuntimeObjectRef;
+        private JsRuntimeObjectRef windowRef;
 
-        internal PerformanceInterop(IJSRuntime jsRuntime, JsRuntimeObjectRef jsRuntimeObjectRef)
+        internal PerformanceInterop(IJSRuntime jsRuntime, JsRuntimeObjectRef windowRef)
         {
             this.jsRuntime = jsRuntime;
-            this.jsRuntimeObjectRef = jsRuntimeObjectRef;
+            this.windowRef = windowRef;
         }
 
 
@@ -25,7 +25,7 @@ namespace BrowserInterop.Performance
         /// <value></value>
         public async Task<double> TimeOrigin()
         {
-            return await jsRuntime.GetInstancePropertyAsync<double>(jsRuntimeObjectRef, "performance.timeOrigin");
+            return await jsRuntime.GetInstancePropertyAsync<double>(windowRef, "performance.timeOrigin");
         }
 
         /// <summary>
@@ -35,7 +35,7 @@ namespace BrowserInterop.Performance
         /// <returns></returns>
         public async Task ClearMarks(string name = null)
         {
-            await jsRuntime.InvokeInstanceMethodAsync(jsRuntimeObjectRef, "performance.clearMarks", name);
+            await jsRuntime.InvokeInstanceMethodAsync(windowRef, "performance.clearMarks", name);
         }
 
         /// <summary>
@@ -45,7 +45,7 @@ namespace BrowserInterop.Performance
         /// <returns></returns>
         public async Task ClearMeasures(string name = null)
         {
-            await jsRuntime.InvokeInstanceMethodAsync(jsRuntimeObjectRef, "performance.clearMeasures", name);
+            await jsRuntime.InvokeInstanceMethodAsync(windowRef, "performance.clearMeasures", name);
         }
 
 
@@ -55,7 +55,7 @@ namespace BrowserInterop.Performance
         /// <returns></returns>
         public async Task ClearResourceTimings()
         {
-            await jsRuntime.InvokeInstanceMethodAsync(jsRuntimeObjectRef, "performance.clearResourceTimings");
+            await jsRuntime.InvokeInstanceMethodAsync(windowRef, "performance.clearResourceTimings");
         }
 
         /// <summary>
@@ -64,7 +64,7 @@ namespace BrowserInterop.Performance
         /// <returns></returns>
         public async Task<PerformanceEntry[]> GetEntries()
         {
-            return await jsRuntime.InvokeInstanceMethodAsync<PerformanceEntry[]>(jsRuntimeObjectRef, "performance.getEntries");
+            return await jsRuntime.InvokeInstanceMethodAsync<PerformanceEntry[]>(windowRef, "performance.getEntries");
         }
 
         /// <summary>
@@ -73,7 +73,7 @@ namespace BrowserInterop.Performance
         /// <returns></returns>
         public async Task<PerformanceEntry[]> GetEntriesByName(string name)
         {
-            return await jsRuntime.InvokeInstanceMethodAsync<PerformanceEntry[]>(jsRuntimeObjectRef, "performance.getEntriesByName", name);
+            return await jsRuntime.InvokeInstanceMethodAsync<PerformanceEntry[]>(windowRef, "performance.getEntriesByName", name);
         }
 
         /// <summary>
@@ -82,7 +82,7 @@ namespace BrowserInterop.Performance
         /// <returns></returns>
         public async Task<T[]> GetEntriesByName<T>(string name) where T : PerformanceEntry
         {
-            return await jsRuntime.InvokeInstanceMethodAsync<T[]>(jsRuntimeObjectRef, "performance.getEntriesByName", name, ConvertTypeToString(typeof(T)));
+            return await jsRuntime.InvokeInstanceMethodAsync<T[]>(windowRef, "performance.getEntriesByName", name, ConvertTypeToString(typeof(T)));
         }
 
         /// <summary>
@@ -91,7 +91,7 @@ namespace BrowserInterop.Performance
         /// <returns></returns>
         public async Task<T[]> GetEntriesByType<T>() where T : PerformanceEntry
         {
-            return await jsRuntime.InvokeInstanceMethodAsync<T[]>(jsRuntimeObjectRef, "performance.getEntriesByType", ConvertTypeToString(typeof(T)));
+            return await jsRuntime.InvokeInstanceMethodAsync<T[]>(windowRef, "performance.getEntriesByType", ConvertTypeToString(typeof(T)));
         }
 
         /// <summary>
@@ -101,7 +101,7 @@ namespace BrowserInterop.Performance
         /// <returns></returns>
         public async Task Mark(string name)
         {
-            await jsRuntime.InvokeInstanceMethodAsync(jsRuntimeObjectRef, "performance.mark", name);
+            await jsRuntime.InvokeInstanceMethodAsync(windowRef, "performance.mark", name);
         }
 
         /// <summary>
@@ -113,7 +113,7 @@ namespace BrowserInterop.Performance
         /// <returns></returns>
         public async Task Measure(string name, string startMark = null, string endMark = null)
         {
-            await jsRuntime.InvokeInstanceMethodAsync(jsRuntimeObjectRef, "performance.measure", name, startMark, endMark);
+            await jsRuntime.InvokeInstanceMethodAsync(windowRef, "performance.measure", name, startMark, endMark);
         }
 
         /// <summary>
@@ -122,7 +122,7 @@ namespace BrowserInterop.Performance
         /// <returns></returns>
         public async Task<double> Now()
         {
-            return await jsRuntime.InvokeInstanceMethodAsync<double>(jsRuntimeObjectRef, "performance.now");
+            return await jsRuntime.InvokeInstanceMethodAsync<double>(windowRef, "performance.now");
         }
 
         /// <summary>
@@ -132,7 +132,17 @@ namespace BrowserInterop.Performance
         /// <returns></returns>
         public async Task SetResourceTimingBufferSize(long maxSize)
         {
-            await jsRuntime.InvokeInstanceMethodAsync(jsRuntimeObjectRef, "performance.setResourceTimingBufferSize", maxSize);
+            await jsRuntime.InvokeInstanceMethodAsync(windowRef, "performance.setResourceTimingBufferSize", maxSize);
+        }
+
+        /// <summary>
+        /// This event is fired when the browser's resource timing buffer is full.
+        /// </summary>
+        /// <param name="toDo"></param>
+        /// <returns></returns>
+        public async Task<IAsyncDisposable> OnResourceTimingBufferFull(Func<Task> toDo)
+        {
+            return await jsRuntime.AddEventListener(windowRef, "performance", "resourcetimingbufferfull", toDo);
         }
 
         internal static Type ConvertStringToType(string str)

@@ -162,5 +162,11 @@ context('window.performance', () => {
                 });
         });
     });
+    it('window performance bufferFullHandled', () => {
+        cy.window().then((w) => {
+            w.performance.dispatchEvent(new Event("resourcetimingbufferfull"));
+            cy.get('#window-performance-bufferFullHandled').should('have.text', '1');
+        });
+    });
 }
 );

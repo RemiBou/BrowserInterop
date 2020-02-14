@@ -17,8 +17,9 @@
 
     <button id="btn-window-performance-setResourceTimingBufferSize" type="button" @onclick="@(async () => await window.Performance.SetResourceTimingBufferSize(123456789))">SetResourceTimingBufferSize</button>
     <ul>
-        <li>TimeOrigin : <span id="window-performance-timeorigin">@timeOrigin?.ToString(System.Globalization.CultureInfo.InvariantCulture)</span></li>
+        <li>TimeOrigin : <span id="window-performance-timeorigin">@timeOrigin?.ToString(".00",System.Globalization.CultureInfo.InvariantCulture)</span></li>
         <li>Now : <span id="window-performance-now">@now?.ToString(System.Globalization.CultureInfo.InvariantCulture)</span></li>
+        <li>bufferFullHandled : <span id="window-performance-bufferFullHandled">@bufferFullHandled</span></li>
     </ul>
     @if(entries != null){
         <text>Entries : </text>
@@ -33,11 +34,16 @@
     private WindowInterop window;
     private double? timeOrigin;
     private double? now;
+    private int bufferFullHandled = 0;
     protected override async Task OnInitializedAsync()
     {
         window = await jsRuntime.Window();
         timeOrigin = await window.Performance.TimeOrigin();
         now = await window.Performance.Now();
-
+        await window.Performance.OnResourceTimingBufferFull(() => {
+            bufferFullHandled++;
+            StateHasChanged();
+            return Task.CompletedTask;
+        });
     }
 }
