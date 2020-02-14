@@ -12,17 +12,19 @@ namespace BrowserInterop.Performance
         {
             if (!JsonDocument.TryParseValue(ref reader, out var jsonDocument))
                 return null;
-            var entryTypeStr = jsonDocument.RootElement.GetProperty("entryType").GetRawText();
+
+            var entryTypeStr = jsonDocument.RootElement.GetProperty("entryType").GetString();
             Type entryType = entryTypeStr switch
             {
                 "mark" => typeof(PerformanceMark),
                 "measure" => typeof(PerformanceMeasure),
-                "frame" => typeof(PerformanceMark),
+                "frame" => typeof(PerformanceFrameTiming),
                 "navigation" => typeof(PerformanceNavigationTiming),
-                "resource" => typeof(PerformanceMark),
-                "paint" => typeof(PerformanceMark),
+                "resource" => typeof(PerformanceResourceTiming),
+                "paint" => typeof(PerformancePaintTiming),
                 _ => typeof(PerformanceMark)
             };
+            Console.WriteLine(entryType.ToString() + "-" + entryTypeStr);
             return (PerformanceEntry)JsonSerializer.Deserialize(jsonDocument.RootElement.GetRawText(), entryType, options);
         }
 

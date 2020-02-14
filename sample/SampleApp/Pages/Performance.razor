@@ -15,7 +15,7 @@
         <text>Entries : </text>
         <ul>
             @foreach(var entry in entries){
-                <li>@entry.Name - @entry.EntryType - @entry.StartTimeTimeSpan - @entry.DurationTimeSpan</li>
+                <li performance-type="@entry.EntryType" performance-name="@entry.Name">@entry.Name - @entry.EntryType - @entry.StartTime.HighResolutionTimeStampToTimeSpan() - @entry.Duration.HighResolutionTimeStampToTimeSpan()</li>
             }
         </ul>
     }

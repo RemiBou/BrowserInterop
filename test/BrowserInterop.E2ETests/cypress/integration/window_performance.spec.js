@@ -56,6 +56,8 @@ context('window.performance', () => {
                 .then(() => {
                     expect(w.performance.getEntries).to.be.calledOnce;
                     expect(w.performance.getEntries).to.be.calledWith();
+                    //we check only the item count, if there is some bug we'll had more check
+                    cy.get("li[performance-type]").should('have.length', entries.length);
 
                 });
         });
