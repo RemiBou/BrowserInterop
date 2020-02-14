@@ -62,5 +62,38 @@ context('window.performance', () => {
                 });
         });
     })
+
+    it('window performance getEntriesByName', () => {
+        cy.window().then((w) => {
+            var entries = w.performance.getEntriesByName("first-paint");
+            cy.spyFix(w.performance, 'getEntriesByName', w);
+            cy.get('#btn-window-performance-getEntriesByName')
+                .click()
+                .then(() => {
+                    expect(w.performance.getEntriesByName).to.be.calledOnce;
+                    expect(w.performance.getEntriesByName).to.be.calledWith("first-paint");
+                    //we check only the item count, if there is some bug we'll had more check
+                    cy.get("li[performance-type]").should('have.length', entries.length);
+
+                });
+        });
+    });
+
+
+    it('window performance getEntriesByName with Type', () => {
+        cy.window().then((w) => {
+            var entries = w.performance.getEntriesByName("first-paint", "paint");
+            cy.spyFix(w.performance, 'getEntriesByName', w);
+            cy.get('#btn-window-performance-getEntriesByNameWithType')
+                .click()
+                .then(() => {
+                    expect(w.performance.getEntriesByName).to.be.calledOnce;
+                    expect(w.performance.getEntriesByName).to.be.calledWith("first-paint", "paint");
+                    //we check only the item count, if there is some bug we'll had more check
+                    cy.get("li[performance-type]").should('have.length', entries.length);
+
+                });
+        });
+    });
 }
 );

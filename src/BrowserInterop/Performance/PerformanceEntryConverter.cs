@@ -14,16 +14,7 @@ namespace BrowserInterop.Performance
                 return null;
 
             var entryTypeStr = jsonDocument.RootElement.GetProperty("entryType").GetString();
-            Type entryType = entryTypeStr switch
-            {
-                "mark" => typeof(PerformanceMark),
-                "measure" => typeof(PerformanceMeasure),
-                "frame" => typeof(PerformanceFrameTiming),
-                "navigation" => typeof(PerformanceNavigationTiming),
-                "resource" => typeof(PerformanceResourceTiming),
-                "paint" => typeof(PerformancePaintTiming),
-                _ => typeof(PerformanceMark)
-            };
+            Type entryType = PerformanceInterop.ConvertStringToType(entryTypeStr);
             return (PerformanceEntry)JsonSerializer.Deserialize(jsonDocument.RootElement.GetRawText(), entryType, options);
         }
 

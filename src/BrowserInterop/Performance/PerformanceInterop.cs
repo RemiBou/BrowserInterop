@@ -66,5 +66,53 @@ namespace BrowserInterop.Performance
         {
             return await jsRuntime.InvokeInstanceMethodAsync<PerformanceEntry[]>(jsRuntimeObjectRef, "performance.getEntries");
         }
+
+
+
+        /// <summary>
+        /// returns a list of all PerformanceEntry objects for the page.
+        /// </summary>
+        /// <returns></returns>
+        public async Task<PerformanceEntry[]> GetEntriesByName(string name)
+        {
+            return await jsRuntime.InvokeInstanceMethodAsync<PerformanceEntry[]>(jsRuntimeObjectRef, "performance.getEntriesByName", name);
+        }
+
+        /// <summary>
+        /// returns a list of all PerformanceEntry objects for the page.
+        /// </summary>
+        /// <returns></returns>
+        public async Task<T[]> GetEntriesByName<T>(string name) where T : PerformanceEntry
+        {
+            return await jsRuntime.InvokeInstanceMethodAsync<T[]>(jsRuntimeObjectRef, "performance.getEntriesByName", name, ConvertTypeToString(typeof(T)));
+        }
+
+        internal static Type ConvertStringToType(string str)
+        {
+            return str switch
+            {
+                "mark" => typeof(PerformanceMark),
+                "measure" => typeof(PerformanceMeasure),
+                "frame" => typeof(PerformanceFrameTiming),
+                "navigation" => typeof(PerformanceNavigationTiming),
+                "resource" => typeof(PerformanceResourceTiming),
+                "paint" => typeof(PerformancePaintTiming),
+                _ => typeof(PerformanceMark)
+            };
+        }
+
+        internal static string ConvertTypeToString(Type type)
+        {
+            return type switch
+            {
+                Type t when t == typeof(PerformanceMark) => "mark",
+                Type t when t == typeof(PerformanceMeasure) => "measure",
+                Type t when t == typeof(PerformanceFrameTiming) => "frame",
+                Type t when t == typeof(PerformanceNavigationTiming) => "navigation",
+                Type t when t == typeof(PerformanceResourceTiming) => "resource",
+                Type t when t == typeof(PerformancePaintTiming) => "paint",
+                _ => null
+            };
+        }
     }
 }

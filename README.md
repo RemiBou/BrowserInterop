@@ -146,6 +146,8 @@ Those are the first API covered, more will come, please open an issue if you thi
         - performance.clearMeasures
         - performance.clearMarks
         - performance.clearResourceTimings
+        - performance.getEntries
+        - performance.getEntriesByName
 ## Utility method
 
 With the development of the library I needed a few utilities method :

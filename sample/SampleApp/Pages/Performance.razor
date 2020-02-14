@@ -7,6 +7,8 @@
     <button id="btn-window-performance-clearMeasures" type="button" @onclick="@(async () => await window.Performance.ClearMeasures("test2"))">ClearMeasures</button>
     <button id="btn-window-performance-clearResourceTimings" type="button" @onclick="@(async () => await window.Performance.ClearResourceTimings())">ClearResourceTimings</button>
     <button id="btn-window-performance-getEntries" type="button" @onclick="@(async () => entries = await window.Performance.GetEntries())">GetEntries</button>
+    <button id="btn-window-performance-getEntriesByName" type="button" @onclick="@(async () => entries = await window.Performance.GetEntriesByName("first-paint"))">GetEntriesByName</button>
+    <button id="btn-window-performance-getEntriesByNameWithType" type="button" @onclick="@(async () => entries = await window.Performance.GetEntriesByName<PerformancePaintTiming>("first-paint"))">GetEntriesByNameWithType</button>
 
     <ul>
         <li>TimeOrigin : <span id="window-performance-timeorigin">@timeOrigin?.ToUnixTimeMilliseconds()</span></li>
