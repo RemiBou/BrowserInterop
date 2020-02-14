@@ -25,7 +25,7 @@ namespace BrowserInterop
             this.jsRuntimeObjectRef = jsRuntimeObjectRef;
             Geolocation = new GeolocationInterop(jsRuntime);
             Storage = new StorageManagerInterop(jsRuntime);
-            this.Connection?.SetJsRuntime(jsRuntime);
+            this.Connection?.SetJsRuntime(jsRuntime, jsRuntimeObjectRef);
         }
 
 
@@ -154,7 +154,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public async Task<bool> CanShare(ShareData shareData)
         {
-            return await jsRuntime.HasProperty("navigator.canShare") && await jsRuntime.InvokeAsync<bool>("navigator.canShare", shareData);
+            return await jsRuntime.HasProperty(jsRuntimeObjectRef, "navigator.canShare") && await jsRuntime.InvokeInstanceMethodAsync<bool>(jsRuntimeObjectRef, "navigator.canShare", shareData);
         }
 
         /// <summary>
@@ -183,7 +183,7 @@ namespace BrowserInterop
                 throw new ArgumentException("Title parameter is mandatory", nameof(title));
             }
 
-            if (await jsRuntime.HasProperty("navigator.registerProtocolHandler"))
+            if (await jsRuntime.HasProperty(jsRuntimeObjectRef, "navigator.registerProtocolHandler"))
             {
                 await jsRuntime.InvokeVoidAsync("navigator.registerProtocolHandler", protocol, url, title);
             }
@@ -201,7 +201,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public async Task<bool> SendBeacon(string url, object data)
         {
-            return await jsRuntime.HasProperty("navigator.sendBeacon") && await jsRuntime.InvokeAsync<bool>("navigator.sendBeacon", url, data);
+            return await jsRuntime.HasProperty(jsRuntimeObjectRef, "navigator.sendBeacon") && await jsRuntime.InvokeInstanceMethodAsync<bool>(jsRuntimeObjectRef, "navigator.sendBeacon", url, data);
         }
 
         /// <summary>

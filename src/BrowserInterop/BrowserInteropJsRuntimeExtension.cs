@@ -125,15 +125,15 @@ namespace BrowserInterop
             return await jsRuntime.InvokeAsync<T>("browserInterop.callInstanceMethod", new object[] { windowObject, methodName }.Concat(arguments).ToArray());
         }
 
-        public static async Task<bool> HasProperty(this IJSRuntime jsRuntime, string propertyPath)
+        public static async Task<bool> HasProperty(this IJSRuntime jsRuntime, JsRuntimeObjectRef jsObject, string propertyPath)
         {
-            return await jsRuntime.InvokeAsync<bool>("browserInterop.hasProperty", propertyPath);
+            return await jsRuntime.InvokeAsync<bool>("browserInterop.hasProperty", jsObject, propertyPath);
         }
 
-        public static async Task<IAsyncDisposable> AddEventListener(this IJSRuntime jsRuntime, string propertyName, string eventName, Func<Task> callBack)
+        public static async Task<IAsyncDisposable> AddEventListener(this IJSRuntime jsRuntime, JsRuntimeObjectRef jsRuntimeObject, string propertyName, string eventName, Func<Task> callBack)
         {
             JSInteropActionWrapper actionWrapper = new JSInteropActionWrapper(jsRuntime, callBack);
-            var listenerId = await jsRuntime.InvokeAsync<int>("browserInterop.addEventListener", propertyName, eventName, DotNetObjectReference.Create(actionWrapper));
+            var listenerId = await jsRuntime.InvokeAsync<int>("browserInterop.addEventListener", jsRuntimeObject, propertyName, eventName, DotNetObjectReference.Create(actionWrapper));
             actionWrapper.SeListenerId(listenerId);
             return actionWrapper;
         }

@@ -175,10 +175,11 @@ await jsRuntime.InvokeInstanceMethodAsync<string>(windowObjectRef, "history.key"
 // will call the method navigator.storage.persist and will return default(bool) if there is no response after 3 secs
 jsRuntime.InvokeOrDefaultAsync<bool>("navigator.storage.persist",TimeSpan.FromSeconds(3), null)
 //will listen for the event until DisposeAsync is called on the result
-var listener = wait jSRuntime.AddEventListener("navigator.connection", "change", () => Console.WriteLine("navigator connection change"));
+var listener = await jSRuntime.AddEventListener(windowObjectRef, "navigator.connection", "change", () => Console.WriteLine("navigator connection change"));
+//stop listening to the event, you can also use "await using()" notation
 await listener.DisposeAsync();
 //will return true if window.navigator.registerProtocolHandler property exists
-await jsRuntime.HasProperty("navigator.registerProtocolHandler")
+await jsRuntime.HasProperty(windowObjectRef, "navigator.registerProtocolHandler")
 ```
 
     

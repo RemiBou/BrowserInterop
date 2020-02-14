@@ -29,8 +29,8 @@ browserInterop = new (function () {
     this.getProperty = function (propertyPath) {
         return me.getInstanceProperty(window, propertyPath);
     };
-    this.hasProperty = function (propertyPath) {
-        return me.getProperty(propertyPath) !== null;
+    this.hasProperty = function (instance, propertyPath) {
+        return me.getInstanceProperty(instance, propertyPath) !== null;
     };
     this.getPropertyRef = function (propertyPath) {
         return me.getInstancePropertyRef(window, propertyPath);
@@ -96,9 +96,9 @@ browserInterop = new (function () {
         }
         var method = me.getInstanceProperty(instance, methodPath);
         return method.apply(instance, args);
-    }
-    this.addEventListener = function (propertyPath, eventName, dotnetAction) {
-        var target = me.getProperty(propertyPath);
+    };
+    this.addEventListener = function (instance, propertyPath, eventName, dotnetAction) {
+        var target = me.getInstanceProperty(instance, propertyPath);
         var methodRef = function () {
             return dotnetAction.invokeMethodAsync('Invoke');
         }
