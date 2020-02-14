@@ -24,7 +24,6 @@ namespace BrowserInterop.Performance
                 "paint" => typeof(PerformancePaintTiming),
                 _ => typeof(PerformanceMark)
             };
-            Console.WriteLine(entryType.ToString() + "-" + entryTypeStr);
             return (PerformanceEntry)JsonSerializer.Deserialize(jsonDocument.RootElement.GetRawText(), entryType, options);
         }
 
