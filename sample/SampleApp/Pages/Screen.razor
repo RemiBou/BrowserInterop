@@ -3,6 +3,8 @@
 @using BrowserInterop
 @using BrowserInterop.Screen
 Screen :
+<button type="button" id="btn-window-screen-lock" @onclick="@(async() => await screen.Orientation.Lock(ScreenOrientationTypeEnum.LandscapePrimary))">Lock</button>
+<button type="button" id="btn-window-screen-unlock" @onclick="@(async() => await screen.Orientation.Unlock())">Unlock</button>
 <ul>
     <li>AvailWidth : <span id="window-screen-AvailWidth">@screen?.AvailWidth</span></li>
     <li>AvailHeight : <span id="window-screen-AvailHeight">@screen?.AvailHeight</span></li>

@@ -56,21 +56,30 @@ namespace BrowserInterop.Screen
         /// <summary>
         /// Locks the orientation of the containing document to its default orientation
         /// </summary>
-        /// <param name="toDo"></param>
         /// <returns></returns>
-        public async Task Lock()
+        public async Task Lock(ScreenOrientationTypeEnum newOrientation)
         {
-            await jsRuntime.InvokeInstanceMethodAsync(windowRef, "screen.orientation", "lock");
+            await jsRuntime.InvokeInstanceMethodAsync(windowRef, "screen.orientation.lock", newOrientation switch
+            {
+                ScreenOrientationTypeEnum.Any => "any",
+                ScreenOrientationTypeEnum.Natural => "natural",
+                ScreenOrientationTypeEnum.Landscape => "landscape",
+                ScreenOrientationTypeEnum.Portrait => "portrait",
+                ScreenOrientationTypeEnum.PortraitPrimary => "portrait-primary",
+                ScreenOrientationTypeEnum.PortraitSecondary => "portrait-secondary",
+                ScreenOrientationTypeEnum.LandscapePrimary => "landscape-primary",
+                ScreenOrientationTypeEnum.LandscapeSecondary => "landscape-secondary",
+                _ => throw new NotImplementedException(),
+            });
         }
 
         /// <summary>
-        /// Locks the orientation of the containing document to its default orientation
+        /// Unlock the orientation of the containing document 
         /// </summary>
-        /// <param name="toDo"></param>
         /// <returns></returns>
         public async Task Unlock()
         {
-            await jsRuntime.InvokeInstanceMethodAsync(windowRef, "screen.orientation", "unlock");
+            await jsRuntime.InvokeInstanceMethodAsync(windowRef, "screen.orientation.unlock");
         }
     }
 
@@ -79,6 +88,10 @@ namespace BrowserInterop.Screen
     /// </summary>
     public enum ScreenOrientationTypeEnum
     {
+        Any,
+        Natural,
+        Landscape,
+        Portrait,
         PortraitPrimary,
         PortraitSecondary,
         LandscapePrimary,

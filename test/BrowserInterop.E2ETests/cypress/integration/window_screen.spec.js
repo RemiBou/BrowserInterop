@@ -19,4 +19,32 @@ context('window.storage', () => {
                 cy.get("#window-screen-Width").should('have.text', w.screen.width.toString());
             });
     });
+    it('screen lock', function () {
+        cy.window()
+            .then(w => {
+                cy.spyFix(w.screen.orientation, 'lock', w);
+                cy.get("#btn-window-screen-lock")
+                    .click()
+                    .then(
+                        () => {
+                            expect(w.screen.orientation.lock).to.be.calledOnce
+                            expect(w.screen.orientation.lock).to.be.calledWith("landscape-primary");
+                        }
+                    );
+
+            });
+    });
+
+    it('screen unlock', function () {
+        cy.window()
+            .then(w => {
+                cy.spyFix(w.screen.orientation, 'unlock', w);
+                cy.get("#btn-window-screen-unlock")
+                    .click()
+                    .then(
+                        () => expect(w.screen.orientation.unlock).to.be.calledOnce
+                    );
+
+            });
+    });
 });
