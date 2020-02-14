@@ -47,4 +47,14 @@ context('window.storage', () => {
 
             });
     });
+
+
+    it('screen onchange', function () {
+        cy.window()
+            .then(w => {
+                w.screen.orientation.dispatchEvent(new Event("change"));
+                cy.get('#window-screen-changeHandled').should('have.text', '1');
+
+            });
+    });
 });

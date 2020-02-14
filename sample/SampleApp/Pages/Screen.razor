@@ -15,13 +15,20 @@ Screen :
     <li>Orientation.Angle : <span id="window-screen-Orientation-Angle">@screen?.Orientation.Angle</span></li>
     <li>PixelDepth : <span id="window-screen-PixelDepth">@screen?.PixelDepth</span></li>
     <li>Width : <span id="window-screen-Width">@screen?.Width</span></li>
+    <li>changeHandled : <span id="window-screen-changeHandled">@changeHandled</span></li>
 </ul>
 @code{
     private WindowInterop window;
     private ScreenInterop screen;
+    private int changeHandled = 0;
     protected override async Task OnInitializedAsync()
     {
         window = await jsRuntime.Window();
         screen = await window.Screen();
+        await screen.Orientation.OnChange(() => {
+            changeHandled++;
+            StateHasChanged();
+            return Task.CompletedTask;
+        });
     }
 }
