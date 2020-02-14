@@ -20,6 +20,9 @@ namespace BrowserInterop
         private Lazy<BarPropInterop> locationBarLazy;
         private Lazy<BarPropInterop> menuBarLazy;
         private Lazy<BarPropInterop> personalBarLazy;
+        private Lazy<BarPropInterop> scrollBarsLazy;
+        private Lazy<BarPropInterop> statusBarLazy;
+        private Lazy<BarPropInterop> toolBarLazy;
         private IJSRuntime jsRuntime;
 
         internal void SetJsRuntime(IJSRuntime jsRuntime, JsRuntimeObjectRef windowRef)
@@ -34,6 +37,9 @@ namespace BrowserInterop
             personalBarLazy = new Lazy<BarPropInterop>(() => new BarPropInterop(windowRef, "personalbar", jsRuntime));
             locationBarLazy = new Lazy<BarPropInterop>(() => new BarPropInterop(windowRef, "locationbar", jsRuntime));
             menuBarLazy = new Lazy<BarPropInterop>(() => new BarPropInterop(windowRef, "menubar", jsRuntime));
+            scrollBarsLazy = new Lazy<BarPropInterop>(() => new BarPropInterop(windowRef, "scrollbars", jsRuntime));
+            statusBarLazy = new Lazy<BarPropInterop>(() => new BarPropInterop(windowRef, "statusbar", jsRuntime));
+            toolBarLazy = new Lazy<BarPropInterop>(() => new BarPropInterop(windowRef, "toolbar", jsRuntime));
             this.jsRuntime = jsRuntime;
             this.windowRef = windowRef;
         }
@@ -170,6 +176,58 @@ namespace BrowserInterop
             ScreenInterop screeninterop = await jsRuntime.GetInstancePropertyAsync<ScreenInterop>(windowRef, "screen");
             screeninterop.SetJSRuntime(jsRuntime, this.windowRef);
             return screeninterop;
+        }
+
+        /// <summary>
+        /// return the horizontal distance from the left border of the user's browser viewport to the left side of the screen.
+        /// </summary>
+        /// <value></value>
+        public int ScreenX { get; set; }
+
+        /// <summary>
+        ///  return the vertical distance from the top border of the user's browser viewport to the top side of the screen.
+        /// </summary>
+        /// <value></value>
+        public int ScreenY { get; set; }
+
+        /// <summary>
+        /// Returns the scrollbars object, whose visibility can be toggled in the window.
+        /// </summary>
+        public BarPropInterop ScrollBars => scrollBarsLazy.Value;
+
+        /// <summary>
+        /// the number of pixels that the document has already been scrolled horizontally.
+        /// </summary>
+        /// <value></value>
+        public int ScrollX { get; set; }
+
+        /// <summary>
+        /// Returns the number of pixels that the document has already been scrolled vertically.
+        /// </summary>
+        /// <value></value>
+        public int ScrollY { get; set; }
+
+        /// <summary>
+        /// Returns the statusbar object, whose visibility can be toggled in the window.
+        /// </summary>
+        public BarPropInterop StatusBar => statusBarLazy.Value;
+
+
+        /// <summary>
+        /// Returns the toolbar object, whose visibility can be toggled in the window.
+        /// </summary>
+        public BarPropInterop ToolBar => toolBarLazy.Value;
+
+        /// <summary>
+        /// Returns a reference to the parent of the current window or subframe
+        /// </summary>
+        /// <returns></returns>
+        public async Task<WindowInterop> Top()
+        {
+            var propertyRef = await jsRuntime.GetInstancePropertyRefAsync(windowRef, "top");
+            var window = await jsRuntime.GetInstancePropertyAsync<WindowInterop>(windowRef, "top", false);
+            window?.SetJsRuntime(jsRuntime, propertyRef);
+            return window;
         }
 
     }

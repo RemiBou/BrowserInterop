@@ -166,6 +166,15 @@ Those are the first API covered, more will come, please open an issue if you thi
         - screen.orientation.unlock
         - screen.pixelDepth
         - screen.width
+    - window.screenX
+    - window.screenY
+    - window.scrollBars
+    - window.scrollX
+    - window.scrollY
+    - window.statusBar
+    - window.toolBar
+    - window.top
+
 ## Utility method
 
 With the development of the library I needed a few utilities method :
