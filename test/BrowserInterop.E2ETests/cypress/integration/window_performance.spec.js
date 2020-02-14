@@ -32,6 +32,18 @@ context('window.performance', () => {
                     expect(w.performance.clearMeasures).to.be.calledWith('test2');
                 });
         });
+    });
+
+    it('window performance clearResourceTimings', () => {
+        cy.window().then((w) => {
+            cy.spyFix(w.performance, 'clearResourceTimings', w);
+            cy.get('#btn-window-performance-clearResourceTimings')
+                .click()
+                .then(() => {
+                    expect(w.performance.clearResourceTimings).to.be.calledOnce;
+                    expect(w.performance.clearResourceTimings).to.be.calledWith();
+                });
+        });
     })
 }
 );

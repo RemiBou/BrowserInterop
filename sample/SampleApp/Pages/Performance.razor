@@ -4,6 +4,7 @@
     <text>Performance : </text> 
     <button id="btn-window-performance-clearMarks" type="button" @onclick="@(async () => await window.Performance.ClearMarks("test"))">ClearMarks</button>
     <button id="btn-window-performance-clearMeasures" type="button" @onclick="@(async () => await window.Performance.ClearMeasures("test2"))">ClearMeasures</button>
+    <button id="btn-window-performance-clearResourceTimings" type="button" @onclick="@(async () => await window.Performance.ClearResourceTimings())">ClearResourceTimings</button>
 
     <ul>
         <li>TimeOrigin : <span id="window-performance-timeorigin">@timeOrigin?.ToUnixTimeMilliseconds()</span></li>

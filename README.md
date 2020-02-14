@@ -145,6 +145,7 @@ Those are the first API covered, more will come, please open an issue if you thi
         - performance.timeOrigin
         - performance.clearMeasures
         - performance.clearMarks
+        - performance.clearResourceTimings
 ## Utility method
 
 With the development of the library I needed a few utilities method :

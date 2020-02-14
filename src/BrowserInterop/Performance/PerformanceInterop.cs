@@ -50,5 +50,15 @@ namespace BrowserInterop.Performance
         {
             await jsRuntime.InvokeInstanceMethodAsync(jsRuntimeObjectRef, "performance.clearMeasures", name);
         }
+
+
+        /// <summary>
+        /// removes all performance entries with an entryType of "resource" from the browser's performance data buffer and sets the size of the performance data buffer to zero. To set the size of the browser's performance data buffer, use the Performance.setResourceTimingBufferSize() method.
+        /// </summary>        
+        /// <returns></returns>
+        public async Task ClearResourceTimings()
+        {
+            await jsRuntime.InvokeInstanceMethodAsync(jsRuntimeObjectRef, "performance.clearResourceTimings");
+        }
     }
 }
