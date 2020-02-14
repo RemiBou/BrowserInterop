@@ -104,6 +104,18 @@ namespace BrowserInterop.Performance
             await jsRuntime.InvokeInstanceMethodAsync(jsRuntimeObjectRef, "performance.mark", name);
         }
 
+        /// <summary>
+        /// The measure() method creates a named timestamp in the browser's performance entry buffer between marks, the navigation start time, or the current time. When measuring between two marks, there is a start mark and end mark, respectively. The named timestamp is referred to as a measure.
+        /// </summary>
+        /// <param name="name"> the name of the measure.</param>
+        /// <param name="startMark"> the name of the measure's starting mark. May also be the name of a PerformanceTiming property. If it is omitted, then the start time will be the navigation start time.</param>
+        /// <param name="endMark">the name of the measure's ending mark. May also be the name of a PerformanceTiming property. If it is omitted, then the current time is used.</param>
+        /// <returns></returns>
+        public async Task Measure(string name, string startMark = null, string endMark = null)
+        {
+            await jsRuntime.InvokeInstanceMethodAsync(jsRuntimeObjectRef, "performance.measure", name, startMark, endMark);
+        }
+
         internal static Type ConvertStringToType(string str)
         {
             return str switch

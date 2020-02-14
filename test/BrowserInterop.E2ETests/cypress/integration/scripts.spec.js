@@ -43,6 +43,19 @@ context('scripts', () => {
                 expect(obj.method).to.be.called.calledWith("A", "B");
             });
     });
+
+
+    it('callInstanceMethod change null parameters to undefined', () => {
+        cy.window()
+            .its('browserInterop')
+            .then(b => {
+                var obj = { method: function (a, b) { } };
+                cy.spy(obj, 'method');
+                b.callInstanceMethod(obj, "method", null, null)
+                expect(obj.method).to.be.called.calledWith(undefined, undefined);
+            });
+    });
+
     it('getSerializableObject return only first layer when deep is false', () => {
         cy.window()
             .its('browserInterop')

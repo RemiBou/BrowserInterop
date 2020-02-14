@@ -87,6 +87,13 @@ browserInterop = new (function () {
             instance = me.getInstanceProperty(instance, instancePath);
             methodPath = methodPath.substring(methodPath.lastIndexOf('.') + 1);
         }
+        for (let index = 0; index < args.length; index++) {
+            const element = args[index];
+            //we change null value to undefined as there is no way to pass undefined value from C# and most of the browser API use undefined instead of null value for "no value"
+            if (element === null) {
+                args[index] = undefined;
+            }
+        }
         var method = me.getInstanceProperty(instance, methodPath);
         return method.apply(instance, args);
     }

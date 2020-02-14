@@ -123,5 +123,18 @@ context('window.performance', () => {
                 });
         });
     });
+
+
+    it('window performance measure', () => {
+        cy.window().then((w) => {
+            cy.spyFix(w.performance, 'measure', w);
+            cy.get('#btn-window-performance-measure')
+                .click()
+                .then(() => {
+                    expect(w.performance.measure).to.be.calledOnce;
+                    expect(w.performance.measure).to.be.calledWith("testmeasure");
+                });
+        });
+    });
 }
 );
