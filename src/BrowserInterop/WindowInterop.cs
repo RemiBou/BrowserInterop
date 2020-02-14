@@ -18,6 +18,7 @@ namespace BrowserInterop
         private Lazy<PerformanceInterop> performanceInteropLazy;
         private Lazy<BarPropInterop> locationBarLazy;
         private Lazy<BarPropInterop> menuBarLazy;
+        private Lazy<BarPropInterop> personalBarLazy;
         private IJSRuntime jsRuntime;
 
         internal void SetJsRuntime(IJSRuntime jsRuntime, JsRuntimeObjectRef jsRuntimeObjectRef)
@@ -29,6 +30,7 @@ namespace BrowserInterop
             historyInteropLazy = new Lazy<HistoryInterop>(() => new HistoryInterop(jsRuntime, jsRuntimeObjectRef));
             performanceInteropLazy = new Lazy<PerformanceInterop>(() => new PerformanceInterop(jsRuntime, jsRuntimeObjectRef));
             framesArrayInteropLazy = new Lazy<FramesArrayInterop>(() => new FramesArrayInterop(jsRuntimeObjectRef, jsRuntime));
+            personalBarLazy = new Lazy<BarPropInterop>(() => new BarPropInterop(jsRuntimeObjectRef, "personalbar", jsRuntime));
             locationBarLazy = new Lazy<BarPropInterop>(() => new BarPropInterop(jsRuntimeObjectRef, "locationbar", jsRuntime));
             menuBarLazy = new Lazy<BarPropInterop>(() => new BarPropInterop(jsRuntimeObjectRef, "menubar", jsRuntime));
             this.jsRuntime = jsRuntime;
@@ -152,6 +154,11 @@ namespace BrowserInterop
         ///  can be used to gather performance information about the current document.
         /// </summary>
         public PerformanceInterop Performance => performanceInteropLazy.Value;
+
+        /// <summary>
+        /// Returns the personalbar object, whose visibility can be toggled in the window.
+        /// </summary>
+        public BarPropInterop PersonalBar => personalBarLazy.Value;
 
     }
 }

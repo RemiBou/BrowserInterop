@@ -31,6 +31,7 @@ context('window.navigator', () => {
                 cy.get("#window-outerWidth").should("have.text", w.outerWidth.toString());
                 cy.get("#window-outerHeight").should("have.text", w.outerHeight.toString());
                 cy.get("#window-name").should("have.text", w.name.toString());
+                cy.get("#window-personalbar").should("have.text", w.personalbar.visible.toString());
             });
     });
 

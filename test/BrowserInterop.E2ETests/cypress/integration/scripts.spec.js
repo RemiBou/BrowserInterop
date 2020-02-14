@@ -121,6 +121,17 @@ context('scripts', () => {
                 expect(res).to.be.eq(0);
             });
     });
+    it('getSerializableObject serialize boolean', () => {
+        cy.window()
+            .its('browserInterop')
+            .then(b => {
+                var obj = { field1: true, field2: false };
+                var res = b.getInstancePropertySerializable(obj, 'field1', false);
+                expect(res).to.be.eq(true);
+                res = b.getInstancePropertySerializable(obj, 'field2', false);
+                expect(res).to.be.eq(false);
+            });
+    });
     it('callInstanceMethod apply to sub property if method is in child', () => {
         cy.window()
             .its('browserInterop')

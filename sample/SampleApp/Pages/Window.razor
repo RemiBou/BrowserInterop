@@ -15,6 +15,7 @@ Window :
     <li>Name: <span id="window-name">@window?.Name</span></li>
     <li>Opener Name: <span id="window-opener-name">@opener?.Name</span></li>
     <li>Parent Name: <span id="window-parent-name">@parent?.Name</span></li>
+    <li>Personal Bar: <span id="window-personalbar">@personalBarVisible?.ToString().ToLower()</span></li>
 
 </ul>
 @code{
@@ -22,9 +23,11 @@ Window :
     private WindowInterop child;
     private WindowInterop opener;
     private WindowInterop parent;
+    private bool? personalBarVisible;
     protected override async Task OnInitializedAsync()
     {
         window = await jsRuntime.Window();
+        personalBarVisible = await window.PersonalBar.GetVisible();
         
     }
     protected async Task GetOpener(){

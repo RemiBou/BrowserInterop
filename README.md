@@ -154,6 +154,7 @@ Those are the first API covered, more will come, please open an issue if you thi
         - performance.now
         - performance.setResourceTimingBufferSize
         - performance.onResourceTimingBufferFull
+    - window.personalbar
 ## Utility method
 
 With the development of the library I needed a few utilities method :

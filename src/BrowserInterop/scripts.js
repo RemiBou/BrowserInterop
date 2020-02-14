@@ -123,7 +123,7 @@ browserInterop = new (function () {
             data === null) {
             return null;
         }
-        if (typeof data === "number" || typeof data === "string") {
+        if (typeof data === "number" || typeof data === "string" || typeof data == "boolean") {
             return data;
         }
         var res = {};
