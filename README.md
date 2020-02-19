@@ -5,15 +5,15 @@
 This library provides access to browser API in a Blazor App. 
 
 The following criteria are taken into account for choosing if an API must be handled :
-- Is it already doable with Blazor (like xhr or dom manipulation) ?
+- Is it already doable with Blazor (like XHR or DOM manipulation) ?
 - Is that part of the standard ?
 - Is that implemented by most browsers ? (> 75% in caniuse)
 
 This library aim at providing some added value which are :
+- Better deserialization than default : DomString, Infinity, Array-like map ...
 - Better typing : duration as TimeSpan, string as enum ...
 - Use IAsyncDisposable for method call that must be executed around a code block (like profiling) or event subscription
 - Func for event subscription
-- Check for method implementation
 
 I use the following website for discovering API description https://developer.mozilla.org/en-US/docs/Web/API and this one for finding out if it is implemented  https://caniuse.com/.
 
@@ -174,6 +174,16 @@ Those are the first API covered, more will come, please open an issue if you thi
     - window.statusBar
     - window.toolBar
     - window.top
+    - window.visualViewport
+        - visualViewport.offsetLeft
+        - visualViewport.offsetTop
+        - visualViewport.pageLeft
+        - visualViewport.pageTop
+        - visualViewport.width
+        - visualViewport.height
+        - visualViewport.scale
+        - visualViewport.resize
+        - visualViewport.scroll
 
 ## Utility method
 
@@ -203,8 +213,6 @@ await listener.DisposeAsync();
 //will return true if window.navigator.registerProtocolHandler property exists
 await jsRuntime.HasProperty(windowObjectRef, "navigator.registerProtocolHandler")
 ```
-
-    
 
 
 

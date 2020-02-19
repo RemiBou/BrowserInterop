@@ -230,5 +230,16 @@ namespace BrowserInterop
             return window;
         }
 
+        /// <summary>
+        ///  represents the visual viewport for a given window. For a page containing iframes, each iframe, as well as the containing page, will have a unique window object. Each window on a page will have a unique VisualViewport representing the properties associated with that window.
+        /// </summary>
+        /// <returns></returns>
+        public async Task<VisualViewportInterop> VisualViewport()
+        {
+            var visualViewport = await jsRuntime.GetInstancePropertyAsync<VisualViewportInterop>(windowRef, "visualViewport", false);
+            visualViewport?.SetJsRuntime(jsRuntime, this.windowRef);
+            return visualViewport;
+        }
+
     }
 }
