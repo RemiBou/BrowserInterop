@@ -241,5 +241,82 @@ namespace BrowserInterop
             return visualViewport;
         }
 
+        /// <summary>
+        /// Returns a boolean indicating whether the current context is secure (true) or not (false).
+        /// </summary>
+        /// <value></value>
+        public bool IsSecureContext { get; set; }
+
+        /// <summary>
+        /// Returns the global object's origin, serialized as a string. 
+        /// </summary>
+        /// <value></value>
+        public string Origin { get; set; }
+
+        /// <summary>
+        /// A string you want to display in the alert dialog
+        /// </summary>
+        /// <param name="message"></param>
+        /// <returns></returns>
+        public async Task Alert(string message)
+        {
+            await jsRuntime.InvokeInstanceMethodAsync(windowRef, "alert", message);
+        }
+
+        /// <summary>
+        /// Shifts focus away from the window.
+        /// </summary>
+        /// <returns></returns>
+        public async Task Blur()
+        {
+            await jsRuntime.InvokeInstanceMethodAsync(windowRef, "blur");
+        }
+
+        /// <summary>
+        /// Closes the current window.
+        /// </summary>
+        /// <returns></returns>
+        public async Task Close()
+        {
+            await jsRuntime.InvokeInstanceMethodAsync(windowRef, "close");
+        }
+
+        /// <summary>
+        /// The Window.confirm() method displays a modal dialog with an optional message and two buttons: OK and Cancel.
+        /// </summary>
+        /// <param name="message"></param>
+        /// <returns></returns>
+        public async Task<bool> Confirm(string message)
+        {
+            return await jsRuntime.InvokeInstanceMethodAsync<bool>(windowRef, "confirm", message);
+        }
+
+        /// <summary>
+        /// Makes a request to bring the window to the front. It may fail due to user settings and the window isn't guaranteed to be frontmost before this method returns.
+        /// </summary>
+        /// <returns></returns>
+        public async Task Focus()
+        {
+            await jsRuntime.InvokeInstanceMethodAsync(windowRef, "focus");
+        }
+
+        /// <summary>
+        /// Minimize the window
+        /// </summary>
+        /// <returns></returns>
+        public async Task Minimize()
+        {
+            await jsRuntime.InvokeInstanceMethodAsync(windowRef, "minimize");
+
+        }
+
+        /// <summary>
+        /// Maximize the window
+        /// </summary>
+        /// <returns></returns>
+        public async Task Maximize()
+        {
+            await jsRuntime.InvokeInstanceMethodAsync(windowRef, "maximize");
+        }
     }
 }

@@ -32,10 +32,12 @@ context('window.navigator', () => {
                     cy.get("#window-outerHeight").should("have.text", w.outerHeight.toString());
                     cy.get("#window-name").should("have.text", w.name.toString());
                     cy.get("#window-personalbar").should("have.text", w.personalbar.visible.toString());
+                    cy.get("#window-IsSecureContext").should("have.text", w.isSecureContext.toString());
                     cy.get("#window-ScreenX").should("have.text", w.screenX.toString());
                     cy.get("#window-ScreenY").should("have.text", w.screenY.toString());
                     cy.get("#window-ScrollX").should("have.text", w.scrollX.toString());
                     cy.get("#window-ScrollY").should("have.text", w.scrollY.toString());
+                    cy.get("#window-Origin").should("have.text", w.origin);
 
                 })
             });
