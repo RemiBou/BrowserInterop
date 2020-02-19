@@ -74,21 +74,23 @@ context('window.navigator', () => {
     it('window viewport', () => {
         cy.window()
             .then(w => {
-                cy.get("#btn-window-visualviewport").click().then(() => {
-                    cy.get("#window-viewport-OffsetLeft").should("have.text", w.visualViewport.offsetLeft.toString());
-                    cy.get("#window-viewport-OffsetTop").should("have.text", w.visualViewport.offsetTop.toString());
-                    cy.get("#window-viewport-PageLeft").should("have.text", w.visualViewport.pageLeft.toString());
-                    cy.get("#window-viewport-PageTop").should("have.text", w.visualViewport.pageTop.toString());
-                    cy.get("#window-viewport-Width").should("have.text", w.visualViewport.width.toString());
-                    cy.get("#window-viewport-Height").should("have.text", w.visualViewport.height.toString());
-                    cy.get("#window-viewport-Scale").should("have.text", w.visualViewport.scale.toString());
-                    w.visualViewport.dispatchEvent(new Event("resize"));
-                    cy.get("#window-viewport-resizeHandled").should("have.text", '1');
+                if (w.visualViewport) {
+                    cy.get("#btn-window-visualviewport").click().then(() => {
+                        cy.get("#window-viewport-OffsetLeft").should("have.text", w.visualViewport.offsetLeft.toString());
+                        cy.get("#window-viewport-OffsetTop").should("have.text", w.visualViewport.offsetTop.toString());
+                        cy.get("#window-viewport-PageLeft").should("have.text", w.visualViewport.pageLeft.toString());
+                        cy.get("#window-viewport-PageTop").should("have.text", w.visualViewport.pageTop.toString());
+                        cy.get("#window-viewport-Width").should("have.text", w.visualViewport.width.toString());
+                        cy.get("#window-viewport-Height").should("have.text", w.visualViewport.height.toString());
+                        cy.get("#window-viewport-Scale").should("have.text", w.visualViewport.scale.toString());
+                        w.visualViewport.dispatchEvent(new Event("resize"));
+                        cy.get("#window-viewport-resizeHandled").should("have.text", '1');
 
-                    w.visualViewport.dispatchEvent(new Event("scroll"));
-                    cy.get("#window-viewport-scrollHandled").should("have.text", '1');
+                        w.visualViewport.dispatchEvent(new Event("scroll"));
+                        cy.get("#window-viewport-scrollHandled").should("have.text", '1');
 
-                });
+                    });
+                }
 
             });
     });
