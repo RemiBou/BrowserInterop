@@ -53,16 +53,19 @@ Visual Viewport :
         window = await jsRuntime.Window();
         personalBarVisible = await window.PersonalBar.GetVisible();
         viewport = await window.VisualViewport();
-        await viewport?.OnResize(() => {
-            resizeHandled++;
-            StateHasChanged();
-            return Task.CompletedTask;
-        });
-        await viewport?.OnScroll(() => {
-            scrollHandled++;
-            StateHasChanged();
-            return Task.CompletedTask;
-        });
+        if(viewport != null){
+            await viewport?.OnResize(() => {
+                resizeHandled++;
+                StateHasChanged();
+                return Task.CompletedTask;
+            });
+            
+            await viewport?.OnScroll(() => {
+                scrollHandled++;
+                StateHasChanged();
+                return Task.CompletedTask;
+            });
+        }
     }
     protected async Task GetOpener(){
         opener = await window.Opener();
