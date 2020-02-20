@@ -8,7 +8,7 @@
     "run": "wait-on -l http://localhost:5000 && cypress run",
     "wait-local": "wait-on -l http://localhost:5000",
     "start-server": "cd ../../sample/SampleApp && dotnet run --verbosity quiet /Logging:LogLevel:Microsoft.AspNetCore Warning",
-    "test": "docker pull --quiet cypress/included:4.0.0 && docker run --network='host' -v $PWD:/e2e -w /e2e cypress/included:4.0.0 --browser chrome --reporter junit --reporter-options mochaFile=junit-result-[hash].xml && docker run --network='host' -v $PWD:/e2e -w /e2e cypress/included:4.0.0 --browser firefox  --reporter junit --reporter-options mochaFile=junit-result-[hash].xml ",
+    "test": "docker pull --quiet cypress/included:4.0.2 && docker run --network='host' -v $PWD:/e2e -w /e2e cypress/included:4.0.2 --browser chrome --reporter junit --reporter-options mochaFile=junit-result-[hash].xml && docker run --network='host' -v $PWD:/e2e -w /e2e cypress/included:4.0.2 --browser firefox  --reporter junit --reporter-options mochaFile=junit-result-[hash].xml ",
     "ci": "start-server-and-test start-server http://localhost:5000 test"
   },
   "author": "",
