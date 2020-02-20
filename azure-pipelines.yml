@@ -43,7 +43,7 @@ steps:
     searchFolder: $(System.DefaultWorkingDirectory)/test/BrowserInterop.E2ETests/
     testRunTitle: LibTest
     testResultsFormat: JUnit
-    testResultsFiles: "**/junit-result.xml"
+    testResultsFiles: "**/junit-*-result-*.xml"
 
 - task: DotNetCoreCLI@2
   displayName: 'Create nuget package'
