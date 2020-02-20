@@ -2,12 +2,12 @@
 @inject IJSRuntime jsRuntime;
 @using BrowserInterop
 <iframe id="child-iframe" src="/navigator"></iframe><br/>
-<button id="btn-window" @onclick="async() => window = await jsRuntime.Window()">Get Opener</button>
+<button id="btn-window" @onclick="async() => window = await jsRuntime.Window()">Get window</button>
 
 <button id="btn-window-child-frame-console" @onclick="ChildFrameConsole">Child frame console</button>
 <button id="btn-window-name-set" @onclick="SetName">Set name</button>
 <button id="btn-window-opener" @onclick="GetOpener">Get Opener</button>
-<button id="btn-window-visualviewport" @onclick="async() => viewport = await window.VisualViewport()">Get Opener</button>
+<button id="btn-window-visualviewport" @onclick="async() => viewport = await window.VisualViewport()">Get viewport</button>
 <button id="btn-window-parent" @onclick="GetParent">Get Parent</button><br/>
 Window :
 <ul>
@@ -39,14 +39,6 @@ Visual Viewport :
     <li>resizeHandled: <span id="window-viewport-resizeHandled">@resizeHandled</span></li>
     <li>scrollHandled: <span id="window-viewport-scrollHandled">@scrollHandled</span></li>
 </ul>
-@if(exception != null){
-    <h2>Exception : </h2>
-    <pre>
-        @exception.Message
-    </pre>
-    <pre>@exception.StackTrace</pre>
-
-}
 @code{
     private WindowInterop window;
     private WindowInterop child;
@@ -56,10 +48,9 @@ Visual Viewport :
     private VisualViewportInterop viewport;
     private int resizeHandled;
     private int scrollHandled;
-    private Exception exception;
     protected override async Task OnInitializedAsync()
     {
-       try{ window = await jsRuntime.Window();
+        window = await jsRuntime.Window();
         personalBarVisible = await window.PersonalBar.GetVisible();
         viewport = await window.VisualViewport();
         if(viewport != null){
@@ -75,9 +66,6 @@ Visual Viewport :
                 return Task.CompletedTask;
             });
         }
-       } catch(Exception e){
-           this.exception = e;
-       }
     }
     protected async Task GetOpener(){
         opener = await window.Opener();
