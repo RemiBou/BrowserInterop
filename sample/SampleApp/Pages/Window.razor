@@ -39,6 +39,14 @@ Visual Viewport :
     <li>resizeHandled: <span id="window-viewport-resizeHandled">@resizeHandled</span></li>
     <li>scrollHandled: <span id="window-viewport-scrollHandled">@scrollHandled</span></li>
 </ul>
+@if(exception != null){
+    <h2>Exception : </h2>
+    <pre>
+        @exception.Message
+    </pre>
+    <pre>@exception.StackTrace</pre>
+
+}
 @code{
     private WindowInterop window;
     private WindowInterop child;
@@ -48,9 +56,10 @@ Visual Viewport :
     private VisualViewportInterop viewport;
     private int resizeHandled;
     private int scrollHandled;
+    private Exception exception;
     protected override async Task OnInitializedAsync()
     {
-        window = await jsRuntime.Window();
+       try{ window = await jsRuntime.Window();
         personalBarVisible = await window.PersonalBar.GetVisible();
         viewport = await window.VisualViewport();
         if(viewport != null){
@@ -66,6 +75,9 @@ Visual Viewport :
                 return Task.CompletedTask;
             });
         }
+       } catch(Exception e){
+           this.exception = e;
+       }
     }
     protected async Task GetOpener(){
         opener = await window.Opener();
