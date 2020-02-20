@@ -71,6 +71,6 @@ steps:
 - task: PublishPipelineArtifact@1
   displayName: 'Publish Cypress screenshot'
   inputs:
-    targetPath: test/BrowserInterop.E2ETests/cypress/screenshots/
+    targetPath: test/BrowserInterop.E2ETests/cypress/**/screenshots/
     artifact: 'Cypress screenshot'
   condition: succeededOrFailed()
