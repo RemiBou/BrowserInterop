@@ -52,17 +52,6 @@ context('window.navigator', () => {
             });
     });
 
-    /*
-        it('window get opener', () => {
-            cy.window()
-                .then(w => {
-                    cy.get("#btn-window-opener").click().then(
-                        () => cy.get("#window-opener-name").should("have.text", w.opener.name.toString())
-                    );
-                });
-        });*/
-
-
     it('window get parent', () => {
         cy.window()
             .then(w => {
@@ -96,4 +85,25 @@ context('window.navigator', () => {
 
             });
     });
+    function windowMethodCallCheck(methodName, stub, ...args) {
+        it("window " + methodName, () => {
+            cy.window()
+                .then(w => {
+                    cy.stubFix(w, methodName, w, stub);
+                    cy.get("#btn-window-" + methodName)
+                        .click()
+                        .then(() => {
+                            expect(w[methodName]).to.be.calledOnce;
+                            if (args.length > 0)
+                                expect(w[methodName]).to.be.calledWith(...args);
+                        });
+                });
+        });
+
+    };
+    windowMethodCallCheck("alert", () => { }, "test");
+    windowMethodCallCheck("blur", () => { });
+    windowMethodCallCheck("close", () => { });
+    windowMethodCallCheck("confirm", () => { return false; }, "test");
+    windowMethodCallCheck("focus", () => { });
 });

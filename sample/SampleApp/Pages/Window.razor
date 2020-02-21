@@ -9,6 +9,12 @@
 <button id="btn-window-opener" @onclick="GetOpener">Get Opener</button>
 <button id="btn-window-visualviewport" @onclick="async() => viewport = await window.VisualViewport()">Get viewport</button>
 <button id="btn-window-parent" @onclick="GetParent">Get Parent</button><br/>
+
+<button id="btn-window-alert" @onclick="@(async() => await window.Alert("test"))">Alert</button><br/>
+<button id="btn-window-blur" @onclick="@(async() => await window.Blur())">Blur</button><br/>
+<button id="btn-window-confirm" @onclick="@(async() => await window.Confirm("test"))">Confirm</button><br/>
+<button id="btn-window-close" @onclick="@(async() => await window.Close())">Close</button><br/>
+<button id="btn-window-focus" @onclick="@(async() => await window.Focus())">Focus</button><br/>
 Window :
 <ul>
     <li>InnerHeight: <span id="window-innerHeight">@window?.InnerHeight</span></li>

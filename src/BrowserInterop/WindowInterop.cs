@@ -299,24 +299,5 @@ namespace BrowserInterop
         {
             await jsRuntime.InvokeInstanceMethodAsync(windowRef, "focus");
         }
-
-        /// <summary>
-        /// Minimize the window
-        /// </summary>
-        /// <returns></returns>
-        public async Task Minimize()
-        {
-            await jsRuntime.InvokeInstanceMethodAsync(windowRef, "minimize");
-
-        }
-
-        /// <summary>
-        /// Maximize the window
-        /// </summary>
-        /// <returns></returns>
-        public async Task Maximize()
-        {
-            await jsRuntime.InvokeInstanceMethodAsync(windowRef, "maximize");
-        }
     }
 }
