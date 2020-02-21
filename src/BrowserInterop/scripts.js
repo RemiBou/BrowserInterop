@@ -24,8 +24,8 @@ browserInterop = new (function () {
         }
     };
     //this simple method will be used for getting the content of a given js object ref because js interop will call the reviver with the given C# js object ref
-    this.returnInstance = function (instance) {
-        return instance;
+    this.returnInstance = function (instance, deep) {
+        return this.getSerializableObject(instance, [], deep);
     }
     DotNet.attachReviver(this.jsObjectRefRevive);
     var me = this;

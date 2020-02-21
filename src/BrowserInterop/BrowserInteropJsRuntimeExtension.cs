@@ -131,9 +131,9 @@ namespace BrowserInterop
         /// <param name="jsRuntime1">Curent JS Runtime</param>
         /// <param name="windowObject">Reference to the JS instance</param>
         /// <returns></returns>
-        public static async Task<T> GetInstanceContent<T>(this IJSRuntime jsRuntime, JsRuntimeObjectRef windowObject)
+        public static async Task<T> GetInstanceContent<T>(this IJSRuntime jsRuntime, JsRuntimeObjectRef windowObject, bool deep)
         {
-            return await jsRuntime.InvokeAsync<T>("browserInterop.returnInstance", windowObject);
+            return await jsRuntime.InvokeAsync<T>("browserInterop.returnInstance", windowObject, deep);
         }
 
 

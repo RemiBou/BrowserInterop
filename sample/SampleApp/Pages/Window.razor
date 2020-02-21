@@ -15,7 +15,11 @@
 <button id="btn-window-close" @onclick="@(async() => await window.Close())">Close</button>
 <button id="btn-window-moveBy" @onclick="@(async() => await window.MoveBy(1,2))">MoveBy</button>
 <button id="btn-window-moveTo" @onclick="@(async() => await window.MoveTo(3,4))">MoveTo</button>
-<button id="btn-window-focus" @onclick="@(async() => await window.Focus())">Focus</button><br/>
+<button id="btn-window-focus" @onclick="@(async() => await window.Focus())">Focus</button>
+
+<button id="btn-window-open" @onclick="@(async() => opened = await window.Open("/window", "_blank"))">Open</button>
+
+<button id="btn-window-close-opened" @onclick="@(async() => await opened.Close())">Close Opened</button><br/>
 Window :
 <ul>
     <li>InnerHeight: <span id="window-innerHeight">@window?.InnerHeight</span></li>
@@ -46,8 +50,23 @@ Visual Viewport :
     <li>resizeHandled: <span id="window-viewport-resizeHandled">@resizeHandled</span></li>
     <li>scrollHandled: <span id="window-viewport-scrollHandled">@scrollHandled</span></li>
 </ul>
+WIndow opened :
+<ul>
+      <li>InnerHeight: <span id="opened-innerHeight">@opened?.InnerHeight</span></li>
+    <li>InnerWidth: <span id="opened-innerWidth">@opened?.InnerWidth</span></li>  
+    <li>OuterHeight: <span id="opened-outerHeight">@opened?.OuterHeight</span></li>
+    <li>OuterWidth: <span id="opened-outerWidth">@opened?.OuterWidth</span></li>  
+    <li>Name: <span id="opened-name">@opened?.Name</span></li>
+    <li>ScreenX: <span id="opened-ScreenX">@opened?.ScreenX</span></li>
+    <li>ScreenY: <span id="opened-ScreenY">@opened?.ScreenY</span></li>
+    <li>ScrollX: <span id="opened-ScrollX">@opened?.ScrollX</span></li>
+    <li>ScrollY: <span id="opened-ScrollY">@opened?.ScrollY</span></li>
+    <li>Origin: <span id="opened-Origin">@opened?.Origin</span></li>
+    <li>IsSecureContext : <span id="opened-IsSecureContext">@opened?.IsSecureContext.ToString().ToLower()</span></li>
+</ul>
 @code{
     private WindowInterop window;
+    private WindowInterop opened;
     private WindowInterop child;
     private WindowInterop opener;
     private WindowInterop parent;

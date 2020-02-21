@@ -329,10 +329,11 @@ namespace BrowserInterop
         /// <param name="windowName">the name of the browsing context (window, <iframe> or tab) into which to load the specified resource; if the name doesn't indicate an existing context, a new window is created and is given the name specified by windowName.</param>
         /// <param name="windowFeature">comma-separated list of window features given with their corresponding values in the form "name=value". These features include options such as the window's default size and position, whether or not to include scroll bars, and so forth. There must be no whitespace in the string.</param>
         /// <returns></returns>
-        public async Task<WindowInterop> Open(Uri url, string windowName = null, string windowFeature = null)
+        public async Task<WindowInterop> Open(string url, string windowName = null, WindowFeature windowFeature = null)
         {
-            var windowOpenRef = await jsRuntime.InvokeInstanceMethodGetRefAsync(windowRef, "open", url.ToString(), windowName, windowFeature);
-            var windowInterop = await jsRuntime.GetInstanceContent<WindowInterop>(windowOpenRef);
+
+            var windowOpenRef = await jsRuntime.InvokeInstanceMethodGetRefAsync(windowRef, "open", url, windowName, windowFeature);
+            var windowInterop = await jsRuntime.GetInstanceContent<WindowInterop>(windowOpenRef, false);
             windowInterop.SetJsRuntime(jsRuntime, windowOpenRef);
             return windowInterop;
         }
