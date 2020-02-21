@@ -149,4 +149,20 @@ context('scripts', () => {
                 expect(res).to.be.eq(2);
             });
     });
+
+    it('callInstanceMethodGetRef retruns object ref', () => {
+        cy.window()
+            .its('browserInterop')
+            .then(b => {
+                var tmp = { id: 3 };
+                var obj = new (function () {
+                    this.method = function () {
+                        return tmp;
+                    }
+                })();
+                var ref = b.callInstanceMethodGetRef(obj, 'method');
+                var res = b.jsObjectRefRevive(null, ref);
+                expect(res).to.be.eq(tmp);
+            });
+    });
 });

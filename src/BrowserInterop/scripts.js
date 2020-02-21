@@ -7,7 +7,7 @@ browserInterop = new (function () {
     const jsRefKey = '__jsObjectRefId'; // Keep in sync with ElementRef.cs
 
     //reviver will help me store js object ref on .net like the .net do with elementreference or dotnetobjectreference
-    DotNet.attachReviver((key, value) => {
+    this.jsObjectRefRevive = function (key, value) {
         if (value &&
             typeof value === 'object' &&
             value.hasOwnProperty(jsRefKey) &&
@@ -22,7 +22,12 @@ browserInterop = new (function () {
         } else {
             return value;
         }
-    });
+    };
+    //this simple method will be used for getting the content of a given js object ref because js interop will call the reviver with the given C# js object ref
+    this.returnInstance = function (instance) {
+        return instance;
+    }
+    DotNet.attachReviver(this.jsObjectRefRevive);
     var me = this;
     var eventListenersIdCurrent = 0;
     this.eventListeners = {};
@@ -36,15 +41,16 @@ browserInterop = new (function () {
         return me.getInstancePropertyRef(window, propertyPath);
     };
     this.getInstancePropertyRef = function (instance, propertyPath) {
-        var res = me.getInstanceProperty(instance, propertyPath);
+        return me.storeObjectRef(me.getInstanceProperty(instance, propertyPath));
+    };
+    this.storeObjectRef = function (obj) {
         var id = jsObjectRefId++;
         weakMapKeys[id] = { id: id };
-        weakMap.set(weakMapKeys[id], res);
+        weakMap.set(weakMapKeys[id], obj);
         var jsRef = {};
         jsRef[jsRefKey] = id;
-
         return jsRef;
-    };
+    }
     this.getInstanceProperty = function (instance, propertyPath) {
         var currentProperty = instance;
         var splitProperty = propertyPath.replace('[', '.').replace(']', '').split('.');
@@ -96,6 +102,10 @@ browserInterop = new (function () {
         }
         var method = me.getInstanceProperty(instance, methodPath);
         return method.apply(instance, args);
+    };
+    this.callInstanceMethodGetRef = function (instance, methodPath, ...args) {
+        return this.storeObjectRef(this.callInstanceMethod(instance, methodPath, ...args));
+
     };
     this.addEventListener = function (instance, propertyPath, eventName, dotnetAction) {
         var target = me.getInstanceProperty(instance, propertyPath);

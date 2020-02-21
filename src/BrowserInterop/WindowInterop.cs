@@ -299,5 +299,42 @@ namespace BrowserInterop
         {
             await jsRuntime.InvokeInstanceMethodAsync(windowRef, "focus");
         }
+
+        /// <summary>
+        /// moves the current window by a specified amount.
+        /// </summary>
+        /// <param name="deltaX">the amount of pixels to move the window horizontally. Positive values are to the right, while negative values are to the left.</param>
+        /// <param name="deltaY">the amount of pixels to move the window vertically. Positive values are down, while negative values are up.</param>
+        /// <returns></returns>
+        public async Task MoveBy(int deltaX, int deltaY)
+        {
+            await jsRuntime.InvokeInstanceMethodAsync(windowRef, "moveBy", deltaX, deltaY);
+        }
+
+        /// <summary>
+        /// moves the current window to the specified coordinates.
+        /// </summary>
+        /// <param name="x">the horizontal coordinate to be moved to.</param>
+        /// <param name="y">the vertical coordinate to be moved to.</param>
+        /// <returns></returns>
+        public async Task MoveTo(int x, int y)
+        {
+            await jsRuntime.InvokeInstanceMethodAsync(windowRef, "moveTo", x, y);
+        }
+
+        /// <summary>
+        /// loads the specified resource into the browsing context (window, <iframe> or tab) with the specified name. If the name doesn't exist, then a new window is opened and the specified resource is loaded into its browsing context.
+        /// </summary>
+        /// <param name="url">URL of the resource to be loaded. This can be a path or URL to an HTML page, image file, or any other resource which is supported by the browser. If the empty string ("") is specified as url, a blank page is opened into the targeted browsing context.</param>
+        /// <param name="windowName">the name of the browsing context (window, <iframe> or tab) into which to load the specified resource; if the name doesn't indicate an existing context, a new window is created and is given the name specified by windowName.</param>
+        /// <param name="windowFeature">comma-separated list of window features given with their corresponding values in the form "name=value". These features include options such as the window's default size and position, whether or not to include scroll bars, and so forth. There must be no whitespace in the string.</param>
+        /// <returns></returns>
+        public async Task<WindowInterop> Open(Uri url, string windowName = null, string windowFeature = null)
+        {
+            var windowOpenRef = await jsRuntime.InvokeInstanceMethodGetRefAsync(windowRef, "open", url.ToString(), windowName, windowFeature);
+            var windowInterop = await jsRuntime.GetInstanceContent<WindowInterop>(windowOpenRef);
+            windowInterop.SetJsRuntime(jsRuntime, windowOpenRef);
+            return windowInterop;
+        }
     }
 }

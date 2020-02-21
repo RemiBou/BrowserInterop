@@ -106,4 +106,13 @@ context('window.navigator', () => {
     windowMethodCallCheck("close", () => { });
     windowMethodCallCheck("confirm", () => { return false; }, "test");
     windowMethodCallCheck("focus", () => { });
+    windowMethodCallCheck("moveBy", () => { }, 1, 2);
+    windowMethodCallCheck("moveTo", () => { }, 3, 4);
+
+    it("window open", () => {
+        cy.window()
+            .then(w => {
+
+            });
+    });
 });
