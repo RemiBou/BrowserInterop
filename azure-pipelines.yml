@@ -8,9 +8,10 @@ variables:
   buildConfiguration: 'Release'
 
 steps:
-- task: DotNetCoreInstaller@0
+- task: UseDotNet@2
   displayName: 'Install SDK'
   inputs:
+    packageType: sdk
     version: 3.1.100	
 
 - task: NuGetToolInstaller@0
