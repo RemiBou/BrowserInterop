@@ -115,7 +115,6 @@ context('window.navigator', () => {
                 cy.get("#btn-window-open")
                     .click()
                     .then(() => {
-                        cy.get("#opened-name").should("have.text", "TEST");
                         cy.get("#btn-window-close-opened").click();
 
                     })
