@@ -1,6 +1,7 @@
 # BrowserInterop
 
-[![Build Status](https://dev.azure.com/remibou/toss/_apis/build/status/RemiBou.BrowserInterop?branchName=master)](https://dev.azure.com/remibou/toss/_build/latest?definitionId=9&branchName=master) [![BrowserInterop](https://img.shields.io/nuget/v/BrowserInterop.svg)](https://www.nuget.org/packages/BrowserInterop/)
+[![Build Status](https://dev.azure.com/remibou/toss/_apis/build/status/RemiBou.BrowserInterop?branchName=master)](https://dev.azure.com/remibou/toss/_build/latest?definitionId=9&branchName=master) [![NuGet Badge](https://buildstats.info/nuget/BrowserInterop)](https://www.nuget.org/packages/BrowserInterop/)
+
 
 This library provides access to browser API in a Blazor App. 
 
@@ -44,6 +45,9 @@ You can find more usage here : https://github.com/RemiBou/BrowserInterop/tree/ma
 
 ## API covered
 Those are the first API covered, more will come, please open an issue if you think some API might be valuable.
+
+_All the window method/properties/events will also work if you use it on frames , parent, or opened window_
+
 - window
     - window.history
         - history.length
@@ -184,6 +188,15 @@ Those are the first API covered, more will come, please open an issue if you thi
         - visualViewport.scale
         - visualViewport.resize
         - visualViewport.scroll
+    - window.alert
+    - window.blur
+    - window.close
+    - window.confirm
+    - window.focus
+    - window.moveBy
+    - window.moveTo
+    - window.open
+
 
 ## Utility method
 
