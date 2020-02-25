@@ -100,15 +100,20 @@ context('window.navigator', () => {
     windowMethodCallCheck("moveTo", () => { }, 3, 4);
 
     it("window open", () => {
+        var fakeWindow = {
+            close: function () { }
+        };
+        cy.spy(fakeWindow, 'close').as('spyClose');
         cy.window()
             .then(w => {
-                cy.spyFix(w, 'open', w).as('spyOpen');
+                cy.stubFix(w, 'open', w, function () { return fakeWindow; }).as('spyOpen');
+
             });
         cy.get("#btn-window-open").click().end();
         cy.get('@spyOpen').should('be.calledOnce')
-            .and('be.calledWith', "/window", "_blank", "menubar=no");
+            .and('be.calledWith', "/window", "_blank", "menubar=no")
+            .and('returned', fakeWindow);
         cy.get("#btn-window-close-opened").click();
-        cy.get("#btn-window-refresh-opened").click();
-        cy.get("#opened-Closed").should("have.text", 'true');
+        cy.get('@spyClose').should('be.calledOnce');
     });
 });
