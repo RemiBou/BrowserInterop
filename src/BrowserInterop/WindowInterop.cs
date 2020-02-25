@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using System;
 using BrowserInterop.Performance;
 using BrowserInterop.Screen;
+using System.Collections.Generic;
 
 namespace BrowserInterop
 {
@@ -355,6 +356,18 @@ namespace BrowserInterop
             var windowInterop = await jsRuntime.GetInstanceContent<WindowInterop>(windowOpenRef, false);
             windowInterop.SetJsRuntime(jsRuntime, windowOpenRef);
             return windowInterop;
+        }
+
+        /// <summary>
+        /// Safely enables cross-origin communication between Window objects; e.g., between a page and a pop-up that it spawned, or between a page and an iframe embedded within it.
+        /// </summary>
+        /// <param name="targetWindow">A reference to the window that will receive the message. Methods for obtaining such a reference include : Open, Frames, Top, Opener, Parent</param>
+        /// <param name="message"></param>
+        /// <param name="transfer"></param>
+        /// <returns></returns>
+        public async Task PostMessage(WindowInterop targetWindow, object message, string targetOrigin, IEnumerable<JsRuntimeObjectRef> transfer = null)
+        {
+            await jsRuntime.InvokeInstanceMethodAsync(targetWindow.JsRuntimeObjectRef, "postMessage", message, targetOrigin, transfer);
         }
 
     }
