@@ -20,3 +20,4 @@ import './commands'
 // require('./commands')
 
 
+require('cypress-terminal-report').installSupport({ printLogs: 'always' });
