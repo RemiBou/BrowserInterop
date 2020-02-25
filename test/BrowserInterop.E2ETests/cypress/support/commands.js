@@ -25,12 +25,14 @@
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
 
 Cypress.Commands.add('stubFix', (object, method, window, replaceFn) => {
-    cy.stub(object, method, replaceFn);
+    var res = cy.stub(object, method, replaceFn);
     object[method].__proto__ = window.Function;
+    return res;
 });
 Cypress.Commands.add('spyFix', (object, method, window) => {
-    cy.spy(object, method);
+    var res = cy.spy(object, method);
     object[method].__proto__ = window.Function;
+    return res;
 });
 // thanks : https://github.com/cypress-io/cypress/issues/136#issuecomment-342391119
 Cypress.Commands.add('iframe', { prevSubject: 'element' }, $iframe => {
