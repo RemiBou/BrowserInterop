@@ -18,7 +18,7 @@
 <button id="btn-window-focus" @onclick="@(async() => await window.Focus())">Focus</button>
 
 <button id="btn-window-open" @onclick="@(async() => opened = await window.Open("/window", "_blank", new WindowFeature(){ MenuBar = false }))">Open</button>
-<button id="btn-window-refresh-opened" @onclick="@(async() => opened = await jsRuntime.GetInstanceContent(opened, false))">Refresh Opened></button>
+<button id="btn-window-refresh-opened" @onclick="@(async() => opened = await jsRuntime.GetInstanceContent(opened, false))">Refresh Opened</button>
 
 <button id="btn-window-close-opened" @onclick="@(async() => await opened.Close())">Close Opened</button><br/>
 Window :
