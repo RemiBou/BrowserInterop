@@ -2,8 +2,8 @@
 @inject IJSRuntime jsRuntime;
 @using BrowserInterop
 Local Storage :
-<button type="button" id="window-sessionStorage-length-get" @onclick="SessionLength" >sessionStorage.setItem</button>
-<button type="button" id="window-localStorage-length-get" @onclick="Length" >localStorage.setItem</button>
+<button type="button" id="window-sessionStorage-length-get" @onclick="SessionLength" >sessionStorage.length</button>
+<button type="button" id="window-localStorage-length-get" @onclick="Length" >localStorage.length</button>
 <button type="button" id="window-localStorage-setItem" @onclick="SetItem" >localStorage.setItem</button>
 <button type="button" id="window-localStorage-getItem" @onclick="GetItem" >localStorage.getItem</button>
 <button type="button" id="window-localStorage-clear" @onclick="async () => await window.LocalStorage.Clear()" >localStorage.clear</button>

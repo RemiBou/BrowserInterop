@@ -112,21 +112,23 @@ context('window.navigator', () => {
     it("window open", () => {
         cy.window()
             .then(w => {
-                var openStubed = w.open;
-                var openedWindow;
-                cy.stubFix(w, 'open', w, function (url, name, feature) {
-                    openedWindow = openStubed.call(w, url, name, feature);
-                    cy.wrap(cy.spyFix(openedWindow, 'close', w));
-                    return openedWindow;
-                });
 
+                cy.spyFix(w, 'open', w);
                 cy.get("#btn-window-open")
                     .click()
                     .then(() => {
-                        cy.get("#btn-window-close-opened").click();
                         expect(w.open).to.be.calledOnce;
-                        expect(w.open).to.be.calledWith("/history", "_blank", "menubar=yes");
-                        expect(openedWindow.close).to.be.calledOnce;
+                        expect(w.open).to.be.calledWith("/window", "_blank", "menubar=no");
+
+                        cy.get("#btn-window-close-opened").click()
+                            .then(
+                                () => {
+                                    cy.get("#btn-window-refresh-opened").click().then(() => {
+                                        cy.get("#opened-Closed").should("have.text", 'true');
+                                    });
+                                }
+                            );
+
                     })
             });
     });

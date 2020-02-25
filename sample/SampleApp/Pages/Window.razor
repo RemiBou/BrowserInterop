@@ -17,7 +17,8 @@
 <button id="btn-window-moveTo" @onclick="@(async() => await window.MoveTo(3,4))">MoveTo</button>
 <button id="btn-window-focus" @onclick="@(async() => await window.Focus())">Focus</button>
 
-<button id="btn-window-open" @onclick="@(async() => opened = await window.Open("/window", "_blank", new WindowFeature(){MenuBar= false}))">Open</button>
+<button id="btn-window-open" @onclick="@(async() => opened = await window.Open("/window", "_blank", new WindowFeature(){ MenuBar = false }))">Open</button>
+<button id="btn-window-refresh-opened" @onclick="@(async() => opened = await jsRuntime.GetInstanceContent(opened, false))">Refresh Opened></button>
 
 <button id="btn-window-close-opened" @onclick="@(async() => await opened.Close())">Close Opened</button><br/>
 Window :
@@ -62,6 +63,7 @@ WIndow opened :
     <li>ScrollX: <span id="opened-ScrollX">@opened?.ScrollX</span></li>
     <li>ScrollY: <span id="opened-ScrollY">@opened?.ScrollY</span></li>
     <li>Origin: <span id="opened-Origin">@opened?.Origin</span></li>
+    <li>Closed: <span id="opened-Closed">@opened?.Closed.ToString().ToLower()</span></li>
     <li>IsSecureContext : <span id="opened-IsSecureContext">@opened?.IsSecureContext.ToString().ToLower()</span></li>
 </ul>
 @code{

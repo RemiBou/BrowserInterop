@@ -6,8 +6,13 @@ using BrowserInterop.Screen;
 
 namespace BrowserInterop
 {
+    public interface IJsObjectWrapper
+    {
+        void SetJsRuntime(IJSRuntime jsRuntime, JsRuntimeObjectRef jsObjectRef);
+        JsRuntimeObjectRef JsRuntimeObjectRef { get; }
+    }
 
-    public class WindowInterop
+    public class WindowInterop : IJsObjectWrapper
     {
         private JsRuntimeObjectRef windowRef;
 
@@ -25,7 +30,15 @@ namespace BrowserInterop
         private Lazy<BarPropInterop> toolBarLazy;
         private IJSRuntime jsRuntime;
 
-        internal void SetJsRuntime(IJSRuntime jsRuntime, JsRuntimeObjectRef windowRef)
+        public JsRuntimeObjectRef JsRuntimeObjectRef
+        {
+            get
+            {
+                return windowRef;
+            }
+        }
+
+        public void SetJsRuntime(IJSRuntime jsRuntime, JsRuntimeObjectRef windowRef)
         {
             localStorageLazy = new Lazy<StorageInterop>(() => new StorageInterop(jsRuntime, windowRef, "localStorage"));
             sessionStorageLazy = new Lazy<StorageInterop>(() => new StorageInterop(jsRuntime, windowRef, "sessionStorage"));
@@ -51,6 +64,12 @@ namespace BrowserInterop
         /// </summary>
         /// <value></value>
         public ConsoleInterop Console => consoleInteropLazy.Value;
+
+        /// <summary>
+        /// Indicates whether the referenced window is closed or not.
+        /// </summary>
+        /// <value></value>
+        public bool Closed { get; set; }
 
         /// <summary>
         /// Will return an instance of NavigatorInterop that'll give access to window.navigator API
@@ -332,10 +351,11 @@ namespace BrowserInterop
         public async Task<WindowInterop> Open(string url, string windowName = null, WindowFeature windowFeature = null)
         {
 
-            var windowOpenRef = await jsRuntime.InvokeInstanceMethodGetRefAsync(windowRef, "open", url, windowName, windowFeature);
+            var windowOpenRef = await jsRuntime.InvokeInstanceMethodGetRefAsync(windowRef, "open", url, windowName, windowFeature?.GetOpenString());
             var windowInterop = await jsRuntime.GetInstanceContent<WindowInterop>(windowOpenRef, false);
             windowInterop.SetJsRuntime(jsRuntime, windowOpenRef);
             return windowInterop;
         }
+
     }
 }
