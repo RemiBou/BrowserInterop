@@ -17,6 +17,8 @@
 <button id="btn-window-moveTo" @onclick="@(async() => await window.MoveTo(3,4))">MoveTo</button>
 <button id="btn-window-focus" @onclick="@(async() => await window.Focus())">Focus</button>
 <button id="btn-window-postMessage" @onclick="@(async() => await window.PostMessage("message","http://localhost:5000"))">PostMessage</button>
+<button id="btn-window-print" @onclick="@(async() => await window.Print())">Print</button>
+<button id="btn-window-prompt" @onclick="@(async() => await window.Prompt("message","return"))">Prompt</button>
 
 <button id="btn-window-open" @onclick="@(async() => opened = await window.Open("/window", "_blank", new WindowFeature(){ MenuBar = false }))">Open</button>
 <button id="btn-window-refresh-opened" @onclick="@(async() => opened = await jsRuntime.GetInstanceContent(opened, false))">Refresh Opened</button>

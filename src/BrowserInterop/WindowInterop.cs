@@ -391,6 +391,25 @@ namespace BrowserInterop
                 });
             }, callbackWithRefToJsObject: true);
         }
+        /// <summary>
+        /// Opens the Print Dialog to print the current document.
+        /// </summary>
+        /// <returns></returns>
+        public async Task Print()
+        {
+            await jsRuntime.InvokeInstanceMethodAsync(JsRuntimeObjectRef, "print");
+        }
+
+        /// <summary>
+        /// displays a dialog with an optional message prompting the user to input some text.
+        /// </summary>
+        /// <param name="message">A string of text to display to the user. Can be omitted if there is nothing to show in the prompt window.</param>
+        /// <param name="defaultValue">A string containing the default value displayed in the text input field. </param>
+        /// <returns></returns>
+        public async Task<string> Prompt(string message, string defaultValue = null)
+        {
+            return await jsRuntime.InvokeInstanceMethodAsync<string>(JsRuntimeObjectRef, "prompt", message, defaultValue);
+        }
     }
 
     /// <summary>

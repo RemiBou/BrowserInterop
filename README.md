@@ -196,6 +196,10 @@ _All the window method/properties/events will also work if you use it on frames 
     - window.moveBy
     - window.moveTo
     - window.open
+    - window.postMessage
+    - window.onmessage
+    - window.print
+    - window.prompt
 
 
 ## Utility method
