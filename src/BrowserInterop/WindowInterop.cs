@@ -410,6 +410,24 @@ namespace BrowserInterop
         {
             return await jsRuntime.InvokeInstanceMethodAsync<string>(JsRuntimeObjectRef, "prompt", message, defaultValue);
         }
+
+        /// <summary>
+        /// Tells the browser that you wish to perform an animation and requests that the browser calls a specified function to update an animation before the next repaint. The method takes a callback as an argument to be invoked before the repaint.
+        /// </summary>
+        /// <param name="callback">ells the browser that you wish to perform an animation and requests that the browser calls a specified function to update an animation before the next repaint. The method takes a callback as an argument to be invoked before the repaint.</param>
+        /// <returns></returns>
+        public async Task RequestAnimationFrame(Func<double, Task> callback)
+        {
+            CallBackWrapper<JSInteropActionWrapper<double>> callBackWrapper = new CallBackWrapper<JSInteropActionWrapper<double>>(DotNetObjectReference.Create(
+                new JSInteropActionWrapper<double>(jsRuntime, async (d) =>
+                {
+                    await callback(d);
+
+                })
+            ));
+            await jsRuntime.InvokeInstanceMethodAsync(JsRuntimeObjectRef, "requestAnimationFrame", callBackWrapper);
+
+        }
     }
 
     /// <summary>

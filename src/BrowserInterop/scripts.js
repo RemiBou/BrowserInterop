@@ -28,6 +28,21 @@ browserInterop = new (function () {
         return me.getSerializableObject(instance, [], deep);
     }
     DotNet.attachReviver(this.jsObjectRefRevive);
+    //this reviver change a given parameter to a method, it's usefull for sending .net callback to js
+    DotNet.attachReviver(function (key, value) {
+        if (value &&
+            typeof value === 'object' &&
+            value.hasOwnProperty("IsCallBackWrapper")) {
+
+            var netObjectRef = value["DotNetObjectRef"];
+
+            return function () {
+                netObjectRef.invokeMethodAsync('Invoke', ...arguments);
+            };
+        } else {
+            return value;
+        }
+    });
     var me = this;
     var eventListenersIdCurrent = 0;
     this.eventListeners = {};

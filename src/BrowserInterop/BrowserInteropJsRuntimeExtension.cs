@@ -256,4 +256,15 @@ namespace BrowserInterop
         [JsonPropertyName("__jsObjectRefId")]
         public int JsObjectRefId { get; set; }
     }
+
+    internal class CallBackWrapper<T> where T : class
+    {
+        public CallBackWrapper(DotNetObjectReference<T> dotNetObjectRef)
+        {
+            DotNetObjectRef = dotNetObjectRef;
+        }
+
+        public string IsCallBackWrapper { get; set; } = "IsCallBackWrapper";
+        public DotNetObjectReference<T> DotNetObjectRef { get; set; }
+    }
 }

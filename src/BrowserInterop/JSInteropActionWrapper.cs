@@ -27,6 +27,7 @@ namespace BrowserInterop
 
         public async ValueTask DisposeAsync()
         {
+            //TODO : fix bug on unregister
             await jSRuntime.InvokeVoidAsync("browserInterop.removeEventListener", "navigator.connection", "change", listernerId);
         }
 
@@ -60,6 +61,7 @@ namespace BrowserInterop
 
         public async ValueTask DisposeAsync()
         {
+            //TODO : fix bug on unregister
             await jSRuntime.InvokeVoidAsync("browserInterop.removeEventListener", "navigator.connection", "change", listernerId);
         }
 
