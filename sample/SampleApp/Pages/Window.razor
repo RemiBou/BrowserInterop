@@ -67,6 +67,12 @@ WIndow opened :
     <li>Closed: <span id="opened-Closed">@opened?.Closed.ToString().ToLower()</span></li>
     <li>IsSecureContext : <span id="opened-IsSecureContext">@opened?.IsSecureContext.ToString().ToLower()</span></li>
 </ul>
+PostMessage Payload :
+<ul>
+    <li>Data : <span id="window-message-data">@onMessageEventPayload?.Data</span></li>
+    <li>Origin : <span id="window-message-origin">@onMessageEventPayload?.Origin</span></li>
+    <li>Source is not null : <span id="window-message-source">@((onMessageEventPayload?.Source != null).ToString().ToLower())</span></li>
+</ul>
 @code{
     private WindowInterop window;
     private WindowInterop opened;
@@ -77,6 +83,8 @@ WIndow opened :
     private VisualViewportInterop viewport;
     private int resizeHandled;
     private int scrollHandled;
+
+    private OnMessageEventPayload<string> onMessageEventPayload;
     protected override async Task OnInitializedAsync()
     {
         window = await jsRuntime.Window();
@@ -96,7 +104,9 @@ WIndow opened :
             });
         }
         await window.OnMessage<string>(async (payload) => {
-            await window.Console.Log((object)"OnMessage",payload);
+            onMessageEventPayload = payload;
+            StateHasChanged();
+            await Task.CompletedTask;
         });
     }
     protected async Task GetOpener(){

@@ -92,14 +92,18 @@ context('window.navigator', () => {
 
     };
     windowMethodCallTest("alert", () => { }, "test");
-    windowMethodCallTest("postMessage", () => { }, "message", "http://localhost:5000");
     windowMethodCallTest("blur", () => { });
     windowMethodCallTest("close", () => { });
     windowMethodCallTest("confirm", () => { return false; }, "test");
     windowMethodCallTest("focus", () => { });
     windowMethodCallTest("moveBy", () => { }, 1, 2);
     windowMethodCallTest("moveTo", () => { }, 3, 4);
-
+    it('window postMessage', () => {
+        cy.get("#btn-window-postMessage").click();
+        cy.get("#window-message-data").should("have.text", "message");
+        cy.get("#window-message-origin").should("have.text", "http://localhost:5000");
+        cy.get("#window-message-source").should("have.text", "true");
+    });
     it("window open", () => {
         var fakeWindow = {
             close: function () { }
