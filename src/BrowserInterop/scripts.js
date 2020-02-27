@@ -25,7 +25,7 @@ browserInterop = new (function () {
     };
     //this simple method will be used for getting the content of a given js object ref because js interop will call the reviver with the given C# js object ref
     this.returnInstance = function (instance, deep) {
-        return this.getSerializableObject(instance, [], deep);
+        return me.getSerializableObject(instance, [], deep);
     }
     DotNet.attachReviver(this.jsObjectRefRevive);
     var me = this;
@@ -52,6 +52,9 @@ browserInterop = new (function () {
         return jsRef;
     }
     this.getInstanceProperty = function (instance, propertyPath) {
+        if (propertyPath === '') {
+            return instance;
+        }
         var currentProperty = instance;
         var splitProperty = propertyPath.replace('[', '.').replace(']', '').split('.');
 
@@ -107,10 +110,19 @@ browserInterop = new (function () {
         return this.storeObjectRef(this.callInstanceMethod(instance, methodPath, ...args));
 
     };
-    this.addEventListener = function (instance, propertyPath, eventName, dotnetAction) {
+
+    this.addEventListener = function (instance, propertyPath, eventName, dotnetAction, callbackWithRefToJsobject) {
         var target = me.getInstanceProperty(instance, propertyPath);
         var methodRef = function () {
-            return dotnetAction.invokeMethodAsync('Invoke');
+            var args = arguments;
+            if (args.length > 0 && callbackWithRefToJsobject) {
+                for (let index = 0; index < args.length; index++) {
+                    const element = args[index];
+                    if (element instanceof Object)
+                        args[index] = me.storeObjectRef(element);
+                }
+            }
+            return dotnetAction.invokeMethodAsync('Invoke', ...args);
         }
         target.addEventListener(eventName, methodRef);
         var eventId = eventListenersIdCurrent++;

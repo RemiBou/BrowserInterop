@@ -362,13 +362,59 @@ namespace BrowserInterop
         /// Safely enables cross-origin communication between Window objects; e.g., between a page and a pop-up that it spawned, or between a page and an iframe embedded within it.
         /// </summary>
         /// <param name="targetWindow">A reference to the window that will receive the message. Methods for obtaining such a reference include : Open, Frames, Top, Opener, Parent</param>
-        /// <param name="message"></param>
-        /// <param name="transfer"></param>
+        /// <param name="message">The object that will be send to the other window </param>
+        /// <param name="targetOrigin">Specifies what the origin of targetWindow must be for the event to be dispatched, either as the literal string "*" (indicating no preference) or as a URI. If at the time the event is scheduled to be dispatched the scheme, hostname, or port of targetWindow's document does not match that provided in targetOrigin, the event will not be dispatched; only if all three match will the event be dispatched.  </param>
         /// <returns></returns>
-        public async Task PostMessage(WindowInterop targetWindow, object message, string targetOrigin, IEnumerable<JsRuntimeObjectRef> transfer = null)
+        public async Task PostMessage(object message, string targetOrigin)
         {
-            await jsRuntime.InvokeInstanceMethodAsync(targetWindow.JsRuntimeObjectRef, "postMessage", message, targetOrigin, transfer);
+            await jsRuntime.InvokeInstanceMethodAsync(JsRuntimeObjectRef, "postMessage", message, targetOrigin);
         }
 
+        /// <summary>
+        ///  listen for dispatched messages send by PostMessage
+        /// </summary>
+        /// <param name="todo"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public async Task OnMessage<T>(Func<OnMessageEventPayload<T>, Task> todo)
+        {
+            await jsRuntime.AddEventListener<JsRuntimeObjectRef>(this.JsRuntimeObjectRef, "", "message", async eventRef =>
+            {
+                var window = await jsRuntime.GetInstancePropertyAsync<WindowInterop>(eventRef, "source", false);
+                var windowRef = await jsRuntime.GetInstancePropertyRefAsync(eventRef, "source");
+                window.SetJsRuntime(jsRuntime, windowRef);
+                await todo.Invoke(new OnMessageEventPayload<T>()
+                {
+                    Data = await jsRuntime.GetInstancePropertyAsync<T>(eventRef, "data"),
+                    Origin = await jsRuntime.GetInstancePropertyAsync<string>(eventRef, "origin"),
+                    Source = window
+                });
+            }, callbackWithRefToJsObject: true);
+        }
+    }
+
+    /// <summary>
+    /// Event send when a new message is received
+    /// </summary>
+    /// <typeparam name="T">Data type</typeparam>
+    public class OnMessageEventPayload<T>
+    {
+        /// <summary>
+        /// The object passed from the other window.
+        /// </summary>
+        /// <value></value>
+        public T Data { get; set; }
+
+        /// <summary>
+        /// The origin of the window that sent the message at the time postMessage was called. 
+        /// </summary>
+        /// <value></value>
+        public string Origin { get; set; }
+
+        /// <summary>
+        /// A reference to the window object that sent the message; you can use this to establish two-way communication between two windows with different origins.
+        /// </summary>
+        /// <value></value>
+        public WindowInterop Source { get; set; }
     }
 }

@@ -23,6 +23,15 @@ context('scripts', () => {
             });
     });
 
+    it('getInstanceProperty return instance if empty string', () => {
+        cy.window()
+            .its('browserInterop')
+            .then(b => {
+                var obj = { inner: { id: 1 } };
+                expect(b.getInstanceProperty(obj, "")).to.eq(obj);
+            });
+    });
+
 
     it('getInstancePropertySerializable return null if property null', () => {
         cy.window()

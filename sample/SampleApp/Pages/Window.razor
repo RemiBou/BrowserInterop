@@ -16,6 +16,7 @@
 <button id="btn-window-moveBy" @onclick="@(async() => await window.MoveBy(1,2))">MoveBy</button>
 <button id="btn-window-moveTo" @onclick="@(async() => await window.MoveTo(3,4))">MoveTo</button>
 <button id="btn-window-focus" @onclick="@(async() => await window.Focus())">Focus</button>
+<button id="btn-window-postMessage" @onclick="@(async() => await window.PostMessage("message","http://localhost:5000"))">PostMessage</button>
 
 <button id="btn-window-open" @onclick="@(async() => opened = await window.Open("/window", "_blank", new WindowFeature(){ MenuBar = false }))">Open</button>
 <button id="btn-window-refresh-opened" @onclick="@(async() => opened = await jsRuntime.GetInstanceContent(opened, false))">Refresh Opened</button>
@@ -94,6 +95,9 @@ WIndow opened :
                 return Task.CompletedTask;
             });
         }
+        await window.OnMessage<string>(async (payload) => {
+            await window.Console.Log((object)"OnMessage",payload);
+        });
     }
     protected async Task GetOpener(){
         opener = await window.Opener();

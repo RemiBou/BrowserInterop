@@ -178,6 +178,31 @@ namespace BrowserInterop
         }
 
         /// <summary>
+        /// Attach an event handler to the given event on the given js object property
+        /// </summary>
+        /// <param name="jsRuntime">Current JSRuntime</param>
+        /// <param name="jsRuntimeObject">JS Object on which you want to listen to event</param>
+        /// <param name="propertyName">Property that will emit the event, "" if it's the js object itself</param>
+        /// <param name="eventName">The event name</param>        
+        /// <param name="callBack">Called method when the event is raised</param>
+        /// <param name="callbackWithRefToJsObject">if true then the event callback object parameters will be sent to c# as JsRuntimeObjectRef instead of their value serialized </param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public static async Task<IAsyncDisposable> AddEventListener<T>(
+            this IJSRuntime jsRuntime,
+            JsRuntimeObjectRef jsRuntimeObject,
+            string propertyName,
+            string eventName,
+            Func<T, Task> callBack,
+            bool callbackWithRefToJsObject = false)
+        {
+            JSInteropActionWrapper<T> actionWrapper = new JSInteropActionWrapper<T>(jsRuntime, callBack);
+            var listenerId = await jsRuntime.InvokeAsync<int>("browserInterop.addEventListener", jsRuntimeObject, propertyName, eventName, DotNetObjectReference.Create(actionWrapper), callbackWithRefToJsObject);
+            actionWrapper.SeListenerId(listenerId);
+            return actionWrapper;
+        }
+
+        /// <summary>
         /// Invoke the specified method with JSInterop and returns default(T) if the timeout is reached
         /// </summary>
         /// <param name="jsRuntime">js runtime on which we'll execute the query</param>

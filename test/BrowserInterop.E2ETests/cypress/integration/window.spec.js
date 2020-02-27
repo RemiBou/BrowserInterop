@@ -78,7 +78,7 @@ context('window.navigator', () => {
 
             });
     });
-    function windowMethodCallCheck(methodName, stub, ...args) {
+    function windowMethodCallTest(methodName, stub, ...args) {
         it("window " + methodName, () => {
             cy.window()
                 .then(w => {
@@ -91,13 +91,14 @@ context('window.navigator', () => {
         });
 
     };
-    windowMethodCallCheck("alert", () => { }, "test");
-    windowMethodCallCheck("blur", () => { });
-    windowMethodCallCheck("close", () => { });
-    windowMethodCallCheck("confirm", () => { return false; }, "test");
-    windowMethodCallCheck("focus", () => { });
-    windowMethodCallCheck("moveBy", () => { }, 1, 2);
-    windowMethodCallCheck("moveTo", () => { }, 3, 4);
+    windowMethodCallTest("alert", () => { }, "test");
+    windowMethodCallTest("postMessage", () => { }, "message", "http://localhost:5000");
+    windowMethodCallTest("blur", () => { });
+    windowMethodCallTest("close", () => { });
+    windowMethodCallTest("confirm", () => { return false; }, "test");
+    windowMethodCallTest("focus", () => { });
+    windowMethodCallTest("moveBy", () => { }, 1, 2);
+    windowMethodCallTest("moveTo", () => { }, 3, 4);
 
     it("window open", () => {
         var fakeWindow = {
@@ -116,4 +117,5 @@ context('window.navigator', () => {
         cy.get("#btn-window-close-opened").click();
         cy.get('@spyClose').should('be.calledOnce');
     });
+
 });
