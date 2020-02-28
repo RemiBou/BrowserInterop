@@ -61,7 +61,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public async Task<IAsyncDisposable> OnResize(Func<Task> todo)
         {
-            return await this.jsRuntime.AddEventListener(this.windowRef, "visualViewport", "resize", todo);
+            return await this.jsRuntime.AddEventListener(this.windowRef, "visualViewport", "resize", CallBackInteropWrapper.Create(todo));
         }
 
         /// <summary>
@@ -71,7 +71,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public async Task<IAsyncDisposable> OnScroll(Func<Task> todo)
         {
-            return await this.jsRuntime.AddEventListener(this.windowRef, "visualViewport", "scroll", todo);
+            return await this.jsRuntime.AddEventListener(this.windowRef, "visualViewport", "scroll", CallBackInteropWrapper.Create(todo));
         }
 
         internal void SetJsRuntime(IJSRuntime jsRuntime, JsRuntimeObjectRef propertyRef)

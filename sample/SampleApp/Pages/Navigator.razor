@@ -150,7 +150,7 @@ Method calls
         battery = await navigator.GetBattery();
         javaEnabled = await navigator.JavaEnabled();
         if(navigator.Connection != null){
-            connectionChangeEventHandler =  await navigator.Connection.OnChange(async () => {
+           connectionChangeEventHandler = await navigator.Connection.OnChange(async () => {
                 await window.Console.Log("Connection Change");
                 connectionChangedEventHandled++;
                 StateHasChanged();                

@@ -142,7 +142,7 @@ namespace BrowserInterop.Performance
         /// <returns></returns>
         public async Task<IAsyncDisposable> OnResourceTimingBufferFull(Func<Task> toDo)
         {
-            return await jsRuntime.AddEventListener(windowRef, "performance", "resourcetimingbufferfull", toDo);
+            return await jsRuntime.AddEventListener(windowRef, "performance", "resourcetimingbufferfull", CallBackInteropWrapper.Create(toDo));
         }
 
         internal static Type ConvertStringToType(string str)

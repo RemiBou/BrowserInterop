@@ -331,28 +331,29 @@ namespace BrowserInterop
             if (IsEnabled)
                 await jsRuntime.InvokeInstanceMethodAsync(windowObject, "console.trace", printedObjects);
         }
-        private class EmptyAsyncDisposable : IAsyncDisposable
+
+    }
+    internal class EmptyAsyncDisposable : IAsyncDisposable
+    {
+        internal static EmptyAsyncDisposable Instance = new EmptyAsyncDisposable();
+        internal EmptyAsyncDisposable()
         {
-            internal static EmptyAsyncDisposable Instance = new EmptyAsyncDisposable();
-            internal EmptyAsyncDisposable()
-            {
-            }
-            public ValueTask DisposeAsync()
-            {
-                return new ValueTask();
-            }
         }
-        private class ActionAsyncDisposable : IAsyncDisposable
+        public ValueTask DisposeAsync()
         {
-            private Func<Task> todoOnDispose;
-            public ActionAsyncDisposable(Func<Task> todoOnDispose)
-            {
-                this.todoOnDispose = todoOnDispose;
-            }
-            public async ValueTask DisposeAsync()
-            {
-                await todoOnDispose();
-            }
+            return new ValueTask();
+        }
+    }
+    internal class ActionAsyncDisposable : IAsyncDisposable
+    {
+        private Func<Task> todoOnDispose;
+        public ActionAsyncDisposable(Func<Task> todoOnDispose)
+        {
+            this.todoOnDispose = todoOnDispose;
+        }
+        public async ValueTask DisposeAsync()
+        {
+            await todoOnDispose();
         }
     }
 }

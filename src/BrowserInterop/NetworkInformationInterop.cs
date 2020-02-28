@@ -97,7 +97,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public async Task<IAsyncDisposable> OnChange(Func<Task> toDo)
         {
-            return await jSRuntime.AddEventListener(windowObject, "navigator.connection", "change", toDo);
+            return await jSRuntime.AddEventListener(windowObject, "navigator.connection", "change", CallBackInteropWrapper.Create(toDo));
         }
     }
 

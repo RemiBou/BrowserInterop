@@ -376,20 +376,28 @@ namespace BrowserInterop
         /// <param name="todo"></param>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public async Task OnMessage<T>(Func<OnMessageEventPayload<T>, Task> todo)
+        public async Task<IAsyncDisposable> OnMessage<T>(Func<OnMessageEventPayload<T>, Task> todo)
         {
-            await jsRuntime.AddEventListener<JsRuntimeObjectRef>(this.JsRuntimeObjectRef, "", "message", async eventRef =>
-            {
-                var window = await jsRuntime.GetInstancePropertyAsync<WindowInterop>(eventRef, "source", false);
-                var windowRef = await jsRuntime.GetInstancePropertyRefAsync(eventRef, "source");
-                window.SetJsRuntime(jsRuntime, windowRef);
-                await todo.Invoke(new OnMessageEventPayload<T>()
-                {
-                    Data = await jsRuntime.GetInstancePropertyAsync<T>(eventRef, "data"),
-                    Origin = await jsRuntime.GetInstancePropertyAsync<string>(eventRef, "origin"),
-                    Source = window
-                });
-            }, callbackWithRefToJsObject: true);
+            return await jsRuntime.AddEventListener(
+                this.JsRuntimeObjectRef,
+                 "",
+                 "message",
+                CallBackInteropWrapper.Create<JsRuntimeObjectRef[]>(
+                    async payload =>
+                    {
+                        var firstParam = payload[0];
+                        var eventPayload = new OnMessageEventPayload<T>()
+                        {
+                            Data = await jsRuntime.GetInstancePropertyAsync<T>(firstParam, "data"),
+                            Origin = await jsRuntime.GetInstancePropertyAsync<string>(firstParam, "origin"),
+                            Source = await jsRuntime.GetInstancePropertyAsync<WindowInterop>(firstParam, "source", false)
+                        };
+                        eventPayload.Source.SetJsRuntime(jsRuntime, await jsRuntime.GetInstancePropertyRefAsync(firstParam, "source"));
+
+                        await todo.Invoke(eventPayload);
+                    },
+                    getJsObjectRef: true
+                ));
         }
         /// <summary>
         /// Opens the Print Dialog to print the current document.
@@ -418,14 +426,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public async Task RequestAnimationFrame(Func<double, Task> callback)
         {
-            CallBackWrapper<JSInteropActionWrapper<double>> callBackWrapper = new CallBackWrapper<JSInteropActionWrapper<double>>(DotNetObjectReference.Create(
-                new JSInteropActionWrapper<double>(jsRuntime, async (d) =>
-                {
-                    await callback(d);
-
-                })
-            ));
-            await jsRuntime.InvokeInstanceMethodAsync(JsRuntimeObjectRef, "requestAnimationFrame", callBackWrapper);
+            await jsRuntime.InvokeInstanceMethodAsync(JsRuntimeObjectRef, "requestAnimationFrame", CallBackInteropWrapper.Create(callback));
 
         }
     }

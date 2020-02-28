@@ -3,6 +3,7 @@ browserInterop = new (function () {
     var weakMap = new WeakMap();
     var weakMapKeys = {};
     var jsObjectRefId = 0;
+    var me = this;
 
     const jsRefKey = '__jsObjectRefId'; // Keep in sync with ElementRef.cs
 
@@ -32,20 +33,44 @@ browserInterop = new (function () {
     DotNet.attachReviver(function (key, value) {
         if (value &&
             typeof value === 'object' &&
-            value.hasOwnProperty("IsCallBackWrapper")) {
+            value.hasOwnProperty("__isCallBackWrapper")) {
 
-            var netObjectRef = value["DotNetObjectRef"];
+
+            var netObjectRef = value.callbackRef;
 
             return function () {
-                netObjectRef.invokeMethodAsync('Invoke', ...arguments);
+                var args = [];
+                if (!value.getJsObjectRef) {
+                    for (let index = 0; index < arguments.length; index++) {
+                        const element = arguments[index];
+                        args.push(me.getSerializableObject(element, [], value.getDeepObject, value.payloadPropertiesPathByRef));
+                    }
+                } else {
+                    for (let index = 0; index < arguments.length; index++) {
+                        const element = arguments[index];
+                        args.push(me.storeObjectRef(element));
+                    }
+                }
+                netObjectRef.invokeMethodAsync('Invoke', ...args);
             };
         } else {
             return value;
         }
     });
-    var me = this;
     var eventListenersIdCurrent = 0;
-    this.eventListeners = {};
+    var eventListeners = {};
+    this.addEventListener = function (instance, propertyPath, eventName, callback) {
+        var target = me.getInstanceProperty(instance, propertyPath);
+        target.addEventListener(eventName, callback);
+        var eventId = eventListenersIdCurrent++;
+        eventListeners[eventId] = callback;
+        return eventId;
+    };
+    this.removeEventListener = function (instance, propertyPath, eventName, eventListenersId) {
+        var target = me.getInstanceProperty(instance, propertyPath);
+        target.removeEventListener(eventName, eventListeners[eventListenersId]);
+        delete eventListeners[eventListenersId];
+    };
     this.getProperty = function (propertyPath) {
         return me.getInstanceProperty(window, propertyPath);
     };
@@ -66,12 +91,19 @@ browserInterop = new (function () {
         jsRef[jsRefKey] = id;
         return jsRef;
     }
+    function getPropertyList(path) {
+        var res = path.replace('[', '.').replace(']', '').split('.');
+        if (res[0] === "") { // if we pass "[0].id" we want to return [0,'id']
+            res.shift();
+        }
+        return res;
+    }
     this.getInstanceProperty = function (instance, propertyPath) {
         if (propertyPath === '') {
             return instance;
         }
         var currentProperty = instance;
-        var splitProperty = propertyPath.replace('[', '.').replace(']', '').split('.');
+        var splitProperty = getPropertyList(propertyPath);
 
         for (i = 0; i < splitProperty.length; i++) {
             if (splitProperty[i] in currentProperty) {
@@ -84,7 +116,7 @@ browserInterop = new (function () {
     };
     this.setInstanceProperty = function (instance, propertyPath, value) {
         var currentProperty = instance;
-        var splitProperty = propertyPath.replace('[', '.').replace(']', '').split('.');
+        var splitProperty = getPropertyList(propertyPath);
         for (i = 0; i < splitProperty.length; i++) {
             if (splitProperty[i] in currentProperty) {
                 if (i === splitProperty.length - 1) {
@@ -123,33 +155,8 @@ browserInterop = new (function () {
     };
     this.callInstanceMethodGetRef = function (instance, methodPath, ...args) {
         return this.storeObjectRef(this.callInstanceMethod(instance, methodPath, ...args));
-
     };
-
-    this.addEventListener = function (instance, propertyPath, eventName, dotnetAction, callbackWithRefToJsobject) {
-        var target = me.getInstanceProperty(instance, propertyPath);
-        var methodRef = function () {
-            var args = arguments;
-            if (args.length > 0 && callbackWithRefToJsobject) {
-                for (let index = 0; index < args.length; index++) {
-                    const element = args[index];
-                    if (element instanceof Object)
-                        args[index] = me.storeObjectRef(element);
-                }
-            }
-            return dotnetAction.invokeMethodAsync('Invoke', ...args);
-        }
-        target.addEventListener(eventName, methodRef);
-        var eventId = eventListenersIdCurrent++;
-        me.eventListeners[eventId] = methodRef;
-        return eventId;
-    };
-    this.removeEventListener = function (propertyPath, eventName, eventListenersId) {
-        var target = me.getProperty(propertyPath);
-        target.removeEventListener(eventName, me.eventListeners[eventListenersId]);
-        delete me.eventListeners[eventListenersId];
-    };
-    this.getSerializableObject = function (data, alreadySerialized, deep) {
+    this.getSerializableObject = function (data, alreadySerialized, deep, pathsToPassByRef) {
         if (typeof deep == "undefined") {
             deep = true;
         }
@@ -163,7 +170,8 @@ browserInterop = new (function () {
         if (typeof data === "number" || typeof data === "string" || typeof data == "boolean") {
             return data;
         }
-        var res = {};
+        var res = (Array.isArray(data)) ? [] : {};
+
         for (var i in data) {
             var currentMember = data[i];
 

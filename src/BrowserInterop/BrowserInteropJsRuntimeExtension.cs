@@ -3,7 +3,6 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
-using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using Microsoft.JSInterop;
 
@@ -169,38 +168,25 @@ namespace BrowserInterop
             return await jsRuntime.InvokeAsync<bool>("browserInterop.hasProperty", jsObject, propertyPath);
         }
 
-        public static async Task<IAsyncDisposable> AddEventListener(this IJSRuntime jsRuntime, JsRuntimeObjectRef jsRuntimeObject, string propertyName, string eventName, Func<Task> callBack)
+        /// <summary>
+        /// Add an event listener to the given property and event Type
+        /// </summary>
+        /// <param name="jsRuntime"></param>
+        /// <param name="jsRuntimeObject"></param>
+        /// <param name="propertyName"></param>
+        /// <param name="eventName"></param>
+        /// <param name="callBack"></param>
+        /// <returns></returns>
+        public static async Task<IAsyncDisposable> AddEventListener(this IJSRuntime jsRuntime, JsRuntimeObjectRef jsRuntimeObject, string propertyName, string eventName, CallBackInteropWrapper callBack)
         {
-            JSInteropActionWrapper actionWrapper = new JSInteropActionWrapper(jsRuntime, callBack);
-            var listenerId = await jsRuntime.InvokeAsync<int>("browserInterop.addEventListener", jsRuntimeObject, propertyName, eventName, DotNetObjectReference.Create(actionWrapper));
-            actionWrapper.SeListenerId(listenerId);
-            return actionWrapper;
+            var listenerId = await jsRuntime.InvokeAsync<int>("browserInterop.addEventListener", jsRuntimeObject, propertyName, eventName, callBack);
+
+            return new ActionAsyncDisposable(async () => await jsRuntime.InvokeVoidAsync("browserInterop.removeEventListener", jsRuntimeObject, propertyName, eventName, listenerId));
         }
 
-        /// <summary>
-        /// Attach an event handler to the given event on the given js object property
-        /// </summary>
-        /// <param name="jsRuntime">Current JSRuntime</param>
-        /// <param name="jsRuntimeObject">JS Object on which you want to listen to event</param>
-        /// <param name="propertyName">Property that will emit the event, "" if it's the js object itself</param>
-        /// <param name="eventName">The event name</param>        
-        /// <param name="callBack">Called method when the event is raised</param>
-        /// <param name="callbackWithRefToJsObject">if true then the event callback object parameters will be sent to c# as JsRuntimeObjectRef instead of their value serialized </param>
-        /// <typeparam name="T"></typeparam>
-        /// <returns></returns>
-        public static async Task<IAsyncDisposable> AddEventListener<T>(
-            this IJSRuntime jsRuntime,
-            JsRuntimeObjectRef jsRuntimeObject,
-            string propertyName,
-            string eventName,
-            Func<T, Task> callBack,
-            bool callbackWithRefToJsObject = false)
-        {
-            JSInteropActionWrapper<T> actionWrapper = new JSInteropActionWrapper<T>(jsRuntime, callBack);
-            var listenerId = await jsRuntime.InvokeAsync<int>("browserInterop.addEventListener", jsRuntimeObject, propertyName, eventName, DotNetObjectReference.Create(actionWrapper), callbackWithRefToJsObject);
-            actionWrapper.SeListenerId(listenerId);
-            return actionWrapper;
-        }
+
+
+
 
         /// <summary>
         /// Invoke the specified method with JSInterop and returns default(T) if the timeout is reached
@@ -251,20 +237,4 @@ namespace BrowserInterop
         }
     }
 
-    public struct JsRuntimeObjectRef
-    {
-        [JsonPropertyName("__jsObjectRefId")]
-        public int JsObjectRefId { get; set; }
-    }
-
-    internal class CallBackWrapper<T> where T : class
-    {
-        public CallBackWrapper(DotNetObjectReference<T> dotNetObjectRef)
-        {
-            DotNetObjectRef = dotNetObjectRef;
-        }
-
-        public string IsCallBackWrapper { get; set; } = "IsCallBackWrapper";
-        public DotNetObjectReference<T> DotNetObjectRef { get; set; }
-    }
 }

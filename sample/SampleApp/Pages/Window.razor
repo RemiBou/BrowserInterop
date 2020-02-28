@@ -26,6 +26,7 @@
 <button id="btn-window-close-opened" @onclick="@(async() => await opened.Close())">Close Opened</button><br/>
 Window :
 <ul>
+    <li>animationFrame : @animationFrame</li>
     <li>InnerHeight: <span id="window-innerHeight">@window?.InnerHeight</span></li>
     <li>InnerWidth: <span id="window-innerWidth">@window?.InnerWidth</span></li>  
     <li>OuterHeight: <span id="window-outerHeight">@window?.OuterHeight</span></li>
@@ -85,6 +86,7 @@ PostMessage Payload :
     private VisualViewportInterop viewport;
     private int resizeHandled;
     private int scrollHandled;
+    private int animationFrame = 0;
 
     private OnMessageEventPayload<string> onMessageEventPayload;
     protected override async Task OnInitializedAsync()
@@ -107,6 +109,12 @@ PostMessage Payload :
         }
         await window.OnMessage<string>(async (payload) => {
             onMessageEventPayload = payload;
+            StateHasChanged();
+            await Task.CompletedTask;
+        });
+
+        await window.RequestAnimationFrame(async d => {
+            animationFrame++;
             StateHasChanged();
             await Task.CompletedTask;
         });

@@ -23,6 +23,16 @@ context('scripts', () => {
             });
     });
 
+    it('getInstanceProperty return on array index', () => {
+        cy.window()
+            .its('browserInterop')
+            .then(b => {
+                var obj = [{ id: 1 }];
+                expect(b.getInstanceProperty(obj, "[0].id")).to.eq(1);
+            });
+    });
+
+
     it('getInstanceProperty return instance if empty string', () => {
         cy.window()
             .its('browserInterop')
@@ -121,7 +131,7 @@ context('scripts', () => {
                 expect(res).to.have.property('deeper');
             });
     });
-    it('getSerializableObject serialize 0', () => {
+    it('getInstancePropertySerializable serialize 0', () => {
         cy.window()
             .its('browserInterop')
             .then(b => {
@@ -130,7 +140,7 @@ context('scripts', () => {
                 expect(res).to.be.eq(0);
             });
     });
-    it('getSerializableObject serialize boolean', () => {
+    it('getInstancePropertySerializable serialize boolean', () => {
         cy.window()
             .its('browserInterop')
             .then(b => {
@@ -139,6 +149,15 @@ context('scripts', () => {
                 expect(res).to.be.eq(true);
                 res = b.getInstancePropertySerializable(obj, 'field2', false);
                 expect(res).to.be.eq(false);
+            });
+    });
+    it('getSerializableObject serialize array', () => {
+        cy.window()
+            .its('browserInterop')
+            .then(b => {
+                var obj = [1, 2];
+                var res = b.getSerializableObject(obj, [], true);
+                expect(res).to.be.eql(obj);
             });
     });
     it('callInstanceMethod apply to sub property if method is in child', () => {
@@ -174,4 +193,41 @@ context('scripts', () => {
                 expect(res).to.be.eq(tmp);
             });
     });
+
+    it('addEventListener register method', () => {
+        cy.window()
+            .its('browserInterop')
+            .then(b => {
+                var test = cy.stub();
+                b.addEventListener(window, "navigator.connection", "change", test);
+                window.navigator.connection.dispatchEvent(new Event("change"));
+                expect(test).to.be.calledOnce;
+
+            });
+    });
+
+
+    it('addEventListener return id for unregister', () => {
+        cy.window()
+            .its('browserInterop')
+            .then(b => {
+                var test = cy.stub();
+                var id = b.addEventListener(window, "navigator.connection", "change", test);
+                b.removeEventListener(window, "navigator.connection", "change", id);
+                window.navigator.connection.dispatchEvent(new Event("change"));
+                expect(test).to.not.be.calledOnce;
+
+            });
+    });
+
+    it('setInstanceProperty set array index', () => {
+        cy.window()
+            .its('browserInterop')
+            .then(b => {
+                var test = [{ id: 1 }];
+                b.setInstanceProperty(test, "[0].id", 2);
+                expect(test[0].id).to.be.eq(2);
+
+            });
+    })
 });

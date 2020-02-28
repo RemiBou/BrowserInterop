@@ -50,7 +50,7 @@ namespace BrowserInterop.Screen
         /// <returns></returns>
         public async Task<IAsyncDisposable> OnChange(Func<Task> toDo)
         {
-            return await jsRuntime.AddEventListener(windowRef, "screen.orientation", "change", toDo);
+            return await jsRuntime.AddEventListener(windowRef, "screen.orientation", "change", CallBackInteropWrapper.Create(toDo));
         }
 
         /// <summary>
