@@ -51,6 +51,7 @@ browserInterop = new (function () {
                         args.push(me.storeObjectRef(element));
                     }
                 }
+                console.log(args);
                 netObjectRef.invokeMethodAsync('Invoke', ...args);
             };
         } else {

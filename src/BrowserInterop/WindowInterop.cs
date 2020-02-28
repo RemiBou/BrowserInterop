@@ -382,17 +382,16 @@ namespace BrowserInterop
                 this.JsRuntimeObjectRef,
                  "",
                  "message",
-                CallBackInteropWrapper.Create<JsRuntimeObjectRef[]>(
+                CallBackInteropWrapper.Create<JsRuntimeObjectRef>(
                     async payload =>
                     {
-                        var firstParam = payload[0];
                         var eventPayload = new OnMessageEventPayload<T>()
                         {
-                            Data = await jsRuntime.GetInstancePropertyAsync<T>(firstParam, "data"),
-                            Origin = await jsRuntime.GetInstancePropertyAsync<string>(firstParam, "origin"),
-                            Source = await jsRuntime.GetInstancePropertyAsync<WindowInterop>(firstParam, "source", false)
+                            Data = await jsRuntime.GetInstancePropertyAsync<T>(payload, "data"),
+                            Origin = await jsRuntime.GetInstancePropertyAsync<string>(payload, "origin"),
+                            Source = await jsRuntime.GetInstancePropertyAsync<WindowInterop>(payload, "source", false)
                         };
-                        eventPayload.Source.SetJsRuntime(jsRuntime, await jsRuntime.GetInstancePropertyRefAsync(firstParam, "source"));
+                        eventPayload.Source.SetJsRuntime(jsRuntime, await jsRuntime.GetInstancePropertyRefAsync(payload, "source"));
 
                         await todo.Invoke(eventPayload);
                     },
