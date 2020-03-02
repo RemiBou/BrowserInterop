@@ -239,6 +239,57 @@ await listener.DisposeAsync();
 await jsRuntime.HasProperty(windowObjectRef, "navigator.registerProtocolHandler")
 ```
 
+## TODO List
+
+These are the method/events I intedn to wrap before releasing V1 :
+
+Window.scrollByLines() 
+Window.scrollByPages() 
+Window.scrollTo()
+Window.sizeToContent() 
+Window.stop()
+EventTarget.dispatchEvent()
+Window.onappinstalled
+Window.onbeforeinstallprompt
+Window.ondevicemotion
+Window.ondeviceorientation
+Window.ongamepadconnected
+Window.ongamepaddisconnected
+GlobalEventHandlers.onabort
+WindowEventHandlers.onafterprint
+WindowEventHandlers.onbeforeprint
+WindowEventHandlers.onbeforeunload
+GlobalEventHandlers.onblur
+GlobalEventHandlers.onchange
+GlobalEventHandlers.onclick
+GlobalEventHandlers.ondblclick
+GlobalEventHandlers.onclose
+GlobalEventHandlers.oncontextmenu
+GlobalEventHandlers.onerror
+GlobalEventHandlers.onfocus
+WindowEventHandlers.onhashchange
+WindowEventHandlers.onlanguagechange
+GlobalEventHandlers.onload
+GlobalEventHandlers.onmousedown
+GlobalEventHandlers.onmousemove
+GlobalEventHandlers.onmouseout
+GlobalEventHandlers.onmouseover
+GlobalEventHandlers.onmouseup
+WindowEventHandlers.onoffline
+WindowEventHandlers.ononline
+WindowEventHandlers.onpagehide
+WindowEventHandlers.onpageshow
+WindowEventHandlers.onpopstate
+GlobalEventHandlers.onreset
+GlobalEventHandlers.onresize
+GlobalEventHandlers.onscroll
+GlobalEventHandlers.onwheel
+WindowEventHandlers.onstorage
+WindowEventHandlers.onunload
+clipboardchange
+copy
+cut
+paste
 
 
 
