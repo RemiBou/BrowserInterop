@@ -27,6 +27,9 @@
 <button id="btn-window-refresh-opened" @onclick="@(async() => opened = await jsRuntime.GetInstanceContent(opened, false))">Refresh Opened</button>
 <button id="btn-window-resizeBy" @onclick="@(async() => await window.ResizeBy(100,200))">ResizeBy</button>
 <button id="btn-window-resizeTo" @onclick="@(async() => await window.ResizeTo(150,250))">ResizeTo</button>
+<button id="btn-window-scroll" @onclick="@(async() => await window.Scroll(150,250))">Scroll</button>
+<button id="btn-window-scrollBy" @onclick="@(async() => await window.ScrollBy(new ScrollToOptions(150,250, ScrollToOptions.ScrollToOptionsBehaviorEnum.Smooth) ))">ScrollBy</button>
+
 
 <button id="btn-window-close-opened" @onclick="@(async() => await opened.Close())">Close Opened</button><br/>
 Window :

@@ -485,6 +485,49 @@ namespace BrowserInterop
             await jsRuntime.InvokeInstanceMethodAsync(JsRuntimeObjectRef, "resizeTo", width, height);
         }
 
+        /// <summary>
+        /// scrolls the window to a particular place in the document.
+        /// </summary>
+        /// <param name="xCoord">the pixel along the horizontal axis of the document that you want displayed in the upper left.</param>
+        /// <param name="yCoord">the pixel along the vertical axis of the document that you want displayed in the upper left.</param>
+        /// <returns></returns>
+        public async Task Scroll(int xCoord, int yCoord)
+        {
+            await jsRuntime.InvokeInstanceMethodAsync(JsRuntimeObjectRef, "scroll", xCoord, yCoord);
+
+        }
+
+        /// <summary>
+        /// scrolls the window to a particular place in the document.
+        /// </summary>
+        /// <param name="options"></param>
+        /// <returns></returns>
+        public async Task Scroll(ScrollToOptions options)
+        {
+            await jsRuntime.InvokeInstanceMethodAsync(JsRuntimeObjectRef, "scroll", options);
+        }
+
+        /// <summary>
+        /// scrolls the document in the window by the given amount.
+        /// </summary>
+        /// <param name="xCoord">the pixel along the horizontal axis of the document that you want displayed in the upper left.</param>
+        /// <param name="yCoord">the pixel along the vertical axis of the document that you want displayed in the upper left.</param>
+        /// <returns></returns>
+        public async Task ScrollBy(int xCoord, int yCoord)
+        {
+            await jsRuntime.InvokeInstanceMethodAsync(JsRuntimeObjectRef, "scrollBy", xCoord, yCoord);
+
+        }
+
+        /// <summary>
+        /// scrolls the document in the window by the given amount.
+        /// </summary>
+        /// <param name="options"></param>
+        /// <returns></returns>
+        public async Task ScrollBy(ScrollToOptions options)
+        {
+            await jsRuntime.InvokeInstanceMethodAsync(JsRuntimeObjectRef, "scrollBy", options);
+        }
     }
 
     /// <summary>

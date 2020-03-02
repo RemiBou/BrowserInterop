@@ -103,6 +103,8 @@ context('window.navigator', () => {
     windowMethodCallTest("cancelAnimationFrame", () => { }, 1);
     windowMethodCallTest("resizeBy", () => { }, 100, 200);
     windowMethodCallTest("resizeTo", () => { }, 150, 250);
+    windowMethodCallTest("scroll", () => { }, 150, 250);
+    windowMethodCallTest("scrollBy", () => { }, { top: 150, left: 250, behavior: 'smooth' });
     it('window postMessage', () => {
         cy.get("#btn-window-postMessage").click();
         cy.get("#window-message-data").should("have.text", "message");
