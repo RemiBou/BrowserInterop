@@ -463,6 +463,28 @@ namespace BrowserInterop
             await jsRuntime.InvokeInstanceMethodAsync(JsRuntimeObjectRef, "cancelIdleCallback", id);
         }
 
+        /// <summary>
+        ///  resizes the current window by a specified amount.
+        /// </summary>
+        /// <param name="xDelta">the number of pixels to grow the window horizontally.</param>
+        /// <param name="yDelta"> the number of pixels to grow the window vertically.</param>
+        /// <returns></returns>
+        public async Task ResizeBy(int xDelta, int yDelta)
+        {
+            await jsRuntime.InvokeInstanceMethodAsync(JsRuntimeObjectRef, "resizeBy", xDelta, yDelta);
+        }
+
+        /// <summary>
+        /// dynamically resizes the window.
+        /// </summary>
+        /// <param name="width">An integer representing the new outerWidth in pixels (including scroll bars, title bars, etc).</param>
+        /// <param name="height">An integer value representing the new outerHeight in pixels (including scroll bars, title bars, etc).</param>
+        /// <returns></returns>
+        public async Task ResizeTo(int width, int height)
+        {
+            await jsRuntime.InvokeInstanceMethodAsync(JsRuntimeObjectRef, "resizeTo", width, height);
+        }
+
     }
 
     /// <summary>

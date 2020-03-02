@@ -101,6 +101,8 @@ context('window.navigator', () => {
     windowMethodCallTest("moveBy", () => { }, 1, 2);
     windowMethodCallTest("moveTo", () => { }, 3, 4);
     windowMethodCallTest("cancelAnimationFrame", () => { }, 1);
+    windowMethodCallTest("resizeBy", () => { }, 100, 200);
+    windowMethodCallTest("resizeTo", () => { }, 150, 250);
     it('window postMessage', () => {
         cy.get("#btn-window-postMessage").click();
         cy.get("#window-message-data").should("have.text", "message");

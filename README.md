@@ -204,6 +204,8 @@ _All the window method/properties/events will also work if you use it on frames 
     - window.cancelRequestAnimationFrame
     - window.requestIdleCallback
     - window.cancelRequestIdleCallback
+    - window.resizeBy
+    - window.resizeTo
 
 
 ## Utility method
