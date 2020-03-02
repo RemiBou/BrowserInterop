@@ -209,6 +209,8 @@ _All the window method/properties/events will also work if you use it on frames 
     - window.scroll
     - window.scrollBy
     - window.stop
+    - window.onappinstalled
+    -
 
 
 ## Utility method
@@ -244,14 +246,11 @@ await jsRuntime.HasProperty(windowObjectRef, "navigator.registerProtocolHandler"
 
 These are the method/events I intedn to wrap before releasing V1 :
 
-EventTarget.dispatchEvent()
-Window.onappinstalled
 Window.onbeforeinstallprompt
 Window.ondevicemotion
 Window.ondeviceorientation
 Window.ongamepadconnected
 Window.ongamepaddisconnected
-GlobalEventHandlers.onabort
 WindowEventHandlers.onafterprint
 WindowEventHandlers.onbeforeprint
 WindowEventHandlers.onbeforeunload

@@ -56,9 +56,7 @@ namespace BrowserInterop
                 GetJsObjectRef = getJsObjectRef
             };
             return res;
-
         }
-
 
         public object CallbackRef { get; set; }
     }

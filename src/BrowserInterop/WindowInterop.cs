@@ -538,6 +538,17 @@ namespace BrowserInterop
             await jsRuntime.InvokeInstanceMethodAsync(JsRuntimeObjectRef, "stop");
 
         }
+
+        /// <summary>
+        /// Called when the page is installed as a webapp.
+        /// </summary>
+        /// <param name="callback"></param>
+        /// <returns></returns>
+        public async Task<IAsyncDisposable> OnAppInstalled(Func<Task> callback)
+        {
+            return await jsRuntime.AddEventListener(JsRuntimeObjectRef, "", "onappinstalled", CallBackInteropWrapper.Create(callback, getDeepObject: false));
+        }
+
     }
 
     /// <summary>

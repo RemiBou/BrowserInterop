@@ -184,10 +184,6 @@ namespace BrowserInterop
             return new ActionAsyncDisposable(async () => await jsRuntime.InvokeVoidAsync("browserInterop.removeEventListener", jsRuntimeObject, propertyName, eventName, listenerId));
         }
 
-
-
-
-
         /// <summary>
         /// Invoke the specified method with JSInterop and returns default(T) if the timeout is reached
         /// </summary>

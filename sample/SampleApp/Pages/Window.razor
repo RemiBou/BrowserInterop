@@ -87,6 +87,14 @@ PostMessage Payload :
     <li>Origin : <span id="window-message-origin">@onMessageEventPayload?.Origin</span></li>
     <li>Source is not null : <span id="window-message-source">@((onMessageEventPayload?.Source != null).ToString().ToLower())</span></li>
 </ul>
+
+Event triggered : <br/>
+<ul>
+    @foreach (var evt in eventTriggered)
+    {
+        <li id="@("window-event-"+evt)">@evt</li>
+    }
+</ul>
 @code{
     private WindowInterop window;
     private WindowInterop opened;
@@ -100,6 +108,7 @@ PostMessage Payload :
     private int animationFrame = 0;
     private int requestIdleCallback = 0;
     private TimeSpan? requestIdleCallbackTimeout;
+    private List<string> eventTriggered = new List<string>();
 
     private OnMessageEventPayload<string> onMessageEventPayload;
     protected override async Task OnInitializedAsync()
@@ -125,9 +134,14 @@ PostMessage Payload :
             StateHasChanged();
             await Task.CompletedTask;
         });
-
-
-      
+        await window.OnAppInstalled(async () => {
+           await AddEventHandled("onappinstalled");
+        });      
+    }
+    protected async Task AddEventHandled(string evtName){
+        eventTriggered.Add(evtName);
+        StateHasChanged();
+        await Task.CompletedTask;
     }
     protected async Task RequestAnimationFrame(){
 

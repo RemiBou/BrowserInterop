@@ -137,6 +137,16 @@ context('window.navigator', () => {
         cy.get("#btn-window-requestIdleCallback").click();
         cy.get("#window-requestIdleCallback").should("have.text", "1");
         cy.get("#window-requestIdleCallbackTimeout").should("not.be.empty");
-    })
+    });
+    function windowEventTest(eventName) {
+        it("window " + eventName, () => {
+            cy.window()
+                .then(w => {
+                    w.dispatchEvent(new Event(eventName))
+                });
+            cy.get("#window-event-" + eventName).should('exist');
+        });
+    }
+    windowEventTest('onappinstalled');
 
 });
