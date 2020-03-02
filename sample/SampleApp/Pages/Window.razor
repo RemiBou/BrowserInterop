@@ -16,9 +16,12 @@
 <button id="btn-window-moveBy" @onclick="@(async() => await window.MoveBy(1,2))">MoveBy</button>
 <button id="btn-window-moveTo" @onclick="@(async() => await window.MoveTo(3,4))">MoveTo</button>
 <button id="btn-window-focus" @onclick="@(async() => await window.Focus())">Focus</button>
+<button id="btn-window-requestAnimationFrame" @onclick="RequestAnimationFrame">requestAnimationFrame</button>
+<button id="btn-window-requestIdleCallback" @onclick="RequestIdleCallback">requestIdleCallback</button>
 <button id="btn-window-postMessage" @onclick="@(async() => await window.PostMessage("message","http://localhost:5000"))">PostMessage</button>
 <button id="btn-window-print" @onclick="@(async() => await window.Print())">Print</button>
 <button id="btn-window-prompt" @onclick="@(async() => await window.Prompt("message","return"))">Prompt</button>
+<button id="btn-window-cancelAnimationFrame" @onclick="@(async() => await window.CancelAnimationFrame(1))">cancelAnimationFrame</button>
 
 <button id="btn-window-open" @onclick="@(async() => opened = await window.Open("/window", "_blank", new WindowFeature(){ MenuBar = false }))">Open</button>
 <button id="btn-window-refresh-opened" @onclick="@(async() => opened = await jsRuntime.GetInstanceContent(opened, false))">Refresh Opened</button>
@@ -26,7 +29,9 @@
 <button id="btn-window-close-opened" @onclick="@(async() => await opened.Close())">Close Opened</button><br/>
 Window :
 <ul>
-    <li>animationFrame : @animationFrame</li>
+    <li>animationFrame : <span id="window-requestAnimationFrame">@animationFrame</span></li>
+    <li>requestIdleCallback : <span id="window-requestIdleCallback">@requestIdleCallback</span></li>
+    <li>requestIdleCallbackTimeout : <span id="window-requestIdleCallbackTimeout">@requestIdleCallbackTimeout</span></li>
     <li>InnerHeight: <span id="window-innerHeight">@window?.InnerHeight</span></li>
     <li>InnerWidth: <span id="window-innerWidth">@window?.InnerWidth</span></li>  
     <li>OuterHeight: <span id="window-outerHeight">@window?.OuterHeight</span></li>
@@ -87,6 +92,8 @@ PostMessage Payload :
     private int resizeHandled;
     private int scrollHandled;
     private int animationFrame = 0;
+    private int requestIdleCallback = 0;
+    private TimeSpan? requestIdleCallbackTimeout;
 
     private OnMessageEventPayload<string> onMessageEventPayload;
     protected override async Task OnInitializedAsync()
@@ -113,8 +120,21 @@ PostMessage Payload :
             await Task.CompletedTask;
         });
 
+
+      
+    }
+    protected async Task RequestAnimationFrame(){
+
         await window.RequestAnimationFrame(async d => {
             animationFrame++;
+            StateHasChanged();
+            await Task.CompletedTask;
+        });
+    }
+    protected async Task RequestIdleCallback(){
+          await window.RequestIdleCallback(async d => {
+            requestIdleCallback++;
+            requestIdleCallbackTimeout = await d.TimeRemaining();
             StateHasChanged();
             await Task.CompletedTask;
         });

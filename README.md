@@ -201,6 +201,9 @@ _All the window method/properties/events will also work if you use it on frames 
     - window.print
     - window.prompt
     - window.requestAnimationFrame
+    - window.cancelRequestAnimationFrame
+    - window.requestIdleCallback
+    - window.cancelRequestIdleCallback
 
 
 ## Utility method

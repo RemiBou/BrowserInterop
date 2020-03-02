@@ -422,12 +422,47 @@ namespace BrowserInterop
         /// Tells the browser that you wish to perform an animation and requests that the browser calls a specified function to update an animation before the next repaint. The method takes a callback as an argument to be invoked before the repaint.
         /// </summary>
         /// <param name="callback">ells the browser that you wish to perform an animation and requests that the browser calls a specified function to update an animation before the next repaint. The method takes a callback as an argument to be invoked before the repaint.</param>
-        /// <returns></returns>
-        public async Task RequestAnimationFrame(Func<double, Task> callback)
+        /// <returns>The request ID, can be used for cancelling it</returns>
+        public async Task<int> RequestAnimationFrame(Func<double, Task> callback)
         {
-            await jsRuntime.InvokeInstanceMethodAsync(JsRuntimeObjectRef, "requestAnimationFrame", CallBackInteropWrapper.Create(callback));
-
+            return await jsRuntime.InvokeInstanceMethodAsync<int>(JsRuntimeObjectRef, "requestAnimationFrame", CallBackInteropWrapper.Create(callback));
         }
+
+        /// <summary>
+        /// cancels an animation frame request previously scheduled through a call to RequestAnimationFrame().
+        /// </summary>
+        /// <param name="id">Id returned by RequestAnimationFrame</param>
+        /// <returns></returns>
+        public async Task CancelAnimationFrame(int id)
+        {
+            await jsRuntime.InvokeInstanceMethodAsync(JsRuntimeObjectRef, "cancelAnimationFrame", id);
+        }
+
+        /// <summary>
+        /// queues a function to be called during a browser's idle periods. This enables developers to perform background and low priority work on the main event loop, without impacting latency-critical events such as animation and input response.
+        /// </summary>
+        /// <param name="callback">ells the browser that you wish to perform an animation and requests that the browser calls a specified function to update an animation before the next repaint. The method takes a callback as an argument to be invoked before the repaint.</param>
+        /// <returns>The request ID, can be used for cancelling it</returns>
+        public async Task<int> RequestIdleCallback(Func<IdleDeadline, Task> callback, RequestIdleCallbackOptions options = null)
+        {
+            return await jsRuntime.InvokeInstanceMethodAsync<int>(JsRuntimeObjectRef, "requestIdleCallback", CallBackInteropWrapper.Create<JsRuntimeObjectRef>(async jsRef =>
+            {
+                IdleDeadline idleDeadline = await jsRuntime.GetInstanceContent<IdleDeadline>(jsRef, true);
+                idleDeadline.SetJsRuntime(jsRuntime, jsRef);
+                await callback.Invoke(idleDeadline);
+            }, getJsObjectRef: true), options);
+        }
+
+        /// <summary>
+        /// cancels a callback previously scheduled with RequestIdleCallback()
+        /// </summary>
+        /// <param name="id">Id returned by RequestIdleCallback</param>
+        /// <returns></returns>
+        public async Task CancelIdleCallback(int id)
+        {
+            await jsRuntime.InvokeInstanceMethodAsync(JsRuntimeObjectRef, "cancelIdleCallback", id);
+        }
+
     }
 
     /// <summary>

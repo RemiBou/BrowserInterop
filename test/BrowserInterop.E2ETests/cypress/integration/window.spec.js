@@ -100,6 +100,7 @@ context('window.navigator', () => {
     windowMethodCallTest("prompt", () => { return "text"; }, "message", "return");
     windowMethodCallTest("moveBy", () => { }, 1, 2);
     windowMethodCallTest("moveTo", () => { }, 3, 4);
+    windowMethodCallTest("cancelAnimationFrame", () => { }, 1);
     it('window postMessage', () => {
         cy.get("#btn-window-postMessage").click();
         cy.get("#window-message-data").should("have.text", "message");
@@ -123,5 +124,14 @@ context('window.navigator', () => {
         cy.get("#btn-window-close-opened").click();
         cy.get('@spyClose').should('be.calledOnce');
     });
+    it('window requestAnimationFrame', () => {
+        cy.get("#btn-window-requestAnimationFrame").click();
+        cy.get("#window-requestAnimationFrame").should("have.text", "1");
+    })
+    it('window requestIdleCallback', () => {
+        cy.get("#btn-window-requestIdleCallback").click();
+        cy.get("#window-requestIdleCallback").should("have.text", "1");
+        cy.get("#window-requestIdleCallbackTimeout").should("not.be.empty");
+    })
 
 });
