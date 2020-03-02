@@ -104,6 +104,7 @@ context('window.navigator', () => {
     windowMethodCallTest("resizeBy", () => { }, 100, 200);
     windowMethodCallTest("resizeTo", () => { }, 150, 250);
     windowMethodCallTest("scroll", () => { }, 150, 250);
+    windowMethodCallTest("stop", () => { });
     windowMethodCallTest("scrollBy", () => { }, { top: 150, left: 250, behavior: 'smooth' });
     it('window postMessage', () => {
         cy.get("#btn-window-postMessage").click();

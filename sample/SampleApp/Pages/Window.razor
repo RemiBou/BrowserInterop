@@ -29,6 +29,7 @@
 <button id="btn-window-resizeTo" @onclick="@(async() => await window.ResizeTo(150,250))">ResizeTo</button>
 <button id="btn-window-scroll" @onclick="@(async() => await window.Scroll(150,250))">Scroll</button>
 <button id="btn-window-scrollBy" @onclick="@(async() => await window.ScrollBy(new ScrollToOptions(150,250, ScrollToOptions.ScrollToOptionsBehaviorEnum.Smooth) ))">ScrollBy</button>
+<button id="btn-window-stop" @onclick="@(async() => await window.Stop())">Stop</button>
 
 
 <button id="btn-window-close-opened" @onclick="@(async() => await opened.Close())">Close Opened</button><br/>

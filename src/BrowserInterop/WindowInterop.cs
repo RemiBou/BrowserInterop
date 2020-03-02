@@ -528,6 +528,16 @@ namespace BrowserInterop
         {
             await jsRuntime.InvokeInstanceMethodAsync(JsRuntimeObjectRef, "scrollBy", options);
         }
+
+        /// <summary>
+        ///  stops further resource loading in the current browsing context, equivalent to the stop button in the browser.
+        /// </summary>
+        /// <returns></returns>
+        public async Task Stop()
+        {
+            await jsRuntime.InvokeInstanceMethodAsync(JsRuntimeObjectRef, "stop");
+
+        }
     }
 
     /// <summary>

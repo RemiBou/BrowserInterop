@@ -208,6 +208,7 @@ _All the window method/properties/events will also work if you use it on frames 
     - window.resizeTo
     - window.scroll
     - window.scrollBy
+    - window.stop
 
 
 ## Utility method
@@ -243,11 +244,6 @@ await jsRuntime.HasProperty(windowObjectRef, "navigator.registerProtocolHandler"
 
 These are the method/events I intedn to wrap before releasing V1 :
 
-Window.scrollByLines() 
-Window.scrollByPages() 
-Window.scrollTo()
-Window.sizeToContent() 
-Window.stop()
 EventTarget.dispatchEvent()
 Window.onappinstalled
 Window.onbeforeinstallprompt
