@@ -135,8 +135,17 @@ Event triggered : <br/>
             await Task.CompletedTask;
         });
         await window.OnAppInstalled(async () => {
-           await AddEventHandled("onappinstalled");
+           await AddEventHandled("appinstalled");
         });      
+        await window.OnError(async () => {
+           await AddEventHandled("error");
+        });      
+        await window.OnLanguageCHange(async () => {
+           await AddEventHandled("languagechange");
+        });      
+        await window.OnOrientationChange(async () => {
+           await AddEventHandled("orientationchange");
+        });         
     }
     protected async Task AddEventHandled(string evtName){
         eventTriggered.Add(evtName);

@@ -210,7 +210,9 @@ _All the window method/properties/events will also work if you use it on frames 
     - window.scrollBy
     - window.stop
     - window.onappinstalled
-    -
+    - window.onerror
+    - window.onlanguagechange
+    - window.onorientationchange
 
 
 ## Utility method
@@ -241,51 +243,3 @@ await listener.DisposeAsync();
 //will return true if window.navigator.registerProtocolHandler property exists
 await jsRuntime.HasProperty(windowObjectRef, "navigator.registerProtocolHandler")
 ```
-
-## TODO List
-
-These are the method/events I intedn to wrap before releasing V1 :
-
-Window.onbeforeinstallprompt
-Window.ondevicemotion
-Window.ondeviceorientation
-Window.ongamepadconnected
-Window.ongamepaddisconnected
-WindowEventHandlers.onafterprint
-WindowEventHandlers.onbeforeprint
-WindowEventHandlers.onbeforeunload
-GlobalEventHandlers.onblur
-GlobalEventHandlers.onchange
-GlobalEventHandlers.onclick
-GlobalEventHandlers.ondblclick
-GlobalEventHandlers.onclose
-GlobalEventHandlers.oncontextmenu
-GlobalEventHandlers.onerror
-GlobalEventHandlers.onfocus
-WindowEventHandlers.onhashchange
-WindowEventHandlers.onlanguagechange
-GlobalEventHandlers.onload
-GlobalEventHandlers.onmousedown
-GlobalEventHandlers.onmousemove
-GlobalEventHandlers.onmouseout
-GlobalEventHandlers.onmouseover
-GlobalEventHandlers.onmouseup
-WindowEventHandlers.onoffline
-WindowEventHandlers.ononline
-WindowEventHandlers.onpagehide
-WindowEventHandlers.onpageshow
-WindowEventHandlers.onpopstate
-GlobalEventHandlers.onreset
-GlobalEventHandlers.onresize
-GlobalEventHandlers.onscroll
-GlobalEventHandlers.onwheel
-WindowEventHandlers.onstorage
-WindowEventHandlers.onunload
-clipboardchange
-copy
-cut
-paste
-
-
-
-

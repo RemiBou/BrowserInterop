@@ -147,6 +147,10 @@ context('window.navigator', () => {
             cy.get("#window-event-" + eventName).should('exist');
         });
     }
-    windowEventTest('onappinstalled');
+    windowEventTest('appinstalled');
+    //this test must stay comented as it makes cypress test fail because it's an error
+    //windowEventTest('error');
+    windowEventTest('languagechange');
+    windowEventTest('orientationchange');
 
 });

@@ -546,9 +546,48 @@ namespace BrowserInterop
         /// <returns></returns>
         public async Task<IAsyncDisposable> OnAppInstalled(Func<Task> callback)
         {
-            return await jsRuntime.AddEventListener(JsRuntimeObjectRef, "", "onappinstalled", CallBackInteropWrapper.Create(callback, getDeepObject: false));
+            return await jsRuntime.AddEventListener(JsRuntimeObjectRef, "", "appinstalled", CallBackInteropWrapper.Create(callback, getDeepObject: false));
         }
 
+        /// <summary>
+        /// Fired when a resource failed to load, or can't be used. For example, if a script has an execution error or an image can't be found or is invalid.
+        /// </summary>
+        /// <param name="callback"></param>
+        /// <returns></returns>
+        public async Task<IAsyncDisposable> OnError(Func<Task> callback)
+        {
+            return await jsRuntime.AddEventListener(JsRuntimeObjectRef, "", "error", CallBackInteropWrapper.Create(callback, getDeepObject: false));
+        }
+
+        /// <summary>
+        /// The languagechange event is fired at the global scope object when the user's preferred language changes.
+        /// </summary>
+        /// <param name="callback"></param>
+        /// <returns></returns>
+        public async Task<IAsyncDisposable> OnLanguageCHange(Func<Task> callback)
+        {
+            return await jsRuntime.AddEventListener(JsRuntimeObjectRef, "", "languagechange", CallBackInteropWrapper.Create(callback, getDeepObject: false));
+        }
+
+        /// <summary>
+        /// The orientationchange event is fired when the orientation of the device has changed.
+        /// </summary>
+        /// <param name="callback"></param>
+        /// <returns></returns>
+        public async Task<IAsyncDisposable> OnOrientationChange(Func<Task> callback)
+        {
+            return await jsRuntime.AddEventListener(JsRuntimeObjectRef, "", "orientationchange", CallBackInteropWrapper.Create(callback, getDeepObject: false));
+        }
+
+        /// <summary>
+        /// The orientationchange event is fired when the orientation of the device has changed.
+        /// </summary>
+        /// <param name="callback"></param>
+        /// <returns></returns>
+        public async Task<IAsyncDisposable> OnOrientationChange(Func<Task> callback)
+        {
+            return await jsRuntime.AddEventListener(JsRuntimeObjectRef, "", "orientationchange", CallBackInteropWrapper.Create(callback, getDeepObject: false));
+        }
     }
 
     /// <summary>
