@@ -1,7 +1,6 @@
 
 browserInterop = new (function () {
-    var weakMap = new WeakMap();
-    var weakMapKeys = {};
+    var jsObectRefs = {};
     var jsObjectRefId = 0;
     var me = this;
 
@@ -15,11 +14,10 @@ browserInterop = new (function () {
             typeof value[jsRefKey] === 'number') {
 
             var id = value[jsRefKey];
-            if (!(id in weakMapKeys) && !weakMap.has(weakMapKeys[id])) {
+            if (!(id in jsObectRefs)) {
                 throw new Error("This JS object reference does not exists : " + id);
             }
-            const instance = weakMap.get(weakMapKeys[id]);
-            return instance;
+            return jsObectRefs[id];
         } else {
             return value;
         }
@@ -85,11 +83,13 @@ browserInterop = new (function () {
     };
     this.storeObjectRef = function (obj) {
         var id = jsObjectRefId++;
-        weakMapKeys[id] = { id: id };
-        weakMap.set(weakMapKeys[id], obj);
+        jsObectRefs[id] = obj;
         var jsRef = {};
         jsRef[jsRefKey] = id;
         return jsRef;
+    }
+    this.removeObjectRef = function (id) {
+        delete jsObectRefs[id];
     }
     function getPropertyList(path) {
         var res = path.replace('[', '.').replace(']', '').split('.');

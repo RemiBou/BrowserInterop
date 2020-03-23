@@ -229,5 +229,36 @@ context('scripts', () => {
                 expect(test[0].id).to.be.eq(2);
 
             });
-    })
+    });
+
+    it('jsObjectRefRevive returns instance with serialized key from storeObjectRef', () => {
+        cy.window()
+            .its('browserInterop')
+            .then(b => {
+                var test = [{ id: 1 }];
+                var key = b.storeObjectRef(test);
+                var test2 = b.jsObjectRefRevive("", JSON.parse(JSON.stringify(key)));
+                expect(test).to.be.eq(test);
+
+
+            });
+    });
+    it('removeObjectRef makes future call fail', () => {
+        cy.window()
+            .its('browserInterop')
+            .then(b => {
+                var test = [{ id: 1 }];
+                var key = b.storeObjectRef(test);
+                b.removeObjectRef(key['__jsObjectRefId']);
+                var test2 = null;
+                try {
+                    test2 = b.jsObjectRefRevive("", JSON.parse(JSON.stringify(key)));
+                } catch{
+
+                }
+                expect(test2).to.be.eq(null);
+
+
+            });
+    });
 });

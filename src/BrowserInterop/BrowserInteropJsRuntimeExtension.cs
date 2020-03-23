@@ -94,7 +94,9 @@ namespace BrowserInterop
         /// <returns></returns>
         public static async Task<JsRuntimeObjectRef> GetInstancePropertyRefAsync(this IJSRuntime jsRuntime, JsRuntimeObjectRef jsObjectRef, string propertyPath)
         {
-            return await jsRuntime.InvokeAsync<JsRuntimeObjectRef>("browserInterop.getInstancePropertyRef", jsObjectRef, propertyPath);
+            JsRuntimeObjectRef jsRuntimeObjectRef = await jsRuntime.InvokeAsync<JsRuntimeObjectRef>("browserInterop.getInstancePropertyRef", jsObjectRef, propertyPath);
+            jsRuntimeObjectRef.JSRuntime = jsRuntime;
+            return jsRuntimeObjectRef;
         }
 
 
@@ -130,7 +132,7 @@ namespace BrowserInterop
         /// <param name="jsRuntime1">Curent JS Runtime</param>
         /// <param name="windowObject">Object holding reference to the js object</param>
         /// <returns></returns>
-        public static async Task<T> GetInstanceContent<T>(this IJSRuntime jsRuntime, T jsObject, bool deep) where T : IJsObjectWrapper
+        public static async Task<T> GetInstanceContent<T>(this IJSRuntime jsRuntime, T jsObject, bool deep) where T : JsObjectWrapperBase
         {
             var content = await jsRuntime.InvokeAsync<T>("browserInterop.returnInstance", jsObject.JsRuntimeObjectRef, deep);
             content.SetJsRuntime(jsRuntime, jsObject.JsRuntimeObjectRef);
@@ -160,7 +162,9 @@ namespace BrowserInterop
         /// <returns></returns>
         public static async Task<JsRuntimeObjectRef> InvokeInstanceMethodGetRefAsync(this IJSRuntime jsRuntime, JsRuntimeObjectRef windowObject, string methodName, params object[] arguments)
         {
-            return await jsRuntime.InvokeAsync<JsRuntimeObjectRef>("browserInterop.callInstanceMethodGetRef", new object[] { windowObject, methodName }.Concat(arguments).ToArray());
+            var jsRuntimeObjectRef = await jsRuntime.InvokeAsync<JsRuntimeObjectRef>("browserInterop.callInstanceMethodGetRef", new object[] { windowObject, methodName }.Concat(arguments).ToArray());
+            jsRuntimeObjectRef.JSRuntime = jsRuntime;
+            return jsRuntimeObjectRef;
         }
 
         public static async Task<bool> HasProperty(this IJSRuntime jsRuntime, JsRuntimeObjectRef jsObject, string propertyPath)

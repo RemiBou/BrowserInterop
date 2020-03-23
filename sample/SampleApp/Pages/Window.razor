@@ -1,6 +1,7 @@
 @page "/window"
 @inject IJSRuntime jsRuntime;
 @using BrowserInterop
+@implements IAsyncDisposable
 <iframe id="child-iframe" src="/navigator"></iframe><br/>
 <button id="btn-window" @onclick="async() => window = await jsRuntime.Window()">Get window</button>
 
@@ -116,70 +117,91 @@ Event triggered : <br/>
         window = await jsRuntime.Window();
         personalBarVisible = await window.PersonalBar.GetVisible();
         viewport = await window.VisualViewport();
-        if(viewport != null){
-            await viewport?.OnResize(() => {
+        if (viewport != null)
+        {
+            await viewport?.OnResize(() =>
+            {
                 resizeHandled++;
                 StateHasChanged();
                 return Task.CompletedTask;
             });
-            
-            await viewport?.OnScroll(() => {
+
+            await viewport?.OnScroll(() =>
+            {
                 scrollHandled++;
                 StateHasChanged();
                 return Task.CompletedTask;
             });
         }
-        await window.OnMessage<string>(async (payload) => {
+        await window.OnMessage<string>(async (payload) =>
+        {
             onMessageEventPayload = payload;
             StateHasChanged();
             await Task.CompletedTask;
         });
-        await window.OnAppInstalled(async () => {
-           await AddEventHandled("appinstalled");
-        });      
-        await window.OnError(async () => {
-           await AddEventHandled("error");
-        });      
-        await window.OnLanguageCHange(async () => {
-           await AddEventHandled("languagechange");
-        });      
-        await window.OnOrientationChange(async () => {
-           await AddEventHandled("orientationchange");
-        });         
+        await window.OnAppInstalled(async () =>
+        {
+            await AddEventHandled("appinstalled");
+        });
+        await window.OnError(async () =>
+        {
+            await AddEventHandled("error");
+        });
+        await window.OnLanguageCHange(async () =>
+        {
+            await AddEventHandled("languagechange");
+        });
+        await window.OnOrientationChange(async () =>
+        {
+            await AddEventHandled("orientationchange");
+        });
     }
-    protected async Task AddEventHandled(string evtName){
+    protected async Task AddEventHandled(string evtName)
+    {
         eventTriggered.Add(evtName);
         StateHasChanged();
         await Task.CompletedTask;
     }
-    protected async Task RequestAnimationFrame(){
+    protected async Task RequestAnimationFrame()
+    {
 
-        await window.RequestAnimationFrame(async d => {
+        await window.RequestAnimationFrame(async d =>
+        {
             animationFrame++;
             StateHasChanged();
             await Task.CompletedTask;
         });
     }
-    protected async Task RequestIdleCallback(){
-          await window.RequestIdleCallback(async d => {
+    protected async Task RequestIdleCallback()
+    {
+        await window.RequestIdleCallback(async d =>
+        {
             requestIdleCallback++;
             requestIdleCallbackTimeout = await d.TimeRemaining();
             StateHasChanged();
             await Task.CompletedTask;
         });
     }
-    protected async Task GetOpener(){
+    protected async Task GetOpener()
+    {
         opener = await window.Opener();
     }
-    protected async Task GetParent(){
+    protected async Task GetParent()
+    {
         parent = await window.Parent();
     }
-    protected async Task SetName(){
+    protected async Task SetName()
+    {
         await window.SetName("Bla bla bla");
     }
     protected async Task ChildFrameConsole()
     {
         child = await window.Frames.Get(0);
         await child.Console.Log("test child");
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        await _ope
     }
 }

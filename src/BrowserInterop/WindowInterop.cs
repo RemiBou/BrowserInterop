@@ -7,15 +7,25 @@ using System.Collections.Generic;
 
 namespace BrowserInterop
 {
-    public interface IJsObjectWrapper
+    public class JsObjectWrapperBase : IAsyncDisposable
     {
-        void SetJsRuntime(IJSRuntime jsRuntime, JsRuntimeObjectRef jsObjectRef);
-        JsRuntimeObjectRef JsRuntimeObjectRef { get; }
+        public JsRuntimeObjectRef JsRuntimeObjectRef { get; protected set; }
+        protected IJSRuntime jsRuntime;
+        public virtual void SetJsRuntime(IJSRuntime jsRuntime, JsRuntimeObjectRef jsObjectRef)
+        {
+            this.JsRuntimeObjectRef = jsObjectRef;
+            this.jsRuntime = jsRuntime;
+        }
+
+        public async ValueTask DisposeAsync()
+        {
+            await this.JsRuntimeObjectRef.DisposeAsync();
+        }
+
     }
 
-    public class WindowInterop : IJsObjectWrapper
+    public class WindowInterop : JsObjectWrapperBase
     {
-        private JsRuntimeObjectRef windowRef;
 
         private Lazy<HistoryInterop> historyInteropLazy;
         private Lazy<FramesArrayInterop> framesArrayInteropLazy;
@@ -29,33 +39,23 @@ namespace BrowserInterop
         private Lazy<BarPropInterop> scrollBarsLazy;
         private Lazy<BarPropInterop> statusBarLazy;
         private Lazy<BarPropInterop> toolBarLazy;
-        private IJSRuntime jsRuntime;
 
-        public JsRuntimeObjectRef JsRuntimeObjectRef
+        public override void SetJsRuntime(IJSRuntime jsRuntime, JsRuntimeObjectRef jsRuntimeObjectRef)
         {
-            get
-            {
-                return windowRef;
-            }
-        }
+            localStorageLazy = new Lazy<StorageInterop>(() => new StorageInterop(jsRuntime, jsRuntimeObjectRef, "localStorage"));
+            sessionStorageLazy = new Lazy<StorageInterop>(() => new StorageInterop(jsRuntime, jsRuntimeObjectRef, "sessionStorage"));
 
-        public void SetJsRuntime(IJSRuntime jsRuntime, JsRuntimeObjectRef windowRef)
-        {
-            localStorageLazy = new Lazy<StorageInterop>(() => new StorageInterop(jsRuntime, windowRef, "localStorage"));
-            sessionStorageLazy = new Lazy<StorageInterop>(() => new StorageInterop(jsRuntime, windowRef, "sessionStorage"));
-
-            consoleInteropLazy = new Lazy<ConsoleInterop>(() => new ConsoleInterop(jsRuntime, windowRef));
-            historyInteropLazy = new Lazy<HistoryInterop>(() => new HistoryInterop(jsRuntime, windowRef));
-            performanceInteropLazy = new Lazy<PerformanceInterop>(() => new PerformanceInterop(jsRuntime, windowRef));
-            framesArrayInteropLazy = new Lazy<FramesArrayInterop>(() => new FramesArrayInterop(windowRef, jsRuntime));
-            personalBarLazy = new Lazy<BarPropInterop>(() => new BarPropInterop(windowRef, "personalbar", jsRuntime));
-            locationBarLazy = new Lazy<BarPropInterop>(() => new BarPropInterop(windowRef, "locationbar", jsRuntime));
-            menuBarLazy = new Lazy<BarPropInterop>(() => new BarPropInterop(windowRef, "menubar", jsRuntime));
-            scrollBarsLazy = new Lazy<BarPropInterop>(() => new BarPropInterop(windowRef, "scrollbars", jsRuntime));
-            statusBarLazy = new Lazy<BarPropInterop>(() => new BarPropInterop(windowRef, "statusbar", jsRuntime));
-            toolBarLazy = new Lazy<BarPropInterop>(() => new BarPropInterop(windowRef, "toolbar", jsRuntime));
-            this.jsRuntime = jsRuntime;
-            this.windowRef = windowRef;
+            consoleInteropLazy = new Lazy<ConsoleInterop>(() => new ConsoleInterop(jsRuntime, jsRuntimeObjectRef));
+            historyInteropLazy = new Lazy<HistoryInterop>(() => new HistoryInterop(jsRuntime, jsRuntimeObjectRef));
+            performanceInteropLazy = new Lazy<PerformanceInterop>(() => new PerformanceInterop(jsRuntime, jsRuntimeObjectRef));
+            framesArrayInteropLazy = new Lazy<FramesArrayInterop>(() => new FramesArrayInterop(jsRuntimeObjectRef, jsRuntime));
+            personalBarLazy = new Lazy<BarPropInterop>(() => new BarPropInterop(jsRuntimeObjectRef, "personalbar", jsRuntime));
+            locationBarLazy = new Lazy<BarPropInterop>(() => new BarPropInterop(jsRuntimeObjectRef, "locationbar", jsRuntime));
+            menuBarLazy = new Lazy<BarPropInterop>(() => new BarPropInterop(jsRuntimeObjectRef, "menubar", jsRuntime));
+            scrollBarsLazy = new Lazy<BarPropInterop>(() => new BarPropInterop(jsRuntimeObjectRef, "scrollbars", jsRuntime));
+            statusBarLazy = new Lazy<BarPropInterop>(() => new BarPropInterop(jsRuntimeObjectRef, "statusbar", jsRuntime));
+            toolBarLazy = new Lazy<BarPropInterop>(() => new BarPropInterop(jsRuntimeObjectRef, "toolbar", jsRuntime));
+            base.SetJsRuntime(jsRuntime, jsRuntimeObjectRef);
         }
 
 
@@ -78,8 +78,8 @@ namespace BrowserInterop
         /// <value></value>
         public async Task<NavigatorInterop> Navigator()
         {
-            NavigatorInterop navigatorInterop = await jsRuntime.GetInstancePropertyAsync<NavigatorInterop>(windowRef, "navigator");
-            navigatorInterop.SetJSRuntime(jsRuntime, this.windowRef);
+            NavigatorInterop navigatorInterop = await jsRuntime.GetInstancePropertyAsync<NavigatorInterop>(JsRuntimeObjectRef, "navigator");
+            navigatorInterop.SetJSRuntime(jsRuntime, this.JsRuntimeObjectRef);
             return navigatorInterop;
         }
 
@@ -137,7 +137,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public async Task SetName(string name)
         {
-            await jsRuntime.SetInstancePropertyAsync(windowRef, "name", name);
+            await jsRuntime.SetInstancePropertyAsync(JsRuntimeObjectRef, "name", name);
         }
 
         /// <summary>
@@ -146,8 +146,8 @@ namespace BrowserInterop
         /// <returns></returns>
         public async Task<WindowInterop> Opener()
         {
-            var propertyRef = await jsRuntime.GetInstancePropertyRefAsync(windowRef, "opener");
-            var window = await jsRuntime.GetInstancePropertyAsync<WindowInterop>(windowRef, "opener", false);
+            var propertyRef = await jsRuntime.GetInstancePropertyRefAsync(JsRuntimeObjectRef, "opener");
+            var window = await jsRuntime.GetInstancePropertyAsync<WindowInterop>(JsRuntimeObjectRef, "opener", false);
             window?.SetJsRuntime(jsRuntime, propertyRef);
             return window;
         }
@@ -171,8 +171,8 @@ namespace BrowserInterop
         /// <returns></returns>
         public async Task<WindowInterop> Parent()
         {
-            var propertyRef = await jsRuntime.GetInstancePropertyRefAsync(windowRef, "parent");
-            var window = await jsRuntime.GetInstancePropertyAsync<WindowInterop>(windowRef, "parent", false);
+            var propertyRef = await jsRuntime.GetInstancePropertyRefAsync(JsRuntimeObjectRef, "parent");
+            var window = await jsRuntime.GetInstancePropertyAsync<WindowInterop>(JsRuntimeObjectRef, "parent", false);
             window?.SetJsRuntime(jsRuntime, propertyRef);
             return window;
         }
@@ -193,8 +193,8 @@ namespace BrowserInterop
         /// <value></value>
         public async Task<ScreenInterop> Screen()
         {
-            ScreenInterop screeninterop = await jsRuntime.GetInstancePropertyAsync<ScreenInterop>(windowRef, "screen");
-            screeninterop.SetJSRuntime(jsRuntime, this.windowRef);
+            ScreenInterop screeninterop = await jsRuntime.GetInstancePropertyAsync<ScreenInterop>(JsRuntimeObjectRef, "screen");
+            screeninterop.SetJSRuntime(jsRuntime, this.JsRuntimeObjectRef);
             return screeninterop;
         }
 
@@ -244,8 +244,8 @@ namespace BrowserInterop
         /// <returns></returns>
         public async Task<WindowInterop> Top()
         {
-            var propertyRef = await jsRuntime.GetInstancePropertyRefAsync(windowRef, "top");
-            var window = await jsRuntime.GetInstancePropertyAsync<WindowInterop>(windowRef, "top", false);
+            var propertyRef = await jsRuntime.GetInstancePropertyRefAsync(JsRuntimeObjectRef, "top");
+            var window = await jsRuntime.GetInstancePropertyAsync<WindowInterop>(JsRuntimeObjectRef, "top", false);
             window?.SetJsRuntime(jsRuntime, propertyRef);
             return window;
         }
@@ -256,8 +256,8 @@ namespace BrowserInterop
         /// <returns></returns>
         public async Task<VisualViewportInterop> VisualViewport()
         {
-            var visualViewport = await jsRuntime.GetInstancePropertyAsync<VisualViewportInterop>(windowRef, "visualViewport", false);
-            visualViewport?.SetJsRuntime(jsRuntime, this.windowRef);
+            var visualViewport = await jsRuntime.GetInstancePropertyAsync<VisualViewportInterop>(JsRuntimeObjectRef, "visualViewport", false);
+            visualViewport?.SetJsRuntime(jsRuntime, this.JsRuntimeObjectRef);
             return visualViewport;
         }
 
@@ -280,7 +280,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public async Task Alert(string message)
         {
-            await jsRuntime.InvokeInstanceMethodAsync(windowRef, "alert", message);
+            await jsRuntime.InvokeInstanceMethodAsync(JsRuntimeObjectRef, "alert", message);
         }
 
         /// <summary>
@@ -289,7 +289,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public async Task Blur()
         {
-            await jsRuntime.InvokeInstanceMethodAsync(windowRef, "blur");
+            await jsRuntime.InvokeInstanceMethodAsync(JsRuntimeObjectRef, "blur");
         }
 
         /// <summary>
@@ -298,7 +298,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public async Task Close()
         {
-            await jsRuntime.InvokeInstanceMethodAsync(windowRef, "close");
+            await jsRuntime.InvokeInstanceMethodAsync(JsRuntimeObjectRef, "close");
         }
 
         /// <summary>
@@ -308,7 +308,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public async Task<bool> Confirm(string message)
         {
-            return await jsRuntime.InvokeInstanceMethodAsync<bool>(windowRef, "confirm", message);
+            return await jsRuntime.InvokeInstanceMethodAsync<bool>(JsRuntimeObjectRef, "confirm", message);
         }
 
         /// <summary>
@@ -317,7 +317,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public async Task Focus()
         {
-            await jsRuntime.InvokeInstanceMethodAsync(windowRef, "focus");
+            await jsRuntime.InvokeInstanceMethodAsync(JsRuntimeObjectRef, "focus");
         }
 
         /// <summary>
@@ -328,7 +328,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public async Task MoveBy(int deltaX, int deltaY)
         {
-            await jsRuntime.InvokeInstanceMethodAsync(windowRef, "moveBy", deltaX, deltaY);
+            await jsRuntime.InvokeInstanceMethodAsync(JsRuntimeObjectRef, "moveBy", deltaX, deltaY);
         }
 
         /// <summary>
@@ -339,7 +339,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public async Task MoveTo(int x, int y)
         {
-            await jsRuntime.InvokeInstanceMethodAsync(windowRef, "moveTo", x, y);
+            await jsRuntime.InvokeInstanceMethodAsync(JsRuntimeObjectRef, "moveTo", x, y);
         }
 
         /// <summary>
@@ -352,7 +352,7 @@ namespace BrowserInterop
         public async Task<WindowInterop> Open(string url, string windowName = null, WindowFeature windowFeature = null)
         {
 
-            var windowOpenRef = await jsRuntime.InvokeInstanceMethodGetRefAsync(windowRef, "open", url, windowName, windowFeature?.GetOpenString());
+            var windowOpenRef = await jsRuntime.InvokeInstanceMethodGetRefAsync(JsRuntimeObjectRef, "open", url, windowName, windowFeature?.GetOpenString());
             var windowInterop = await jsRuntime.GetInstanceContent<WindowInterop>(windowOpenRef, false);
             windowInterop.SetJsRuntime(jsRuntime, windowOpenRef);
             return windowInterop;
@@ -579,15 +579,6 @@ namespace BrowserInterop
             return await jsRuntime.AddEventListener(JsRuntimeObjectRef, "", "orientationchange", CallBackInteropWrapper.Create(callback, getDeepObject: false));
         }
 
-        /// <summary>
-        /// The orientationchange event is fired when the orientation of the device has changed.
-        /// </summary>
-        /// <param name="callback"></param>
-        /// <returns></returns>
-        public async Task<IAsyncDisposable> OnOrientationChange(Func<Task> callback)
-        {
-            return await jsRuntime.AddEventListener(JsRuntimeObjectRef, "", "orientationchange", CallBackInteropWrapper.Create(callback, getDeepObject: false));
-        }
     }
 
     /// <summary>
