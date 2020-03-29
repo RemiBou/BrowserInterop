@@ -1,7 +1,6 @@
 @page "/window"
 @inject IJSRuntime jsRuntime;
 @using BrowserInterop
-@implements IAsyncDisposable
 <iframe id="child-iframe" src="/navigator"></iframe><br/>
 <button id="btn-window" @onclick="async() => window = await jsRuntime.Window()">Get window</button>
 
@@ -33,7 +32,7 @@
 <button id="btn-window-stop" @onclick="@(async() => await window.Stop())">Stop</button>
 
 
-<button id="btn-window-close-opened" @onclick="@(async() => await opened.Close())">Close Opened</button><br/>
+<button id="btn-window-close-opened" @onclick="@(async() => {await opened.Close(); await opened.DisposeAsync();})">Close Opened</button><br/>
 Window :
 <ul>
     <li>animationFrame : <span id="window-requestAnimationFrame">@animationFrame</span></li>
@@ -200,8 +199,4 @@ Event triggered : <br/>
         await child.Console.Log("test child");
     }
 
-    public async ValueTask DisposeAsync()
-    {
-        await _ope
-    }
 }

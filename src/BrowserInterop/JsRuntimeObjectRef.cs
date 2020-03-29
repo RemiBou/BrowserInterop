@@ -22,7 +22,6 @@ namespace BrowserInterop
         public async ValueTask DisposeAsync()
         {
             await JSRuntime.InvokeVoidAsync("browserInterop.removeObjectRef", JsObjectRefId);
-            JsObjectRefId = 0;
         }
     }
 

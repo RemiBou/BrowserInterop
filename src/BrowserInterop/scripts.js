@@ -1,6 +1,6 @@
 
 browserInterop = new (function () {
-    var jsObectRefs = {};
+    var jsObjectRefs = {};
     var jsObjectRefId = 0;
     var me = this;
 
@@ -14,10 +14,10 @@ browserInterop = new (function () {
             typeof value[jsRefKey] === 'number') {
 
             var id = value[jsRefKey];
-            if (!(id in jsObectRefs)) {
+            if (!(id in jsObjectRefs)) {
                 throw new Error("This JS object reference does not exists : " + id);
             }
-            return jsObectRefs[id];
+            return jsObjectRefs[id];
         } else {
             return value;
         }
@@ -83,13 +83,13 @@ browserInterop = new (function () {
     };
     this.storeObjectRef = function (obj) {
         var id = jsObjectRefId++;
-        jsObectRefs[id] = obj;
+        jsObjectRefs[id] = obj;
         var jsRef = {};
         jsRef[jsRefKey] = id;
         return jsRef;
     }
     this.removeObjectRef = function (id) {
-        delete jsObectRefs[id];
+        delete jsObjectRefs[id];
     }
     function getPropertyList(path) {
         var res = path.replace('[', '.').replace(']', '').split('.');
