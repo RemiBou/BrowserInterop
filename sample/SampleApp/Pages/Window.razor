@@ -95,6 +95,15 @@ Event triggered : <br/>
         <li id="@("window-event-"+evt)">@evt</li>
     }
 </ul>
+
+Before Install :
+<ul>
+@if(beforeInstallPlatforms != null){
+    <li id="window-event-onbeforeinstallprompt-platforms">@string.Join(",", beforeInstallPlatforms)</li>
+    
+    <li id="window-event-onbeforeinstallprompt-userChoice">@beforeInstallAccepted.ToString().ToLower()</li>
+}
+</ul>
 @code{
     private WindowInterop window;
     private WindowInterop opened;
@@ -111,6 +120,8 @@ Event triggered : <br/>
     private List<string> eventTriggered = new List<string>();
 
     private OnMessageEventPayload<string> onMessageEventPayload;
+    private string[] beforeInstallPlatforms;
+    private bool? beforeInstallAccepted;
     protected override async Task OnInitializedAsync()
     {
         window = await jsRuntime.Window();
@@ -153,6 +164,15 @@ Event triggered : <br/>
         await window.OnOrientationChange(async () =>
         {
             await AddEventHandled("orientationchange");
+        });
+        await window.OnBeforeInstallPrompt(async beforeInstall =>
+        {
+            this.beforeInstallPlatforms = beforeInstall.Platforms;
+            this.StateHasChanged();
+            await beforeInstall.Prompt();
+            this.StateHasChanged();
+            this.beforeInstallAccepted = await beforeInstall.IsAccepted();
+            this.StateHasChanged();
         });
     }
     protected async Task AddEventHandled(string evtName)

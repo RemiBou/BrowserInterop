@@ -152,5 +152,22 @@ context('window.navigator', () => {
     //windowEventTest('error');
     windowEventTest('languagechange');
     windowEventTest('orientationchange');
+    it('window-onbeforeinstallprompt',
+        () => {
+            cy.window()
+                .then(w => {
+                    const event = new Event("beforeinstallprompt");
+                    event.platforms = ["test", "test2"];
+                    event.userChoice = w.Promise.resolve("accepted");
+                    event.prompt = function () {
 
+                    }
+                    cy.spy(event, 'prompt').as('spyPrompt');
+                    w.dispatchEvent(event);
+                    cy.get("#window-event-onbeforeinstallprompt-platforms").should("have.text", "test,test2");
+                    cy.get("#window-event-onbeforeinstallprompt-userChoice").should("have.text", "true");
+                    cy.get('@spyPrompt').should('be.calledOnce');
+
+                })
+        });
 });

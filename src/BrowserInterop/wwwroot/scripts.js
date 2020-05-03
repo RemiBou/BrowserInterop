@@ -132,6 +132,9 @@ browserInterop = new (function () {
     };
     this.getInstancePropertySerializable = function (instance, propertyName, deep) {
         var data = me.getInstanceProperty(instance, propertyName);
+        if (data instanceof Promise) {//needed when some properties like beforeinstallevent.userChoice are promise
+            return data;
+        }
         var res = me.getSerializableObject(data, [], deep);
         return res;
     };
@@ -167,7 +170,9 @@ browserInterop = new (function () {
             data === null) {
             return null;
         }
-        if (typeof data === "number" || typeof data === "string" || typeof data == "boolean") {
+        if (typeof data === "number" ||
+            typeof data === "string" ||
+            typeof data == "boolean") {
             return data;
         }
         var res = (Array.isArray(data)) ? [] : {};

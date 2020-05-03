@@ -120,6 +120,21 @@ context('scripts', () => {
                 expect(res).to.not.have.property('deeper');
             });
     });
+
+
+    it('getInstancePropertySerializable returns promise', () => {
+        cy.window()
+            .then(w => {
+                cy.window()
+                    .its('browserInterop')
+                    .then(b => {
+                        var obj = { member: w.Promise.resolve("test") };
+                        var res = b.getInstancePropertySerializable(obj, 'member', false);
+                        expect(res).to.be.a('promise');
+                    });
+
+            });
+    });
     it('getInstancePropertySerializable returns deep property copy if deep is true', () => {
 
         cy.window()

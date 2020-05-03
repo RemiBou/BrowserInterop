@@ -7,7 +7,7 @@
     "start": "cypress open",
     "run": "wait-on -l http://localhost:5000 && cypress run",
     "wait-local": "wait-on -l http://localhost:5000",
-    "test": "docker run --network='host' -v $PWD:/e2e -w /e2e cypress/included:4.0.2 --browser $BROWSER --reporter junit --reporter-options mochaFile=junit-$BROWSER-result-[hash].xml,rootSuiteTitle=Test-$BROWSER --config screenshotsFolder=cypress/screenshots/$BROWSER,videosFolder=cypress/videos/$BROWSER,videoUploadOnPasses=false ",
+    "test": "docker run --network='host' -v $PWD:/e2e -w /e2e cypress/included:4.4.1 --browser $BROWSER --reporter junit --reporter-options mochaFile=junit-$BROWSER-result-[hash].xml,rootSuiteTitle=Test-$BROWSER --config screenshotsFolder=cypress/screenshots/$BROWSER,videosFolder=cypress/videos/$BROWSER,videoUploadOnPasses=false ",
     "start-server": "cd ../../sample/SampleApp && dotnet run --verbosity quiet /Logging:LogLevel:Microsoft.AspNetCore Warning",
     "test-full": "BROWSER=chrome npm run test",
     "ci": "start-server-and-test start-server http://localhost:5000 test-full"

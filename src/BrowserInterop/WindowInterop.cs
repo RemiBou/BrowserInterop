@@ -579,6 +579,61 @@ namespace BrowserInterop
             return await jsRuntime.AddEventListener(JsRuntimeObjectRef, "", "orientationchange", CallBackInteropWrapper.Create(callback, getDeepObject: false));
         }
 
+        public async Task<IAsyncDisposable> OnBeforeInstallPrompt(Func<BeforeInstallPromptEvent, Task> callback)
+        {
+            return await jsRuntime.AddEventListener(
+                JsRuntimeObjectRef, "",
+                "beforeinstallprompt",
+                CallBackInteropWrapper.Create<JsRuntimeObjectRef>(
+                    async jsObjectRef =>
+                    {
+                        BeforeInstallPromptEvent beforeInstallPromptEvent = new BeforeInstallPromptEvent();
+                        beforeInstallPromptEvent.Platforms = await jsRuntime.GetInstancePropertyAsync<string[]>(jsObjectRef, "platforms");
+                        beforeInstallPromptEvent.SetJsRuntime(jsRuntime, jsObjectRef);
+                        await callback.Invoke(beforeInstallPromptEvent);
+                    },
+                    getJsObjectRef: true,
+                    getDeepObject: false
+                )
+            );
+
+        }
+
+        public class BeforeInstallPromptEvent
+        {
+            private JsRuntimeObjectRef jsObjectRef;
+            private IJSRuntime jSRuntime;
+
+            /// <summary>
+            ///  the platforms on which the event was dispatched. This is provided for user agents that want to present a choice of versions to the user such as, for example, "web" or "play" which would allow the user to chose between a web version or an Android version.
+            /// </summary>
+            /// <value></value>
+            public string[] Platforms { get; set; }
+
+            internal void SetJsRuntime(IJSRuntime jSRuntime, JsRuntimeObjectRef jsObjectRef)
+            {
+                this.jsObjectRef = jsObjectRef;
+                this.jSRuntime = jSRuntime;
+            }
+
+            /// <summary>
+            /// Returns the user choice
+            /// </summary>
+            /// <returns></returns>
+            public async Task<bool> IsAccepted()
+            {
+                return (await jSRuntime.GetInstancePropertyAsync<string>(jsObjectRef, "userChoice") == "accepted");
+            }
+
+            /// <summary>
+            /// Allows a developer to show the install prompt at a time of their own choosing. 
+            /// </summary>
+            /// <returns></returns>
+            public async Task Prompt()
+            {
+                await jSRuntime.InvokeInstanceMethodAsync(jsObjectRef, "prompt");
+            }
+        }
     }
 
     /// <summary>

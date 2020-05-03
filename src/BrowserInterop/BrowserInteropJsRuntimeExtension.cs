@@ -13,11 +13,6 @@ namespace BrowserInterop
     /// </summary>
     public static class BrowserInteropJsRuntimeExtension
     {
-
-        private static bool ScriptInitialized = false;
-
-
-
         /// <summary>
         /// Create a WIndowInterop instance that can be used for using Browser API
         /// </summary>
@@ -25,18 +20,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public static async Task<WindowInterop> Window(this IJSRuntime jsRuntime)
         {
-
-            // I don't handle concurrent access, multiple initialization are not a problem and we can't await in a lock
-            if (!ScriptInitialized)
-            {
-                var assembly = typeof(WindowInterop).Assembly;
-
-                using var ressourceStream = assembly.GetManifestResourceStream("BrowserInterop.scripts.js");
-                using var ressourceReader = new StreamReader(ressourceStream);
-                await jsRuntime.InvokeVoidAsync("eval", ressourceReader.ReadToEnd());
-                ScriptInitialized = true;
-            }
-            var jsObjectRef = await jsRuntime.GetInstancePropertyAsync<JsRuntimeObjectRef>("window");
+            var jsObjectRef = await jsRuntime.GetInstancePropertyAsync("window");
             var wsInterop = await jsRuntime.GetInstancePropertyAsync<WindowInterop>(jsObjectRef, "self", false);
             wsInterop.SetJsRuntime(jsRuntime, jsObjectRef);
             return wsInterop;
@@ -51,9 +35,9 @@ namespace BrowserInterop
         /// <param name="deep">If true,(default) then the full object is received.await If false, only the object root</param>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public static async Task<T> GetInstancePropertyAsync<T>(this IJSRuntime jsRuntime, string propertyPath)
+        public static async Task<JsRuntimeObjectRef> GetInstancePropertyAsync(this IJSRuntime jsRuntime, string propertyPath)
         {
-            return await jsRuntime.InvokeAsync<T>("browserInterop.getPropertyRef", propertyPath);
+            return await jsRuntime.InvokeAsync<JsRuntimeObjectRef>("browserInterop.getPropertyRef", propertyPath);
 
         }
 

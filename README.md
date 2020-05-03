@@ -213,6 +213,7 @@ _All the window method/properties/events will also work if you use it on frames 
     - window.onerror
     - window.onlanguagechange
     - window.onorientationchange
+    - window.onbeforeinstall
 
 
 ## Utility method
