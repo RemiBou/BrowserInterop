@@ -165,6 +165,10 @@ Before Install :
         {
             await AddEventHandled("orientationchange");
         });
+        await window.OnHashChange(async () =>
+        {
+            await AddEventHandled("hashchange");
+        });
         await window.OnBeforeInstallPrompt(async beforeInstall =>
         {
             this.beforeInstallPlatforms = beforeInstall.Platforms;

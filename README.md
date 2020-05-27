@@ -26,6 +26,12 @@ First install the package
 dotnet add package BrowserInterop
 ```
 
+Reference the needed JS in your index.html (or in your js bundling tool)
+
+```html
+    <script src="_content/BrowserInterop/scripts.js"></script>
+```
+
 Then in your template enter the API with the Window() extension method like this :
 
 ```c#
