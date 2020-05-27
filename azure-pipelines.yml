@@ -12,7 +12,7 @@ steps:
   displayName: 'Install SDK'
   inputs:
     packageType: sdk
-    version: 3.1.100	
+    version: 3.1.202	
 
 - task: NuGetToolInstaller@0
   inputs:
