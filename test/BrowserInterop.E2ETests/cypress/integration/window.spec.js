@@ -152,6 +152,7 @@ context('window.navigator', () => {
     //windowEventTest('error');
     windowEventTest('languagechange');
     windowEventTest('orientationchange');
+    windowEventTest('hashchange');
     it('window-onbeforeinstallprompt',
         () => {
             cy.window()

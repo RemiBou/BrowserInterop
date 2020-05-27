@@ -599,6 +599,21 @@ namespace BrowserInterop
 
         }
 
+        public async Task<IAsyncDisposable> OnHashChange(Func<Task> callback){
+            return await jsRuntime.AddEventListener(
+                           JsRuntimeObjectRef, "",
+                           "hashchange",
+                           CallBackInteropWrapper.Create(
+                               async () =>
+                               {
+                                   await callback.Invoke();
+                               },
+                               getJsObjectRef: false,
+                               getDeepObject: false
+                           )
+                       );
+        }
+
         public class BeforeInstallPromptEvent
         {
             private JsRuntimeObjectRef jsObjectRef;
