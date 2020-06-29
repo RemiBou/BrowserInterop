@@ -26,7 +26,21 @@ namespace BrowserInterop
 
     public class WindowInterop : JsObjectWrapperBase
     {
-
+        internal static object SerializationSpec = new
+        {
+            closed = true,
+            innerHeight = true,
+            innerWidth = true,
+            isSecureContext = true,
+            name = true,
+            origin = true,
+            outerHeight = true,
+            outerWidth = true,
+            screenX = true,
+            screenY = true,
+            scrollX = true,
+            scrollY = true
+        };
         private Lazy<HistoryInterop> historyInteropLazy;
         private Lazy<FramesArrayInterop> framesArrayInteropLazy;
         private Lazy<StorageInterop> localStorageLazy;
@@ -147,7 +161,7 @@ namespace BrowserInterop
         public async Task<WindowInterop> Opener()
         {
             var propertyRef = await jsRuntime.GetInstancePropertyRefAsync(JsRuntimeObjectRef, "opener");
-            var window = await jsRuntime.GetInstancePropertyAsync<WindowInterop>(JsRuntimeObjectRef, "opener", false);
+            var window = await jsRuntime.GetInstancePropertyAsync<WindowInterop>(JsRuntimeObjectRef, "opener", WindowInterop.SerializationSpec);
             window?.SetJsRuntime(jsRuntime, propertyRef);
             return window;
         }
@@ -172,7 +186,7 @@ namespace BrowserInterop
         public async Task<WindowInterop> Parent()
         {
             var propertyRef = await jsRuntime.GetInstancePropertyRefAsync(JsRuntimeObjectRef, "parent");
-            var window = await jsRuntime.GetInstancePropertyAsync<WindowInterop>(JsRuntimeObjectRef, "parent", false);
+            var window = await jsRuntime.GetInstancePropertyAsync<WindowInterop>(JsRuntimeObjectRef, "parent", WindowInterop.SerializationSpec);
             window?.SetJsRuntime(jsRuntime, propertyRef);
             return window;
         }
@@ -245,7 +259,7 @@ namespace BrowserInterop
         public async Task<WindowInterop> Top()
         {
             var propertyRef = await jsRuntime.GetInstancePropertyRefAsync(JsRuntimeObjectRef, "top");
-            var window = await jsRuntime.GetInstancePropertyAsync<WindowInterop>(JsRuntimeObjectRef, "top", false);
+            var window = await jsRuntime.GetInstancePropertyAsync<WindowInterop>(JsRuntimeObjectRef, "top", WindowInterop.SerializationSpec);
             window?.SetJsRuntime(jsRuntime, propertyRef);
             return window;
         }
@@ -256,7 +270,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public async Task<VisualViewportInterop> VisualViewport()
         {
-            var visualViewport = await jsRuntime.GetInstancePropertyAsync<VisualViewportInterop>(JsRuntimeObjectRef, "visualViewport", false);
+            var visualViewport = await jsRuntime.GetInstancePropertyAsync<VisualViewportInterop>(JsRuntimeObjectRef, "visualViewport");
             visualViewport?.SetJsRuntime(jsRuntime, this.JsRuntimeObjectRef);
             return visualViewport;
         }
@@ -353,7 +367,7 @@ namespace BrowserInterop
         {
 
             var windowOpenRef = await jsRuntime.InvokeInstanceMethodGetRefAsync(JsRuntimeObjectRef, "open", url, windowName, windowFeature?.GetOpenString());
-            var windowInterop = await jsRuntime.GetInstanceContent<WindowInterop>(windowOpenRef, false);
+            var windowInterop = await jsRuntime.GetInstanceContent<WindowInterop>(windowOpenRef, SerializationSpec);
             windowInterop.SetJsRuntime(jsRuntime, windowOpenRef);
             return windowInterop;
         }
@@ -389,7 +403,7 @@ namespace BrowserInterop
                         {
                             Data = await jsRuntime.GetInstancePropertyAsync<T>(payload, "data"),
                             Origin = await jsRuntime.GetInstancePropertyAsync<string>(payload, "origin"),
-                            Source = await jsRuntime.GetInstancePropertyAsync<WindowInterop>(payload, "source", false)
+                            Source = await jsRuntime.GetInstancePropertyAsync<WindowInterop>(payload, "source", WindowInterop.SerializationSpec)
                         };
                         eventPayload.Source.SetJsRuntime(jsRuntime, await jsRuntime.GetInstancePropertyRefAsync(payload, "source"));
 
@@ -546,7 +560,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public async Task<IAsyncDisposable> OnAppInstalled(Func<Task> callback)
         {
-            return await jsRuntime.AddEventListener(JsRuntimeObjectRef, "", "appinstalled", CallBackInteropWrapper.Create(callback, getDeepObject: false));
+            return await jsRuntime.AddEventListener(JsRuntimeObjectRef, "", "appinstalled", CallBackInteropWrapper.Create(callback, serializationSpec: false));
         }
 
         /// <summary>
@@ -556,7 +570,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public async Task<IAsyncDisposable> OnError(Func<Task> callback)
         {
-            return await jsRuntime.AddEventListener(JsRuntimeObjectRef, "", "error", CallBackInteropWrapper.Create(callback, getDeepObject: false));
+            return await jsRuntime.AddEventListener(JsRuntimeObjectRef, "", "error", CallBackInteropWrapper.Create(callback, serializationSpec: false));
         }
 
         /// <summary>
@@ -566,7 +580,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public async Task<IAsyncDisposable> OnLanguageCHange(Func<Task> callback)
         {
-            return await jsRuntime.AddEventListener(JsRuntimeObjectRef, "", "languagechange", CallBackInteropWrapper.Create(callback, getDeepObject: false));
+            return await jsRuntime.AddEventListener(JsRuntimeObjectRef, "", "languagechange", CallBackInteropWrapper.Create(callback, serializationSpec: false));
         }
 
         /// <summary>
@@ -576,7 +590,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public async Task<IAsyncDisposable> OnOrientationChange(Func<Task> callback)
         {
-            return await jsRuntime.AddEventListener(JsRuntimeObjectRef, "", "orientationchange", CallBackInteropWrapper.Create(callback, getDeepObject: false));
+            return await jsRuntime.AddEventListener(JsRuntimeObjectRef, "", "orientationchange", CallBackInteropWrapper.Create(callback, serializationSpec: false));
         }
 
         public async Task<IAsyncDisposable> OnBeforeInstallPrompt(Func<BeforeInstallPromptEvent, Task> callback)
@@ -593,13 +607,14 @@ namespace BrowserInterop
                         await callback.Invoke(beforeInstallPromptEvent);
                     },
                     getJsObjectRef: true,
-                    getDeepObject: false
+                    serializationSpec: false
                 )
             );
 
         }
 
-        public async Task<IAsyncDisposable> OnHashChange(Func<Task> callback){
+        public async Task<IAsyncDisposable> OnHashChange(Func<Task> callback)
+        {
             return await jsRuntime.AddEventListener(
                            JsRuntimeObjectRef, "",
                            "hashchange",
@@ -609,7 +624,7 @@ namespace BrowserInterop
                                    await callback.Invoke();
                                },
                                getJsObjectRef: false,
-                               getDeepObject: false
+                               serializationSpec: false
                            )
                        );
         }

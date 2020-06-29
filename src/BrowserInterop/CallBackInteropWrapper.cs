@@ -13,14 +13,14 @@ namespace BrowserInterop
     {
         [JsonPropertyName("__isCallBackWrapper")]
         public string IsCallBackWrapper { get; set; } = "";
-        public bool GetDeepObject { get; set; }
+        public Object SerializationSpec { get; set; }
 
         public bool GetJsObjectRef { get; set; }
 
 
         private CallBackInteropWrapper()
         {
-
+ 
         }
 
         /// <summary>
@@ -29,12 +29,12 @@ namespace BrowserInterop
         /// <param name="callback"></param>
         /// <param name="getDeepObject">If true then the event payload are serialized deeply, if no it's only shallow (mandatory when there is a window object)</param>
         /// <param name="getJsObjectRef">If true then only the js object ref to the payload is returned instead of the serialize js object</returns>
-        public static CallBackInteropWrapper Create<T>(Func<T, Task> callback, bool getDeepObject = true, bool getJsObjectRef = false)
+        public static CallBackInteropWrapper Create<T>(Func<T, Task> callback, Object serializationSpec = null, bool getJsObjectRef = false)
         {
             var res = new CallBackInteropWrapper
             {
                 CallbackRef = DotNetObjectReference.Create(new JSInteropActionWrapper<T>(callback)),
-                GetDeepObject = getDeepObject,
+                SerializationSpec  = serializationSpec,
                 GetJsObjectRef = getJsObjectRef
             };
             return res;
@@ -45,14 +45,13 @@ namespace BrowserInterop
         /// </summary>
         /// <param name="callback"></param>
         /// <param name="getDeepObject">If true then the event payload are serialized deeply, if no it's only shallow (mandatory when there is a window object)</param>
-        /// <param name="payloadPropertiesPathByRef">List of property path that needs to be send a js object ref instead of js object serialized/deseriliazed</param>
         /// <returns>Object that needs to be send to js interop api call</returns>
-        public static CallBackInteropWrapper Create(Func<Task> callback, bool getDeepObject = true, bool getJsObjectRef = false)
+        public static CallBackInteropWrapper Create(Func<Task> callback, Object serializationSpec = null, bool getJsObjectRef = false)
         {
             var res = new CallBackInteropWrapper
             {
                 CallbackRef = DotNetObjectReference.Create(new JSInteropActionWrapper(callback)),
-                GetDeepObject = getDeepObject,
+                SerializationSpec = serializationSpec,
                 GetJsObjectRef = getJsObjectRef
             };
             return res;

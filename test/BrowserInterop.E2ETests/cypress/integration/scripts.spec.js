@@ -75,30 +75,80 @@ context('scripts', () => {
             });
     });
 
-    it('getSerializableObject return only first layer when deep is false', () => {
+    it('getSerializableObject return match specs', () => {
         cy.window()
             .its('browserInterop')
             .then(b => {
-                var obj = { id: 1, inner: { id: 2 } };
-                var res = b.getSerializableObject(obj, [], false);
-                expect(res).to.have.property('id');
-                expect(res).to.not.have.property('inner');
-            });
-    });
+                var obj = {
+                    id: 1,
+                    inner: { id: 2 },
+                    ignored: "aaa",
+                    array: [{
+                        id: 1,
+                        ignored: 2
+                    }],
+                    ignoredArray: [{
+                        id: 1,
+                        ignored: 2
+                    }],
 
-    it('getSerializableObject return all layer when deep is true', () => {
-        cy.window()
-            .its('browserInterop')
-            .then(b => {
-                var obj = { id: 1, inner: { id: 2 } };
-                var res = b.getSerializableObject(obj, [], true);
+                };
+                var res = b.getSerializableObject(obj, [], {
+                    id: true,
+                    inner: "*",
+                    array: {
+                        id:true
+                    },
+                    ignoredArray: false
+                });
                 expect(res).to.have.property('id');
                 expect(res).to.have.property('inner');
+                expect(res).to.have.property('array');
+                expect(res).not.to.have.property('ignored');
+                expect(res).not.to.have.property('ignoredArray');
+                expect(res.array[0]).to.have.property('id');
+                expect(res.array[0]).not.to.have.property('ignored');
             });
     });
 
+    it('getSerializableObject return match specsif root array', () => {
+        cy.window()
+            .its('browserInterop')
+            .then(b => {
+                var obj = [{
+                    id: 1,
+                    inner: { id: 2 },
+                    ignored: "aaa",
+                    array: [{
+                        id: 1,
+                        ignored: 2
+                    }],
+                    ignoredArray: [{
+                        id: 1,
+                        ignored: 2
+                    }],
 
-    it('getSerializableObject return all layer when deep is not given', () => {
+                }];
+                var resArr = b.getSerializableObject(obj, [], {
+                    id: true,
+                    inner: "*",
+                    array: {
+                        id: true
+                    },
+                    ignoredArray: false
+                });
+                var res = resArr[0]
+                expect(res).to.have.property('id');
+                expect(res).to.have.property('inner');
+                expect(res).to.have.property('array');
+                expect(res).not.to.have.property('ignored');
+                expect(res).not.to.have.property('ignoredArray');
+                expect(res.array[0]).to.have.property('id');
+                expect(res.array[0]).not.to.have.property('ignored');
+            });
+    });
+
+    it('getSerializableObject return all layer when spec is not given', () => {
         cy.window()
             .its('browserInterop')
             .then(b => {
@@ -109,15 +159,14 @@ context('scripts', () => {
             });
     });
 
-    it('getInstancePropertySerializable returns swalow property copy if deep is false', () => {
 
+    it('getSerializableObject return none layer when spec is false', () => {
         cy.window()
             .its('browserInterop')
             .then(b => {
-                var obj = { inner: { id: 2, deeper: { id: 3 } } };
-                var res = b.getInstancePropertySerializable(obj, 'inner', false);
-                expect(res).to.have.property('id');
-                expect(res).to.not.have.property('deeper');
+                var obj = { id: 1, inner: { id: 2 } };
+                var res = b.getSerializableObject(obj,[], false);
+                expect(res).to.be.eq(undefined);
             });
     });
 
@@ -129,21 +178,10 @@ context('scripts', () => {
                     .its('browserInterop')
                     .then(b => {
                         var obj = { member: w.Promise.resolve("test") };
-                        var res = b.getInstancePropertySerializable(obj, 'member', false);
+                        var res = b.getInstancePropertySerializable(obj, 'member');
                         expect(res).to.be.a('promise');
                     });
 
-            });
-    });
-    it('getInstancePropertySerializable returns deep property copy if deep is true', () => {
-
-        cy.window()
-            .its('browserInterop')
-            .then(b => {
-                var obj = { inner: { id: 2, deeper: { id: 3 } } };
-                var res = b.getInstancePropertySerializable(obj, 'inner', true);
-                expect(res).to.have.property('id');
-                expect(res).to.have.property('deeper');
             });
     });
     it('getInstancePropertySerializable serialize 0', () => {
@@ -151,7 +189,7 @@ context('scripts', () => {
             .its('browserInterop')
             .then(b => {
                 var obj = { id: 0 };
-                var res = b.getInstancePropertySerializable(obj, 'id', false);
+                var res = b.getInstancePropertySerializable(obj, 'id');
                 expect(res).to.be.eq(0);
             });
     });
@@ -160,9 +198,9 @@ context('scripts', () => {
             .its('browserInterop')
             .then(b => {
                 var obj = { field1: true, field2: false };
-                var res = b.getInstancePropertySerializable(obj, 'field1', false);
+                var res = b.getInstancePropertySerializable(obj, 'field1');
                 expect(res).to.be.eq(true);
-                res = b.getInstancePropertySerializable(obj, 'field2', false);
+                res = b.getInstancePropertySerializable(obj, 'field2');
                 expect(res).to.be.eq(false);
             });
     });
@@ -171,7 +209,7 @@ context('scripts', () => {
             .its('browserInterop')
             .then(b => {
                 var obj = [1, 2];
-                var res = b.getSerializableObject(obj, [], true);
+                var res = b.getSerializableObject(obj, [], "*");
                 expect(res).to.be.eql(obj);
             });
     });

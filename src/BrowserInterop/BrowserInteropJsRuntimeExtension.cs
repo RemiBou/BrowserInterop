@@ -21,7 +21,7 @@ namespace BrowserInterop
         public static async Task<WindowInterop> Window(this IJSRuntime jsRuntime)
         {
             var jsObjectRef = await jsRuntime.GetInstancePropertyAsync("window");
-            var wsInterop = await jsRuntime.GetInstancePropertyAsync<WindowInterop>(jsObjectRef, "self", false);
+            var wsInterop = await jsRuntime.GetInstancePropertyAsync<WindowInterop>(jsObjectRef, "self", WindowInterop.SerializationSpec);
             wsInterop.SetJsRuntime(jsRuntime, jsObjectRef);
             return wsInterop;
         }
@@ -50,9 +50,9 @@ namespace BrowserInterop
         /// <param name="deep">If true,(default) then the full object is received.await If false, only the object root</param>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public static async Task<T> GetInstancePropertyAsync<T>(this IJSRuntime jsRuntime, JsRuntimeObjectRef jsObjectRef, string propertyPath, bool deep = true)
+        public static async Task<T> GetInstancePropertyAsync<T>(this IJSRuntime jsRuntime, JsRuntimeObjectRef jsObjectRef, string propertyPath, Object serializationSpec = null)
         {
-            return await jsRuntime.InvokeAsync<T>("browserInterop.getInstancePropertySerializable", jsObjectRef, propertyPath, deep);
+            return await jsRuntime.InvokeAsync<T>("browserInterop.getInstancePropertySerializable", jsObjectRef, propertyPath, serializationSpec);
 
         }
 
@@ -116,9 +116,9 @@ namespace BrowserInterop
         /// <param name="jsRuntime1">Curent JS Runtime</param>
         /// <param name="windowObject">Object holding reference to the js object</param>
         /// <returns></returns>
-        public static async Task<T> GetInstanceContent<T>(this IJSRuntime jsRuntime, T jsObject, bool deep) where T : JsObjectWrapperBase
+        public static async Task<T> GetInstanceContent<T>(this IJSRuntime jsRuntime, T jsObject, Object serializationSpec) where T : JsObjectWrapperBase
         {
-            var content = await jsRuntime.InvokeAsync<T>("browserInterop.returnInstance", jsObject.JsRuntimeObjectRef, deep);
+            var content = await jsRuntime.InvokeAsync<T>("browserInterop.returnInstance", jsObject.JsRuntimeObjectRef, serializationSpec);
             content.SetJsRuntime(jsRuntime, jsObject.JsRuntimeObjectRef);
             return content;
         }
@@ -129,9 +129,9 @@ namespace BrowserInterop
         /// <param name="jsRuntime1">Curent JS Runtime</param>
         /// <param name="windowObject">Reference to the JS instance</param>
         /// <returns></returns>
-        public static async Task<T> GetInstanceContent<T>(this IJSRuntime jsRuntime, JsRuntimeObjectRef jsObject, bool deep)
+        public static async Task<T> GetInstanceContent<T>(this IJSRuntime jsRuntime, JsRuntimeObjectRef jsObject, Object serializationSpec)
         {
-            var content = await jsRuntime.InvokeAsync<T>("browserInterop.returnInstance", jsObject, deep);
+            var content = await jsRuntime.InvokeAsync<T>("browserInterop.returnInstance", jsObject, serializationSpec);
             return content;
         }
 

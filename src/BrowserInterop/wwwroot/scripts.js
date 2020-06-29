@@ -23,8 +23,8 @@ browserInterop = new (function () {
         }
     };
     //this simple method will be used for getting the content of a given js object ref because js interop will call the reviver with the given C# js object ref
-    this.returnInstance = function (instance, deep) {
-        return me.getSerializableObject(instance, [], deep);
+    this.returnInstance = function (instance, serializationSpec) {
+        return me.getSerializableObject(instance, [], serializationSpec);
     }
     DotNet.attachReviver(this.jsObjectRefRevive);
     //this reviver change a given parameter to a method, it's usefull for sending .net callback to js
@@ -41,7 +41,7 @@ browserInterop = new (function () {
                 if (!value.getJsObjectRef) {
                     for (let index = 0; index < arguments.length; index++) {
                         const element = arguments[index];
-                        args.push(me.getSerializableObject(element, [], value.getDeepObject, value.payloadPropertiesPathByRef));
+                        args.push(me.getSerializableObject(element, [], value.serializationSpec));
                     }
                 } else {
                     for (let index = 0; index < arguments.length; index++) {
@@ -130,12 +130,12 @@ browserInterop = new (function () {
             }
         }
     };
-    this.getInstancePropertySerializable = function (instance, propertyName, deep) {
+    this.getInstancePropertySerializable = function (instance, propertyName, serializationSpec) {
         var data = me.getInstanceProperty(instance, propertyName);
         if (data instanceof Promise) {//needed when some properties like beforeinstallevent.userChoice are promise
             return data;
         }
-        var res = me.getSerializableObject(data, [], deep);
+        var res = me.getSerializableObject(data, [], serializationSpec);
         return res;
     };
     this.callInstanceMethod = function (instance, methodPath, ...args) {
@@ -159,9 +159,9 @@ browserInterop = new (function () {
     this.callInstanceMethodGetRef = function (instance, methodPath, ...args) {
         return this.storeObjectRef(this.callInstanceMethod(instance, methodPath, ...args));
     };
-    this.getSerializableObject = function (data, alreadySerialized, deep, pathsToPassByRef) {
-        if (typeof deep == "undefined") {
-            deep = true;
+    this.getSerializableObject = function (data, alreadySerialized, serializationSpec) {
+        if (serializationSpec === false) {
+            return undefined;
         }
         if (!alreadySerialized) {
             alreadySerialized = [];
@@ -176,34 +176,46 @@ browserInterop = new (function () {
             return data;
         }
         var res = (Array.isArray(data)) ? [] : {};
-
+        serializationSpec = serializationSpec ?? "*";
         for (var i in data) {
             var currentMember = data[i];
 
             if (typeof currentMember === 'function' || currentMember === null) {
                 continue;
-            } else if (typeof currentMember === 'object') {
-                if (deep && alreadySerialized.indexOf(currentMember) < 0) {
-                    alreadySerialized.push(currentMember);
-                    if (Array.isArray(currentMember) || currentMember.length) {
-                        res[i] = [];
-                        for (var j = 0; j < currentMember.length; j++) {
-                            const arrayItem = currentMember[j];
-                            if (typeof arrayItem === 'object') {
-                                res[i].push(me.getSerializableObject(arrayItem, alreadySerialized));
-                            } else {
-                                res[i].push(arrayItem);
-                            }
-                        }
-                    } else {
-                        //the browser provides some member (like plugins) as hash with index as key, if length == 0 we shall not convert it
-                        if (currentMember.length === 0) {
-                            res[i] = [];
+            }
+            var currentMemberSpec;
+            if (serializationSpec != "*") {
+                currentMemberSpec = Array.isArray(data) ? serializationSpec : serializationSpec[i];
+                if (!currentMemberSpec) {
+                    continue;
+                }
+            } else {
+                currentMemberSpec = "*"
+            }
+            if (typeof currentMember === 'object') {
+                if (alreadySerialized.indexOf(currentMember) >= 0) {
+                    continue;
+                }
+                alreadySerialized.push(currentMember);
+                if (Array.isArray(currentMember) || currentMember.length) {
+                    res[i] = [];
+                    for (var j = 0; j < currentMember.length; j++) {
+                        const arrayItem = currentMember[j];
+                        if (typeof arrayItem === 'object') {
+                            res[i].push(me.getSerializableObject(arrayItem, alreadySerialized, currentMemberSpec));
                         } else {
-                            res[i] = me.getSerializableObject(currentMember, alreadySerialized);
+                            res[i].push(arrayItem);
                         }
                     }
+                } else {
+                    //the browser provides some member (like plugins) as hash with index as key, if length == 0 we shall not convert it
+                    if (currentMember.length === 0) {
+                        res[i] = [];
+                    } else {
+                        res[i] = me.getSerializableObject(currentMember, alreadySerialized, currentMemberSpec);
+                    }
                 }
+
 
             } else {
                 // string, number or boolean

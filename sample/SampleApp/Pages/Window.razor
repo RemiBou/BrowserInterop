@@ -24,7 +24,7 @@
 <button id="btn-window-cancelAnimationFrame" @onclick="@(async() => await window.CancelAnimationFrame(1))">cancelAnimationFrame</button>
 
 <button id="btn-window-open" @onclick="@(async() => opened = await window.Open("/window", "_blank", new WindowFeature(){ MenuBar = false }))">Open</button>
-<button id="btn-window-refresh-opened" @onclick="@(async() => opened = await jsRuntime.GetInstanceContent(opened, false))">Refresh Opened</button>
+<button id="btn-window-refresh-opened" @onclick="@(async() => opened = await jsRuntime.GetInstanceContent(opened, null))">Refresh Opened</button>
 <button id="btn-window-resizeBy" @onclick="@(async() => await window.ResizeBy(100,200))">ResizeBy</button>
 <button id="btn-window-resizeTo" @onclick="@(async() => await window.ResizeTo(150,250))">ResizeTo</button>
 <button id="btn-window-scroll" @onclick="@(async() => await window.Scroll(150,250))">Scroll</button>

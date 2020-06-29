@@ -26,7 +26,7 @@ namespace BrowserInterop
         {
             var jsObjectRef = await jsRuntime.GetInstancePropertyRefAsync(jsRuntimeObjectRef, $"frames[{index}]");
 
-            var windowInterop = await jsRuntime.GetInstancePropertyAsync<WindowInterop>(jsRuntimeObjectRef, $"frames[{index}]", false);
+            var windowInterop = await jsRuntime.GetInstancePropertyAsync<WindowInterop>(jsRuntimeObjectRef, $"frames[{index}]", WindowInterop.SerializationSpec);
             windowInterop.SetJsRuntime(jsRuntime, jsObjectRef);
             return windowInterop;
         }
