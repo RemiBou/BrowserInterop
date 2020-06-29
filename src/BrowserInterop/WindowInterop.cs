@@ -742,6 +742,15 @@ namespace BrowserInterop
             return await jsRuntime.AddEventListener(JsRuntimeObjectRef, "", "blur", CallBackInteropWrapper.Create(callback, serializationSpec: false));
         }
 
+        /// <summary>
+        /// raised when the window is closed
+        /// </summary>
+        /// <param name="callback"></param>
+        /// <returns></returns>
+        public async Task<IAsyncDisposable> OnClose(Func<Task> callback)
+        {
+            return await jsRuntime.AddEventListener(JsRuntimeObjectRef, "", "close", CallBackInteropWrapper.Create(callback, serializationSpec: false));
+        }
 
         public class BeforeInstallPromptEvent
         {

@@ -227,6 +227,7 @@ Device Orientation Event :
         await window.OnBeforePrint(async () => await AddEventHandled("beforeprint"));
         await window.OnBeforeUnload(async b => await AddEventHandled("beforeunload"));
         await window.OnBlur(async () => await AddEventHandled("blur"));
+        await window.OnClose(async () => await AddEventHandled("close"));
     }
     protected async Task AddEventHandled(string evtName)
     {
