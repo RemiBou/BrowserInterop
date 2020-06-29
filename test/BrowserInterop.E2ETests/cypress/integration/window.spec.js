@@ -240,5 +240,6 @@ context('window.navigator', () => {
                 })
         });
     windowEventTest('afterprint');
-    windowEventTest('beforeprint'); 
+    windowEventTest('beforeprint');
+    windowEventTest('blur');  
 });

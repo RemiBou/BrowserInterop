@@ -226,6 +226,7 @@ _All the window method/properties/events will also work if you use it on frames 
     - window.onafterprint
     - window.onbeforeprint
     - window.onbeforeunload
+    - window.onblur
 
 
 ## Utility method

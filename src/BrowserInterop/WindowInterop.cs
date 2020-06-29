@@ -732,6 +732,17 @@ namespace BrowserInterop
                         );
         }
 
+        /// <summary>
+        /// raised when the windowlosses focus
+        /// </summary>
+        /// <param name="callback"></param>
+        /// <returns></returns>
+        public async Task<IAsyncDisposable> OnBlur(Func<Task> callback)
+        {
+            return await jsRuntime.AddEventListener(JsRuntimeObjectRef, "", "blur", CallBackInteropWrapper.Create(callback, serializationSpec: false));
+        }
+
+
         public class BeforeInstallPromptEvent
         {
             private JsRuntimeObjectRef jsObjectRef;
