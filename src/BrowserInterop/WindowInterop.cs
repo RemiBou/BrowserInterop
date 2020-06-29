@@ -752,6 +752,26 @@ namespace BrowserInterop
             return await jsRuntime.AddEventListener(JsRuntimeObjectRef, "", "close", CallBackInteropWrapper.Create(callback, serializationSpec: false));
         }
 
+
+        /// <summary>
+        /// raised when the window is closed
+        /// </summary>
+        /// <param name="callback"></param>
+        /// <returns></returns>
+        public async Task<IAsyncDisposable> OnContextMenu(Func<CancellableEvent, Task> callback)
+        {
+            return await jsRuntime.AddEventListener(
+                        JsRuntimeObjectRef, "",
+                        "contextmenu",
+                        CallBackInteropWrapper.Create<JsRuntimeObjectRef>(
+                            async (e) =>
+                            {
+                                await callback.Invoke(new CancellableEvent(jsRuntime, e));
+                            },
+                            getJsObjectRef: true)
+                    );
+        }
+
         public class BeforeInstallPromptEvent
         {
             private JsRuntimeObjectRef jsObjectRef;
@@ -803,13 +823,36 @@ namespace BrowserInterop
             /// <summary>
             /// Prompt the user before quitting
             /// </summary>
-            /// <param name="returnValue"></param>
             /// <returns></returns>
             public async Task Prompt()
             {    
                 await jsRuntime.SetInstancePropertyAsync(jsRuntimeObjectRef, "returnValue", false);
             }
 
+
+        }
+
+        public class CancellableEvent
+        {
+
+            private IJSRuntime jsRuntime;
+            private JsRuntimeObjectRef jsRuntimeObjectRef;
+
+            public CancellableEvent(IJSRuntime jsRuntime, JsRuntimeObjectRef jsRuntimeObjectRef)
+            {
+                this.jsRuntime = jsRuntime;
+                this.jsRuntimeObjectRef = jsRuntimeObjectRef;
+            }
+
+
+            /// <summary>
+            /// Prevent the event default behavior
+            /// </summary>
+            /// <returns></returns>
+            public async Task PreventDefault()
+            {
+                await jsRuntime.InvokeInstanceMethodAsync(jsRuntimeObjectRef, "preventDefault");
+            }
 
         }
     }

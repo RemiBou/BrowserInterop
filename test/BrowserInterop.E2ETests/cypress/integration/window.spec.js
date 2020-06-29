@@ -242,5 +242,20 @@ context('window.navigator', () => {
     windowEventTest('afterprint');
     windowEventTest('beforeprint');
     windowEventTest('blur');
-    windowEventTest('close'); 
+    windowEventTest('close');
+    it('window-oncontextmenu',
+        () => {
+            cy.window()
+                .then(w => {
+                    const event = new Event("contextmenu");
+                    event.preventDefault = function () {
+
+                    }
+                    cy.spy(event, 'preventDefault').as('spyPreventDefault');
+                    w.dispatchEvent(event);
+                    cy.get("#window-event-contextmenu").should('exist');
+                    cy.get('@spyPreventDefault').should('be.calledOnce');
+
+                })
+        });
 });

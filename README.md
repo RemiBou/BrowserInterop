@@ -228,6 +228,7 @@ _All the window method/properties/events will also work if you use it on frames 
     - window.onbeforeunload
     - window.onblur
     - window.onclose
+    - window.OnContextMenu
 
 
 ## Utility method
