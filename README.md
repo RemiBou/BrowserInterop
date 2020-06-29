@@ -223,6 +223,8 @@ _All the window method/properties/events will also work if you use it on frames 
     - window.onhashchange
     - window.ondevicemotion
     - window.ondeviceorientation
+    - window.onafterprint
+    - window.onbeforeprint
 
 
 ## Utility method

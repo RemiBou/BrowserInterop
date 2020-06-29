@@ -228,4 +228,6 @@ context('window.navigator', () => {
 
                 })
         });
+    windowEventTest('afterprint');
+    windowEventTest('beforeprint'); 
 });

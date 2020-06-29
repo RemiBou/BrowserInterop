@@ -593,6 +593,11 @@ namespace BrowserInterop
             return await jsRuntime.AddEventListener(JsRuntimeObjectRef, "", "orientationchange", CallBackInteropWrapper.Create(callback, serializationSpec: false));
         }
 
+        /// <summary>
+        /// dispatched on devices when a user is about to be prompted to "install" a web application. Its associated event may be saved for later and used to prompt the user at a more suitable time. 
+        /// </summary>
+        /// <param name="callback"></param>
+        /// <returns></returns>
         public async Task<IAsyncDisposable> OnBeforeInstallPrompt(Func<BeforeInstallPromptEvent, Task> callback)
         {
             return await jsRuntime.AddEventListener(
@@ -613,6 +618,11 @@ namespace BrowserInterop
 
         }
 
+        /// <summary>
+        /// fires when a window's hash changes
+        /// </summary>
+        /// <param name="callback"></param>
+        /// <returns></returns>
         public async Task<IAsyncDisposable> OnHashChange(Func<Task> callback)
         {
             return await jsRuntime.AddEventListener(
@@ -629,6 +639,11 @@ namespace BrowserInterop
                        );
         }
 
+        /// <summary>
+        /// fired at a regular interval and indicates the amount of physical force of acceleration the device is receiving at that time. It also provides information about the rate of rotation, if available.
+        /// </summary>
+        /// <param name="callback"></param>
+        /// <returns></returns>
         public async Task<IAsyncDisposable> OnDeviceMotion(Func<DeviceMotionEvent, Task> callback)
         {
             return await jsRuntime.AddEventListener(
@@ -650,6 +665,11 @@ namespace BrowserInterop
                       );
         }
 
+        /// <summary>
+        /// fired when fresh data is available from an orientation sensor about the current orientation of the device as compared to the Earth coordinate frame. This data is gathered from a magnetometer inside the device
+        /// </summary>
+        /// <param name="callback"></param>
+        /// <returns></returns>
         public async Task<IAsyncDisposable> OnDeviceOrientation(Func<DeviceOrientationEvent, Task> callback)
         {
             return await jsRuntime.AddEventListener(
@@ -669,6 +689,28 @@ namespace BrowserInterop
                                   absolute = "*"
                               })
                       );
+        }
+
+
+        /// <summary>
+        /// raised after the user prints
+        /// </summary>
+        /// <param name="callback"></param>
+        /// <returns></returns>
+        public async Task<IAsyncDisposable> OnAfterPrint(Func<Task> callback)
+        {
+            return await jsRuntime.AddEventListener(JsRuntimeObjectRef, "", "afterprint", CallBackInteropWrapper.Create(callback, serializationSpec: false));
+        }
+
+
+        /// <summary>
+        /// raised beofre the user prints
+        /// </summary>
+        /// <param name="callback"></param>
+        /// <returns></returns>
+        public async Task<IAsyncDisposable> OnBeforePrint(Func<Task> callback)
+        {
+            return await jsRuntime.AddEventListener(JsRuntimeObjectRef, "", "beforeprint", CallBackInteropWrapper.Create(callback, serializationSpec: false));
         }
 
         public class BeforeInstallPromptEvent

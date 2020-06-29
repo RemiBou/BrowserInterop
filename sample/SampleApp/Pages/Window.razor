@@ -218,6 +218,14 @@ Device Orientation Event :
             this.StateHasChanged();
             await Task.CompletedTask;
         });
+        await window.OnAfterPrint(async () =>
+        {
+            await AddEventHandled("afterprint");
+        });
+        await window.OnBeforePrint(async () =>
+        {
+            await AddEventHandled("beforeprint");
+        });
     }
     protected async Task AddEventHandled(string evtName)
     {
