@@ -650,6 +650,27 @@ namespace BrowserInterop
                       );
         }
 
+        public async Task<IAsyncDisposable> OnDeviceOrientation(Func<DeviceOrientationEvent, Task> callback)
+        {
+            return await jsRuntime.AddEventListener(
+                          JsRuntimeObjectRef, "",
+                          "deviceorientation",
+                          CallBackInteropWrapper.Create<DeviceOrientationEvent>(
+                              async (e) =>
+                              {
+                                  await callback.Invoke(e);
+                              },
+                              getJsObjectRef: false,
+                              serializationSpec: new
+                              {
+                                  alpha = "*",
+                                  beta = "*",
+                                  gamma = "*",
+                                  absolute = "*"
+                              })
+                      );
+        }
+
         public class BeforeInstallPromptEvent
         {
             private JsRuntimeObjectRef jsObjectRef;

@@ -120,7 +120,18 @@ Device Motion Event :
 
 
     }
-</ul> 
+</ul>
+Device Orientation Event : 
+<ul>
+    @if(deviceOrientationEvent != null){
+           <li id="window-event-ondeviceorientation-alpha">@deviceOrientationEvent.Alpha</li>
+           <li id="window-event-ondeviceorientation-beta">@deviceOrientationEvent.Beta</li>
+           <li id="window-event-ondeviceorientation-gamma">@deviceOrientationEvent.Gamma</li>
+           <li id="window-event-ondeviceorientation-absolute">@deviceOrientationEvent.Absolute.ToString().ToLower()</li>
+
+
+    }
+</ul>  
 @code{
     private WindowInterop window;
     private WindowInterop opened;
@@ -140,6 +151,7 @@ Device Motion Event :
     private string[] beforeInstallPlatforms;
     private bool? beforeInstallAccepted;
     private DeviceMotionEvent deviceMotionEvent;
+    private DeviceOrientationEvent deviceOrientationEvent;
     protected override async Task OnInitializedAsync()
     {
         window = await jsRuntime.Window();
@@ -198,6 +210,11 @@ Device Motion Event :
         });
         await window.OnDeviceMotion(async deviceMotionEvent => {
             this.deviceMotionEvent = deviceMotionEvent;
+            this.StateHasChanged();
+            await Task.CompletedTask;
+        });
+        await window.OnDeviceOrientation(async deviceOrientationEvent => {
+            this.deviceOrientationEvent = deviceOrientationEvent;
             this.StateHasChanged();
             await Task.CompletedTask;
         });

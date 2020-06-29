@@ -176,7 +176,7 @@ context('window.navigator', () => {
         () => {
             cy.window()
                 .then(w => {
-                    const event = new DeviceMotionEvent("devicemotion",{
+                    const event = new DeviceMotionEvent("devicemotion", {
                         acceleration: {
                             x: 100,
                             y: 150,
@@ -205,6 +205,26 @@ context('window.navigator', () => {
                     cy.get("#window-event-ondevicemotion-rotationRate-beta").should("have.text", "301");
                     cy.get("#window-event-ondevicemotion-rotationRate-gamma").should("have.text", "351");
                     cy.get("#window-event-ondevicemotion-interval").should("have.text", "162");
+
+                })
+        });
+
+
+    it('window-ondeviceorientation',
+        () => { 
+            cy.window()
+                .then(w => {
+                    const event = new DeviceOrientationEvent("deviceorientation", {
+                        alpha: 251,
+                        beta: 301,
+                        gamma: 351,
+                        absolute: true
+                    });
+                    w.dispatchEvent(event);
+                    cy.get("#window-event-ondeviceorientation-alpha").should("have.text", "251");
+                    cy.get("#window-event-ondeviceorientation-beta").should("have.text", "301");
+                    cy.get("#window-event-ondeviceorientation-gamma").should("have.text", "351");
+                    cy.get("#window-event-ondeviceorientation-absolute").should("have.text", "true");
 
                 })
         });

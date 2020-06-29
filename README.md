@@ -222,6 +222,7 @@ _All the window method/properties/events will also work if you use it on frames 
     - window.onbeforeinstall
     - window.onhashchange
     - window.ondevicemotion
+    - window.ondeviceorientation
 
 
 ## Utility method
