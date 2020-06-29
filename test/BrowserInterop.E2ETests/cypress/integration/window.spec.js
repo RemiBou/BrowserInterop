@@ -243,6 +243,7 @@ context('window.navigator', () => {
     windowEventTest('beforeprint');
     windowEventTest('blur');
     windowEventTest('close');
+    windowEventTest('focus');
     it('window-oncontextmenu',
         () => {
             cy.window()

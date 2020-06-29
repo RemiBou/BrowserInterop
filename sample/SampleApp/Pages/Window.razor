@@ -228,6 +228,7 @@ Device Orientation Event :
         await window.OnBeforeUnload(async b => await AddEventHandled("beforeunload"));
         await window.OnBlur(async () => await AddEventHandled("blur"));
         await window.OnClose(async () => await AddEventHandled("close"));
+        await window.OnFocus(async () => await AddEventHandled("focus"));
         await window.OnContextMenu(async (e) => {
              await AddEventHandled("contextmenu");
              await e.PreventDefault();

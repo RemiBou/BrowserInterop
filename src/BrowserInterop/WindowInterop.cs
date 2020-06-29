@@ -772,6 +772,17 @@ namespace BrowserInterop
                     );
         }
 
+        /// <summary>
+        /// raised when the window gains focus
+        /// </summary>
+        /// <param name="callback"></param>
+        /// <returns></returns>
+        public async Task<IAsyncDisposable> OnFocus(Func<Task> callback)
+        {
+            return await jsRuntime.AddEventListener(JsRuntimeObjectRef, "", "focus", CallBackInteropWrapper.Create(callback, serializationSpec: false));
+        }
+
+
         public class BeforeInstallPromptEvent
         {
             private JsRuntimeObjectRef jsObjectRef;
