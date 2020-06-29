@@ -104,6 +104,23 @@ Before Install :
     <li id="window-event-onbeforeinstallprompt-userChoice">@beforeInstallAccepted.ToString().ToLower()</li>
 }
 </ul>
+Device Motion Event : 
+<ul>
+    @if(deviceMotionEvent != null){
+           <li id="window-event-ondevicemotion-acceleration-x">@deviceMotionEvent.Acceleration.X</li>
+           <li id="window-event-ondevicemotion-acceleration-y">@deviceMotionEvent.Acceleration.Y</li>
+           <li id="window-event-ondevicemotion-acceleration-z">@deviceMotionEvent.Acceleration.Z</li>
+           <li id="window-event-ondevicemotion-accelerationIncludingGravity-x">@deviceMotionEvent.AccelerationIncludingGravity.X</li>
+           <li id="window-event-ondevicemotion-accelerationIncludingGravity-y">@deviceMotionEvent.AccelerationIncludingGravity.Y</li>
+           <li id="window-event-ondevicemotion-accelerationIncludingGravity-z">@deviceMotionEvent.AccelerationIncludingGravity.Z</li>
+           <li id="window-event-ondevicemotion-rotationRate-alpha">@deviceMotionEvent.RotationRate.Alpha</li>
+           <li id="window-event-ondevicemotion-rotationRate-beta">@deviceMotionEvent.RotationRate.Beta</li>
+           <li id="window-event-ondevicemotion-rotationRate-gamma">@deviceMotionEvent.RotationRate.Gamma</li>
+           <li id="window-event-ondevicemotion-interval">@deviceMotionEvent.Interval</li>
+
+
+    }
+</ul> 
 @code{
     private WindowInterop window;
     private WindowInterop opened;
@@ -122,6 +139,7 @@ Before Install :
     private OnMessageEventPayload<string> onMessageEventPayload;
     private string[] beforeInstallPlatforms;
     private bool? beforeInstallAccepted;
+    private DeviceMotionEvent deviceMotionEvent;
     protected override async Task OnInitializedAsync()
     {
         window = await jsRuntime.Window();
@@ -177,6 +195,11 @@ Before Install :
             this.StateHasChanged();
             this.beforeInstallAccepted = await beforeInstall.IsAccepted();
             this.StateHasChanged();
+        });
+        await window.OnDeviceMotion(async deviceMotionEvent => {
+            this.deviceMotionEvent = deviceMotionEvent;
+            this.StateHasChanged();
+            await Task.CompletedTask;
         });
     }
     protected async Task AddEventHandled(string evtName)

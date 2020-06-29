@@ -171,4 +171,41 @@ context('window.navigator', () => {
 
                 })
         });
+
+    it('window-ondevicemotion',
+        () => {
+            cy.window()
+                .then(w => {
+                    const event = new DeviceMotionEvent("devicemotion",{
+                        acceleration: {
+                            x: 100,
+                            y: 150,
+                            z: 200
+                        },
+                        accelerationIncludingGravity: {
+                            x: 101,
+                            y: 151,
+                            z: 201
+                        },
+                        rotationRate: {
+                            alpha: 251,
+                            beta: 301,
+                            gamma: 351
+                        },
+                        interval: 162
+                    });
+                    w.dispatchEvent(event);
+                    cy.get("#window-event-ondevicemotion-acceleration-x").should("have.text", "100");
+                    cy.get("#window-event-ondevicemotion-acceleration-y").should("have.text", "150");
+                    cy.get("#window-event-ondevicemotion-acceleration-z").should("have.text", "200");
+                    cy.get("#window-event-ondevicemotion-accelerationIncludingGravity-x").should("have.text", "101");
+                    cy.get("#window-event-ondevicemotion-accelerationIncludingGravity-y").should("have.text", "151");
+                    cy.get("#window-event-ondevicemotion-accelerationIncludingGravity-z").should("have.text", "201");
+                    cy.get("#window-event-ondevicemotion-rotationRate-alpha").should("have.text", "251");
+                    cy.get("#window-event-ondevicemotion-rotationRate-beta").should("have.text", "301");
+                    cy.get("#window-event-ondevicemotion-rotationRate-gamma").should("have.text", "351");
+                    cy.get("#window-event-ondevicemotion-interval").should("have.text", "162");
+
+                })
+        });
 });

@@ -629,6 +629,27 @@ namespace BrowserInterop
                        );
         }
 
+        public async Task<IAsyncDisposable> OnDeviceMotion(Func<DeviceMotionEvent, Task> callback)
+        {
+            return await jsRuntime.AddEventListener(
+                          JsRuntimeObjectRef, "",
+                          "devicemotion",
+                          CallBackInteropWrapper.Create<DeviceMotionEvent>(
+                              async (e) =>
+                              {
+                                  await callback.Invoke(e);
+                              },
+                              getJsObjectRef: false,
+                              serializationSpec: new
+                              {
+                                  acceleration = "*",
+                                  accelerationIncludingGravity = "*",
+                                  rotationRate = "*",
+                                  interval = "*"
+                              })
+                      );
+        }
+
         public class BeforeInstallPromptEvent
         {
             private JsRuntimeObjectRef jsObjectRef;
