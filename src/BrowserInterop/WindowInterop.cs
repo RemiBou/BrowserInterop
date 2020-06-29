@@ -704,13 +704,32 @@ namespace BrowserInterop
 
 
         /// <summary>
-        /// raised beofre the user prints
+        /// raised before the user prints
         /// </summary>
         /// <param name="callback"></param>
         /// <returns></returns>
         public async Task<IAsyncDisposable> OnBeforePrint(Func<Task> callback)
         {
             return await jsRuntime.AddEventListener(JsRuntimeObjectRef, "", "beforeprint", CallBackInteropWrapper.Create(callback, serializationSpec: false));
+        }
+
+        /// <summary>
+        ///  fire when a window is about to unload its resources. At this point, the document is still visible and the event is still cancelable.
+        /// </summary>
+        /// <param name="callback"></param>
+        /// <returns></returns>
+        public async Task<IAsyncDisposable> OnBeforeUnload(Func<BeforeUnloadEvent, Task> callback)
+        {
+            return await jsRuntime.AddEventListener(
+                            JsRuntimeObjectRef, "",
+                            "beforeunload",
+                            CallBackInteropWrapper.Create<JsRuntimeObjectRef>( 
+                                async (e) =>
+                                {
+                                    await callback.Invoke(new BeforeUnloadEvent(jsRuntime,e));
+                                },
+                                getJsObjectRef: true)
+                        );
         }
 
         public class BeforeInstallPromptEvent
@@ -747,6 +766,31 @@ namespace BrowserInterop
             {
                 await jSRuntime.InvokeInstanceMethodAsync(jsObjectRef, "prompt");
             }
+        }
+
+        public class BeforeUnloadEvent
+        {
+            private IJSRuntime jsRuntime;
+            private JsRuntimeObjectRef jsRuntimeObjectRef;
+
+            public BeforeUnloadEvent(IJSRuntime jsRuntime, JsRuntimeObjectRef jsRuntimeObjectRef)
+            {
+                this.jsRuntime = jsRuntime; 
+                this.jsRuntimeObjectRef = jsRuntimeObjectRef;
+            }
+
+
+            /// <summary>
+            /// Prompt the user before quitting
+            /// </summary>
+            /// <param name="returnValue"></param>
+            /// <returns></returns>
+            public async Task Prompt()
+            {    
+                await jsRuntime.SetInstancePropertyAsync(jsRuntimeObjectRef, "returnValue", false);
+            }
+
+
         }
     }
 

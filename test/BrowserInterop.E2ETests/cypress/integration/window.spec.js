@@ -228,6 +228,17 @@ context('window.navigator', () => {
 
                 })
         });
+
+    it('window-onbeforeunload',
+        () => {
+            cy.window()
+                .then(w => {
+                    const event = new Event("beforeunload");
+                    w.dispatchEvent(event);
+                    cy.get("#window-event-beforeunload").should('exist');
+
+                })
+        });
     windowEventTest('afterprint');
     windowEventTest('beforeprint'); 
 });

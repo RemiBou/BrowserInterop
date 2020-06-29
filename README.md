@@ -225,6 +225,7 @@ _All the window method/properties/events will also work if you use it on frames 
     - window.ondeviceorientation
     - window.onafterprint
     - window.onbeforeprint
+    - window.onbeforeunload
 
 
 ## Utility method

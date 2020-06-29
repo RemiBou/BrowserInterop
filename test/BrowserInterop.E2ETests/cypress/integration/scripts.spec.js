@@ -4,13 +4,23 @@ context('scripts', () => {
     before(() => {
         cy.visit('/navigator');
     });
-    it('setInstanceProperty set property value', () => {
+    it('setInstanceProperty set inner property value', () => {
         cy.window()
             .its('browserInterop')
             .then(b => {
                 var obj = { inner: { id: 1 } };
                 b.setInstanceProperty(obj, "inner.id", 2);
                 expect(obj.inner.id).to.eq(2);
+            });
+    });
+
+    it('setInstanceProperty set property value', () => {
+        cy.window()
+            .its('browserInterop')
+            .then(b => {
+                var obj = { field: 1 };
+                b.setInstanceProperty(obj, "field", 2);
+                expect(obj.field).to.eq(2);
             });
     });
 

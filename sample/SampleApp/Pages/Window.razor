@@ -208,12 +208,14 @@ Device Orientation Event :
             this.beforeInstallAccepted = await beforeInstall.IsAccepted();
             this.StateHasChanged();
         });
-        await window.OnDeviceMotion(async deviceMotionEvent => {
+        await window.OnDeviceMotion(async deviceMotionEvent =>
+        {
             this.deviceMotionEvent = deviceMotionEvent;
             this.StateHasChanged();
             await Task.CompletedTask;
         });
-        await window.OnDeviceOrientation(async deviceOrientationEvent => {
+        await window.OnDeviceOrientation(async deviceOrientationEvent =>
+        {
             this.deviceOrientationEvent = deviceOrientationEvent;
             this.StateHasChanged();
             await Task.CompletedTask;
@@ -226,6 +228,7 @@ Device Orientation Event :
         {
             await AddEventHandled("beforeprint");
         });
+        await window.OnBeforeUnload(async b => await AddEventHandled("beforeunload"));
     }
     protected async Task AddEventHandled(string evtName)
     {
