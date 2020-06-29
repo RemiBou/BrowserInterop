@@ -782,6 +782,16 @@ namespace BrowserInterop
             return await jsRuntime.AddEventListener(JsRuntimeObjectRef, "", "focus", CallBackInteropWrapper.Create(callback, serializationSpec: false));
         }
 
+        /// <summary>
+        /// fires at the end of the document loading process. At this point, all of the objects in the document are in the DOM, and all the images, scripts, links and sub-frames have finished loading.
+        /// </summary>
+        /// <param name="callback"></param>
+        /// <returns></returns>
+        public async Task<IAsyncDisposable> OnLoad(Func<Task> callback)
+        {
+            return await jsRuntime.AddEventListener(JsRuntimeObjectRef, "", "load", CallBackInteropWrapper.Create(callback, serializationSpec: false));
+        }
+
 
         public class BeforeInstallPromptEvent
         {

@@ -230,6 +230,7 @@ _All the window method/properties/events will also work if you use it on frames 
     - window.onclose
     - window.OnContextMenu
     - window.onfocus
+    - window.onload
 
 
 ## Utility method

@@ -244,6 +244,7 @@ context('window.navigator', () => {
     windowEventTest('blur');
     windowEventTest('close');
     windowEventTest('focus');
+    windowEventTest('load');
     it('window-oncontextmenu',
         () => {
             cy.window()
