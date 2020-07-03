@@ -260,4 +260,18 @@ context('window.navigator', () => {
 
                 })
         });
+    windowEventTest('offline');
+    windowEventTest('online');
+    it('window-onpagehide',
+        () => {
+            cy.window()
+                .then(w => {
+                    const event = new PageTransitionEvent("pagehide", {
+                        persisted: true
+                    });
+                    w.dispatchEvent(event);
+                    cy.get("#window-event-pagehide-persisted").should("have.text", "true");
+
+                })
+        });
 });

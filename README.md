@@ -231,6 +231,9 @@ _All the window method/properties/events will also work if you use it on frames 
     - window.OnContextMenu
     - window.onfocus
     - window.onload
+    - window.onoffline
+    - window.ononline
+    - window.onpagehide
 
 
 ## Utility method

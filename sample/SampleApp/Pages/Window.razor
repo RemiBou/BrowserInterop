@@ -132,6 +132,12 @@ Device Orientation Event :
 
     }
 </ul>  
+Page Hide Event :
+<ul>
+    @if(pageHideTransitionEvent != null){
+        <li id="window-event-pagehide-persisted">@pageHideTransitionEvent.Persisted.ToString().ToLower()</li>
+    }
+</ul>
 @code{
     private WindowInterop window;
     private WindowInterop opened;
@@ -152,6 +158,7 @@ Device Orientation Event :
     private bool? beforeInstallAccepted;
     private DeviceMotionEvent deviceMotionEvent;
     private DeviceOrientationEvent deviceOrientationEvent;
+    private PageTransitionEvent pageHideTransitionEvent;
     protected override async Task OnInitializedAsync()
     {
         window = await jsRuntime.Window();
@@ -230,9 +237,18 @@ Device Orientation Event :
         await window.OnClose(async () => await AddEventHandled("close"));
         await window.OnFocus(async () => await AddEventHandled("focus"));
         await window.OnLoad(async () => await AddEventHandled("load"));
-        await window.OnContextMenu(async (e) => {
-             await AddEventHandled("contextmenu");
-             await e.PreventDefault();
+        await window.OnContextMenu(async (e) =>
+        {
+            await AddEventHandled("contextmenu");
+            await e.PreventDefault();
+        });
+        await window.OnOffline(async () => await AddEventHandled("offline"));
+        await window.OnOnline(async () => await AddEventHandled("online"));
+        await window.OnPageHide(async (p) =>
+        {
+            this.pageHideTransitionEvent = p;
+            this.StateHasChanged();
+            await Task.CompletedTask;
         });
     }
     protected async Task AddEventHandled(string evtName)

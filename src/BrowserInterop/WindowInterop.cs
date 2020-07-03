@@ -24,7 +24,7 @@ namespace BrowserInterop
 
     }
 
-    public class WindowInterop : JsObjectWrapperBase
+    public partial class WindowInterop : JsObjectWrapperBase
     {
         internal static object SerializationSpec = new
         {
@@ -723,10 +723,10 @@ namespace BrowserInterop
             return await jsRuntime.AddEventListener(
                             JsRuntimeObjectRef, "",
                             "beforeunload",
-                            CallBackInteropWrapper.Create<JsRuntimeObjectRef>( 
+                            CallBackInteropWrapper.Create<JsRuntimeObjectRef>(
                                 async (e) =>
                                 {
-                                    await callback.Invoke(new BeforeUnloadEvent(jsRuntime,e));
+                                    await callback.Invoke(new BeforeUnloadEvent(jsRuntime, e));
                                 },
                                 getJsObjectRef: true)
                         );
@@ -792,6 +792,34 @@ namespace BrowserInterop
             return await jsRuntime.AddEventListener(JsRuntimeObjectRef, "", "load", CallBackInteropWrapper.Create(callback, serializationSpec: false));
         }
 
+        /// <summary>
+        /// fired when the browser has lost access to the network and the value of Navigator.onLine switches to false.
+        /// </summary>
+        /// <param name="callback"></param>
+        /// <returns></returns>
+        public async Task<IAsyncDisposable> OnOffline(Func<Task> callback)
+        {
+            return await jsRuntime.AddEventListener(JsRuntimeObjectRef, "", "offline", CallBackInteropWrapper.Create(callback, serializationSpec: false));
+        }
+        /// <summary>
+        /// fired when the browser has gained access to the network and the value of Navigator.onLine switches to true.
+        /// </summary>
+        /// <param name="callback"></param>
+        /// <returns></returns>
+        public async Task<IAsyncDisposable> OnOnline(Func<Task> callback)
+        {
+            return await jsRuntime.AddEventListener(JsRuntimeObjectRef, "", "online", CallBackInteropWrapper.Create(callback, serializationSpec: false));
+        }
+        /// <summary>
+        /// fired when the browser has gained access to the network and the value of Navigator.onLine switches to true.
+        /// </summary>
+        /// <param name="callback"></param>
+        /// <returns></returns>
+        public async Task<IAsyncDisposable> OnPageHide(Func<PageTransitionEvent, Task> callback)
+        {
+            return await jsRuntime.AddEventListener(JsRuntimeObjectRef, "", "pagehide", CallBackInteropWrapper.Create<PageTransitionEvent>(callback, serializationSpec: new { persisted = true }));
+        }
+
 
         public class BeforeInstallPromptEvent
         {
@@ -836,7 +864,7 @@ namespace BrowserInterop
 
             public BeforeUnloadEvent(IJSRuntime jsRuntime, JsRuntimeObjectRef jsRuntimeObjectRef)
             {
-                this.jsRuntime = jsRuntime; 
+                this.jsRuntime = jsRuntime;
                 this.jsRuntimeObjectRef = jsRuntimeObjectRef;
             }
 
@@ -846,7 +874,7 @@ namespace BrowserInterop
             /// </summary>
             /// <returns></returns>
             public async Task Prompt()
-            {    
+            {
                 await jsRuntime.SetInstancePropertyAsync(jsRuntimeObjectRef, "returnValue", false);
             }
 
