@@ -234,6 +234,11 @@ _All the window method/properties/events will also work if you use it on frames 
     - window.onoffline
     - window.ononline
     - window.onpagehide
+    - window.onpopstate
+    - window.onresize
+    - window.onscroll
+    - window.onwheel
+    - window.onstorage
 
 
 ## Utility method

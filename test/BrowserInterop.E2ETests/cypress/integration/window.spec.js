@@ -211,7 +211,7 @@ context('window.navigator', () => {
 
 
     it('window-ondeviceorientation',
-        () => { 
+        () => {
             cy.window()
                 .then(w => {
                     const event = new DeviceOrientationEvent("deviceorientation", {
@@ -271,6 +271,73 @@ context('window.navigator', () => {
                     });
                     w.dispatchEvent(event);
                     cy.get("#window-event-pagehide-persisted").should("have.text", "true");
+
+                })
+        });
+    it('window-onpageshow',
+        () => {
+            cy.window()
+                .then(w => {
+                    const event = new PageTransitionEvent("pageshow", {
+                        persisted: true
+                    });
+                    w.dispatchEvent(event);
+                    cy.get("#window-event-pageshow-persisted").should("have.text", "true");
+
+                })
+        });
+    it('window-onpopstate',
+        () => {
+            cy.window()
+                .then(w => {
+                    const event = new PopStateEvent("popstate", {
+                        state: {
+                            test: "aaa"
+                        }
+                    });
+                    w.dispatchEvent(event);
+                    cy.get("#window-event-popstate-test").should("have.text", "aaa");
+
+                })
+        });
+    windowEventTest('resize');
+    windowEventTest('scroll');
+    it('window-onwheel',
+        () => {
+            cy.window()
+                .then(w => {
+                    const event = new WheelEvent("wheel", {
+                        deltaX: 101,
+                        deltaY: 102,
+                        deltaZ: 103,
+                        deltaMode: 1,
+                    });
+                    w.dispatchEvent(event);
+                    cy.get("#window-event-wheel-deltaX").should("have.text", "101");
+                    cy.get("#window-event-wheel-deltaY").should("have.text", "102");
+                    cy.get("#window-event-wheel-deltaZ").should("have.text", "103");
+                    cy.get("#window-event-wheel-deltaMode").should("have.text", "Line");
+
+                })
+        });
+
+    it('window-onstorage',
+        () => {
+            cy.window()
+                .then(w => {
+                    w.sessionStorage.clear();
+                    var event = new StorageEvent("storage", {
+                        key: "testevent",
+                        newValue: "bbb",
+                        oldValue: "aaa",
+                        storageArea: w.sessionStorage
+                    })
+                    w.dispatchEvent(event);
+                    cy.get("#window-event-storage-oldValue").should("have.text", "aaa");
+                    cy.get("#window-event-storage-newValue").should("have.text", "bbb");
+                    cy.get("#window-event-storage-key").should("have.text", "testevent").then(() => {
+                        expect(w.sessionStorage.getItem('testcallback')).to.be.eq("\"abc\"")
+                    });
 
                 })
         });

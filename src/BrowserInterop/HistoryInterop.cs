@@ -109,7 +109,7 @@ namespace BrowserInterop
         public async Task ReplaceState(object state, string title, Uri url = null)
         {
             await jsRuntime.InvokeInstanceMethodAsync(jsRuntimeObjectRef, "history.replaceState", state, title, url?.ToString());
-        }
+        } 
     }
     public enum ScrollRestorationEnum
     {

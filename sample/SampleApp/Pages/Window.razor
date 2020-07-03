@@ -138,6 +138,36 @@ Page Hide Event :
         <li id="window-event-pagehide-persisted">@pageHideTransitionEvent.Persisted.ToString().ToLower()</li>
     }
 </ul>
+Page Show Event :
+<ul>
+    @if(pageShowTransitionEvent != null){
+        <li id="window-event-pageshow-persisted">@pageShowTransitionEvent.Persisted.ToString().ToLower()</li>
+    }
+</ul>
+Pop State Event :
+<ul>
+    @if(popState != null){
+        <li id="window-event-popstate-test">@popState.Test</li>
+    }
+</ul>
+Wheel Event :
+<ul>
+    @if(wheel != null){
+        <li id="window-event-wheel-deltaX">@wheel.DeltaX</li>
+        <li id="window-event-wheel-deltaY">@wheel.DeltaY</li>
+        <li id="window-event-wheel-deltaZ">@wheel.DeltaZ</li>
+        <li id="window-event-wheel-deltaMode">@wheel.DeltaModeEnum.ToString()</li>
+    }
+</ul>
+Storage Event :
+<ul>
+    @if(onStorage != null){
+        <li id="window-event-storage-key">@onStorage.Key</li>
+        <li id="window-event-storage-oldValue">@onStorage.OldValue</li>
+        <li id="window-event-storage-newValue">@onStorage.NewValue</li>
+        <li id="window-event-storage-url">@onStorage.Url</li>
+    }
+</ul>
 @code{
     private WindowInterop window;
     private WindowInterop opened;
@@ -151,7 +181,7 @@ Page Hide Event :
     private int animationFrame = 0;
     private int requestIdleCallback = 0;
     private TimeSpan? requestIdleCallbackTimeout;
-    private List<string> eventTriggered = new List<string>();
+    private HashSet<string> eventTriggered = new HashSet<string>();
 
     private OnMessageEventPayload<string> onMessageEventPayload;
     private string[] beforeInstallPlatforms;
@@ -159,6 +189,11 @@ Page Hide Event :
     private DeviceMotionEvent deviceMotionEvent;
     private DeviceOrientationEvent deviceOrientationEvent;
     private PageTransitionEvent pageHideTransitionEvent;
+    private PageTransitionEvent pageShowTransitionEvent;
+
+    private PopState popState;
+    private WheelEvent wheel;
+    private StorageEvent onStorage;
     protected override async Task OnInitializedAsync()
     {
         window = await jsRuntime.Window();
@@ -250,6 +285,40 @@ Page Hide Event :
             this.StateHasChanged();
             await Task.CompletedTask;
         });
+        await window.OnPageShow(async (p) =>
+        {
+            this.pageShowTransitionEvent = p;
+            this.StateHasChanged();
+            await Task.CompletedTask;
+        });
+        await window.OnPopState<PopState>(async (p) =>
+        {
+            this.popState = p;
+            this.StateHasChanged();
+            await Task.CompletedTask;
+        });
+
+        await window.OnResize(async () => await AddEventHandled("resize"));
+
+        await window.OnScroll(async () => await AddEventHandled("scroll"));
+
+        await window.OnWheel(async (w) =>
+        {
+            this.wheel = w;
+            this.StateHasChanged();
+            await Task.CompletedTask;
+        });
+
+        await window.OnStorage(async (s) =>
+        {
+           if (s.Key != "testevent")
+           {
+               return;
+           }
+           this.onStorage = s;
+           await s.Storage.SetItem("testcallback", "abc");
+           this.StateHasChanged();
+       });
     }
     protected async Task AddEventHandled(string evtName)
     {
@@ -293,6 +362,11 @@ Page Hide Event :
     {
         child = await window.Frames.Get(0);
         await child.Console.Log("test child");
+    }
+
+    private class PopState
+    {
+        public string Test { get; set; }
     }
 
 }

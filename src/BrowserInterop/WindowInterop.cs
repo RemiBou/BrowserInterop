@@ -810,8 +810,9 @@ namespace BrowserInterop
         {
             return await jsRuntime.AddEventListener(JsRuntimeObjectRef, "", "online", CallBackInteropWrapper.Create(callback, serializationSpec: false));
         }
+
         /// <summary>
-        /// fired when the browser has gained access to the network and the value of Navigator.onLine switches to true.
+        /// The pagehide event is sent to a Window when the browser hides the current page in the process of presenting a different page from the session's history.
         /// </summary>
         /// <param name="callback"></param>
         /// <returns></returns>
@@ -821,89 +822,164 @@ namespace BrowserInterop
         }
 
 
+        /// <summary>
+        /// The pageshow event is sent to a Window when the browser displays the window's document due to navigation
+        /// </summary>
+        /// <param name="callback"></param>
+        /// <returns></returns>
+        public async Task<IAsyncDisposable> OnPageShow(Func<PageTransitionEvent, Task> callback)
+        {
+            return await jsRuntime.AddEventListener(JsRuntimeObjectRef, "", "pageshow", CallBackInteropWrapper.Create<PageTransitionEvent>(callback, serializationSpec: new { persisted = true }));
+        }
+
+        /// <summary>
+        /// A popstate event is dispatched to the window every time the active history entry changes between two history entries for the same document. If the history entry being activated was created by a call to history.pushState() or was affected by a call to history.replaceState(), the popstate event's state property contains a copy of the history entry's state object.
+        /// </summary>
+        /// <param name="callback"></param>
+        /// <returns></returns>
+        public async Task<IAsyncDisposable> OnPopState<T>(Func<T, Task> callback)
+        {
+            return await jsRuntime.AddEventListener(JsRuntimeObjectRef, "", "popstate", CallBackInteropWrapper.Create<PopStateEvent<T>>(async p => await callback(p.State), new { state = "*" }));
+        }
+
+
+        /// <summary>
+        /// The resize event fires when the document view (window) has been resized.
+        /// </summary>
+        /// <param name="callback"></param>
+        /// <returns></returns>
+        public async Task<IAsyncDisposable> OnResize(Func<Task> callback)
+        {
+            return await jsRuntime.AddEventListener(JsRuntimeObjectRef, "", "resize", CallBackInteropWrapper.Create(callback, serializationSpec: false));
+        }
+
+        /// <summary>
+        /// The scroll event fires when the document view or an element has been scrolled, whether by the user, a Web API, or the user agent.
+        /// </summary>
+        /// <param name="callback"></param>
+        /// <returns></returns>
+        public async Task<IAsyncDisposable> OnScroll(Func<Task> callback)
+        {
+            return await jsRuntime.AddEventListener(JsRuntimeObjectRef, "", "scroll", CallBackInteropWrapper.Create(callback, serializationSpec: false));
+        }
+
+        /// <summary>
+        /// The scroll event fires when the document view or an element has been scrolled, whether by the user, a Web API, or the user agent.
+        /// </summary>
+        /// <param name="callback"></param>
+        /// <returns></returns>
+        public async Task<IAsyncDisposable> OnWheel(Func<WheelEvent, Task> callback)
+        {
+            return await jsRuntime.AddEventListener(JsRuntimeObjectRef, "", "wheel", CallBackInteropWrapper.Create(callback, serializationSpec: new { deltaX = true, deltaY = true, deltaZ = true, deltaMode = true }));
+        }
+
+        public async Task<IAsyncDisposable> OnStorage(Func<StorageEvent, Task> callback)
+        {
+            return await jsRuntime.AddEventListener(JsRuntimeObjectRef, "", "storage",
+                CallBackInteropWrapper.Create<JsRuntimeObjectRef>(
+                    async (jsObject) =>
+                    {
+                        var eventContent = await jsRuntime.GetInstanceContent<StorageEvent>(jsObject,new { key = true, oldValue = true, newValue = true, url = true });
+                        eventContent.Storage = new StorageInterop(jsRuntime, await jsRuntime.GetInstancePropertyRefAsync(jsObject, "storageArea"));
+                        await callback(eventContent);
+                    },
+                    getJsObjectRef: true
+                )
+            );
+
+        }
+
+
+
+
         public class BeforeInstallPromptEvent
-        {
-            private JsRuntimeObjectRef jsObjectRef;
-            private IJSRuntime jSRuntime;
+{
+    private JsRuntimeObjectRef jsObjectRef;
+    private IJSRuntime jSRuntime;
 
-            /// <summary>
-            ///  the platforms on which the event was dispatched. This is provided for user agents that want to present a choice of versions to the user such as, for example, "web" or "play" which would allow the user to chose between a web version or an Android version.
-            /// </summary>
-            /// <value></value>
-            public string[] Platforms { get; set; }
+    /// <summary>
+    ///  the platforms on which the event was dispatched. This is provided for user agents that want to present a choice of versions to the user such as, for example, "web" or "play" which would allow the user to chose between a web version or an Android version.
+    /// </summary>
+    /// <value></value>
+    public string[] Platforms { get; set; }
 
-            internal void SetJsRuntime(IJSRuntime jSRuntime, JsRuntimeObjectRef jsObjectRef)
-            {
-                this.jsObjectRef = jsObjectRef;
-                this.jSRuntime = jSRuntime;
-            }
+    internal void SetJsRuntime(IJSRuntime jSRuntime, JsRuntimeObjectRef jsObjectRef)
+    {
+        this.jsObjectRef = jsObjectRef;
+        this.jSRuntime = jSRuntime;
+    }
 
-            /// <summary>
-            /// Returns the user choice
-            /// </summary>
-            /// <returns></returns>
-            public async Task<bool> IsAccepted()
-            {
-                return (await jSRuntime.GetInstancePropertyAsync<string>(jsObjectRef, "userChoice") == "accepted");
-            }
+    /// <summary>
+    /// Returns the user choice
+    /// </summary>
+    /// <returns></returns>
+    public async Task<bool> IsAccepted()
+    {
+        return (await jSRuntime.GetInstancePropertyAsync<string>(jsObjectRef, "userChoice") == "accepted");
+    }
 
-            /// <summary>
-            /// Allows a developer to show the install prompt at a time of their own choosing. 
-            /// </summary>
-            /// <returns></returns>
-            public async Task Prompt()
-            {
-                await jSRuntime.InvokeInstanceMethodAsync(jsObjectRef, "prompt");
-            }
-        }
+    /// <summary>
+    /// Allows a developer to show the install prompt at a time of their own choosing. 
+    /// </summary>
+    /// <returns></returns>
+    public async Task Prompt()
+    {
+        await jSRuntime.InvokeInstanceMethodAsync(jsObjectRef, "prompt");
+    }
+}
 
-        public class BeforeUnloadEvent
-        {
-            private IJSRuntime jsRuntime;
-            private JsRuntimeObjectRef jsRuntimeObjectRef;
+public class BeforeUnloadEvent
+{
+    private IJSRuntime jsRuntime;
+    private JsRuntimeObjectRef jsRuntimeObjectRef;
 
-            public BeforeUnloadEvent(IJSRuntime jsRuntime, JsRuntimeObjectRef jsRuntimeObjectRef)
-            {
-                this.jsRuntime = jsRuntime;
-                this.jsRuntimeObjectRef = jsRuntimeObjectRef;
-            }
-
-
-            /// <summary>
-            /// Prompt the user before quitting
-            /// </summary>
-            /// <returns></returns>
-            public async Task Prompt()
-            {
-                await jsRuntime.SetInstancePropertyAsync(jsRuntimeObjectRef, "returnValue", false);
-            }
+    public BeforeUnloadEvent(IJSRuntime jsRuntime, JsRuntimeObjectRef jsRuntimeObjectRef)
+    {
+        this.jsRuntime = jsRuntime;
+        this.jsRuntimeObjectRef = jsRuntimeObjectRef;
+    }
 
 
-        }
-
-        public class CancellableEvent
-        {
-
-            private IJSRuntime jsRuntime;
-            private JsRuntimeObjectRef jsRuntimeObjectRef;
-
-            public CancellableEvent(IJSRuntime jsRuntime, JsRuntimeObjectRef jsRuntimeObjectRef)
-            {
-                this.jsRuntime = jsRuntime;
-                this.jsRuntimeObjectRef = jsRuntimeObjectRef;
-            }
+    /// <summary>
+    /// Prompt the user before quitting
+    /// </summary>
+    /// <returns></returns>
+    public async Task Prompt()
+    {
+        await jsRuntime.SetInstancePropertyAsync(jsRuntimeObjectRef, "returnValue", false);
+    }
 
 
-            /// <summary>
-            /// Prevent the event default behavior
-            /// </summary>
-            /// <returns></returns>
-            public async Task PreventDefault()
-            {
-                await jsRuntime.InvokeInstanceMethodAsync(jsRuntimeObjectRef, "preventDefault");
-            }
+}
 
-        }
+public class CancellableEvent
+{
+
+    private IJSRuntime jsRuntime;
+    private JsRuntimeObjectRef jsRuntimeObjectRef;
+
+    public CancellableEvent(IJSRuntime jsRuntime, JsRuntimeObjectRef jsRuntimeObjectRef)
+    {
+        this.jsRuntime = jsRuntime;
+        this.jsRuntimeObjectRef = jsRuntimeObjectRef;
+    }
+
+
+    /// <summary>
+    /// Prevent the event default behavior
+    /// </summary>
+    /// <returns></returns>
+    public async Task PreventDefault()
+    {
+        await jsRuntime.InvokeInstanceMethodAsync(jsRuntimeObjectRef, "preventDefault");
+    }
+
+}
+
+private class PopStateEvent<T>
+{
+    public T State { get; set; }
+}
     }
 
     /// <summary>
@@ -911,23 +987,23 @@ namespace BrowserInterop
     /// </summary>
     /// <typeparam name="T">Data type</typeparam>
     public class OnMessageEventPayload<T>
-    {
-        /// <summary>
-        /// The object passed from the other window.
-        /// </summary>
-        /// <value></value>
-        public T Data { get; set; }
+{
+    /// <summary>
+    /// The object passed from the other window.
+    /// </summary>
+    /// <value></value>
+    public T Data { get; set; }
 
-        /// <summary>
-        /// The origin of the window that sent the message at the time postMessage was called. 
-        /// </summary>
-        /// <value></value>
-        public string Origin { get; set; }
+    /// <summary>
+    /// The origin of the window that sent the message at the time postMessage was called. 
+    /// </summary>
+    /// <value></value>
+    public string Origin { get; set; }
 
-        /// <summary>
-        /// A reference to the window object that sent the message; you can use this to establish two-way communication between two windows with different origins.
-        /// </summary>
-        /// <value></value>
-        public WindowInterop Source { get; set; }
-    }
+    /// <summary>
+    /// A reference to the window object that sent the message; you can use this to establish two-way communication between two windows with different origins.
+    /// </summary>
+    /// <value></value>
+    public WindowInterop Source { get; set; }
+}
 }
