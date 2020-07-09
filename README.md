@@ -6,7 +6,7 @@
 This library provides access to browser API in a Blazor App. 
 
 The following criteria are taken into account for choosing if an API must be handled :
-- Is it already doable with Blazor (like XHR or DOM manipulation) ?
+- Is it already doable with Blazor (like XHR, DOM manipulation or already managed event ) ?
 - Is that part of the standard ?
 - Is that implemented by most browsers ? (> 75% in caniuse)
 
@@ -239,6 +239,7 @@ _All the window method/properties/events will also work if you use it on frames 
     - window.onscroll
     - window.onwheel
     - window.onstorage
+    - window.onunload
 
 
 ## Utility method

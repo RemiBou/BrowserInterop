@@ -889,7 +889,15 @@ namespace BrowserInterop
 
         }
 
-
+        /// <summary>
+        /// The unload event is fired when the document or a child resource is being unloaded.
+        /// </summary>
+        /// <param name="callback"></param>
+        /// <returns></returns>
+        public async Task<IAsyncDisposable> OnUnload(Func<Task> callback)
+        {
+            return await jsRuntime.AddEventListener(JsRuntimeObjectRef, "", "unload", CallBackInteropWrapper.Create(callback, serializationSpec: false));
+        }
 
 
         public class BeforeInstallPromptEvent

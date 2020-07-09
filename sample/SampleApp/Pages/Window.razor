@@ -302,6 +302,8 @@ Storage Event :
 
         await window.OnScroll(async () => await AddEventHandled("scroll"));
 
+        await window.OnUnload(async () => await AddEventHandled("unload"));
+
         await window.OnWheel(async (w) =>
         {
             this.wheel = w;
@@ -311,14 +313,14 @@ Storage Event :
 
         await window.OnStorage(async (s) =>
         {
-           if (s.Key != "testevent")
-           {
-               return;
-           }
-           this.onStorage = s;
-           await s.Storage.SetItem("testcallback", "abc");
-           this.StateHasChanged();
-       });
+            if (s.Key != "testevent")
+            {
+                return;
+            }
+            this.onStorage = s;
+            await s.Storage.SetItem("testcallback", "abc");
+            this.StateHasChanged();
+        });
     }
     protected async Task AddEventHandled(string evtName)
     {
