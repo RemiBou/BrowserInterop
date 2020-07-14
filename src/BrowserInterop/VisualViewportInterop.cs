@@ -59,7 +59,7 @@ namespace BrowserInterop
         /// </summary>
         /// <param name="todo"></param>
         /// <returns></returns>
-        public async Task<IAsyncDisposable> OnResize(Func<Task> todo)
+        public async ValueTask<IAsyncDisposable> OnResize(Func<ValueTask> todo)
         {
             return await this.jsRuntime.AddEventListener(this.windowRef, "visualViewport", "resize", CallBackInteropWrapper.Create(todo));
         }
@@ -69,7 +69,7 @@ namespace BrowserInterop
         /// </summary>
         /// <param name="todo"></param>
         /// <returns></returns>
-        public async Task<IAsyncDisposable> OnScroll(Func<Task> todo)
+        public async ValueTask<IAsyncDisposable> OnScroll(Func<ValueTask> todo)
         {
             return await this.jsRuntime.AddEventListener(this.windowRef, "visualViewport", "scroll", CallBackInteropWrapper.Create(todo));
         }

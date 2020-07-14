@@ -201,18 +201,18 @@ Storage Event :
         viewport = await window.VisualViewport();
         if (viewport != null)
         {
-            await viewport?.OnResize(() =>
+            await viewport.OnResize(() =>
             {
                 resizeHandled++;
                 StateHasChanged();
-                return Task.CompletedTask;
+                return new ValueTask();
             });
 
-            await viewport?.OnScroll(() =>
+            await viewport.OnScroll(() =>
             {
                 scrollHandled++;
                 StateHasChanged();
-                return Task.CompletedTask;
+                return new ValueTask();
             });
         }
         await window.OnMessage<string>(async (payload) =>
@@ -302,7 +302,7 @@ Storage Event :
 
         await window.OnScroll(async () => await AddEventHandled("scroll"));
 
-        await window.OnUnload(async () => await AddEventHandled("unload"));
+        await window.OnUnload(async () => await AddEventHandled("unload"));  
 
         await window.OnWheel(async (w) =>
         {
@@ -322,7 +322,7 @@ Storage Event :
             this.StateHasChanged();
         });
     }
-    protected async Task AddEventHandled(string evtName)
+    protected async ValueTask AddEventHandled(string evtName)
     {
         eventTriggered.Add(evtName);
         StateHasChanged();

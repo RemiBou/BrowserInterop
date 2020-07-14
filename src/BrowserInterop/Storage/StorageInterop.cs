@@ -32,7 +32,7 @@ namespace BrowserInterop
         ///  the number of data items stored in the Storage object.
         ///  </summary>
         /// <returns></returns>
-        public async Task<int> Length()
+        public async ValueTask<int> Length()
         {
             return await jsRuntime.GetInstancePropertyAsync<int>(await GetJsRuntimeObjectRef(),  "length");
         }
@@ -42,7 +42,7 @@ namespace BrowserInterop
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
-        public async Task<string> Key(int index)
+        public async ValueTask<string> Key(int index)
         {
             return await jsRuntime.InvokeInstanceMethodAsync<string>(await GetJsRuntimeObjectRef(), "key", index);
         }
@@ -52,7 +52,7 @@ namespace BrowserInterop
         /// </summary>
         /// <param name="keyName"></param>
         /// <returns></returns>
-        public async Task<T> GetItem<T>(string keyName)
+        public async ValueTask<T> GetItem<T>(string keyName)
         {
             var strValue = await jsRuntime.InvokeInstanceMethodAsync<string>(await GetJsRuntimeObjectRef(),"getItem", keyName);
             return JsonSerializer.Deserialize<T>(strValue);
@@ -63,7 +63,7 @@ namespace BrowserInterop
         /// </summary>
         /// <param name="keyName"></param>
         /// <returns></returns>
-        public async Task SetItem(string keyName, object value)
+        public async ValueTask SetItem(string keyName, object value)
         {
             await jsRuntime.InvokeInstanceMethodAsync(await GetJsRuntimeObjectRef(),"setItem", keyName, JsonSerializer.Serialize(value));
         }
@@ -73,7 +73,7 @@ namespace BrowserInterop
         /// </summary>
         /// <param name="keyName"></param>
         /// <returns></returns>
-        public async Task RemoveItem(string keyName)
+        public async ValueTask RemoveItem(string keyName)
         {
             await jsRuntime.InvokeInstanceMethodAsync(await GetJsRuntimeObjectRef(), "removeItem", keyName);
         }
@@ -82,13 +82,13 @@ namespace BrowserInterop
         ///  will empty all keys out of the storage..
         /// </summary>
         /// <returns></returns>
-        public async Task Clear()
+        public async ValueTask Clear()
         {
             await jsRuntime.InvokeInstanceMethodAsync(await GetJsRuntimeObjectRef(), "clear");
         }
 
 
-        private async Task<JsRuntimeObjectRef> GetJsRuntimeObjectRef()
+        private async ValueTask<JsRuntimeObjectRef> GetJsRuntimeObjectRef()
         {
             if(jsRuntimeObjectRef == null){
                 jsRuntimeObjectRef = await jsRuntime.GetInstancePropertyRefAsync(windowRuntimeObjectRef, memberName);

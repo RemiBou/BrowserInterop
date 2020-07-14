@@ -9,16 +9,16 @@ namespace BrowserInterop
     /// </summary>
     public class JSInteropActionWrapper
     {
-        private readonly Func<Task> toDo;
+        private readonly Func<ValueTask> toDo;
 
-        internal JSInteropActionWrapper(Func<Task> toDo)
+        internal JSInteropActionWrapper(Func<ValueTask> toDo)
         {
             this.toDo = toDo;
         }
 
 
         [JSInvokable]
-        public async Task Invoke()
+        public async ValueTask Invoke()
         {
             await toDo.Invoke();
         }
@@ -29,16 +29,16 @@ namespace BrowserInterop
     /// </summary>
     public class JSInteropActionWrapper<T>
     {
-        private readonly Func<T, Task> toDo;
+        private readonly Func<T, ValueTask> toDo;
 
-        internal JSInteropActionWrapper(Func<T, Task> toDo)
+        internal JSInteropActionWrapper(Func<T, ValueTask> toDo)
         {
             this.toDo = toDo;
         }
 
 
         [JSInvokable]
-        public async Task Invoke(T arg1)
+        public async ValueTask Invoke(T arg1)
         {
             await toDo.Invoke(arg1);
         }

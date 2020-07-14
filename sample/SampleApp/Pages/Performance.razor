@@ -43,7 +43,7 @@
         await window.Performance.OnResourceTimingBufferFull(() => {
             bufferFullHandled++;
             StateHasChanged();
-            return Task.CompletedTask;
+            return new ValueTask();
         });
     }
 }

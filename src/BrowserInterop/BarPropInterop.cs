@@ -23,7 +23,7 @@ namespace BrowserInterop
         /// Return true if the element is visible or not
         /// </summary>
         /// <returns></returns>
-        public async Task<bool> GetVisible()
+        public async ValueTask<bool> GetVisible()
         {
             return await jSRuntime.GetInstancePropertyAsync<bool>(windowRef, $"{propertyName}.visible");
         }
@@ -33,7 +33,7 @@ namespace BrowserInterop
         /// </summary>
         /// <param name="visible"></param>
         /// <returns></returns>
-        public async Task SetVisible(bool visible)
+        public async ValueTask SetVisible(bool visible)
         {
             await jSRuntime.SetInstancePropertyAsync(windowRef, $"{propertyName}.visible", visible);
         }

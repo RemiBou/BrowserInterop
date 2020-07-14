@@ -23,7 +23,7 @@ namespace BrowserInterop.Performance
         /// Represents the time at which the location was retrieved.
         /// </summary>
         /// <value></value>
-        public async Task<double> TimeOrigin()
+        public async ValueTask<double> TimeOrigin()
         {
             return await jsRuntime.GetInstancePropertyAsync<double>(windowRef, "performance.timeOrigin");
         }
@@ -33,7 +33,7 @@ namespace BrowserInterop.Performance
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        public async Task ClearMarks(string name = null)
+        public async ValueTask ClearMarks(string name = null)
         {
             await jsRuntime.InvokeInstanceMethodAsync(windowRef, "performance.clearMarks", name);
         }
@@ -43,7 +43,7 @@ namespace BrowserInterop.Performance
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        public async Task ClearMeasures(string name = null)
+        public async ValueTask ClearMeasures(string name = null)
         {
             await jsRuntime.InvokeInstanceMethodAsync(windowRef, "performance.clearMeasures", name);
         }
@@ -53,7 +53,7 @@ namespace BrowserInterop.Performance
         /// removes all performance entries with an entryType of "resource" from the browser's performance data buffer and sets the size of the performance data buffer to zero. To set the size of the browser's performance data buffer, use the Performance.setResourceTimingBufferSize() method.
         /// </summary>        
         /// <returns></returns>
-        public async Task ClearResourceTimings()
+        public async ValueTask ClearResourceTimings()
         {
             await jsRuntime.InvokeInstanceMethodAsync(windowRef, "performance.clearResourceTimings");
         }
@@ -62,7 +62,7 @@ namespace BrowserInterop.Performance
         /// returns a list of all PerformanceEntry objects for the page.
         /// </summary>
         /// <returns></returns>
-        public async Task<PerformanceEntry[]> GetEntries()
+        public async ValueTask<PerformanceEntry[]> GetEntries()
         {
             return await jsRuntime.InvokeInstanceMethodAsync<PerformanceEntry[]>(windowRef, "performance.getEntries");
         }
@@ -71,7 +71,7 @@ namespace BrowserInterop.Performance
         /// Returns a list of PerformanceEntry objects based on the given name
         /// </summary>
         /// <returns></returns>
-        public async Task<PerformanceEntry[]> GetEntriesByName(string name)
+        public async ValueTask<PerformanceEntry[]> GetEntriesByName(string name)
         {
             return await jsRuntime.InvokeInstanceMethodAsync<PerformanceEntry[]>(windowRef, "performance.getEntriesByName", name);
         }
@@ -80,7 +80,7 @@ namespace BrowserInterop.Performance
         /// Returns a list of PerformanceEntry objects based on the given name and entry type.
         /// </summary>
         /// <returns></returns>
-        public async Task<T[]> GetEntriesByName<T>(string name) where T : PerformanceEntry
+        public async ValueTask<T[]> GetEntriesByName<T>(string name) where T : PerformanceEntry
         {
             return await jsRuntime.InvokeInstanceMethodAsync<T[]>(windowRef, "performance.getEntriesByName", name, ConvertTypeToString(typeof(T)));
         }
@@ -89,7 +89,7 @@ namespace BrowserInterop.Performance
         /// returns a list of all PerformanceEntry objects for the page.
         /// </summary>
         /// <returns></returns>
-        public async Task<T[]> GetEntriesByType<T>() where T : PerformanceEntry
+        public async ValueTask<T[]> GetEntriesByType<T>() where T : PerformanceEntry
         {
             return await jsRuntime.InvokeInstanceMethodAsync<T[]>(windowRef, "performance.getEntriesByType", ConvertTypeToString(typeof(T)));
         }
@@ -99,7 +99,7 @@ namespace BrowserInterop.Performance
         /// </summary>
         /// <param name="name">the name of the mark.</param>
         /// <returns></returns>
-        public async Task Mark(string name)
+        public async ValueTask Mark(string name)
         {
             await jsRuntime.InvokeInstanceMethodAsync(windowRef, "performance.mark", name);
         }
@@ -111,7 +111,7 @@ namespace BrowserInterop.Performance
         /// <param name="startMark"> the name of the measure's starting mark. May also be the name of a PerformanceTiming property. If it is omitted, then the start time will be the navigation start time.</param>
         /// <param name="endMark">the name of the measure's ending mark. May also be the name of a PerformanceTiming property. If it is omitted, then the current time is used.</param>
         /// <returns></returns>
-        public async Task Measure(string name, string startMark = null, string endMark = null)
+        public async ValueTask Measure(string name, string startMark = null, string endMark = null)
         {
             await jsRuntime.InvokeInstanceMethodAsync(windowRef, "performance.measure", name, startMark, endMark);
         }
@@ -120,7 +120,7 @@ namespace BrowserInterop.Performance
         ///  returns a DOMHighResTimeStamp, measured in milliseconds. The returned value represents the time elapsed since the time origin
         /// </summary>
         /// <returns></returns>
-        public async Task<double> Now()
+        public async ValueTask<double> Now()
         {
             return await jsRuntime.InvokeInstanceMethodAsync<double>(windowRef, "performance.now");
         }
@@ -130,7 +130,7 @@ namespace BrowserInterop.Performance
         /// </summary>
         /// <param name="maxSize"></param>
         /// <returns></returns>
-        public async Task SetResourceTimingBufferSize(long maxSize)
+        public async ValueTask SetResourceTimingBufferSize(long maxSize)
         {
             await jsRuntime.InvokeInstanceMethodAsync(windowRef, "performance.setResourceTimingBufferSize", maxSize);
         }
@@ -140,7 +140,7 @@ namespace BrowserInterop.Performance
         /// </summary>
         /// <param name="toDo"></param>
         /// <returns></returns>
-        public async Task<IAsyncDisposable> OnResourceTimingBufferFull(Func<Task> toDo)
+        public async ValueTask<IAsyncDisposable> OnResourceTimingBufferFull(Func<ValueTask> toDo)
         {
             return await jsRuntime.AddEventListener(windowRef, "performance", "resourcetimingbufferfull", CallBackInteropWrapper.Create(toDo));
         }

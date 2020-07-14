@@ -23,7 +23,7 @@ namespace BrowserInterop
         /// Represents the number of elements in the session history, including the currently loaded page. For example, for a page loaded in a new tab this property returns 1.
         /// </summary>
         /// <value></value>
-        public async Task<int> Length()
+        public async ValueTask<int> Length()
         {
             return await jsRuntime.GetInstancePropertyAsync<int>(jsRuntimeObjectRef, "history.length");
         }
@@ -32,7 +32,7 @@ namespace BrowserInterop
         ///allows web applications to explicitly set default scroll restoration behavior on history navigation.
         /// </summary>
         /// <returns></returns>
-        public async Task<ScrollRestorationEnum> ScrollRestoration()
+        public async ValueTask<ScrollRestorationEnum> ScrollRestoration()
         {
             return Enum.Parse<ScrollRestorationEnum>(await jsRuntime.GetInstancePropertyAsync<string>(jsRuntimeObjectRef, "history.scrollRestoration"), true);
         }
@@ -42,7 +42,7 @@ namespace BrowserInterop
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public async Task ScrollRestoration(ScrollRestorationEnum value)
+        public async ValueTask ScrollRestoration(ScrollRestorationEnum value)
         {
             await jsRuntime.SetInstancePropertyAsync(jsRuntimeObjectRef, "history.scrollRestoration", value.ToString().ToLower());
         }
@@ -52,7 +52,7 @@ namespace BrowserInterop
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public async Task<T> State<T>()
+        public async ValueTask<T> State<T>()
         {
             return await jsRuntime.GetInstancePropertyAsync<T>(jsRuntimeObjectRef, "history.state");
         }
@@ -61,7 +61,7 @@ namespace BrowserInterop
         /// causes the browser to move back one page in the session history. It has the same effect as calling history.go(-1). If there is no previous page, this method call does nothing.
         /// </summary>
         /// <returns></returns>
-        public async Task Back()
+        public async ValueTask Back()
         {
             await jsRuntime.InvokeInstanceMethodAsync(jsRuntimeObjectRef, "history.back");
         }
@@ -70,7 +70,7 @@ namespace BrowserInterop
         /// causes the browser to move forward one page in the session history. It has the same effect as calling history.go(1).
         /// </summary>
         /// <returns></returns>
-        public async Task Forward()
+        public async ValueTask Forward()
         {
             await jsRuntime.InvokeInstanceMethodAsync(jsRuntimeObjectRef, "history.forward");
         }
@@ -80,7 +80,7 @@ namespace BrowserInterop
         /// /// </summary>
         /// <param name="delta">The position in the history to which you want to move, relative to the current page. A negative value moves backwards, a positive value moves forwards. So, for example, history.go(2) moves forward two pages and history.go(-2) moves back two pages. If no value is passed or if delta equals 0, it has the same result as calling location.reload().</param>
         /// <returns></returns>
-        public async Task Go(int delta = 0)
+        public async ValueTask Go(int delta = 0)
         {
             await jsRuntime.InvokeInstanceMethodAsync(jsRuntimeObjectRef, "history.go", delta);
         }
@@ -94,7 +94,7 @@ namespace BrowserInterop
         /// <param name="title">Most browsers currently ignores this parameter, although they may use it in the future. Passing the empty string here should be safe against future changes to the method. Alternatively, you could pass a short title for the state to which you're moving.</param>
         /// <param name="url">The new history entry's URL is given by this parameter. Note that the browser won't attempt to load this URL after a call to pushState(), but it might attempt to load the URL later, for instance after the user restarts the browser. The new URL does not need to be absolute; if it's relative, it's resolved relative to the current URL. The new URL must be of the same origin as the current URL; otherwise, pushState() will throw an exception. If this parameter isn't specified, it's set to the document's current URL.</param>
         /// <returns></returns>
-        public async Task PushState(object state, string title, Uri url = null)
+        public async ValueTask PushState(object state, string title, Uri url = null)
         {
             await jsRuntime.InvokeInstanceMethodAsync(jsRuntimeObjectRef, "history.pushState", state, title, url?.ToString());
         }
@@ -106,7 +106,7 @@ namespace BrowserInterop
         /// <param name="title">Most browsers currently ignores this parameter, although they may use it in the future. Passing the empty string here should be safe against future changes to the method. Alternatively, you could pass a short title for the state to which you're moving.</param>
         /// <param name="url">The URL of the history entry. The new URL must be of the same origin as the current URL; otherwise replaceState throws an exception.</param>
         /// <returns></returns>
-        public async Task ReplaceState(object state, string title, Uri url = null)
+        public async ValueTask ReplaceState(object state, string title, Uri url = null)
         {
             await jsRuntime.InvokeInstanceMethodAsync(jsRuntimeObjectRef, "history.replaceState", state, title, url?.ToString());
         } 

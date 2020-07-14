@@ -48,7 +48,7 @@ namespace BrowserInterop.Screen
         /// </summary>
         /// <param name="toDo"></param>
         /// <returns></returns>
-        public async Task<IAsyncDisposable> OnChange(Func<Task> toDo)
+        public async ValueTask<IAsyncDisposable> OnChange(Func<ValueTask> toDo)
         {
             return await jsRuntime.AddEventListener(windowRef, "screen.orientation", "change", CallBackInteropWrapper.Create(toDo));
         }
@@ -57,7 +57,7 @@ namespace BrowserInterop.Screen
         /// Locks the orientation of the containing document to its default orientation
         /// </summary>
         /// <returns></returns>
-        public async Task Lock(ScreenOrientationTypeEnum newOrientation)
+        public async ValueTask Lock(ScreenOrientationTypeEnum newOrientation)
         {
             await jsRuntime.InvokeInstanceMethodAsync(windowRef, "screen.orientation.lock", newOrientation switch
             {
@@ -77,7 +77,7 @@ namespace BrowserInterop.Screen
         /// Unlock the orientation of the containing document 
         /// </summary>
         /// <returns></returns>
-        public async Task Unlock()
+        public async ValueTask Unlock()
         {
             await jsRuntime.InvokeInstanceMethodAsync(windowRef, "screen.orientation.unlock");
         }

@@ -54,7 +54,7 @@ namespace BrowserInterop
         ///  provides information about the system's battery
         /// </summary>
         /// <returns></returns>
-        public async Task<BatteryManager> GetBattery()
+        public async ValueTask<BatteryManager> GetBattery()
         {
             return await jsRuntime.InvokeAsync<BatteryManager>("browserInterop.navigator.getBattery");
 
@@ -86,7 +86,7 @@ namespace BrowserInterop
         /// Returns false if the browser enables java
         /// </summary>
         /// <returns></returns>
-        public async Task<bool> JavaEnabled()
+        public async ValueTask<bool> JavaEnabled()
         {
             return await this.jsRuntime.InvokeAsync<bool>("window.navigator.javaEnabled");
         }
@@ -152,7 +152,7 @@ namespace BrowserInterop
         /// Returns false if it would fail or sharing is not supported
         /// </summary>
         /// <returns></returns>
-        public async Task<bool> CanShare(ShareData shareData)
+        public async ValueTask<bool> CanShare(ShareData shareData)
         {
             return await jsRuntime.HasProperty(jsRuntimeObjectRef, "navigator.canShare") && await jsRuntime.InvokeInstanceMethodAsync<bool>(jsRuntimeObjectRef, "navigator.canShare", shareData);
         }
@@ -166,7 +166,7 @@ namespace BrowserInterop
         /// <param name="url">A string containing the URL of the handler. This URL must include %s, as a placeholder that will be replaced with the escaped URL to be handled.</param>
         /// <param name="title">A human-readable title string for the handler. This will be displayed to the user, such as prompting “Allow this site to handle [scheme] links?” or listing registered handlers in the browser’s settings.</param>
         /// <returns></returns>
-        public async Task RegisterProtocolHandler(string protocol, string url, string title)
+        public async ValueTask RegisterProtocolHandler(string protocol, string url, string title)
         {
             if (string.IsNullOrEmpty(protocol))
             {
@@ -199,7 +199,7 @@ namespace BrowserInterop
         /// <param name="url"></param>
         /// <param name="data"></param>
         /// <returns></returns>
-        public async Task<bool> SendBeacon(string url, object data)
+        public async ValueTask<bool> SendBeacon(string url, object data)
         {
             return await jsRuntime.HasProperty(jsRuntimeObjectRef, "navigator.sendBeacon") && await jsRuntime.InvokeInstanceMethodAsync<bool>(jsRuntimeObjectRef, "navigator.sendBeacon", url, data);
         }
@@ -209,7 +209,7 @@ namespace BrowserInterop
         /// Use CanShare to check if this is allowed
         /// </summary>
         /// <returns></returns>
-        public async Task Share(ShareData shareData)
+        public async ValueTask Share(ShareData shareData)
         {
             await jsRuntime.InvokeAsync<bool>("navigator.share", shareData);
         }
@@ -219,7 +219,7 @@ namespace BrowserInterop
         /// </summary>
         /// <param name="pattern">Each value indicates a number of milliseconds to vibrate or pause, in alternation. An array of values to alternately vibrate, pause, then vibrate again.</param>
         /// <returns></returns>
-        public async Task Vibrate(IEnumerable<TimeSpan> pattern)
+        public async ValueTask Vibrate(IEnumerable<TimeSpan> pattern)
         {
             await jsRuntime.InvokeAsync<bool>("navigator.vibrate", pattern.Select(t => t.TotalMilliseconds).ToArray());
         }

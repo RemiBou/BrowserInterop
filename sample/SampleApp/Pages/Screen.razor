@@ -28,7 +28,7 @@ Screen :
         await screen.Orientation.OnChange(() => {
             changeHandled++;
             StateHasChanged();
-            return Task.CompletedTask;
+            return new ValueTask();
         });
     }
 }

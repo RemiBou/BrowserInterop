@@ -32,7 +32,7 @@ namespace BrowserInterop
         /// <param name="assertion">true or false</param>
         /// <param name="printedObjects">object to print in the console</param>
         /// <returns></returns>
-        public async Task Assert(bool assertion, params object[] printedObjects)
+        public async ValueTask Assert(bool assertion, params object[] printedObjects)
         {
             if (IsEnabled)
                 await jsRuntime.InvokeInstanceMethodAsync(windowObject, "browserInterop.callInstanceMethod", windowObject, "console.assert", assertion, printedObjects);
@@ -46,7 +46,7 @@ namespace BrowserInterop
         /// <param name="message">message format</param>
         /// <param name="formatParameters">string.Format parameters</param>
         /// <returns></returns>
-        public async Task Assert(bool assertion, string message, params object[] formatParameters)
+        public async ValueTask Assert(bool assertion, string message, params object[] formatParameters)
         {
             if (IsEnabled)
                 await jsRuntime.InvokeInstanceMethodAsync(windowObject, "console.assert", assertion, string.Format(message, formatParameters));
@@ -57,7 +57,7 @@ namespace BrowserInterop
         /// Clear the console
         /// </summary>
         /// <returns></returns>
-        public async Task Clear()
+        public async ValueTask Clear()
         {
             if (IsEnabled)
                 await jsRuntime.InvokeInstanceMethodAsync(windowObject, "console.clear");
@@ -68,7 +68,7 @@ namespace BrowserInterop
         /// </summary>
         /// <param name="label">If supplied, Count() outputs the number of times it has been called with that label. If omitted, Count() behaves as though it was called with the "default" label.</param>
         /// <returns></returns>
-        public async Task Count(string label = null)
+        public async ValueTask Count(string label = null)
         {
             if (IsEnabled)
                 await jsRuntime.InvokeInstanceMethodAsync(windowObject, "console.count", label ?? "default");
@@ -79,7 +79,7 @@ namespace BrowserInterop
         /// </summary>
         /// <param name="label">If supplied,resets this label counter else, resets the default label.</param>
         /// <returns></returns>
-        public async Task CountReset(string label = null)
+        public async ValueTask CountReset(string label = null)
         {
             if (IsEnabled)
                 await jsRuntime.InvokeInstanceMethodAsync(windowObject, "console.countReset", label ?? "default");
@@ -90,7 +90,7 @@ namespace BrowserInterop
         /// </summary>
         /// <param name="printedObjects">object to print in the console</param>
         /// <returns></returns>
-        public async Task Debug(params object[] printedObjects)
+        public async ValueTask Debug(params object[] printedObjects)
         {
             if (IsEnabled)
                 await jsRuntime.InvokeInstanceMethodAsync(windowObject, "console.debug", printedObjects);
@@ -103,7 +103,7 @@ namespace BrowserInterop
         /// <param name="message">message format</param>
         /// <param name="formatParameters">string.Format parameters</param>
         /// <returns></returns>
-        public async Task Debug(string message, params object[] formatParameters)
+        public async ValueTask Debug(string message, params object[] formatParameters)
         {
             if (IsEnabled)
                 await jsRuntime.InvokeInstanceMethodAsync(windowObject, "console.debug", string.Format(message, formatParameters));
@@ -115,7 +115,7 @@ namespace BrowserInterop
         /// </summary>
         /// <param name="data">the object to display</param>
         /// <returns></returns>
-        public async Task Dir(object data)
+        public async ValueTask Dir(object data)
         {
             if (IsEnabled)
                 await jsRuntime.InvokeInstanceMethodAsync(windowObject, "console.dir", data);
@@ -126,7 +126,7 @@ namespace BrowserInterop
         /// </summary>
         /// <param name="data">the HTML element ref to display</param>
         /// <returns></returns>
-        public async Task DirXml(ElementReference element)
+        public async ValueTask DirXml(ElementReference element)
         {
             if (IsEnabled)
                 await jsRuntime.InvokeInstanceMethodAsync(windowObject, "console.dirxml", element);
@@ -137,7 +137,7 @@ namespace BrowserInterop
         /// </summary>
         /// <param name="printedObjects">object to print in the console</param>
         /// <returns></returns>
-        public async Task Error(params object[] printedObjects)
+        public async ValueTask Error(params object[] printedObjects)
         {
             if (IsEnabled)
                 await jsRuntime.InvokeInstanceMethodAsync(windowObject, "console.error", printedObjects);
@@ -150,7 +150,7 @@ namespace BrowserInterop
         /// <param name="message">message format</param>
         /// <param name="formatParameters">string.Format parameters</param>
         /// <returns></returns>
-        public async Task Error(string message, params object[] formatParameters)
+        public async ValueTask Error(string message, params object[] formatParameters)
         {
             if (IsEnabled)
                 await jsRuntime.InvokeInstanceMethodAsync(windowObject, "console.error", string.Format(message, formatParameters));
@@ -161,7 +161,7 @@ namespace BrowserInterop
         /// </summary>
         /// <param name="label">The group label</param>
         /// <returns></returns>
-        public async Task GroupStart(string label)
+        public async ValueTask GroupStart(string label)
         {
             if (IsEnabled)
             {
@@ -174,7 +174,7 @@ namespace BrowserInterop
         /// End the current console group
         /// </summary>
         /// <returns></returns>
-        public async Task GroupEnd()
+        public async ValueTask GroupEnd()
         {
             if (IsEnabled)
                 await jsRuntime.InvokeInstanceMethodAsync(windowObject, "console.groupEnd");
@@ -185,7 +185,7 @@ namespace BrowserInterop
         /// </summary>
         /// <param name="label">group label</param>
         /// <returns></returns>
-        public async Task<IAsyncDisposable> Group(string label)
+        public async ValueTask<IAsyncDisposable> Group(string label)
         {
 
             if (!IsEnabled) return EmptyAsyncDisposable.Instance;
@@ -198,7 +198,7 @@ namespace BrowserInterop
         /// </summary>
         /// <param name="printedObjects">object to print in the console</param>
         /// <returns></returns>
-        public async Task Log(params object[] printedObjects)
+        public async ValueTask Log(params object[] printedObjects)
         {
             if (IsEnabled)
                 await jsRuntime.InvokeInstanceMethodAsync(windowObject, "console.log", printedObjects);
@@ -211,7 +211,7 @@ namespace BrowserInterop
         /// <param name="message">message format</param>
         /// <param name="formatParameters">string.Format parameters</param>
         /// <returns></returns>
-        public async Task Log(string message, params object[] formatParameters)
+        public async ValueTask Log(string message, params object[] formatParameters)
         {
             if (IsEnabled)
                 await jsRuntime.InvokeInstanceMethodAsync(windowObject, "console.log", string.Format(message, formatParameters));
@@ -222,7 +222,7 @@ namespace BrowserInterop
         /// </summary>
         /// <param name="name">The profiling session name</param>
         /// <returns></returns>
-        public async Task ProfileStart(string name = null)
+        public async ValueTask ProfileStart(string name = null)
         {
             if (IsEnabled)
                 await jsRuntime.InvokeInstanceMethodAsync(windowObject, "console.profile", name);
@@ -232,7 +232,7 @@ namespace BrowserInterop
         /// End the profiling session withe the given name
         /// </summary>
         /// <returns></returns>
-        public async Task ProfileEnd(string name = null)
+        public async ValueTask ProfileEnd(string name = null)
         {
             if (IsEnabled)
                 await jsRuntime.InvokeInstanceMethodAsync(windowObject, "console.profileEnd", name);
@@ -245,7 +245,7 @@ namespace BrowserInterop
         /// </summary>
         /// <param name="label">profiler name</param>
         /// <returns></returns>
-        public async Task<IAsyncDisposable> Profile(string name = null)
+        public async ValueTask<IAsyncDisposable> Profile(string name = null)
         {
             if (!IsEnabled) return EmptyAsyncDisposable.Instance;
             await ProfileStart(name);
@@ -258,7 +258,7 @@ namespace BrowserInterop
         /// <param name="objectToDisplay">Objects to display</param>
         /// <param name="columns">Columns to display, if no parameters then all the columns are displayed</param>
         /// <returns></returns>
-        public async Task Table<T>(IEnumerable<T> objectToDisplay, params string[] columns)
+        public async ValueTask Table<T>(IEnumerable<T> objectToDisplay, params string[] columns)
         {
             if (IsEnabled)
                 await jsRuntime.InvokeInstanceMethodAsync(windowObject, "console.table", objectToDisplay, columns);
@@ -269,7 +269,7 @@ namespace BrowserInterop
         /// </summary>
         /// <param name="name">The label displayed</param>
         /// <returns></returns>
-        public async Task TimeStart(string label)
+        public async ValueTask TimeStart(string label)
         {
             if (IsEnabled)
                 await jsRuntime.InvokeInstanceMethodAsync(windowObject, "console.time", label);
@@ -280,7 +280,7 @@ namespace BrowserInterop
         /// </summary>
         /// <param name="name">The label displayed</param>
         /// <returns></returns>
-        public async Task TimeEnd(string label)
+        public async ValueTask TimeEnd(string label)
         {
             if (IsEnabled)
                 await jsRuntime.InvokeInstanceMethodAsync(windowObject, "console.timeEnd", label);
@@ -292,7 +292,7 @@ namespace BrowserInterop
         /// </summary>
         /// <param name="label">The label displayed</param>
         /// <returns></returns>
-        public async Task<IAsyncDisposable> Time(string label)
+        public async ValueTask<IAsyncDisposable> Time(string label)
         {
             if (!IsEnabled) return EmptyAsyncDisposable.Instance;
             await TimeStart(label);
@@ -304,7 +304,7 @@ namespace BrowserInterop
         /// </summary>
         /// <param name="name">The label displayed</param>
         /// <returns></returns>
-        public async Task TimeLog(string label)
+        public async ValueTask TimeLog(string label)
         {
             if (IsEnabled)
                 await jsRuntime.InvokeInstanceMethodAsync(windowObject, "console.timeLog", label);
@@ -315,7 +315,7 @@ namespace BrowserInterop
         /// </summary>
         /// <param name="name">The label displayed</param>
         /// <returns></returns>
-        public async Task TimeStamp(string label)
+        public async ValueTask TimeStamp(string label)
         {
             if (IsEnabled)
                 await jsRuntime.InvokeInstanceMethodAsync(windowObject, "console.timeStamp", label);
@@ -326,7 +326,7 @@ namespace BrowserInterop
         /// </summary>
         /// <param name="printedObjects">objects to print in the console</param>
         /// <returns></returns>
-        public async Task Trace(params object[] printedObjects)
+        public async ValueTask Trace(params object[] printedObjects)
         {
             if (IsEnabled)
                 await jsRuntime.InvokeInstanceMethodAsync(windowObject, "console.trace", printedObjects);
@@ -346,8 +346,8 @@ namespace BrowserInterop
     }
     internal class ActionAsyncDisposable : IAsyncDisposable
     {
-        private Func<Task> todoOnDispose;
-        public ActionAsyncDisposable(Func<Task> todoOnDispose)
+        private Func<ValueTask> todoOnDispose;
+        public ActionAsyncDisposable(Func<ValueTask> todoOnDispose)
         {
             this.todoOnDispose = todoOnDispose;
         }

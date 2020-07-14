@@ -18,7 +18,7 @@ namespace BrowserInterop.Geolocation
         /// </summary>
         /// <param name="options"></param>
         /// <returns></returns>
-        public async Task<GeolocationResult> GetCurrentPosition(PositionOptions options = null)
+        public async ValueTask<GeolocationResult> GetCurrentPosition(PositionOptions options = null)
         {
             return await jsRuntime.InvokeAsync<GeolocationResult>("browserInterop.navigator.geolocation.getCurrentPosition", options);
         }
@@ -29,7 +29,7 @@ namespace BrowserInterop.Geolocation
         /// <param name="callback"></param>
         /// <param name="options"></param>
         /// <returns></returns>
-        public async Task<IAsyncDisposable> WatchPosition(Func<GeolocationResult, Task> callback, PositionOptions options = null)
+        public async ValueTask<IAsyncDisposable> WatchPosition(Func<GeolocationResult, ValueTask> callback, PositionOptions options = null)
         {
             var wrapper = new WatchGeolocationWrapper(callback, jsRuntime);
 
@@ -44,18 +44,18 @@ namespace BrowserInterop.Geolocation
         }
         private class WatchGeolocationWrapper : IAsyncDisposable
         {
-            private readonly Func<GeolocationResult, Task> callback;
+            private readonly Func<GeolocationResult, ValueTask> callback;
             private readonly IJSRuntime jSRuntime;
             private int watchId;
 
-            public WatchGeolocationWrapper(Func<GeolocationResult, Task> callback, IJSRuntime jSRuntime)
+            public WatchGeolocationWrapper(Func<GeolocationResult, ValueTask> callback, IJSRuntime jSRuntime)
             {
                 this.callback = callback;
                 this.jSRuntime = jSRuntime;
             }
 
             [JSInvokable]
-            public async Task Invoke(GeolocationResult result)
+            public async ValueTask Invoke(GeolocationResult result)
             {
                 await this.callback.Invoke(result);
             }

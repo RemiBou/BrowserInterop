@@ -22,7 +22,7 @@ namespace BrowserInterop
         /// </summary>
         /// <param name="index">Frame index</param>
         /// <returns></returns>
-        public async Task<WindowInterop> Get(int index)
+        public async ValueTask<WindowInterop> Get(int index)
         {
             var jsObjectRef = await jsRuntime.GetInstancePropertyRefAsync(jsRuntimeObjectRef, $"frames[{index}]");
 
@@ -34,7 +34,7 @@ namespace BrowserInterop
         /// Count of direct subframes
         /// </summary>
         /// <returns></returns>
-        public async Task<int> Length()
+        public async ValueTask<int> Length()
         {
             return await jsRuntime.GetInstancePropertyAsync<int>(jsRuntimeObjectRef, "frames.length");
         }
