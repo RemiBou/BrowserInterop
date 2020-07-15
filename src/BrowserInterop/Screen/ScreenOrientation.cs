@@ -60,7 +60,7 @@ namespace BrowserInterop.Screen
         /// <returns></returns>
         public async ValueTask Lock(ScreenOrientationTypeEnum newOrientation)
         {
-            await jsRuntime.InvokeInstanceMethodAsync(screenRef, "orientation.lock", newOrientation switch
+            await jsRuntime.InvokeInstanceMethod(screenRef, "orientation.lock", newOrientation switch
             {
                 ScreenOrientationTypeEnum.Any => "any",
                 ScreenOrientationTypeEnum.Natural => "natural",
@@ -80,7 +80,7 @@ namespace BrowserInterop.Screen
         /// <returns></returns>
         public async ValueTask Unlock()
         {
-            await jsRuntime.InvokeInstanceMethodAsync(screenRef, "orientation.unlock");
+            await jsRuntime.InvokeInstanceMethod(screenRef, "orientation.unlock");
         }
     }
 

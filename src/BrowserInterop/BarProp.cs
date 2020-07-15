@@ -36,7 +36,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public async ValueTask SetVisible(bool visible)
         {
-            await jSRuntime.SetInstancePropertyAsync(windowRef, $"{propertyName}.visible", visible);
+            await jSRuntime.SetInstanceProperty(windowRef, $"{propertyName}.visible", visible);
         }
     }
 }

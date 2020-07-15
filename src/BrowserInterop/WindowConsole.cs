@@ -34,7 +34,7 @@ namespace BrowserInterop
         public async ValueTask Assert(bool assertion, params object[] printedObjects)
         {
             if (IsEnabled)
-                await jsRuntime.InvokeInstanceMethodAsync(windowObject, "console.assert", assertion, printedObjects);
+                await jsRuntime.InvokeInstanceMethod(windowObject, "console.assert", assertion, printedObjects);
         }
 
         /// <summary>
@@ -48,7 +48,7 @@ namespace BrowserInterop
         public async ValueTask Assert(bool assertion, string message, params object[] formatParameters)
         {
             if (IsEnabled)
-                await jsRuntime.InvokeInstanceMethodAsync(windowObject, "console.assert", assertion, string.Format(message, formatParameters));
+                await jsRuntime.InvokeInstanceMethod(windowObject, "console.assert", assertion, string.Format(message, formatParameters));
 
         }
 
@@ -59,7 +59,7 @@ namespace BrowserInterop
         public async ValueTask Clear()
         {
             if (IsEnabled)
-                await jsRuntime.InvokeInstanceMethodAsync(windowObject, "console.clear");
+                await jsRuntime.InvokeInstanceMethod(windowObject, "console.clear");
         }
 
         /// <summary>
@@ -70,7 +70,7 @@ namespace BrowserInterop
         public async ValueTask Count(string label = null)
         {
             if (IsEnabled)
-                await jsRuntime.InvokeInstanceMethodAsync(windowObject, "console.count", label ?? "default");
+                await jsRuntime.InvokeInstanceMethod(windowObject, "console.count", label ?? "default");
         }
 
         /// <summary>
@@ -81,7 +81,7 @@ namespace BrowserInterop
         public async ValueTask CountReset(string label = null)
         {
             if (IsEnabled)
-                await jsRuntime.InvokeInstanceMethodAsync(windowObject, "console.countReset", label ?? "default");
+                await jsRuntime.InvokeInstanceMethod(windowObject, "console.countReset", label ?? "default");
         }
 
         /// <summary>
@@ -92,7 +92,7 @@ namespace BrowserInterop
         public async ValueTask Debug(params object[] printedObjects)
         {
             if (IsEnabled)
-                await jsRuntime.InvokeInstanceMethodAsync(windowObject, "console.debug", printedObjects);
+                await jsRuntime.InvokeInstanceMethod(windowObject, "console.debug", printedObjects);
         }
 
         /// <summary>
@@ -105,7 +105,7 @@ namespace BrowserInterop
         public async ValueTask Debug(string message, params object[] formatParameters)
         {
             if (IsEnabled)
-                await jsRuntime.InvokeInstanceMethodAsync(windowObject, "console.debug", string.Format(message, formatParameters));
+                await jsRuntime.InvokeInstanceMethod(windowObject, "console.debug", string.Format(message, formatParameters));
 
         }
 
@@ -117,7 +117,7 @@ namespace BrowserInterop
         public async ValueTask Dir(object data)
         {
             if (IsEnabled)
-                await jsRuntime.InvokeInstanceMethodAsync(windowObject, "console.dir", data);
+                await jsRuntime.InvokeInstanceMethod(windowObject, "console.dir", data);
         }
 
         /// <summary>
@@ -128,7 +128,7 @@ namespace BrowserInterop
         public async ValueTask DirXml(ElementReference element)
         {
             if (IsEnabled)
-                await jsRuntime.InvokeInstanceMethodAsync(windowObject, "console.dirxml", element);
+                await jsRuntime.InvokeInstanceMethod(windowObject, "console.dirxml", element);
         }
 
         /// <summary>
@@ -139,7 +139,7 @@ namespace BrowserInterop
         public async ValueTask Error(params object[] printedObjects)
         {
             if (IsEnabled)
-                await jsRuntime.InvokeInstanceMethodAsync(windowObject, "console.error", printedObjects);
+                await jsRuntime.InvokeInstanceMethod(windowObject, "console.error", printedObjects);
         }
 
         /// <summary>
@@ -152,7 +152,7 @@ namespace BrowserInterop
         public async ValueTask Error(string message, params object[] formatParameters)
         {
             if (IsEnabled)
-                await jsRuntime.InvokeInstanceMethodAsync(windowObject, "console.error", string.Format(message, formatParameters));
+                await jsRuntime.InvokeInstanceMethod(windowObject, "console.error", string.Format(message, formatParameters));
         }
 
         /// <summary>
@@ -164,7 +164,7 @@ namespace BrowserInterop
         {
             if (IsEnabled)
             {
-                await jsRuntime.InvokeInstanceMethodAsync(windowObject, "console.group", label);
+                await jsRuntime.InvokeInstanceMethod(windowObject, "console.group", label);
             }
         }
 
@@ -176,7 +176,7 @@ namespace BrowserInterop
         public async ValueTask GroupEnd()
         {
             if (IsEnabled)
-                await jsRuntime.InvokeInstanceMethodAsync(windowObject, "console.groupEnd");
+                await jsRuntime.InvokeInstanceMethod(windowObject, "console.groupEnd");
         }
 
         /// <summary>
@@ -200,7 +200,7 @@ namespace BrowserInterop
         public async ValueTask Log(params object[] printedObjects)
         {
             if (IsEnabled)
-                await jsRuntime.InvokeInstanceMethodAsync(windowObject, "console.log", printedObjects);
+                await jsRuntime.InvokeInstanceMethod(windowObject, "console.log", printedObjects);
         }
 
         /// <summary>
@@ -213,7 +213,7 @@ namespace BrowserInterop
         public async ValueTask Log(string message, params object[] formatParameters)
         {
             if (IsEnabled)
-                await jsRuntime.InvokeInstanceMethodAsync(windowObject, "console.log", string.Format(message, formatParameters));
+                await jsRuntime.InvokeInstanceMethod(windowObject, "console.log", string.Format(message, formatParameters));
         }
 
         /// <summary>
@@ -224,7 +224,7 @@ namespace BrowserInterop
         public async ValueTask ProfileStart(string name = null)
         {
             if (IsEnabled)
-                await jsRuntime.InvokeInstanceMethodAsync(windowObject, "console.profile", name);
+                await jsRuntime.InvokeInstanceMethod(windowObject, "console.profile", name);
         }
 
         /// <summary>
@@ -234,7 +234,7 @@ namespace BrowserInterop
         public async ValueTask ProfileEnd(string name = null)
         {
             if (IsEnabled)
-                await jsRuntime.InvokeInstanceMethodAsync(windowObject, "console.profileEnd", name);
+                await jsRuntime.InvokeInstanceMethod(windowObject, "console.profileEnd", name);
         }
 
         /// <summary>
@@ -260,7 +260,7 @@ namespace BrowserInterop
         public async ValueTask Table<T>(IEnumerable<T> objectToDisplay, params string[] columns)
         {
             if (IsEnabled)
-                await jsRuntime.InvokeInstanceMethodAsync(windowObject, "console.table", objectToDisplay, columns);
+                await jsRuntime.InvokeInstanceMethod(windowObject, "console.table", objectToDisplay, columns);
         }
 
         /// <summary>
@@ -271,7 +271,7 @@ namespace BrowserInterop
         public async ValueTask TimeStart(string label)
         {
             if (IsEnabled)
-                await jsRuntime.InvokeInstanceMethodAsync(windowObject, "console.time", label);
+                await jsRuntime.InvokeInstanceMethod(windowObject, "console.time", label);
         }
 
         /// <summary>
@@ -282,7 +282,7 @@ namespace BrowserInterop
         public async ValueTask TimeEnd(string label)
         {
             if (IsEnabled)
-                await jsRuntime.InvokeInstanceMethodAsync(windowObject, "console.timeEnd", label);
+                await jsRuntime.InvokeInstanceMethod(windowObject, "console.timeEnd", label);
         }
 
         /// <summary>
@@ -306,7 +306,7 @@ namespace BrowserInterop
         public async ValueTask TimeLog(string label)
         {
             if (IsEnabled)
-                await jsRuntime.InvokeInstanceMethodAsync(windowObject, "console.timeLog", label);
+                await jsRuntime.InvokeInstanceMethod(windowObject, "console.timeLog", label);
         }
 
         /// <summary>
@@ -317,7 +317,7 @@ namespace BrowserInterop
         public async ValueTask TimeStamp(string label)
         {
             if (IsEnabled)
-                await jsRuntime.InvokeInstanceMethodAsync(windowObject, "console.timeStamp", label);
+                await jsRuntime.InvokeInstanceMethod(windowObject, "console.timeStamp", label);
         }
 
         /// <summary>
@@ -328,7 +328,7 @@ namespace BrowserInterop
         public async ValueTask Trace(params object[] printedObjects)
         {
             if (IsEnabled)
-                await jsRuntime.InvokeInstanceMethodAsync(windowObject, "console.trace", printedObjects);
+                await jsRuntime.InvokeInstanceMethod(windowObject, "console.trace", printedObjects);
         }
 
     }

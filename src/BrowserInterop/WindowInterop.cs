@@ -133,7 +133,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public async ValueTask SetName(string name)
         {
-            await jsRuntime.SetInstancePropertyAsync(JsRuntimeObjectRef, "name", name);
+            await jsRuntime.SetInstanceProperty(JsRuntimeObjectRef, "name", name);
         }
 
         /// <summary>
@@ -263,7 +263,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public async ValueTask Alert(string message)
         {
-            await jsRuntime.InvokeInstanceMethodAsync(JsRuntimeObjectRef, "alert", message);
+            await jsRuntime.InvokeInstanceMethod(JsRuntimeObjectRef, "alert", message);
         }
 
         /// <summary>
@@ -272,7 +272,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public async ValueTask Blur()
         {
-            await jsRuntime.InvokeInstanceMethodAsync(JsRuntimeObjectRef, "blur");
+            await jsRuntime.InvokeInstanceMethod(JsRuntimeObjectRef, "blur");
         }
 
         /// <summary>
@@ -281,7 +281,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public async ValueTask Close()
         {
-            await jsRuntime.InvokeInstanceMethodAsync(JsRuntimeObjectRef, "close");
+            await jsRuntime.InvokeInstanceMethod(JsRuntimeObjectRef, "close");
         }
 
         /// <summary>
@@ -300,7 +300,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public async ValueTask Focus()
         {
-            await jsRuntime.InvokeInstanceMethodAsync(JsRuntimeObjectRef, "focus");
+            await jsRuntime.InvokeInstanceMethod(JsRuntimeObjectRef, "focus");
         }
 
         /// <summary>
@@ -311,7 +311,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public async ValueTask MoveBy(int deltaX, int deltaY)
         {
-            await jsRuntime.InvokeInstanceMethodAsync(JsRuntimeObjectRef, "moveBy", deltaX, deltaY);
+            await jsRuntime.InvokeInstanceMethod(JsRuntimeObjectRef, "moveBy", deltaX, deltaY);
         }
 
         /// <summary>
@@ -322,7 +322,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public async ValueTask MoveTo(int x, int y)
         {
-            await jsRuntime.InvokeInstanceMethodAsync(JsRuntimeObjectRef, "moveTo", x, y);
+            await jsRuntime.InvokeInstanceMethod(JsRuntimeObjectRef, "moveTo", x, y);
         }
 
         /// <summary>
@@ -335,7 +335,7 @@ namespace BrowserInterop
         public async ValueTask<WindowInterop> Open(string url, string windowName = null, WindowFeature windowFeature = null)
         {
 
-            JsRuntimeObjectRef windowOpenRef = await jsRuntime.InvokeInstanceMethodGetRefAsync(JsRuntimeObjectRef, "open", url, windowName, windowFeature?.GetOpenString());
+            JsRuntimeObjectRef windowOpenRef = await jsRuntime.InvokeInstanceMethodGetRef(JsRuntimeObjectRef, "open", url, windowName, windowFeature?.GetOpenString());
             WindowInterop windowInterop = await jsRuntime.GetInstanceContent<WindowInterop>(windowOpenRef, SerializationSpec);
             windowInterop.SetJsRuntime(jsRuntime, windowOpenRef);
             return windowInterop;
@@ -350,7 +350,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public async ValueTask PostMessage(object message, string targetOrigin)
         {
-            await jsRuntime.InvokeInstanceMethodAsync(JsRuntimeObjectRef, "postMessage", message, targetOrigin);
+            await jsRuntime.InvokeInstanceMethod(JsRuntimeObjectRef, "postMessage", message, targetOrigin);
         }
 
         /// <summary>
@@ -374,7 +374,7 @@ namespace BrowserInterop
                             Origin = await jsRuntime.GetInstancePropertyAsync<string>(payload, "origin"),
                             Source = await jsRuntime.GetInstancePropertyAsync<WindowInterop>(payload, "source", WindowInterop.SerializationSpec)
                         };
-                        eventPayload.Source.SetJsRuntime(jsRuntime, await jsRuntime.GetInstancePropertyRefAsync(payload, "source"));
+                        eventPayload.Source.SetJsRuntime(jsRuntime, await jsRuntime.GetInstancePropertyRef(payload, "source"));
 
                         await todo.Invoke(eventPayload);
                     },
@@ -387,7 +387,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public async ValueTask Print()
         {
-            await jsRuntime.InvokeInstanceMethodAsync(JsRuntimeObjectRef, "print");
+            await jsRuntime.InvokeInstanceMethod(JsRuntimeObjectRef, "print");
         }
 
         /// <summary>
@@ -418,7 +418,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public async ValueTask CancelAnimationFrame(int id)
         {
-            await jsRuntime.InvokeInstanceMethodAsync(JsRuntimeObjectRef, "cancelAnimationFrame", id);
+            await jsRuntime.InvokeInstanceMethod(JsRuntimeObjectRef, "cancelAnimationFrame", id);
         }
 
         /// <summary>
@@ -443,7 +443,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public async ValueTask CancelIdleCallback(int id)
         {
-            await jsRuntime.InvokeInstanceMethodAsync(JsRuntimeObjectRef, "cancelIdleCallback", id);
+            await jsRuntime.InvokeInstanceMethod(JsRuntimeObjectRef, "cancelIdleCallback", id);
         }
 
         /// <summary>
@@ -454,7 +454,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public async ValueTask ResizeBy(int xDelta, int yDelta)
         {
-            await jsRuntime.InvokeInstanceMethodAsync(JsRuntimeObjectRef, "resizeBy", xDelta, yDelta);
+            await jsRuntime.InvokeInstanceMethod(JsRuntimeObjectRef, "resizeBy", xDelta, yDelta);
         }
 
         /// <summary>
@@ -465,7 +465,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public async ValueTask ResizeTo(int width, int height)
         {
-            await jsRuntime.InvokeInstanceMethodAsync(JsRuntimeObjectRef, "resizeTo", width, height);
+            await jsRuntime.InvokeInstanceMethod(JsRuntimeObjectRef, "resizeTo", width, height);
         }
 
         /// <summary>
@@ -476,7 +476,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public async ValueTask Scroll(int xCoord, int yCoord)
         {
-            await jsRuntime.InvokeInstanceMethodAsync(JsRuntimeObjectRef, "scroll", xCoord, yCoord);
+            await jsRuntime.InvokeInstanceMethod(JsRuntimeObjectRef, "scroll", xCoord, yCoord);
 
         }
 
@@ -487,7 +487,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public async ValueTask Scroll(ScrollToOptions options)
         {
-            await jsRuntime.InvokeInstanceMethodAsync(JsRuntimeObjectRef, "scroll", options);
+            await jsRuntime.InvokeInstanceMethod(JsRuntimeObjectRef, "scroll", options);
         }
 
         /// <summary>
@@ -498,7 +498,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public async ValueTask ScrollBy(int xCoord, int yCoord)
         {
-            await jsRuntime.InvokeInstanceMethodAsync(JsRuntimeObjectRef, "scrollBy", xCoord, yCoord);
+            await jsRuntime.InvokeInstanceMethod(JsRuntimeObjectRef, "scrollBy", xCoord, yCoord);
 
         }
 
@@ -509,7 +509,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public async ValueTask ScrollBy(ScrollToOptions options)
         {
-            await jsRuntime.InvokeInstanceMethodAsync(JsRuntimeObjectRef, "scrollBy", options);
+            await jsRuntime.InvokeInstanceMethod(JsRuntimeObjectRef, "scrollBy", options);
         }
 
         /// <summary>
@@ -518,7 +518,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public async ValueTask Stop()
         {
-            await jsRuntime.InvokeInstanceMethodAsync(JsRuntimeObjectRef, "stop");
+            await jsRuntime.InvokeInstanceMethod(JsRuntimeObjectRef, "stop");
 
         }
 
@@ -851,7 +851,7 @@ namespace BrowserInterop
                     async (jsObject) =>
                     {
                         StorageEvent eventContent = await jsRuntime.GetInstanceContent<StorageEvent>(jsObject, new { key = true, oldValue = true, newValue = true, url = true });
-                        eventContent.Storage = new WindowStorage(jsRuntime, await jsRuntime.GetInstancePropertyRefAsync(jsObject, "storageArea"));
+                        eventContent.Storage = new WindowStorage(jsRuntime, await jsRuntime.GetInstancePropertyRef(jsObject, "storageArea"));
                         await callback(eventContent);
                     },
                     getJsObjectRef: true

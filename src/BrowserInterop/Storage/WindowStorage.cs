@@ -66,7 +66,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public async ValueTask SetItem(string keyName, object value)
         {
-            await jsRuntime.InvokeInstanceMethodAsync(await GetJsRuntimeObjectRef(), "setItem", keyName, JsonSerializer.Serialize(value));
+            await jsRuntime.InvokeInstanceMethod(await GetJsRuntimeObjectRef(), "setItem", keyName, JsonSerializer.Serialize(value));
         }
 
         /// <summary>
@@ -76,7 +76,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public async ValueTask RemoveItem(string keyName)
         {
-            await jsRuntime.InvokeInstanceMethodAsync(await GetJsRuntimeObjectRef(), "removeItem", keyName);
+            await jsRuntime.InvokeInstanceMethod(await GetJsRuntimeObjectRef(), "removeItem", keyName);
         }
 
         /// <summary>
@@ -85,7 +85,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public async ValueTask Clear()
         {
-            await jsRuntime.InvokeInstanceMethodAsync(await GetJsRuntimeObjectRef(), "clear");
+            await jsRuntime.InvokeInstanceMethod(await GetJsRuntimeObjectRef(), "clear");
         }
 
 
@@ -93,7 +93,7 @@ namespace BrowserInterop
         {
             if (jsRuntimeObjectRef == null)
             {
-                jsRuntimeObjectRef = await jsRuntime.GetInstancePropertyRefAsync(windowRuntimeObjectRef, memberName);
+                jsRuntimeObjectRef = await jsRuntime.GetInstancePropertyRef(windowRuntimeObjectRef, memberName);
             }
             return jsRuntimeObjectRef;
         }

@@ -182,7 +182,7 @@ namespace BrowserInterop
 
             if (await jsRuntime.HasProperty(JsRuntimeObjectRef, "registerProtocolHandler"))
             {
-                await jsRuntime.InvokeInstanceMethodAsync(JsRuntimeObjectRef, "registerProtocolHandler", protocol, url, title);
+                await jsRuntime.InvokeInstanceMethod(JsRuntimeObjectRef, "registerProtocolHandler", protocol, url, title);
             }
         }
 

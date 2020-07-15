@@ -22,7 +22,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public async ValueTask Prompt()
         {
-            await jsRuntime.SetInstancePropertyAsync(jsRuntimeObjectRef, "returnValue", false);
+            await jsRuntime.SetInstanceProperty(jsRuntimeObjectRef, "returnValue", false);
         }
 
 

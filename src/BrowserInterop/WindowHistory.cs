@@ -45,7 +45,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public async ValueTask ScrollRestoration(ScrollRestorationEnum value)
         {
-            await jsRuntime.SetInstancePropertyAsync(jsRuntimeObjectRef, "history.scrollRestoration", value.ToString().ToLower());
+            await jsRuntime.SetInstanceProperty(jsRuntimeObjectRef, "history.scrollRestoration", value.ToString().ToLower());
         }
 
         /// <summary>
@@ -64,7 +64,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public async ValueTask Back()
         {
-            await jsRuntime.InvokeInstanceMethodAsync(jsRuntimeObjectRef, "history.back");
+            await jsRuntime.InvokeInstanceMethod(jsRuntimeObjectRef, "history.back");
         }
 
         /// <summary>
@@ -73,7 +73,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public async ValueTask Forward()
         {
-            await jsRuntime.InvokeInstanceMethodAsync(jsRuntimeObjectRef, "history.forward");
+            await jsRuntime.InvokeInstanceMethod(jsRuntimeObjectRef, "history.forward");
         }
 
         /// <summary>
@@ -83,7 +83,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public async ValueTask Go(int delta = 0)
         {
-            await jsRuntime.InvokeInstanceMethodAsync(jsRuntimeObjectRef, "history.go", delta);
+            await jsRuntime.InvokeInstanceMethod(jsRuntimeObjectRef, "history.go", delta);
         }
 
         /// <summary>
@@ -97,7 +97,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public async ValueTask PushState(object state, string title, Uri url = null)
         {
-            await jsRuntime.InvokeInstanceMethodAsync(jsRuntimeObjectRef, "history.pushState", state, title, url?.ToString());
+            await jsRuntime.InvokeInstanceMethod(jsRuntimeObjectRef, "history.pushState", state, title, url?.ToString());
         }
 
         /// <summary>
@@ -109,7 +109,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public async ValueTask ReplaceState(object state, string title, Uri url = null)
         {
-            await jsRuntime.InvokeInstanceMethodAsync(jsRuntimeObjectRef, "history.replaceState", state, title, url?.ToString());
+            await jsRuntime.InvokeInstanceMethod(jsRuntimeObjectRef, "history.replaceState", state, title, url?.ToString());
         }
     }
     public enum ScrollRestorationEnum

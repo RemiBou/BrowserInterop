@@ -48,10 +48,10 @@ WA demo HTML block for window.Console.DirXml</span>
 
         await window.Console.Log("this is a {0}","Log message");
         await window.Console.Log(new SampleClass(1,"Log object"), new SampleClass(2,"Log object2"));
-        ConsoleInterop.IsEnabled = false;
+        WindowConsole.IsEnabled = false;
         // this should not be displayed, we just test on log, if there is any bug we'll add more tests
         await window.Console.Log("This should not be displayed");
-        ConsoleInterop.IsEnabled = true;
+        WindowConsole.IsEnabled = true;
 
         await using(await window.Console.Profile("test")){
             await Task.Delay(200);

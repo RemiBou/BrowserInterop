@@ -36,7 +36,7 @@ namespace BrowserInterop.Performance
         /// <returns></returns>
         public async ValueTask ClearMarks(string name = null)
         {
-            await jsRuntime.InvokeInstanceMethodAsync(windowRef, "performance.clearMarks", name);
+            await jsRuntime.InvokeInstanceMethod(windowRef, "performance.clearMarks", name);
         }
 
         /// <summary>
@@ -46,7 +46,7 @@ namespace BrowserInterop.Performance
         /// <returns></returns>
         public async ValueTask ClearMeasures(string name = null)
         {
-            await jsRuntime.InvokeInstanceMethodAsync(windowRef, "performance.clearMeasures", name);
+            await jsRuntime.InvokeInstanceMethod(windowRef, "performance.clearMeasures", name);
         }
 
 
@@ -56,7 +56,7 @@ namespace BrowserInterop.Performance
         /// <returns></returns>
         public async ValueTask ClearResourceTimings()
         {
-            await jsRuntime.InvokeInstanceMethodAsync(windowRef, "performance.clearResourceTimings");
+            await jsRuntime.InvokeInstanceMethod(windowRef, "performance.clearResourceTimings");
         }
 
         /// <summary>
@@ -102,7 +102,7 @@ namespace BrowserInterop.Performance
         /// <returns></returns>
         public async ValueTask Mark(string name)
         {
-            await jsRuntime.InvokeInstanceMethodAsync(windowRef, "performance.mark", name);
+            await jsRuntime.InvokeInstanceMethod(windowRef, "performance.mark", name);
         }
 
         /// <summary>
@@ -114,7 +114,7 @@ namespace BrowserInterop.Performance
         /// <returns></returns>
         public async ValueTask Measure(string name, string startMark = null, string endMark = null)
         {
-            await jsRuntime.InvokeInstanceMethodAsync(windowRef, "performance.measure", name, startMark, endMark);
+            await jsRuntime.InvokeInstanceMethod(windowRef, "performance.measure", name, startMark, endMark);
         }
 
         /// <summary>
@@ -133,7 +133,7 @@ namespace BrowserInterop.Performance
         /// <returns></returns>
         public async ValueTask SetResourceTimingBufferSize(long maxSize)
         {
-            await jsRuntime.InvokeInstanceMethodAsync(windowRef, "performance.setResourceTimingBufferSize", maxSize);
+            await jsRuntime.InvokeInstanceMethod(windowRef, "performance.setResourceTimingBufferSize", maxSize);
         }
 
         /// <summary>

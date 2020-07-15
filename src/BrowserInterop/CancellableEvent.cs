@@ -25,7 +25,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public async ValueTask PreventDefault()
         {
-            await jsRuntime.InvokeInstanceMethodAsync(jsRuntimeObjectRef, "preventDefault");
+            await jsRuntime.InvokeInstanceMethod(jsRuntimeObjectRef, "preventDefault");
         }
 
     }

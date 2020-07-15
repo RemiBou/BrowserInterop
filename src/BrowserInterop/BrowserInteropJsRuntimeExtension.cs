@@ -18,7 +18,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public static async ValueTask<WindowInterop> Window(this IJSRuntime jsRuntime)
         {
-            JsRuntimeObjectRef jsObjectRef = await jsRuntime.GetInstancePropertyAsync("window");
+            JsRuntimeObjectRef jsObjectRef = await jsRuntime.GetInstanceProperty("window");
             WindowInterop wsInterop = await jsRuntime.GetInstancePropertyAsync<WindowInterop>(jsObjectRef, "self", WindowInterop.SerializationSpec);
             wsInterop.SetJsRuntime(jsRuntime, jsObjectRef);
             return wsInterop;
@@ -33,7 +33,7 @@ namespace BrowserInterop
         /// <param name="deep">If true,(default) then the full object is received.await If false, only the object root</param>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public static async ValueTask<JsRuntimeObjectRef> GetInstancePropertyAsync(this IJSRuntime jsRuntime, string propertyPath)
+        public static async ValueTask<JsRuntimeObjectRef> GetInstanceProperty(this IJSRuntime jsRuntime, string propertyPath)
         {
             return await jsRuntime.InvokeAsync<JsRuntimeObjectRef>("browserInterop.getPropertyRef", propertyPath);
 
@@ -66,7 +66,7 @@ namespace BrowserInterop
         public static async ValueTask<T> GetInstancePropertyWrapperAsync<T>(this IJSRuntime jsRuntime, JsRuntimeObjectRef jsObjectRef, string propertyPath, Object serializationSpec = null) where T : JsObjectWrapperBase
         {
             ValueTask<T> taskContent = GetInstancePropertyAsync<T>(jsRuntime, jsObjectRef, propertyPath, serializationSpec);
-            ValueTask<JsRuntimeObjectRef> taskRef = GetInstancePropertyRefAsync(jsRuntime, jsObjectRef, propertyPath);
+            ValueTask<JsRuntimeObjectRef> taskRef = GetInstancePropertyRef(jsRuntime, jsObjectRef, propertyPath);
             var res = await taskContent;
             var jsRuntimeObjectRef = await taskRef;
             res.SetJsRuntime(jsRuntime, jsRuntimeObjectRef);
@@ -80,7 +80,7 @@ namespace BrowserInterop
         /// <param name="propertyPath"></param>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public static async ValueTask SetInstancePropertyAsync(this IJSRuntime jsRuntime, JsRuntimeObjectRef jsObjectRef, string propertyPath, object value)
+        public static async ValueTask SetInstanceProperty(this IJSRuntime jsRuntime, JsRuntimeObjectRef jsObjectRef, string propertyPath, object value)
         {
             await jsRuntime.InvokeVoidAsync("browserInterop.setInstanceProperty", jsObjectRef, propertyPath, value);
         }
@@ -92,7 +92,7 @@ namespace BrowserInterop
         /// <param name="jsObjectRef">Refernece to the parent instance</param>
         /// <param name="propertyPath">property path</param>
         /// <returns></returns>
-        public static async ValueTask<JsRuntimeObjectRef> GetInstancePropertyRefAsync(this IJSRuntime jsRuntime, JsRuntimeObjectRef jsObjectRef, string propertyPath)
+        public static async ValueTask<JsRuntimeObjectRef> GetInstancePropertyRef(this IJSRuntime jsRuntime, JsRuntimeObjectRef jsObjectRef, string propertyPath)
         {
             JsRuntimeObjectRef jsRuntimeObjectRef = await jsRuntime.InvokeAsync<JsRuntimeObjectRef>("browserInterop.getInstancePropertyRef", jsObjectRef, propertyPath);
             jsRuntimeObjectRef.JSRuntime = jsRuntime;
@@ -108,7 +108,7 @@ namespace BrowserInterop
         /// <param name="methodName">Methdod name/path </param>
         /// <param name="arguments">method arguments</param>
         /// <returns></returns>
-        public static async ValueTask InvokeInstanceMethodAsync(this IJSRuntime jsRuntime, JsRuntimeObjectRef windowObject, string methodName, params object[] arguments)
+        public static async ValueTask InvokeInstanceMethod(this IJSRuntime jsRuntime, JsRuntimeObjectRef windowObject, string methodName, params object[] arguments)
         {
             await jsRuntime.InvokeVoidAsync("browserInterop.callInstanceMethod", new object[] { windowObject, methodName }.Concat(arguments).ToArray());
         }
@@ -160,7 +160,7 @@ namespace BrowserInterop
         /// <param name="methodName">Methdod name/path </param>
         /// <param name="arguments">method arguments</param>
         /// <returns></returns>
-        public static async ValueTask<JsRuntimeObjectRef> InvokeInstanceMethodGetRefAsync(this IJSRuntime jsRuntime, JsRuntimeObjectRef windowObject, string methodName, params object[] arguments)
+        public static async ValueTask<JsRuntimeObjectRef> InvokeInstanceMethodGetRef(this IJSRuntime jsRuntime, JsRuntimeObjectRef windowObject, string methodName, params object[] arguments)
         {
             JsRuntimeObjectRef jsRuntimeObjectRef = await jsRuntime.InvokeAsync<JsRuntimeObjectRef>("browserInterop.callInstanceMethodGetRef", new object[] { windowObject, methodName }.Concat(arguments).ToArray());
             jsRuntimeObjectRef.JSRuntime = jsRuntime;

@@ -29,7 +29,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public async ValueTask Prompt()
         {
-            await jsRuntime.InvokeInstanceMethodAsync(JsRuntimeObjectRef, "prompt");
+            await jsRuntime.InvokeInstanceMethod(JsRuntimeObjectRef, "prompt");
         }
 
     }
