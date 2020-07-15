@@ -1,21 +1,16 @@
+using Microsoft.JSInterop;
+
 using System;
 using System.Threading.Tasks;
-using Microsoft.JSInterop;
 
 namespace BrowserInterop
 {
     /// <summary>
     /// The IdleDeadline interface is used as the data type of the input parameter to idle callbacks established by calling Window.requestIdleCallback()
     /// </summary>
-    public class IdleDeadline
+    public class IdleDeadline : JsObjectWrapperBase
     {
-        private IJSRuntime jsRuntime;
-        private JsRuntimeObjectRef jsRuntimeObject;
-        internal void SetJsRuntime(IJSRuntime jSRuntime, JsRuntimeObjectRef jsRuntimeObject)
-        {
-            this.jsRuntime = jSRuntime;
-            this.jsRuntimeObject = jsRuntimeObject;
-        }
+        
         /// <summary>
         /// A Boolean whose value is true if the callback is being executed because the timeout specified when the idle callback was installed has expired.
         /// </summary>
@@ -28,7 +23,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public async ValueTask<TimeSpan> TimeRemaining()
         {
-            return TimeSpan.FromMilliseconds(await jsRuntime.InvokeInstanceMethodAsync<double>(jsRuntimeObject, "timeRemaining"));
+            return TimeSpan.FromMilliseconds(await jsRuntime.InvokeInstanceMethodAsync<double>(JsRuntimeObjectRef, "timeRemaining"));
         }
     }
 }

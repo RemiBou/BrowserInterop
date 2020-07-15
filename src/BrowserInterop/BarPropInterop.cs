@@ -1,4 +1,5 @@
 using Microsoft.JSInterop;
+
 using System.Threading.Tasks;
 
 namespace BrowserInterop
@@ -8,7 +9,7 @@ namespace BrowserInterop
     /// </summary>
     public class BarPropInterop
     {
-        private JsRuntimeObjectRef windowRef;
+        private readonly JsRuntimeObjectRef windowRef;
         private readonly string propertyName;
         private readonly IJSRuntime jSRuntime;
 

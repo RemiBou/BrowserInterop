@@ -1,6 +1,7 @@
+using Microsoft.JSInterop;
+
 using System;
 using System.Threading.Tasks;
-using Microsoft.JSInterop;
 
 namespace BrowserInterop
 {
@@ -9,8 +10,8 @@ namespace BrowserInterop
     /// </summary>
     public class HistoryInterop
     {
-        private IJSRuntime jsRuntime;
-        private JsRuntimeObjectRef jsRuntimeObjectRef;
+        private readonly IJSRuntime jsRuntime;
+        private readonly JsRuntimeObjectRef jsRuntimeObjectRef;
 
         internal HistoryInterop(IJSRuntime jsRuntime, JsRuntimeObjectRef jsRuntimeObjectRef)
         {
@@ -109,7 +110,7 @@ namespace BrowserInterop
         public async ValueTask ReplaceState(object state, string title, Uri url = null)
         {
             await jsRuntime.InvokeInstanceMethodAsync(jsRuntimeObjectRef, "history.replaceState", state, title, url?.ToString());
-        } 
+        }
     }
     public enum ScrollRestorationEnum
     {

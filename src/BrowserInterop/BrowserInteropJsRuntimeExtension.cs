@@ -1,10 +1,8 @@
-using System;
-using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
 using Microsoft.JSInterop;
+
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace BrowserInterop
 {
@@ -20,8 +18,8 @@ namespace BrowserInterop
         /// <returns></returns>
         public static async ValueTask<WindowInterop> Window(this IJSRuntime jsRuntime)
         {
-            var jsObjectRef = await jsRuntime.GetInstancePropertyAsync("window");
-            var wsInterop = await jsRuntime.GetInstancePropertyAsync<WindowInterop>(jsObjectRef, "self", WindowInterop.SerializationSpec);
+            JsRuntimeObjectRef jsObjectRef = await jsRuntime.GetInstancePropertyAsync("window");
+            WindowInterop wsInterop = await jsRuntime.GetInstancePropertyAsync<WindowInterop>(jsObjectRef, "self", WindowInterop.SerializationSpec);
             wsInterop.SetJsRuntime(jsRuntime, jsObjectRef);
             return wsInterop;
         }
@@ -117,7 +115,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public static async ValueTask<T> GetInstanceContent<T>(this IJSRuntime jsRuntime, T jsObject, Object serializationSpec) where T : JsObjectWrapperBase
         {
-            var content = await jsRuntime.InvokeAsync<T>("browserInterop.returnInstance", jsObject.JsRuntimeObjectRef, serializationSpec);
+            T content = await jsRuntime.InvokeAsync<T>("browserInterop.returnInstance", jsObject.JsRuntimeObjectRef, serializationSpec);
             content.SetJsRuntime(jsRuntime, jsObject.JsRuntimeObjectRef);
             return content;
         }
@@ -130,7 +128,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public static async ValueTask<T> GetInstanceContent<T>(this IJSRuntime jsRuntime, JsRuntimeObjectRef jsObject, Object serializationSpec)
         {
-            var content = await jsRuntime.InvokeAsync<T>("browserInterop.returnInstance", jsObject, serializationSpec);
+            T content = await jsRuntime.InvokeAsync<T>("browserInterop.returnInstance", jsObject, serializationSpec);
             return content;
         }
 
@@ -145,7 +143,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public static async ValueTask<JsRuntimeObjectRef> InvokeInstanceMethodGetRefAsync(this IJSRuntime jsRuntime, JsRuntimeObjectRef windowObject, string methodName, params object[] arguments)
         {
-            var jsRuntimeObjectRef = await jsRuntime.InvokeAsync<JsRuntimeObjectRef>("browserInterop.callInstanceMethodGetRef", new object[] { windowObject, methodName }.Concat(arguments).ToArray());
+            JsRuntimeObjectRef jsRuntimeObjectRef = await jsRuntime.InvokeAsync<JsRuntimeObjectRef>("browserInterop.callInstanceMethodGetRef", new object[] { windowObject, methodName }.Concat(arguments).ToArray());
             jsRuntimeObjectRef.JSRuntime = jsRuntime;
             return jsRuntimeObjectRef;
         }
@@ -166,7 +164,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public static async ValueTask<IAsyncDisposable> AddEventListener(this IJSRuntime jsRuntime, JsRuntimeObjectRef jsRuntimeObject, string propertyName, string eventName, CallBackInteropWrapper callBack)
         {
-            var listenerId = await jsRuntime.InvokeAsync<int>("browserInterop.addEventListener", jsRuntimeObject, propertyName, eventName, callBack);
+            int listenerId = await jsRuntime.InvokeAsync<int>("browserInterop.addEventListener", jsRuntimeObject, propertyName, eventName, callBack);
 
             return new ActionAsyncDisposable(async () => await jsRuntime.InvokeVoidAsync("browserInterop.removeEventListener", jsRuntimeObject, propertyName, eventName, listenerId));
         }
@@ -204,8 +202,8 @@ namespace BrowserInterop
         /// <returns></returns>
         public static DateTimeOffset HighResolutionTimeStampToDateTimeOffset(this double timeStamp)
         {
-            var ms = (long)Math.Floor(timeStamp);
-            var tick = (long)Math.Floor((timeStamp - ms) * 10000);
+            long ms = (long)Math.Floor(timeStamp);
+            long tick = (long)Math.Floor((timeStamp - ms) * 10000);
             return DateTimeOffset.FromUnixTimeMilliseconds(ms).AddTicks(tick);
         }
 

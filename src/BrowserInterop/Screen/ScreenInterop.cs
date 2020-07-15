@@ -1,4 +1,3 @@
-using System;
 using Microsoft.JSInterop;
 
 namespace BrowserInterop.Screen
@@ -57,7 +56,7 @@ namespace BrowserInterop.Screen
         {
             this.jsRuntime = jsRuntime;
             this.windowRef = windowRef;
-            this.Orientation.SetJSRuntime(jsRuntime, windowRef);
+            Orientation.SetJSRuntime(jsRuntime, windowRef);
 
         }
     }

@@ -1,6 +1,7 @@
+using Microsoft.JSInterop;
+
 using System;
 using System.Threading.Tasks;
-using Microsoft.JSInterop;
 
 namespace BrowserInterop.Performance
 {
@@ -10,7 +11,7 @@ namespace BrowserInterop.Performance
     public class PerformanceInterop
     {
         private readonly IJSRuntime jsRuntime;
-        private JsRuntimeObjectRef windowRef;
+        private readonly JsRuntimeObjectRef windowRef;
 
         internal PerformanceInterop(IJSRuntime jsRuntime, JsRuntimeObjectRef windowRef)
         {

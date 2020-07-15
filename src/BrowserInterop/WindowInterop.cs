@@ -1,28 +1,13 @@
-﻿using Microsoft.JSInterop;
-using System.Threading.Tasks;
-using System;
-using BrowserInterop.Performance;
+﻿using BrowserInterop.Performance;
 using BrowserInterop.Screen;
-using System.Collections.Generic;
+
+using Microsoft.JSInterop;
+
+using System;
+using System.Threading.Tasks;
 
 namespace BrowserInterop
 {
-    public class JsObjectWrapperBase : IAsyncDisposable
-    {
-        public JsRuntimeObjectRef JsRuntimeObjectRef { get; protected set; }
-        protected IJSRuntime jsRuntime;
-        public virtual void SetJsRuntime(IJSRuntime jsRuntime, JsRuntimeObjectRef jsObjectRef)
-        {
-            this.JsRuntimeObjectRef = jsObjectRef;
-            this.jsRuntime = jsRuntime;
-        }
-
-        public async ValueTask DisposeAsync()
-        {
-            await this.JsRuntimeObjectRef.DisposeAsync();
-        }
-
-    }
 
     public partial class WindowInterop : JsObjectWrapperBase
     {
@@ -93,7 +78,8 @@ namespace BrowserInterop
         public async ValueTask<NavigatorInterop> Navigator()
         {
             NavigatorInterop navigatorInterop = await jsRuntime.GetInstancePropertyAsync<NavigatorInterop>(JsRuntimeObjectRef, "navigator");
-            navigatorInterop.SetJSRuntime(jsRuntime, this.JsRuntimeObjectRef);
+            var navigatorObjectRef = await jsRuntime.GetInstancePropertyRefAsync(JsRuntimeObjectRef, "navigator");
+            navigatorInterop.SetJsRuntime(jsRuntime, navigatorObjectRef);
             return navigatorInterop;
         }
 
@@ -160,8 +146,8 @@ namespace BrowserInterop
         /// <returns></returns>
         public async ValueTask<WindowInterop> Opener()
         {
-            var propertyRef = await jsRuntime.GetInstancePropertyRefAsync(JsRuntimeObjectRef, "opener");
-            var window = await jsRuntime.GetInstancePropertyAsync<WindowInterop>(JsRuntimeObjectRef, "opener", WindowInterop.SerializationSpec);
+            JsRuntimeObjectRef propertyRef = await jsRuntime.GetInstancePropertyRefAsync(JsRuntimeObjectRef, "opener");
+            WindowInterop window = await jsRuntime.GetInstancePropertyAsync<WindowInterop>(JsRuntimeObjectRef, "opener", WindowInterop.SerializationSpec);
             window?.SetJsRuntime(jsRuntime, propertyRef);
             return window;
         }
@@ -185,8 +171,8 @@ namespace BrowserInterop
         /// <returns></returns>
         public async ValueTask<WindowInterop> Parent()
         {
-            var propertyRef = await jsRuntime.GetInstancePropertyRefAsync(JsRuntimeObjectRef, "parent");
-            var window = await jsRuntime.GetInstancePropertyAsync<WindowInterop>(JsRuntimeObjectRef, "parent", WindowInterop.SerializationSpec);
+            JsRuntimeObjectRef propertyRef = await jsRuntime.GetInstancePropertyRefAsync(JsRuntimeObjectRef, "parent");
+            WindowInterop window = await jsRuntime.GetInstancePropertyAsync<WindowInterop>(JsRuntimeObjectRef, "parent", WindowInterop.SerializationSpec);
             window?.SetJsRuntime(jsRuntime, propertyRef);
             return window;
         }
@@ -208,7 +194,7 @@ namespace BrowserInterop
         public async ValueTask<ScreenInterop> Screen()
         {
             ScreenInterop screeninterop = await jsRuntime.GetInstancePropertyAsync<ScreenInterop>(JsRuntimeObjectRef, "screen");
-            screeninterop.SetJSRuntime(jsRuntime, this.JsRuntimeObjectRef);
+            screeninterop.SetJSRuntime(jsRuntime, JsRuntimeObjectRef);
             return screeninterop;
         }
 
@@ -258,8 +244,8 @@ namespace BrowserInterop
         /// <returns></returns>
         public async ValueTask<WindowInterop> Top()
         {
-            var propertyRef = await jsRuntime.GetInstancePropertyRefAsync(JsRuntimeObjectRef, "top");
-            var window = await jsRuntime.GetInstancePropertyAsync<WindowInterop>(JsRuntimeObjectRef, "top", WindowInterop.SerializationSpec);
+            JsRuntimeObjectRef propertyRef = await jsRuntime.GetInstancePropertyRefAsync(JsRuntimeObjectRef, "top");
+            WindowInterop window = await jsRuntime.GetInstancePropertyAsync<WindowInterop>(JsRuntimeObjectRef, "top", WindowInterop.SerializationSpec);
             window?.SetJsRuntime(jsRuntime, propertyRef);
             return window;
         }
@@ -270,8 +256,8 @@ namespace BrowserInterop
         /// <returns></returns>
         public async ValueTask<VisualViewportInterop> VisualViewport()
         {
-            var visualViewport = await jsRuntime.GetInstancePropertyAsync<VisualViewportInterop>(JsRuntimeObjectRef, "visualViewport");
-            visualViewport?.SetJsRuntime(jsRuntime, this.JsRuntimeObjectRef);
+            VisualViewportInterop visualViewport = await jsRuntime.GetInstancePropertyAsync<VisualViewportInterop>(JsRuntimeObjectRef, "visualViewport");
+            visualViewport?.SetJsRuntime(jsRuntime, JsRuntimeObjectRef);
             return visualViewport;
         }
 
@@ -366,8 +352,8 @@ namespace BrowserInterop
         public async ValueTask<WindowInterop> Open(string url, string windowName = null, WindowFeature windowFeature = null)
         {
 
-            var windowOpenRef = await jsRuntime.InvokeInstanceMethodGetRefAsync(JsRuntimeObjectRef, "open", url, windowName, windowFeature?.GetOpenString());
-            var windowInterop = await jsRuntime.GetInstanceContent<WindowInterop>(windowOpenRef, SerializationSpec);
+            JsRuntimeObjectRef windowOpenRef = await jsRuntime.InvokeInstanceMethodGetRefAsync(JsRuntimeObjectRef, "open", url, windowName, windowFeature?.GetOpenString());
+            WindowInterop windowInterop = await jsRuntime.GetInstanceContent<WindowInterop>(windowOpenRef, SerializationSpec);
             windowInterop.SetJsRuntime(jsRuntime, windowOpenRef);
             return windowInterop;
         }
@@ -393,13 +379,13 @@ namespace BrowserInterop
         public async ValueTask<IAsyncDisposable> OnMessage<T>(Func<OnMessageEventPayload<T>, ValueTask> todo)
         {
             return await jsRuntime.AddEventListener(
-                this.JsRuntimeObjectRef,
+                JsRuntimeObjectRef,
                  "",
                  "message",
                 CallBackInteropWrapper.Create<JsRuntimeObjectRef>(
                     async payload =>
                     {
-                        var eventPayload = new OnMessageEventPayload<T>()
+                        OnMessageEventPayload<T> eventPayload = new OnMessageEventPayload<T>()
                         {
                             Data = await jsRuntime.GetInstancePropertyAsync<T>(payload, "data"),
                             Origin = await jsRuntime.GetInstancePropertyAsync<string>(payload, "origin"),
@@ -606,8 +592,10 @@ namespace BrowserInterop
                 CallBackInteropWrapper.Create<JsRuntimeObjectRef>(
                     async jsObjectRef =>
                     {
-                        BeforeInstallPromptEvent beforeInstallPromptEvent = new BeforeInstallPromptEvent();
-                        beforeInstallPromptEvent.Platforms = await jsRuntime.GetInstancePropertyAsync<string[]>(jsObjectRef, "platforms");
+                        BeforeInstallPromptEvent beforeInstallPromptEvent = new BeforeInstallPromptEvent
+                        {
+                            Platforms = await jsRuntime.GetInstancePropertyAsync<string[]>(jsObjectRef, "platforms")
+                        };
                         beforeInstallPromptEvent.SetJsRuntime(jsRuntime, jsObjectRef);
                         await callback.Invoke(beforeInstallPromptEvent);
                     },
@@ -879,7 +867,7 @@ namespace BrowserInterop
                 CallBackInteropWrapper.Create<JsRuntimeObjectRef>(
                     async (jsObject) =>
                     {
-                        var eventContent = await jsRuntime.GetInstanceContent<StorageEvent>(jsObject,new { key = true, oldValue = true, newValue = true, url = true });
+                        StorageEvent eventContent = await jsRuntime.GetInstanceContent<StorageEvent>(jsObject, new { key = true, oldValue = true, newValue = true, url = true });
                         eventContent.Storage = new StorageInterop(jsRuntime, await jsRuntime.GetInstancePropertyRefAsync(jsObject, "storageArea"));
                         await callback(eventContent);
                     },
@@ -898,120 +886,5 @@ namespace BrowserInterop
         {
             return await jsRuntime.AddEventListener(JsRuntimeObjectRef, "", "unload", CallBackInteropWrapper.Create(callback, serializationSpec: false));
         }
-
-
-        public class BeforeInstallPromptEvent
-{
-    private JsRuntimeObjectRef jsObjectRef;
-    private IJSRuntime jSRuntime;
-
-    /// <summary>
-    ///  the platforms on which the event was dispatched. This is provided for user agents that want to present a choice of versions to the user such as, for example, "web" or "play" which would allow the user to chose between a web version or an Android version.
-    /// </summary>
-    /// <value></value>
-    public string[] Platforms { get; set; }
-
-    internal void SetJsRuntime(IJSRuntime jSRuntime, JsRuntimeObjectRef jsObjectRef)
-    {
-        this.jsObjectRef = jsObjectRef;
-        this.jSRuntime = jSRuntime;
     }
-
-    /// <summary>
-    /// Returns the user choice
-    /// </summary>
-    /// <returns></returns>
-    public async ValueTask<bool> IsAccepted()
-    {
-        return (await jSRuntime.GetInstancePropertyAsync<string>(jsObjectRef, "userChoice") == "accepted");
-    }
-
-    /// <summary>
-    /// Allows a developer to show the install prompt at a time of their own choosing. 
-    /// </summary>
-    /// <returns></returns>
-    public async ValueTask Prompt()
-    {
-        await jSRuntime.InvokeInstanceMethodAsync(jsObjectRef, "prompt");
-    }
-}
-
-public class BeforeUnloadEvent
-{
-    private IJSRuntime jsRuntime;
-    private JsRuntimeObjectRef jsRuntimeObjectRef;
-
-    public BeforeUnloadEvent(IJSRuntime jsRuntime, JsRuntimeObjectRef jsRuntimeObjectRef)
-    {
-        this.jsRuntime = jsRuntime;
-        this.jsRuntimeObjectRef = jsRuntimeObjectRef;
-    }
-
-
-    /// <summary>
-    /// Prompt the user before quitting
-    /// </summary>
-    /// <returns></returns>
-    public async ValueTask Prompt()
-    {
-        await jsRuntime.SetInstancePropertyAsync(jsRuntimeObjectRef, "returnValue", false);
-    }
-
-
-}
-
-public class CancellableEvent
-{
-
-    private IJSRuntime jsRuntime;
-    private JsRuntimeObjectRef jsRuntimeObjectRef;
-
-    public CancellableEvent(IJSRuntime jsRuntime, JsRuntimeObjectRef jsRuntimeObjectRef)
-    {
-        this.jsRuntime = jsRuntime;
-        this.jsRuntimeObjectRef = jsRuntimeObjectRef;
-    }
-
-
-    /// <summary>
-    /// Prevent the event default behavior
-    /// </summary>
-    /// <returns></returns>
-    public async ValueTask PreventDefault()
-    {
-        await jsRuntime.InvokeInstanceMethodAsync(jsRuntimeObjectRef, "preventDefault");
-    }
-
-}
-
-private class PopStateEvent<T>
-{
-    public T State { get; set; }
-}
-    }
-
-    /// <summary>
-    /// Event send when a new message is received
-    /// </summary>
-    /// <typeparam name="T">Data type</typeparam>
-    public class OnMessageEventPayload<T>
-{
-    /// <summary>
-    /// The object passed from the other window.
-    /// </summary>
-    /// <value></value>
-    public T Data { get; set; }
-
-    /// <summary>
-    /// The origin of the window that sent the message at the time postMessage was called. 
-    /// </summary>
-    /// <value></value>
-    public string Origin { get; set; }
-
-    /// <summary>
-    /// A reference to the window object that sent the message; you can use this to establish two-way communication between two windows with different origins.
-    /// </summary>
-    /// <value></value>
-    public WindowInterop Source { get; set; }
-}
 }

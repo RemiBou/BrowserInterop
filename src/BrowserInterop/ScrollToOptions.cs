@@ -18,9 +18,9 @@ namespace BrowserInterop
         /// <value></value>
         public ScrollToOptions(int top, int left, ScrollToOptionsBehaviorEnum behavior)
         {
-            this.Top = top;
-            this.Left = left;
-            this.Behavior = behavior;
+            Top = top;
+            Left = left;
+            Behavior = behavior;
 
         }
         public int Top { get; set; }

@@ -1,12 +1,13 @@
-﻿using System;
+﻿using Microsoft.JSInterop;
+
+using System;
 using System.Threading.Tasks;
-using Microsoft.JSInterop;
 
 namespace BrowserInterop.Geolocation
 {
     public class GeolocationInterop
     {
-        private IJSRuntime jsRuntime;
+        private readonly IJSRuntime jsRuntime;
 
         internal GeolocationInterop(IJSRuntime jsRuntime)
         {
@@ -31,9 +32,9 @@ namespace BrowserInterop.Geolocation
         /// <returns></returns>
         public async ValueTask<IAsyncDisposable> WatchPosition(Func<GeolocationResult, ValueTask> callback, PositionOptions options = null)
         {
-            var wrapper = new WatchGeolocationWrapper(callback, jsRuntime);
+            WatchGeolocationWrapper wrapper = new WatchGeolocationWrapper(callback, jsRuntime);
 
-            var watchId = await jsRuntime.InvokeAsync<int>(
+            int watchId = await jsRuntime.InvokeAsync<int>(
                 "browserInterop.navigator.geolocation.watchPosition",
                  options,
                   DotNetObjectReference.Create(wrapper));
@@ -57,7 +58,7 @@ namespace BrowserInterop.Geolocation
             [JSInvokable]
             public async ValueTask Invoke(GeolocationResult result)
             {
-                await this.callback.Invoke(result);
+                await callback.Invoke(result);
             }
 
             internal void SetWatchId(int watchId)
@@ -67,7 +68,7 @@ namespace BrowserInterop.Geolocation
 
             public async ValueTask DisposeAsync()
             {
-                await this.jSRuntime.InvokeVoidAsync("navigator.geolocation.clearWatch", watchId);
+                await jSRuntime.InvokeVoidAsync("navigator.geolocation.clearWatch", watchId);
             }
         }
     }

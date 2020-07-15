@@ -172,34 +172,34 @@ namespace BrowserInterop
 
         internal string GetOpenString()
         {
-            var strs = new List<string>();
-            if (this.Left.HasValue) strs.Add($"left={Left}");
-            if (this.Top.HasValue) strs.Add($"top={Top}");
-            if (this.Height.HasValue) strs.Add($"height={Height}");
-            if (this.Width.HasValue) strs.Add($"width={Width}");
-            if (this.OuterHeight.HasValue) strs.Add($"outerHeight={OuterHeight}");
-            if (this.OuterWidth.HasValue) strs.Add($"outerWidth={OuterWidth}");
-            if (this.InnerHeight.HasValue) strs.Add($"innerHeight={InnerHeight}");
-            if (this.InnerWidth.HasValue) strs.Add($"innerWidth={InnerWidth}");
-            if (this.MenuBar.HasValue) strs.Add("menubar=" + (MenuBar.Value ? "yes" : "no"));
-            if (this.ToolBar.HasValue) strs.Add("toolbar=" + (ToolBar.Value ? "yes" : "no"));
-            if (this.Location.HasValue) strs.Add("location=" + (Location.Value ? "yes" : "no"));
-            if (this.PersonalBar.HasValue) strs.Add("personalbar=" + (PersonalBar.Value ? "yes" : "no"));
-            if (this.Status.HasValue) strs.Add("status=" + (Status.Value ? "yes" : "no"));
-            if (this.Minimizable.HasValue) strs.Add("minimizable=" + (Minimizable.Value ? "yes" : "no"));
-            if (this.NoOpener.HasValue) strs.Add("noopener=" + (NoOpener.Value ? "yes" : "no"));
-            if (this.NoReferrer.HasValue) strs.Add("noreferrer=" + (NoReferrer.Value ? "yes" : "no"));
-            if (this.Resizable.HasValue) strs.Add("resizable=" + (Resizable.Value ? "yes" : "no"));
-            if (this.ScrollBars.HasValue) strs.Add("scrollbars=" + (ScrollBars.Value ? "yes" : "no"));
-            if (this.Chrome.HasValue) strs.Add("chrome=" + (Chrome.Value ? "yes" : "no"));
-            if (this.Dialog.HasValue) strs.Add("dialog=" + (Dialog.Value ? "yes" : "no"));
-            if (this.Modal.HasValue) strs.Add("modal=" + (Modal.Value ? "yes" : "no"));
-            if (this.TitleBar.HasValue) strs.Add("titlebar=" + (TitleBar.Value ? "yes" : "no"));
-            if (this.AlwaysRaised.HasValue) strs.Add("alwaysRaised=" + (AlwaysRaised.Value ? "yes" : "no"));
-            if (this.AlwaysLowered.HasValue) strs.Add("alwaysLowered=" + (AlwaysLowered.Value ? "yes" : "no"));
-            if (this.AlwaysOnTop.HasValue) strs.Add("alwaysOnTop=" + (AlwaysOnTop.Value ? "yes" : "no"));
-            if (this.Close.HasValue) strs.Add("close=" + (Close.Value ? "yes" : "no"));
-            if (this.CenterScreen.HasValue) strs.Add("centerscreen=" + (CenterScreen.Value ? "yes" : "no"));
+            List<string> strs = new List<string>();
+            if (Left.HasValue) strs.Add($"left={Left}");
+            if (Top.HasValue) strs.Add($"top={Top}");
+            if (Height.HasValue) strs.Add($"height={Height}");
+            if (Width.HasValue) strs.Add($"width={Width}");
+            if (OuterHeight.HasValue) strs.Add($"outerHeight={OuterHeight}");
+            if (OuterWidth.HasValue) strs.Add($"outerWidth={OuterWidth}");
+            if (InnerHeight.HasValue) strs.Add($"innerHeight={InnerHeight}");
+            if (InnerWidth.HasValue) strs.Add($"innerWidth={InnerWidth}");
+            if (MenuBar.HasValue) strs.Add("menubar=" + (MenuBar.Value ? "yes" : "no"));
+            if (ToolBar.HasValue) strs.Add("toolbar=" + (ToolBar.Value ? "yes" : "no"));
+            if (Location.HasValue) strs.Add("location=" + (Location.Value ? "yes" : "no"));
+            if (PersonalBar.HasValue) strs.Add("personalbar=" + (PersonalBar.Value ? "yes" : "no"));
+            if (Status.HasValue) strs.Add("status=" + (Status.Value ? "yes" : "no"));
+            if (Minimizable.HasValue) strs.Add("minimizable=" + (Minimizable.Value ? "yes" : "no"));
+            if (NoOpener.HasValue) strs.Add("noopener=" + (NoOpener.Value ? "yes" : "no"));
+            if (NoReferrer.HasValue) strs.Add("noreferrer=" + (NoReferrer.Value ? "yes" : "no"));
+            if (Resizable.HasValue) strs.Add("resizable=" + (Resizable.Value ? "yes" : "no"));
+            if (ScrollBars.HasValue) strs.Add("scrollbars=" + (ScrollBars.Value ? "yes" : "no"));
+            if (Chrome.HasValue) strs.Add("chrome=" + (Chrome.Value ? "yes" : "no"));
+            if (Dialog.HasValue) strs.Add("dialog=" + (Dialog.Value ? "yes" : "no"));
+            if (Modal.HasValue) strs.Add("modal=" + (Modal.Value ? "yes" : "no"));
+            if (TitleBar.HasValue) strs.Add("titlebar=" + (TitleBar.Value ? "yes" : "no"));
+            if (AlwaysRaised.HasValue) strs.Add("alwaysRaised=" + (AlwaysRaised.Value ? "yes" : "no"));
+            if (AlwaysLowered.HasValue) strs.Add("alwaysLowered=" + (AlwaysLowered.Value ? "yes" : "no"));
+            if (AlwaysOnTop.HasValue) strs.Add("alwaysOnTop=" + (AlwaysOnTop.Value ? "yes" : "no"));
+            if (Close.HasValue) strs.Add("close=" + (Close.Value ? "yes" : "no"));
+            if (CenterScreen.HasValue) strs.Add("centerscreen=" + (CenterScreen.Value ? "yes" : "no"));
             return string.Join(",", strs);
         }
     }

@@ -1,6 +1,7 @@
+using Microsoft.JSInterop;
+
 using System.Text.Json;
 using System.Threading.Tasks;
-using Microsoft.JSInterop;
 
 namespace BrowserInterop
 {
@@ -9,9 +10,9 @@ namespace BrowserInterop
     /// </summary>
     public class StorageInterop
     {
-        private IJSRuntime jsRuntime;
+        private readonly IJSRuntime jsRuntime;
         private JsRuntimeObjectRef jsRuntimeObjectRef;
-        private JsRuntimeObjectRef windowRuntimeObjectRef;
+        private readonly JsRuntimeObjectRef windowRuntimeObjectRef;
         private readonly string memberName;
 
         internal StorageInterop(IJSRuntime jsRuntime, JsRuntimeObjectRef windowRuntimeObjectRef, string memberName)
@@ -25,7 +26,7 @@ namespace BrowserInterop
         internal StorageInterop(IJSRuntime jsRuntime, JsRuntimeObjectRef runtimeObjectRef)
         {
             this.jsRuntime = jsRuntime;
-            this.jsRuntimeObjectRef = runtimeObjectRef;
+            jsRuntimeObjectRef = runtimeObjectRef;
         }
 
         /// <summary>
@@ -34,7 +35,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public async ValueTask<int> Length()
         {
-            return await jsRuntime.GetInstancePropertyAsync<int>(await GetJsRuntimeObjectRef(),  "length");
+            return await jsRuntime.GetInstancePropertyAsync<int>(await GetJsRuntimeObjectRef(), "length");
         }
 
         /// <summary>
@@ -54,7 +55,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public async ValueTask<T> GetItem<T>(string keyName)
         {
-            var strValue = await jsRuntime.InvokeInstanceMethodAsync<string>(await GetJsRuntimeObjectRef(),"getItem", keyName);
+            string strValue = await jsRuntime.InvokeInstanceMethodAsync<string>(await GetJsRuntimeObjectRef(), "getItem", keyName);
             return JsonSerializer.Deserialize<T>(strValue);
         }
 
@@ -65,7 +66,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public async ValueTask SetItem(string keyName, object value)
         {
-            await jsRuntime.InvokeInstanceMethodAsync(await GetJsRuntimeObjectRef(),"setItem", keyName, JsonSerializer.Serialize(value));
+            await jsRuntime.InvokeInstanceMethodAsync(await GetJsRuntimeObjectRef(), "setItem", keyName, JsonSerializer.Serialize(value));
         }
 
         /// <summary>
@@ -90,7 +91,8 @@ namespace BrowserInterop
 
         private async ValueTask<JsRuntimeObjectRef> GetJsRuntimeObjectRef()
         {
-            if(jsRuntimeObjectRef == null){
+            if (jsRuntimeObjectRef == null)
+            {
                 jsRuntimeObjectRef = await jsRuntime.GetInstancePropertyRefAsync(windowRuntimeObjectRef, memberName);
             }
             return jsRuntimeObjectRef;

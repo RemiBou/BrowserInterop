@@ -1,4 +1,5 @@
 using Microsoft.JSInterop;
+
 using System.Threading.Tasks;
 
 namespace BrowserInterop
@@ -24,9 +25,9 @@ namespace BrowserInterop
         /// <returns></returns>
         public async ValueTask<WindowInterop> Get(int index)
         {
-            var jsObjectRef = await jsRuntime.GetInstancePropertyRefAsync(jsRuntimeObjectRef, $"frames[{index}]");
+            JsRuntimeObjectRef jsObjectRef = await jsRuntime.GetInstancePropertyRefAsync(jsRuntimeObjectRef, $"frames[{index}]");
 
-            var windowInterop = await jsRuntime.GetInstancePropertyAsync<WindowInterop>(jsRuntimeObjectRef, $"frames[{index}]", WindowInterop.SerializationSpec);
+            WindowInterop windowInterop = await jsRuntime.GetInstancePropertyAsync<WindowInterop>(jsRuntimeObjectRef, $"frames[{index}]", WindowInterop.SerializationSpec);
             windowInterop.SetJsRuntime(jsRuntime, jsObjectRef);
             return windowInterop;
         }

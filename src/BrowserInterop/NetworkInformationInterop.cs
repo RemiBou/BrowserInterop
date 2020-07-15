@@ -1,6 +1,7 @@
+using Microsoft.JSInterop;
+
 using System;
 using System.Threading.Tasks;
-using Microsoft.JSInterop;
 
 namespace BrowserInterop
 {
@@ -94,10 +95,10 @@ namespace BrowserInterop
         /// toDo will be called when the network informations changes
         /// </summary>
         /// <param name="toDo">Action to call</param>
-        /// <returns></returns>
+        /// <returns></returns> 
         public async ValueTask<IAsyncDisposable> OnChange(Func<ValueTask> toDo)
         {
-            return await jSRuntime.AddEventListener(windowObject, "navigator.connection", "change", CallBackInteropWrapper.Create(toDo));
+            return await jSRuntime.AddEventListener(windowObject, "connection", "change", CallBackInteropWrapper.Create(toDo));
         }
     }
 

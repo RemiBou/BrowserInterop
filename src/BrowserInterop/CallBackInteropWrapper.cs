@@ -1,8 +1,8 @@
+using Microsoft.JSInterop;
+
 using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
-using Microsoft.JSInterop;
 
 namespace BrowserInterop
 {
@@ -20,7 +20,7 @@ namespace BrowserInterop
 
         private CallBackInteropWrapper()
         {
- 
+
         }
 
         /// <summary>
@@ -31,10 +31,10 @@ namespace BrowserInterop
         /// <param name="getJsObjectRef">If true then only the js object ref to the payload is returned instead of the serialize js object</returns>
         public static CallBackInteropWrapper Create<T>(Func<T, ValueTask> callback, Object serializationSpec = null, bool getJsObjectRef = false)
         {
-            var res = new CallBackInteropWrapper
+            CallBackInteropWrapper res = new CallBackInteropWrapper
             {
                 CallbackRef = DotNetObjectReference.Create(new JSInteropActionWrapper<T>(callback)),
-                SerializationSpec  = serializationSpec,
+                SerializationSpec = serializationSpec,
                 GetJsObjectRef = getJsObjectRef
             };
             return res;
@@ -48,7 +48,7 @@ namespace BrowserInterop
         /// <returns>Object that needs to be send to js interop api call</returns>
         public static CallBackInteropWrapper Create(Func<ValueTask> callback, Object serializationSpec = null, bool getJsObjectRef = false)
         {
-            var res = new CallBackInteropWrapper
+            CallBackInteropWrapper res = new CallBackInteropWrapper
             {
                 CallbackRef = DotNetObjectReference.Create(new JSInteropActionWrapper(callback)),
                 SerializationSpec = serializationSpec,

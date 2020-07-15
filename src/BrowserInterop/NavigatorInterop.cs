@@ -1,31 +1,30 @@
+using BrowserInterop.Geolocation;
+using BrowserInterop.Storage;
+
+using Microsoft.JSInterop;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
-using Microsoft.JSInterop;
-using BrowserInterop.Geolocation;
-using BrowserInterop.Storage;
 
 namespace BrowserInterop
 {
-    public class NavigatorInterop
+    public class NavigatorInterop : JsObjectWrapperBase
     {
-        private IJSRuntime jsRuntime;
-        private JsRuntimeObjectRef jsRuntimeObjectRef;
 
         public NavigatorInterop()
         {
         }
 
-        internal void SetJSRuntime(IJSRuntime jsRuntime, JsRuntimeObjectRef jsRuntimeObjectRef)
+        public override void SetJsRuntime(IJSRuntime jsRuntime, JsRuntimeObjectRef jsRuntimeObjectRef)
         {
-            this.jsRuntime = jsRuntime;
-            this.jsRuntimeObjectRef = jsRuntimeObjectRef;
+            base.SetJsRuntime(jsRuntime, jsRuntimeObjectRef);
             Geolocation = new GeolocationInterop(jsRuntime);
             Storage = new StorageManagerInterop(jsRuntime);
-            this.Connection?.SetJsRuntime(jsRuntime, jsRuntimeObjectRef);
+            Connection?.SetJsRuntime(jsRuntime, jsRuntimeObjectRef);
         }
 
 
@@ -88,7 +87,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public async ValueTask<bool> JavaEnabled()
         {
-            return await this.jsRuntime.InvokeAsync<bool>("window.navigator.javaEnabled");
+            return await jsRuntime.InvokeInstanceMethodAsync<bool>(JsRuntimeObjectRef, "javaEnabled");
         }
 
         /// <summary>
@@ -154,7 +153,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public async ValueTask<bool> CanShare(ShareData shareData)
         {
-            return await jsRuntime.HasProperty(jsRuntimeObjectRef, "navigator.canShare") && await jsRuntime.InvokeInstanceMethodAsync<bool>(jsRuntimeObjectRef, "navigator.canShare", shareData);
+            return await jsRuntime.HasProperty(JsRuntimeObjectRef, "canShare") && await jsRuntime.InvokeInstanceMethodAsync<bool>(JsRuntimeObjectRef, "canShare", shareData);
         }
 
         /// <summary>
@@ -183,9 +182,9 @@ namespace BrowserInterop
                 throw new ArgumentException("Title parameter is mandatory", nameof(title));
             }
 
-            if (await jsRuntime.HasProperty(jsRuntimeObjectRef, "navigator.registerProtocolHandler"))
+            if (await jsRuntime.HasProperty(JsRuntimeObjectRef, "registerProtocolHandler"))
             {
-                await jsRuntime.InvokeVoidAsync("navigator.registerProtocolHandler", protocol, url, title);
+                await jsRuntime.InvokeInstanceMethodAsync(JsRuntimeObjectRef, "registerProtocolHandler", protocol, url, title);
             }
         }
 
@@ -201,7 +200,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public async ValueTask<bool> SendBeacon(string url, object data)
         {
-            return await jsRuntime.HasProperty(jsRuntimeObjectRef, "navigator.sendBeacon") && await jsRuntime.InvokeInstanceMethodAsync<bool>(jsRuntimeObjectRef, "navigator.sendBeacon", url, data);
+            return await jsRuntime.HasProperty(JsRuntimeObjectRef, "sendBeacon") && await jsRuntime.InvokeInstanceMethodAsync<bool>(JsRuntimeObjectRef, "sendBeacon", url, data);
         }
 
         /// <summary>
@@ -211,7 +210,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public async ValueTask Share(ShareData shareData)
         {
-            await jsRuntime.InvokeAsync<bool>("navigator.share", shareData);
+            await jsRuntime.InvokeInstanceMethodAsync<bool>(JsRuntimeObjectRef, "share", shareData);
         }
 
         /// <summary>
@@ -221,7 +220,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public async ValueTask Vibrate(IEnumerable<TimeSpan> pattern)
         {
-            await jsRuntime.InvokeAsync<bool>("navigator.vibrate", pattern.Select(t => t.TotalMilliseconds).ToArray());
+            await jsRuntime.InvokeInstanceMethodAsync<bool>(JsRuntimeObjectRef, "vibrate", pattern.Select(t => t.TotalMilliseconds).ToArray());
         }
 
     }
