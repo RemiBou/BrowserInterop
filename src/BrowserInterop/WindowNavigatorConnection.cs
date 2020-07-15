@@ -5,12 +5,12 @@ using System.Threading.Tasks;
 
 namespace BrowserInterop
 {
-    public class NetworkInformationInterop
+    public class WindowNavigatorConnection
     {
         private IJSRuntime jSRuntime;
         private JsRuntimeObjectRef navigatorRef;
 
-        public NetworkInformationInterop()
+        public WindowNavigatorConnection()
         {
         }
 

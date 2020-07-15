@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace BrowserInterop
 {
 
-    public partial class WindowInterop : JsObjectWrapperBase
+    public class WindowInterop : JsObjectWrapperBase
     {
         internal static object SerializationSpec = new
         {
@@ -26,34 +26,34 @@ namespace BrowserInterop
             scrollX = true,
             scrollY = true
         };
-        private Lazy<HistoryInterop> historyInteropLazy;
-        private Lazy<FramesArrayInterop> framesArrayInteropLazy;
-        private Lazy<StorageInterop> localStorageLazy;
-        private Lazy<StorageInterop> sessionStorageLazy;
-        private Lazy<ConsoleInterop> consoleInteropLazy;
-        private Lazy<PerformanceInterop> performanceInteropLazy;
-        private Lazy<BarPropInterop> locationBarLazy;
-        private Lazy<BarPropInterop> menuBarLazy;
-        private Lazy<BarPropInterop> personalBarLazy;
-        private Lazy<BarPropInterop> scrollBarsLazy;
-        private Lazy<BarPropInterop> statusBarLazy;
-        private Lazy<BarPropInterop> toolBarLazy;
+        private Lazy<WindowHistory> historyInteropLazy;
+        private Lazy<WindowFramesArray> framesArrayInteropLazy;
+        private Lazy<WindowStorage> localStorageLazy;
+        private Lazy<WindowStorage> sessionStorageLazy;
+        private Lazy<WindowConsole> consoleInteropLazy;
+        private Lazy<WindowPerformance> performanceInteropLazy;
+        private Lazy<BarProp> locationBarLazy;
+        private Lazy<BarProp> menuBarLazy;
+        private Lazy<BarProp> personalBarLazy;
+        private Lazy<BarProp> scrollBarsLazy;
+        private Lazy<BarProp> statusBarLazy;
+        private Lazy<BarProp> toolBarLazy;
 
         internal override void SetJsRuntime(IJSRuntime jsRuntime, JsRuntimeObjectRef jsRuntimeObjectRef)
         {
             base.SetJsRuntime(jsRuntime, jsRuntimeObjectRef);
-            localStorageLazy = new Lazy<StorageInterop>(() => new StorageInterop(jsRuntime, jsRuntimeObjectRef, "localStorage"));
-            sessionStorageLazy = new Lazy<StorageInterop>(() => new StorageInterop(jsRuntime, jsRuntimeObjectRef, "sessionStorage"));
-            consoleInteropLazy = new Lazy<ConsoleInterop>(() => new ConsoleInterop(jsRuntime, jsRuntimeObjectRef));
-            historyInteropLazy = new Lazy<HistoryInterop>(() => new HistoryInterop(jsRuntime, jsRuntimeObjectRef));
-            performanceInteropLazy = new Lazy<PerformanceInterop>(() => new PerformanceInterop(jsRuntime, jsRuntimeObjectRef));
-            framesArrayInteropLazy = new Lazy<FramesArrayInterop>(() => new FramesArrayInterop(jsRuntimeObjectRef, jsRuntime));
-            personalBarLazy = new Lazy<BarPropInterop>(() => new BarPropInterop(jsRuntimeObjectRef, "personalbar", jsRuntime));
-            locationBarLazy = new Lazy<BarPropInterop>(() => new BarPropInterop(jsRuntimeObjectRef, "locationbar", jsRuntime));
-            menuBarLazy = new Lazy<BarPropInterop>(() => new BarPropInterop(jsRuntimeObjectRef, "menubar", jsRuntime));
-            scrollBarsLazy = new Lazy<BarPropInterop>(() => new BarPropInterop(jsRuntimeObjectRef, "scrollbars", jsRuntime));
-            statusBarLazy = new Lazy<BarPropInterop>(() => new BarPropInterop(jsRuntimeObjectRef, "statusbar", jsRuntime));
-            toolBarLazy = new Lazy<BarPropInterop>(() => new BarPropInterop(jsRuntimeObjectRef, "toolbar", jsRuntime));
+            localStorageLazy = new Lazy<WindowStorage>(() => new WindowStorage(jsRuntime, jsRuntimeObjectRef, "localStorage"));
+            sessionStorageLazy = new Lazy<WindowStorage>(() => new WindowStorage(jsRuntime, jsRuntimeObjectRef, "sessionStorage"));
+            consoleInteropLazy = new Lazy<WindowConsole>(() => new WindowConsole(jsRuntime, jsRuntimeObjectRef));
+            historyInteropLazy = new Lazy<WindowHistory>(() => new WindowHistory(jsRuntime, jsRuntimeObjectRef));
+            performanceInteropLazy = new Lazy<WindowPerformance>(() => new WindowPerformance(jsRuntime, jsRuntimeObjectRef));
+            framesArrayInteropLazy = new Lazy<WindowFramesArray>(() => new WindowFramesArray(jsRuntimeObjectRef, jsRuntime));
+            personalBarLazy = new Lazy<BarProp>(() => new BarProp(jsRuntimeObjectRef, "personalbar", jsRuntime));
+            locationBarLazy = new Lazy<BarProp>(() => new BarProp(jsRuntimeObjectRef, "locationbar", jsRuntime));
+            menuBarLazy = new Lazy<BarProp>(() => new BarProp(jsRuntimeObjectRef, "menubar", jsRuntime));
+            scrollBarsLazy = new Lazy<BarProp>(() => new BarProp(jsRuntimeObjectRef, "scrollbars", jsRuntime));
+            statusBarLazy = new Lazy<BarProp>(() => new BarProp(jsRuntimeObjectRef, "statusbar", jsRuntime));
+            toolBarLazy = new Lazy<BarProp>(() => new BarProp(jsRuntimeObjectRef, "toolbar", jsRuntime));
         }
 
 
@@ -62,7 +62,7 @@ namespace BrowserInterop
         /// Will return an instance of ConsoleInteorp that'll give access to window.console API
         /// </summary>
         /// <value></value>
-        public ConsoleInterop Console => consoleInteropLazy.Value;
+        public WindowConsole Console => consoleInteropLazy.Value;
 
         /// <summary>
         /// Indicates whether the referenced window is closed or not.
@@ -71,23 +71,23 @@ namespace BrowserInterop
         public bool Closed { get; set; }
 
         /// <summary>
-        /// Will return an instance of NavigatorInterop that'll give access to window.navigator API
+        /// Will return an instance of WindowNavigator that'll give access to window.navigator API
         /// </summary>
         /// <value></value>
-        public async ValueTask<NavigatorInterop> Navigator()
+        public async ValueTask<WindowNavigator> Navigator()
         {
-            return await jsRuntime.GetInstancePropertyWrapperAsync<NavigatorInterop>(JsRuntimeObjectRef, "navigator");
+            return await jsRuntime.GetInstancePropertyWrapperAsync<WindowNavigator>(JsRuntimeObjectRef, "navigator");
         }
 
         /// <summary>
         /// Give access to the direct sub-frames of the current window.
         /// </summary>
-        public FramesArrayInterop Frames => framesArrayInteropLazy.Value;
+        public WindowFramesArray Frames => framesArrayInteropLazy.Value;
 
         /// <summary>
         /// reference to the History object, which provides an interface for manipulating the browser session history (pages visited in the tab or frame that the current page is loaded in).
         /// </summary>
-        public HistoryInterop History => historyInteropLazy.Value;
+        public WindowHistory History => historyInteropLazy.Value;
         /// <summary>
         /// Gets the height of the content area of the browser window including, if rendered, the horizontal scrollbar.
         /// </summary>
@@ -103,22 +103,22 @@ namespace BrowserInterop
         /// <summary>
         /// Returns the locationbar object, whose visibility can be checked.
         /// </summary>
-        public BarPropInterop LocationBar => locationBarLazy.Value;
+        public BarProp LocationBar => locationBarLazy.Value;
 
         /// <summary>
         /// Returns the menubar object, whose visibility can be checked.
         /// </summary>
-        public BarPropInterop MenuBar => menuBarLazy.Value;
+        public BarProp MenuBar => menuBarLazy.Value;
 
         /// <summary>
         /// reference to the local storage object used to store data that may only be accessed by the origin that created it.
         /// </summary>
-        public StorageInterop LocalStorage => localStorageLazy.Value;
+        public WindowStorage LocalStorage => localStorageLazy.Value;
 
         /// <summary>
         /// Returns a reference to the session storage object used to store data that may only be accessed by the origin that created it.
         /// </summary>
-        public StorageInterop SessionStorage => sessionStorageLazy.Value;
+        public WindowStorage SessionStorage => sessionStorageLazy.Value;
 
         /// <summary>
         /// Gets the name of the window.
@@ -170,20 +170,20 @@ namespace BrowserInterop
         /// <summary>
         ///  can be used to gather performance information about the current document.
         /// </summary>
-        public PerformanceInterop Performance => performanceInteropLazy.Value;
+        public WindowPerformance Performance => performanceInteropLazy.Value;
 
         /// <summary>
         /// Returns the personalbar object, whose visibility can be toggled in the window.
         /// </summary>
-        public BarPropInterop PersonalBar => personalBarLazy.Value;
+        public BarProp PersonalBar => personalBarLazy.Value;
 
         /// <summary>
-        /// Will return an instance of NavigatorInterop that'll give access to window.navigator API
+        /// Will return an instance of WindowNavigator that'll give access to window.navigator API
         /// </summary>
         /// <value></value>
-        public async ValueTask<ScreenInterop> Screen()
+        public async ValueTask<WindowScreen> Screen()
         {
-            return await jsRuntime.GetInstancePropertyWrapperAsync<ScreenInterop>(JsRuntimeObjectRef, "screen"); ;
+            return await jsRuntime.GetInstancePropertyWrapperAsync<WindowScreen>(JsRuntimeObjectRef, "screen"); ;
         }
 
         /// <summary>
@@ -201,7 +201,7 @@ namespace BrowserInterop
         /// <summary>
         /// Returns the scrollbars object, whose visibility can be toggled in the window.
         /// </summary>
-        public BarPropInterop ScrollBars => scrollBarsLazy.Value;
+        public BarProp ScrollBars => scrollBarsLazy.Value;
 
         /// <summary>
         /// the number of pixels that the document has already been scrolled horizontally.
@@ -218,13 +218,13 @@ namespace BrowserInterop
         /// <summary>
         /// Returns the statusbar object, whose visibility can be toggled in the window.
         /// </summary>
-        public BarPropInterop StatusBar => statusBarLazy.Value;
+        public BarProp StatusBar => statusBarLazy.Value;
 
 
         /// <summary>
         /// Returns the toolbar object, whose visibility can be toggled in the window.
         /// </summary>
-        public BarPropInterop ToolBar => toolBarLazy.Value;
+        public BarProp ToolBar => toolBarLazy.Value;
 
         /// <summary>
         /// Returns a reference to the parent of the current window or subframe
@@ -239,9 +239,9 @@ namespace BrowserInterop
         ///  represents the visual viewport for a given window. For a page containing iframes, each iframe, as well as the containing page, will have a unique window object. Each window on a page will have a unique VisualViewport representing the properties associated with that window.
         /// </summary>
         /// <returns></returns>
-        public async ValueTask<VisualViewportInterop> VisualViewport()
+        public async ValueTask<WindowVisualViewPort> VisualViewport()
         {
-            return await jsRuntime.GetInstancePropertyWrapperAsync<VisualViewportInterop>(JsRuntimeObjectRef, "visualViewport");
+            return await jsRuntime.GetInstancePropertyWrapperAsync<WindowVisualViewPort>(JsRuntimeObjectRef, "visualViewport");
         }
 
         /// <summary>
@@ -851,7 +851,7 @@ namespace BrowserInterop
                     async (jsObject) =>
                     {
                         StorageEvent eventContent = await jsRuntime.GetInstanceContent<StorageEvent>(jsObject, new { key = true, oldValue = true, newValue = true, url = true });
-                        eventContent.Storage = new StorageInterop(jsRuntime, await jsRuntime.GetInstancePropertyRefAsync(jsObject, "storageArea"));
+                        eventContent.Storage = new WindowStorage(jsRuntime, await jsRuntime.GetInstancePropertyRefAsync(jsObject, "storageArea"));
                         await callback(eventContent);
                     },
                     getJsObjectRef: true

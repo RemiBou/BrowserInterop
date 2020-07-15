@@ -6,6 +6,6 @@ namespace BrowserInterop
         public string NewValue { get; set; }
         public string OldValue { get; set; }
         public string Url { get; set; }
-        public StorageInterop Storage { get; set; }
+        public WindowStorage Storage { get; set; }
     }
 }

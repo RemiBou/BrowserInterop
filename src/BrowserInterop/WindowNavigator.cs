@@ -1,4 +1,4 @@
-using BrowserInterop.Geolocation;
+﻿using BrowserInterop.Geolocation;
 using BrowserInterop.Storage;
 
 using Microsoft.JSInterop;
@@ -6,24 +6,22 @@ using Microsoft.JSInterop;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.Json;
-using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace BrowserInterop
 {
-    public class NavigatorInterop : JsObjectWrapperBase
+    public class WindowNavigator : JsObjectWrapperBase
     {
 
-        public NavigatorInterop()
+        public WindowNavigator()
         {
         }
 
         internal override void SetJsRuntime(IJSRuntime jsRuntime, JsRuntimeObjectRef navigatorRef)
         {
             base.SetJsRuntime(jsRuntime, navigatorRef);
-            Geolocation = new GeolocationInterop(jsRuntime);
-            Storage = new StorageManagerInterop(jsRuntime);
+            Geolocation = new WindowGeolocation(jsRuntime);
+            Storage = new WindowStorageManager(jsRuntime);
             Connection?.SetJsRuntime(jsRuntime, navigatorRef);
         }
 
@@ -65,7 +63,7 @@ namespace BrowserInterop
         /// Return a JS Interop wrapper for getting information about the network connection of a device.
         /// </summary>
         /// <returns></returns>
-        public NetworkInformationInterop Connection { get; set; }
+        public WindowNavigatorConnection Connection { get; set; }
 
         /// <summary>
         /// Returns false if setting a cookie will be ignored and true otherwise.
@@ -79,7 +77,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public int HardwareConcurrency { get; set; }
 
-        public GeolocationInterop Geolocation { get; private set; }
+        public WindowGeolocation Geolocation { get; private set; }
 
         /// <summary>
         /// Returns false if the browser enables java
@@ -112,7 +110,7 @@ namespace BrowserInterop
         /// Returns the mime types supported by the browser
         /// </summary>
         /// <returns></returns>
-        public MimeTypeInterop[] MimeTypes { get; set; }
+        public NavigatorMimeTypes[] MimeTypes { get; set; }
 
         /// <summary>
         /// Returns true if the user is online
@@ -132,13 +130,13 @@ namespace BrowserInterop
         /// </summary>
         /// <returns></returns>
 
-        public PluginInterop[] Plugins { get; set; }
+        public NavigatorPlugin[] Plugins { get; set; }
 
         /// <summary>
         /// Provides an interface for managing persistance permissions and estimating available storage
         /// </summary>
         /// <value></value>
-        public StorageManagerInterop Storage { get; private set; }
+        public WindowStorageManager Storage { get; private set; }
 
         /// <summary>
         /// Return the user agent string for the browser
@@ -223,42 +221,6 @@ namespace BrowserInterop
             await jsRuntime.InvokeInstanceMethodAsync<bool>(JsRuntimeObjectRef, "vibrate", pattern.Select(t => t.TotalMilliseconds).ToArray());
         }
 
-    }
-    //from https://github.com/dotnet/corefx/issues/41442#issuecomment-553196880
-    internal class HandleSpecialDoublesAsStrings : JsonConverter<double>
-    {
-        public override double Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
-        {
-            if (reader.TokenType == JsonTokenType.String)
-            {
-                string specialDouble = reader.GetString();
-                if (specialDouble == "Infinity")
-                {
-                    return double.PositiveInfinity;
-                }
-                else if (specialDouble == "-Infinity")
-                {
-                    return double.NegativeInfinity;
-                }
-                else
-                {
-                    return double.NaN;
-                }
-            }
-            return reader.GetDouble();
-        }
-
-        public override void Write(Utf8JsonWriter writer, double value, JsonSerializerOptions options)
-        {
-            if (double.IsFinite(value))
-            {
-                writer.WriteNumberValue(value);
-            }
-            else
-            {
-                writer.WriteStringValue(value.ToString());
-            }
-        }
     }
 
 }

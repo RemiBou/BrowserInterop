@@ -8,12 +8,12 @@ namespace BrowserInterop.Performance
     /// <summary>
     /// provides access to performance-related information for the current page.
     /// </summary>
-    public class PerformanceInterop
+    public class WindowPerformance
     {
         private readonly IJSRuntime jsRuntime;
         private readonly JsRuntimeObjectRef windowRef;
 
-        internal PerformanceInterop(IJSRuntime jsRuntime, JsRuntimeObjectRef windowRef)
+        internal WindowPerformance(IJSRuntime jsRuntime, JsRuntimeObjectRef windowRef)
         {
             this.jsRuntime = jsRuntime;
             this.windowRef = windowRef;

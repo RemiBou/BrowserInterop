@@ -8,11 +8,11 @@ namespace BrowserInterop.Storage
     /// <summary>
     /// provides an interface for managing persistance permissions and estimating available storage
     /// </summary>
-    public class StorageManagerInterop
+    public class WindowStorageManager
     {
         private readonly IJSRuntime jsRuntime;
 
-        internal StorageManagerInterop(IJSRuntime jsRuntime)
+        internal WindowStorageManager(IJSRuntime jsRuntime)
         {
             this.jsRuntime = jsRuntime;
         }

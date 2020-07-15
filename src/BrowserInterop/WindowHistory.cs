@@ -8,12 +8,12 @@ namespace BrowserInterop
     /// <summary>
     /// reference to the History object, which provides an interface for manipulating the browser session history (pages visited in the tab or frame that the current page is loaded in).
     /// </summary>
-    public class HistoryInterop
+    public class WindowHistory
     {
         private readonly IJSRuntime jsRuntime;
         private readonly JsRuntimeObjectRef jsRuntimeObjectRef;
 
-        internal HistoryInterop(IJSRuntime jsRuntime, JsRuntimeObjectRef jsRuntimeObjectRef)
+        internal WindowHistory(IJSRuntime jsRuntime, JsRuntimeObjectRef jsRuntimeObjectRef)
         {
             this.jsRuntime = jsRuntime;
             this.jsRuntimeObjectRef = jsRuntimeObjectRef;

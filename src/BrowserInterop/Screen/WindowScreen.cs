@@ -5,7 +5,7 @@ namespace BrowserInterop.Screen
     /// <summary>
     /// The Screen interface represents a screen, usually the one on which the current window is being rendered
     /// </summary>
-    public class ScreenInterop : JsObjectWrapperBase
+    public class WindowScreen : JsObjectWrapperBase
     {
 
         /// <summary>

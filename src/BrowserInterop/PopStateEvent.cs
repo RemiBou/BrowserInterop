@@ -1,11 +1,8 @@
 ﻿namespace BrowserInterop
 {
-
-    public partial class WindowInterop
+    public class PopStateEvent<T>
     {
-        private class PopStateEvent<T>
-        {
-            public T State { get; set; }
-        }
+        public T State { get; set; }
     }
+
 }

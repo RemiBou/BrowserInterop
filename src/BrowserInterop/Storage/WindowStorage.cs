@@ -8,14 +8,14 @@ namespace BrowserInterop
     /// <summary>
     /// provides access to a particular domain's session or local storage. It allows, for example, the addition, modification, or deletion of stored data items.
     /// </summary>
-    public class StorageInterop
+    public class WindowStorage
     {
         private readonly IJSRuntime jsRuntime;
         private JsRuntimeObjectRef jsRuntimeObjectRef;
         private readonly JsRuntimeObjectRef windowRuntimeObjectRef;
         private readonly string memberName;
 
-        internal StorageInterop(IJSRuntime jsRuntime, JsRuntimeObjectRef windowRuntimeObjectRef, string memberName)
+        internal WindowStorage(IJSRuntime jsRuntime, JsRuntimeObjectRef windowRuntimeObjectRef, string memberName)
         {
             this.jsRuntime = jsRuntime;
             this.windowRuntimeObjectRef = windowRuntimeObjectRef;
@@ -23,7 +23,7 @@ namespace BrowserInterop
         }
 
 
-        internal StorageInterop(IJSRuntime jsRuntime, JsRuntimeObjectRef runtimeObjectRef)
+        internal WindowStorage(IJSRuntime jsRuntime, JsRuntimeObjectRef runtimeObjectRef)
         {
             this.jsRuntime = jsRuntime;
             jsRuntimeObjectRef = runtimeObjectRef;

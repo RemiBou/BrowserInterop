@@ -7,12 +7,12 @@ namespace BrowserInterop
     /// <summary>
     /// Give access to the direct sub-frames of the current window.
     /// </summary>
-    public class FramesArrayInterop
+    public class WindowFramesArray
     {
         private readonly JsRuntimeObjectRef jsRuntimeObjectRef;
         private readonly IJSRuntime jsRuntime;
 
-        internal FramesArrayInterop(JsRuntimeObjectRef jsRuntimeObjectRef, IJSRuntime jsRuntime)
+        internal WindowFramesArray(JsRuntimeObjectRef jsRuntimeObjectRef, IJSRuntime jsRuntime)
         {
             this.jsRuntimeObjectRef = jsRuntimeObjectRef;
             this.jsRuntime = jsRuntime;

@@ -7,13 +7,13 @@ namespace BrowserInterop
     /// <summary>
     /// Represent property of a menu element
     /// </summary>
-    public class BarPropInterop
+    public class BarProp
     {
         private readonly JsRuntimeObjectRef windowRef;
         private readonly string propertyName;
         private readonly IJSRuntime jSRuntime;
 
-        internal BarPropInterop(JsRuntimeObjectRef windowRef, string propertyName, IJSRuntime jSRuntime)
+        internal BarProp(JsRuntimeObjectRef windowRef, string propertyName, IJSRuntime jSRuntime)
         {
             this.windowRef = windowRef;
             this.propertyName = propertyName;

@@ -5,11 +5,11 @@ using System.Threading.Tasks;
 
 namespace BrowserInterop.Geolocation
 {
-    public class GeolocationInterop
+    public class WindowGeolocation
     {
         private readonly IJSRuntime jsRuntime;
 
-        internal GeolocationInterop(IJSRuntime jsRuntime)
+        internal WindowGeolocation(IJSRuntime jsRuntime)
         {
             this.jsRuntime = jsRuntime;
         }

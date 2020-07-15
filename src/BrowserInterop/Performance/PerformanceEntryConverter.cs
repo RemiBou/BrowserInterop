@@ -14,7 +14,7 @@ namespace BrowserInterop.Performance
                 return null;
 
             string entryTypeStr = jsonDocument.RootElement.GetProperty("entryType").GetString();
-            Type entryType = PerformanceInterop.ConvertStringToType(entryTypeStr);
+            Type entryType = WindowPerformance.ConvertStringToType(entryTypeStr);
             return (PerformanceEntry)JsonSerializer.Deserialize(jsonDocument.RootElement.GetRawText(), entryType, options);
         }
 
