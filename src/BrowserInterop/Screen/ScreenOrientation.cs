@@ -11,7 +11,7 @@ namespace BrowserInterop.Screen
     public class ScreenOrientation
     {
         private IJSRuntime jsRuntime;
-        private JsRuntimeObjectRef windowRef;
+        private JsRuntimeObjectRef screenRef;
 
         /// <summary>
         /// Returns the document's current orientation type, one of "portrait-primary", "portrait-secondary", "landscape-primary", or "landscape-secondary".
@@ -38,10 +38,10 @@ namespace BrowserInterop.Screen
         /// <value></value>
         public int Angle { get; set; }
 
-        internal void SetJSRuntime(IJSRuntime jsRuntime, JsRuntimeObjectRef windowRef)
+        internal void SetJSRuntime(IJSRuntime jsRuntime, JsRuntimeObjectRef screenRef)
         {
             this.jsRuntime = jsRuntime;
-            this.windowRef = windowRef;
+            this.screenRef = screenRef;
         }
 
         /// <summary>
@@ -51,7 +51,7 @@ namespace BrowserInterop.Screen
         /// <returns></returns>
         public async ValueTask<IAsyncDisposable> OnChange(Func<ValueTask> toDo)
         {
-            return await jsRuntime.AddEventListener(windowRef, "screen.orientation", "change", CallBackInteropWrapper.Create(toDo));
+            return await jsRuntime.AddEventListener(screenRef, "orientation", "change", CallBackInteropWrapper.Create(toDo));
         }
 
         /// <summary>
@@ -60,7 +60,7 @@ namespace BrowserInterop.Screen
         /// <returns></returns>
         public async ValueTask Lock(ScreenOrientationTypeEnum newOrientation)
         {
-            await jsRuntime.InvokeInstanceMethodAsync(windowRef, "screen.orientation.lock", newOrientation switch
+            await jsRuntime.InvokeInstanceMethodAsync(screenRef, "orientation.lock", newOrientation switch
             {
                 ScreenOrientationTypeEnum.Any => "any",
                 ScreenOrientationTypeEnum.Natural => "natural",
@@ -80,7 +80,7 @@ namespace BrowserInterop.Screen
         /// <returns></returns>
         public async ValueTask Unlock()
         {
-            await jsRuntime.InvokeInstanceMethodAsync(windowRef, "screen.orientation.unlock");
+            await jsRuntime.InvokeInstanceMethodAsync(screenRef, "orientation.unlock");
         }
     }
 

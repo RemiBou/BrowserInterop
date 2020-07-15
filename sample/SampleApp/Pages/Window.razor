@@ -248,7 +248,6 @@ Storage Event :
             await beforeInstall.Prompt();
             this.StateHasChanged();
             this.beforeInstallAccepted = await beforeInstall.IsAccepted();
-            await beforeInstall.DisposeAsync(); //as beforeInstall point to a js object we must dispose it so the js object reference can be GCd
             this.StateHasChanged();
         });
         await window.OnDeviceMotion(async deviceMotionEvent =>

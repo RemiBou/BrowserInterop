@@ -77,10 +77,7 @@ namespace BrowserInterop
         /// <value></value>
         public async ValueTask<NavigatorInterop> Navigator()
         {
-            NavigatorInterop navigatorInterop = await jsRuntime.GetInstancePropertyAsync<NavigatorInterop>(JsRuntimeObjectRef, "navigator");
-            var navigatorObjectRef = await jsRuntime.GetInstancePropertyRefAsync(JsRuntimeObjectRef, "navigator");
-            navigatorInterop.SetJsRuntime(jsRuntime, navigatorObjectRef);
-            return navigatorInterop;
+            return await jsRuntime.GetInstancePropertyWrapperAsync<NavigatorInterop>(JsRuntimeObjectRef, "navigator");
         }
 
         /// <summary>
@@ -193,9 +190,7 @@ namespace BrowserInterop
         /// <value></value>
         public async ValueTask<ScreenInterop> Screen()
         {
-            ScreenInterop screeninterop = await jsRuntime.GetInstancePropertyAsync<ScreenInterop>(JsRuntimeObjectRef, "screen");
-            screeninterop.SetJSRuntime(jsRuntime, JsRuntimeObjectRef);
-            return screeninterop;
+            return await jsRuntime.GetInstancePropertyWrapperAsync<ScreenInterop>(JsRuntimeObjectRef, "screen"); ;
         }
 
         /// <summary>

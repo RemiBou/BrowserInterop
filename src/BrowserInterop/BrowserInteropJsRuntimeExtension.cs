@@ -55,6 +55,25 @@ namespace BrowserInterop
         }
 
         /// <summary>
+        /// Get the js object property value and initialize its js object reference
+        /// </summary>
+        /// <param name="jsRuntime">current js runtime</param>
+        /// <param name="propertyPath">path of the property</param>
+        /// <param name="jsObjectRef">Ref to the js object from which we'll get the property</param>
+        /// <param name="deep">If true,(default) then the full object is received.await If false, only the object root</param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public static async ValueTask<T> GetInstancePropertyWrapperAsync<T>(this IJSRuntime jsRuntime, JsRuntimeObjectRef jsObjectRef, string propertyPath, Object serializationSpec = null) where T : JsObjectWrapperBase
+        {
+            ValueTask<T> taskContent = GetInstancePropertyAsync<T>(jsRuntime, jsObjectRef, propertyPath, serializationSpec);
+            ValueTask<JsRuntimeObjectRef> taskRef = GetInstancePropertyRefAsync(jsRuntime, jsObjectRef, propertyPath);
+            var res = await taskContent;
+            var jsRuntimeObjectRef = await taskRef;
+            res.SetJsRuntime(jsRuntime, jsRuntimeObjectRef);
+            return res;
+        }
+
+        /// <summary>
         /// Set the js object property value
         /// </summary>
         /// <param name="jsRuntime"></param>
@@ -217,5 +236,7 @@ namespace BrowserInterop
             return TimeSpan.FromTicks((long)timeStamp * 10000);
         }
     }
+
+    
 
 }

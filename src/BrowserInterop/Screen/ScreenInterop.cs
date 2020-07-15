@@ -5,10 +5,8 @@ namespace BrowserInterop.Screen
     /// <summary>
     /// The Screen interface represents a screen, usually the one on which the current window is being rendered
     /// </summary>
-    public class ScreenInterop
+    public class ScreenInterop : JsObjectWrapperBase
     {
-        private IJSRuntime jsRuntime;
-        private JsRuntimeObjectRef windowRef;
 
         /// <summary>
         /// Returns the amount of horizontal space in pixels available to the window.
@@ -52,11 +50,10 @@ namespace BrowserInterop.Screen
         /// <value></value>
         public int Width { get; set; }
 
-        internal void SetJSRuntime(IJSRuntime jsRuntime, JsRuntimeObjectRef windowRef)
+        public override void SetJsRuntime(IJSRuntime jsRuntime, JsRuntimeObjectRef screenRef)
         {
-            this.jsRuntime = jsRuntime;
-            this.windowRef = windowRef;
-            Orientation.SetJSRuntime(jsRuntime, windowRef);
+            base.SetJsRuntime(jsRuntime, screenRef);
+            Orientation.SetJSRuntime(jsRuntime, screenRef);
 
         }
     }
