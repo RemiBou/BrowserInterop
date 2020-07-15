@@ -25,11 +25,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public async ValueTask<WindowInterop> Get(int index)
         {
-            JsRuntimeObjectRef jsObjectRef = await jsRuntime.GetInstancePropertyRefAsync(jsRuntimeObjectRef, $"frames[{index}]");
-
-            WindowInterop windowInterop = await jsRuntime.GetInstancePropertyAsync<WindowInterop>(jsRuntimeObjectRef, $"frames[{index}]", WindowInterop.SerializationSpec);
-            windowInterop.SetJsRuntime(jsRuntime, jsObjectRef);
-            return windowInterop;
+            return await jsRuntime.GetInstancePropertyWrapperAsync<WindowInterop>(jsRuntimeObjectRef, $"frames[{index}]", WindowInterop.SerializationSpec);
         }
         /// <summary>
         /// Count of direct subframes

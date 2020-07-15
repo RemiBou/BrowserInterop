@@ -10,7 +10,7 @@ namespace BrowserInterop
     {
         public JsRuntimeObjectRef JsRuntimeObjectRef { get; protected set; }
         protected IJSRuntime jsRuntime;
-        public virtual void SetJsRuntime(IJSRuntime jsRuntime, JsRuntimeObjectRef jsObjectRef)
+        internal virtual void SetJsRuntime(IJSRuntime jsRuntime, JsRuntimeObjectRef jsObjectRef)
         {
             JsRuntimeObjectRef = jsObjectRef;
             this.jsRuntime = jsRuntime;

@@ -39,7 +39,7 @@ namespace BrowserInterop
         private Lazy<BarPropInterop> statusBarLazy;
         private Lazy<BarPropInterop> toolBarLazy;
 
-        public override void SetJsRuntime(IJSRuntime jsRuntime, JsRuntimeObjectRef jsRuntimeObjectRef)
+        internal override void SetJsRuntime(IJSRuntime jsRuntime, JsRuntimeObjectRef jsRuntimeObjectRef)
         {
             base.SetJsRuntime(jsRuntime, jsRuntimeObjectRef);
             localStorageLazy = new Lazy<StorageInterop>(() => new StorageInterop(jsRuntime, jsRuntimeObjectRef, "localStorage"));

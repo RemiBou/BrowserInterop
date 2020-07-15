@@ -19,7 +19,7 @@ namespace BrowserInterop
         {
         }
 
-        public override void SetJsRuntime(IJSRuntime jsRuntime, JsRuntimeObjectRef navigatorRef)
+        internal override void SetJsRuntime(IJSRuntime jsRuntime, JsRuntimeObjectRef navigatorRef)
         {
             base.SetJsRuntime(jsRuntime, navigatorRef);
             Geolocation = new GeolocationInterop(jsRuntime);
