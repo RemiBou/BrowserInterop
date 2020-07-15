@@ -41,9 +41,9 @@ namespace BrowserInterop
 
         public override void SetJsRuntime(IJSRuntime jsRuntime, JsRuntimeObjectRef jsRuntimeObjectRef)
         {
+            base.SetJsRuntime(jsRuntime, jsRuntimeObjectRef);
             localStorageLazy = new Lazy<StorageInterop>(() => new StorageInterop(jsRuntime, jsRuntimeObjectRef, "localStorage"));
             sessionStorageLazy = new Lazy<StorageInterop>(() => new StorageInterop(jsRuntime, jsRuntimeObjectRef, "sessionStorage"));
-
             consoleInteropLazy = new Lazy<ConsoleInterop>(() => new ConsoleInterop(jsRuntime, jsRuntimeObjectRef));
             historyInteropLazy = new Lazy<HistoryInterop>(() => new HistoryInterop(jsRuntime, jsRuntimeObjectRef));
             performanceInteropLazy = new Lazy<PerformanceInterop>(() => new PerformanceInterop(jsRuntime, jsRuntimeObjectRef));
@@ -54,7 +54,6 @@ namespace BrowserInterop
             scrollBarsLazy = new Lazy<BarPropInterop>(() => new BarPropInterop(jsRuntimeObjectRef, "scrollbars", jsRuntime));
             statusBarLazy = new Lazy<BarPropInterop>(() => new BarPropInterop(jsRuntimeObjectRef, "statusbar", jsRuntime));
             toolBarLazy = new Lazy<BarPropInterop>(() => new BarPropInterop(jsRuntimeObjectRef, "toolbar", jsRuntime));
-            base.SetJsRuntime(jsRuntime, jsRuntimeObjectRef);
         }
 
 
@@ -143,10 +142,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public async ValueTask<WindowInterop> Opener()
         {
-            JsRuntimeObjectRef propertyRef = await jsRuntime.GetInstancePropertyRefAsync(JsRuntimeObjectRef, "opener");
-            WindowInterop window = await jsRuntime.GetInstancePropertyAsync<WindowInterop>(JsRuntimeObjectRef, "opener", WindowInterop.SerializationSpec);
-            window?.SetJsRuntime(jsRuntime, propertyRef);
-            return window;
+            return await jsRuntime.GetInstancePropertyWrapperAsync<WindowInterop>(JsRuntimeObjectRef, "opener", WindowInterop.SerializationSpec);
         }
 
         /// <summary>
@@ -168,10 +164,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public async ValueTask<WindowInterop> Parent()
         {
-            JsRuntimeObjectRef propertyRef = await jsRuntime.GetInstancePropertyRefAsync(JsRuntimeObjectRef, "parent");
-            WindowInterop window = await jsRuntime.GetInstancePropertyAsync<WindowInterop>(JsRuntimeObjectRef, "parent", WindowInterop.SerializationSpec);
-            window?.SetJsRuntime(jsRuntime, propertyRef);
-            return window;
+            return await jsRuntime.GetInstancePropertyWrapperAsync<WindowInterop>(JsRuntimeObjectRef, "parent", WindowInterop.SerializationSpec);
         }
 
         /// <summary>
@@ -239,10 +232,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public async ValueTask<WindowInterop> Top()
         {
-            JsRuntimeObjectRef propertyRef = await jsRuntime.GetInstancePropertyRefAsync(JsRuntimeObjectRef, "top");
-            WindowInterop window = await jsRuntime.GetInstancePropertyAsync<WindowInterop>(JsRuntimeObjectRef, "top", WindowInterop.SerializationSpec);
-            window?.SetJsRuntime(jsRuntime, propertyRef);
-            return window;
+            return await jsRuntime.GetInstancePropertyWrapperAsync<WindowInterop>(JsRuntimeObjectRef, "top", SerializationSpec);
         }
 
         /// <summary>
@@ -251,9 +241,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public async ValueTask<VisualViewportInterop> VisualViewport()
         {
-            VisualViewportInterop visualViewport = await jsRuntime.GetInstancePropertyAsync<VisualViewportInterop>(JsRuntimeObjectRef, "visualViewport");
-            visualViewport?.SetJsRuntime(jsRuntime, JsRuntimeObjectRef);
-            return visualViewport;
+            return await jsRuntime.GetInstancePropertyWrapperAsync<VisualViewportInterop>(JsRuntimeObjectRef, "visualViewport");
         }
 
         /// <summary>

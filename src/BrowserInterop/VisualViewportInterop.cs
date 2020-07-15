@@ -8,10 +8,8 @@ namespace BrowserInterop
     /// <summary>
     ///  represents the visual viewport for a given window. For a page containing iframes, each iframe, as well as the containing page, will have a unique window object. Each window on a page will have a unique VisualViewport representing the properties associated with that window.
     /// </summary>
-    public class VisualViewportInterop
+    public class VisualViewportInterop : JsObjectWrapperBase
     {
-        private IJSRuntime jsRuntime;
-        private JsRuntimeObjectRef windowRef;
 
         /// <summary>
         /// Returns the offset of the left edge of the visual viewport from the left edge of the layout viewport in CSS pixels.
@@ -62,7 +60,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public async ValueTask<IAsyncDisposable> OnResize(Func<ValueTask> todo)
         {
-            return await jsRuntime.AddEventListener(windowRef, "visualViewport", "resize", CallBackInteropWrapper.Create(todo));
+            return await jsRuntime.AddEventListener(JsRuntimeObjectRef,"", "resize", CallBackInteropWrapper.Create(todo));
         }
 
         /// <summary>
@@ -72,13 +70,8 @@ namespace BrowserInterop
         /// <returns></returns>
         public async ValueTask<IAsyncDisposable> OnScroll(Func<ValueTask> todo)
         {
-            return await jsRuntime.AddEventListener(windowRef, "visualViewport", "scroll", CallBackInteropWrapper.Create(todo));
+            return await jsRuntime.AddEventListener(JsRuntimeObjectRef,"", "scroll", CallBackInteropWrapper.Create(todo));
         }
 
-        internal void SetJsRuntime(IJSRuntime jsRuntime, JsRuntimeObjectRef propertyRef)
-        {
-            this.jsRuntime = jsRuntime;
-            windowRef = propertyRef;
-        }
     }
 }

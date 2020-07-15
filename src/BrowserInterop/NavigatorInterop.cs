@@ -19,12 +19,12 @@ namespace BrowserInterop
         {
         }
 
-        public override void SetJsRuntime(IJSRuntime jsRuntime, JsRuntimeObjectRef jsRuntimeObjectRef)
+        public override void SetJsRuntime(IJSRuntime jsRuntime, JsRuntimeObjectRef navigatorRef)
         {
-            base.SetJsRuntime(jsRuntime, jsRuntimeObjectRef);
+            base.SetJsRuntime(jsRuntime, navigatorRef);
             Geolocation = new GeolocationInterop(jsRuntime);
             Storage = new StorageManagerInterop(jsRuntime);
-            Connection?.SetJsRuntime(jsRuntime, jsRuntimeObjectRef);
+            Connection?.SetJsRuntime(jsRuntime, navigatorRef);
         }
 
 

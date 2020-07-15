@@ -38,7 +38,7 @@ namespace BrowserInterop.Screen
         /// <value></value>
         public int Angle { get; set; }
 
-        internal void SetJSRuntime(IJSRuntime jsRuntime, JsRuntimeObjectRef screenRef)
+        internal void SetJsRuntime(IJSRuntime jsRuntime, JsRuntimeObjectRef screenRef)
         {
             this.jsRuntime = jsRuntime;
             this.screenRef = screenRef;

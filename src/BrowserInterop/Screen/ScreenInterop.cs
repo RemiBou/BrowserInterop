@@ -53,7 +53,7 @@ namespace BrowserInterop.Screen
         public override void SetJsRuntime(IJSRuntime jsRuntime, JsRuntimeObjectRef screenRef)
         {
             base.SetJsRuntime(jsRuntime, screenRef);
-            Orientation.SetJSRuntime(jsRuntime, screenRef);
+            Orientation.SetJsRuntime(jsRuntime, screenRef);
 
         }
     }

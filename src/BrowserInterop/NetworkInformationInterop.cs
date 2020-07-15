@@ -8,16 +8,16 @@ namespace BrowserInterop
     public class NetworkInformationInterop
     {
         private IJSRuntime jSRuntime;
-        private JsRuntimeObjectRef windowObject;
+        private JsRuntimeObjectRef navigatorRef;
 
         public NetworkInformationInterop()
         {
         }
 
-        internal void SetJsRuntime(IJSRuntime jSRuntime, JsRuntimeObjectRef windowObject)
+        internal void SetJsRuntime(IJSRuntime jSRuntime, JsRuntimeObjectRef navigatorRef)
         {
             this.jSRuntime = jSRuntime;
-            this.windowObject = windowObject;
+            this.navigatorRef = navigatorRef;
         }
 
         /// <summary>
@@ -98,7 +98,7 @@ namespace BrowserInterop
         /// <returns></returns> 
         public async ValueTask<IAsyncDisposable> OnChange(Func<ValueTask> toDo)
         {
-            return await jSRuntime.AddEventListener(windowObject, "connection", "change", CallBackInteropWrapper.Create(toDo));
+            return await jSRuntime.AddEventListener(navigatorRef, "connection", "change", CallBackInteropWrapper.Create(toDo));
         }
     }
 
