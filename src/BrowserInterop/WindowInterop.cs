@@ -211,13 +211,13 @@ namespace BrowserInterop
         /// the number of pixels that the document has already been scrolled horizontally.
         /// </summary>
         /// <value></value>
-        public int ScrollX { get; set; }
+        public decimal ScrollX { get; set; }
 
         /// <summary>
         /// Returns the number of pixels that the document has already been scrolled vertically.
         /// </summary>
         /// <value></value>
-        public int ScrollY { get; set; }
+        public decimal ScrollY { get; set; }
 
         /// <summary>
         /// Returns the statusbar object, whose visibility can be toggled in the window.

@@ -79,6 +79,10 @@ namespace BrowserInterop.Extensions
             var taskRef = GetInstancePropertyRef(jsRuntime, jsObjectRef, propertyPath);
             var res = await taskContent;
             var jsRuntimeObjectRef = await taskRef;
+            if (res == null)
+            {
+                return null;
+            }
             res.SetJsRuntime(jsRuntime, jsRuntimeObjectRef);
             return res;
         }

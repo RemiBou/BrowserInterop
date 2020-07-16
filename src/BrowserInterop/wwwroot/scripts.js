@@ -99,6 +99,7 @@ browserInterop = new (function () {
         return res;
     }
     this.getInstanceProperty = function (instance, propertyPath) {
+        console.debug("getInstanceProperty",instance, propertyPath)
         if (propertyPath === '') {
             return instance;
         }

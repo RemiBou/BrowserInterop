@@ -262,8 +262,8 @@ context('scripts', () => {
             .its('browserInterop')
             .then(b => {
                 var test = cy.stub();
-                b.addEventListener(window, "navigator.connection", "change", test);
-                window.navigator.connection.dispatchEvent(new Event("change"));
+                b.addEventListener(window, "", "testevt", test);
+                window.dispatchEvent(new Event("testevt"));
                 expect(test).to.be.calledOnce;
 
             });
@@ -275,9 +275,9 @@ context('scripts', () => {
             .its('browserInterop')
             .then(b => {
                 var test = cy.stub();
-                var id = b.addEventListener(window, "navigator.connection", "change", test);
-                b.removeEventListener(window, "navigator.connection", "change", id);
-                window.navigator.connection.dispatchEvent(new Event("change"));
+                var id = b.addEventListener(window, "", "testevt", test);
+                b.removeEventListener(window, "", "testevt", id);
+                window.dispatchEvent(new Event("testevt"));
                 expect(test).to.not.be.calledOnce;
 
             });
