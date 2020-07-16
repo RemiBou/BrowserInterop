@@ -33,7 +33,7 @@ namespace BrowserInterop
         {
             CallBackInteropWrapper res = new CallBackInteropWrapper
             {
-                CallbackRef = DotNetObjectReference.Create(new JSInteropActionWrapper<T>(callback)),
+                CallbackRef = DotNetObjectReference.Create(new JsInteropActionWrapper<T>(callback)),
                 SerializationSpec = serializationSpec,
                 GetJsObjectRef = getJsObjectRef
             };
@@ -50,7 +50,7 @@ namespace BrowserInterop
         {
             CallBackInteropWrapper res = new CallBackInteropWrapper
             {
-                CallbackRef = DotNetObjectReference.Create(new JSInteropActionWrapper(callback)),
+                CallbackRef = DotNetObjectReference.Create(new JsInteropActionWrapper(callback)),
                 SerializationSpec = serializationSpec,
                 GetJsObjectRef = getJsObjectRef
             };

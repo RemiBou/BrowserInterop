@@ -5,11 +5,11 @@ using System.Threading.Tasks;
 
 namespace BrowserInterop.Geolocation
 {
-    public class WindowGeolocation
+    public class WindowNavigatorGeolocation
     {
         private readonly IJSRuntime jsRuntime;
 
-        internal WindowGeolocation(IJSRuntime jsRuntime)
+        internal WindowNavigatorGeolocation(IJSRuntime jsRuntime)
         {
             this.jsRuntime = jsRuntime;
         }
@@ -46,13 +46,13 @@ namespace BrowserInterop.Geolocation
         private class WatchGeolocationWrapper : IAsyncDisposable
         {
             private readonly Func<GeolocationResult, ValueTask> callback;
-            private readonly IJSRuntime jSRuntime;
+            private readonly IJSRuntime jsRuntime;
             private int watchId;
 
-            public WatchGeolocationWrapper(Func<GeolocationResult, ValueTask> callback, IJSRuntime jSRuntime)
+            public WatchGeolocationWrapper(Func<GeolocationResult, ValueTask> callback, IJSRuntime jsRuntime)
             {
                 this.callback = callback;
-                this.jSRuntime = jSRuntime;
+                this.jsRuntime = jsRuntime;
             }
 
             [JSInvokable]
@@ -68,7 +68,7 @@ namespace BrowserInterop.Geolocation
 
             public async ValueTask DisposeAsync()
             {
-                await jSRuntime.InvokeVoidAsync("navigator.geolocation.clearWatch", watchId);
+                await jsRuntime.InvokeVoidAsync("navigator.geolocation.clearWatch", watchId);
             }
         }
     }

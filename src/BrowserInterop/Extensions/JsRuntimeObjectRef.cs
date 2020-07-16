@@ -11,7 +11,7 @@ namespace BrowserInterop
     /// </summary>
     public class JsRuntimeObjectRef : IAsyncDisposable
     {
-        internal IJSRuntime JSRuntime { get; set; }
+        internal IJSRuntime JsRuntime { get; set; }
 
         public JsRuntimeObjectRef()
         {
@@ -22,7 +22,7 @@ namespace BrowserInterop
 
         public async ValueTask DisposeAsync()
         {
-            await JSRuntime.InvokeVoidAsync("browserInterop.removeObjectRef", JsObjectRefId);
+            await JsRuntime.InvokeVoidAsync("browserInterop.removeObjectRef", JsObjectRefId);
         }
     }
 

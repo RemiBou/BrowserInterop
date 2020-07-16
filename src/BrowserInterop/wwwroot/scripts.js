@@ -129,7 +129,6 @@ browserInterop = new (function () {
                 return;
             }
         }
-        console.debug(instance, propertyPath, value);
     };
     this.getInstancePropertySerializable = function (instance, propertyName, serializationSpec) {
         var data = me.getInstanceProperty(instance, propertyName);

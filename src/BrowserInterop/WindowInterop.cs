@@ -359,7 +359,7 @@ namespace BrowserInterop
         /// <param name="todo"></param>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public async ValueTask<IAsyncDisposable> OnMessage<T>(Func<OnMessageEventPayload<T>, ValueTask> todo)
+        public async ValueTask<IAsyncDisposable> OnMessage<T>(Func<MessageEvent<T>, ValueTask> todo)
         {
             return await jsRuntime.AddEventListener(
                 JsRuntimeObjectRef,
@@ -368,7 +368,7 @@ namespace BrowserInterop
                 CallBackInteropWrapper.Create<JsRuntimeObjectRef>(
                     async payload =>
                     {
-                        OnMessageEventPayload<T> eventPayload = new OnMessageEventPayload<T>()
+                        MessageEvent<T> eventPayload = new MessageEvent<T>()
                         {
                             Data = await jsRuntime.GetInstancePropertyAsync<T>(payload, "data"),
                             Origin = await jsRuntime.GetInstancePropertyAsync<string>(payload, "origin"),

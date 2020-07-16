@@ -1,11 +1,10 @@
 namespace BrowserInterop
 {
-    using Microsoft.JSInterop;
 
     using System;
     using System.Text.Json.Serialization;
 
-    public class BatteryManager
+    public class WindowNavigatorBattery
     {
         /// <summary>
         /// A Boolean value indicating whether or not the battery is currently being charged.

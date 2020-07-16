@@ -4,7 +4,7 @@
     /// Event send when a new message is received
     /// </summary>
     /// <typeparam name="T">Data type</typeparam>
-    public class OnMessageEventPayload<T>
+    public class MessageEvent<T>
     {
         /// <summary>
         /// The object passed from the other window.

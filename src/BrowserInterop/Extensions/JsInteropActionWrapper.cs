@@ -8,11 +8,11 @@ namespace BrowserInterop
     /// <summary>
     /// Wrap a c# action into an object ibvokable by JS
     /// </summary>
-    public class JSInteropActionWrapper
+    public class JsInteropActionWrapper
     {
         private readonly Func<ValueTask> toDo;
 
-        internal JSInteropActionWrapper(Func<ValueTask> toDo)
+        internal JsInteropActionWrapper(Func<ValueTask> toDo)
         {
             this.toDo = toDo;
         }
@@ -28,11 +28,11 @@ namespace BrowserInterop
     /// <summary>
     /// Wrap a c# action into an object ibvokable by JS
     /// </summary>
-    public class JSInteropActionWrapper<T>
+    public class JsInteropActionWrapper<T>
     {
         private readonly Func<T, ValueTask> toDo;
 
-        internal JSInteropActionWrapper(Func<T, ValueTask> toDo)
+        internal JsInteropActionWrapper(Func<T, ValueTask> toDo)
         {
             this.toDo = toDo;
         }

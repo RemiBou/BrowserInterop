@@ -11,13 +11,13 @@ namespace BrowserInterop
     {
         private readonly JsRuntimeObjectRef windowRef;
         private readonly string propertyName;
-        private readonly IJSRuntime jSRuntime;
+        private readonly IJSRuntime jsRuntime;
 
-        internal BarProp(JsRuntimeObjectRef windowRef, string propertyName, IJSRuntime jSRuntime)
+        internal BarProp(JsRuntimeObjectRef windowRef, string propertyName, IJSRuntime jsRuntime)
         {
             this.windowRef = windowRef;
             this.propertyName = propertyName;
-            this.jSRuntime = jSRuntime;
+            this.jsRuntime = jsRuntime;
         }
 
         /// <summary>
@@ -26,7 +26,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public async ValueTask<bool> GetVisible()
         {
-            return await jSRuntime.GetInstancePropertyAsync<bool>(windowRef, $"{propertyName}.visible");
+            return await jsRuntime.GetInstancePropertyAsync<bool>(windowRef, $"{propertyName}.visible");
         }
 
         /// <summary>
@@ -36,7 +36,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public async ValueTask SetVisible(bool visible)
         {
-            await jSRuntime.SetInstanceProperty(windowRef, $"{propertyName}.visible", visible);
+            await jsRuntime.SetInstanceProperty(windowRef, $"{propertyName}.visible", visible);
         }
     }
 }

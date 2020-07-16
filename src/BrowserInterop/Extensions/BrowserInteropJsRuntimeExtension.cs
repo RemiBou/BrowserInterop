@@ -67,8 +67,8 @@ namespace BrowserInterop
         {
             ValueTask<T> taskContent = GetInstancePropertyAsync<T>(jsRuntime, jsObjectRef, propertyPath, serializationSpec);
             ValueTask<JsRuntimeObjectRef> taskRef = GetInstancePropertyRef(jsRuntime, jsObjectRef, propertyPath);
-            var res = await taskContent;
-            var jsRuntimeObjectRef = await taskRef;
+            T res = await taskContent;
+            JsRuntimeObjectRef jsRuntimeObjectRef = await taskRef;
             res.SetJsRuntime(jsRuntime, jsRuntimeObjectRef);
             return res;
         }
@@ -95,7 +95,7 @@ namespace BrowserInterop
         public static async ValueTask<JsRuntimeObjectRef> GetInstancePropertyRef(this IJSRuntime jsRuntime, JsRuntimeObjectRef jsObjectRef, string propertyPath)
         {
             JsRuntimeObjectRef jsRuntimeObjectRef = await jsRuntime.InvokeAsync<JsRuntimeObjectRef>("browserInterop.getInstancePropertyRef", jsObjectRef, propertyPath);
-            jsRuntimeObjectRef.JSRuntime = jsRuntime;
+            jsRuntimeObjectRef.JsRuntime = jsRuntime;
             return jsRuntimeObjectRef;
         }
 
@@ -163,7 +163,7 @@ namespace BrowserInterop
         public static async ValueTask<JsRuntimeObjectRef> InvokeInstanceMethodGetRef(this IJSRuntime jsRuntime, JsRuntimeObjectRef windowObject, string methodName, params object[] arguments)
         {
             JsRuntimeObjectRef jsRuntimeObjectRef = await jsRuntime.InvokeAsync<JsRuntimeObjectRef>("browserInterop.callInstanceMethodGetRef", new object[] { windowObject, methodName }.Concat(arguments).ToArray());
-            jsRuntimeObjectRef.JSRuntime = jsRuntime;
+            jsRuntimeObjectRef.JsRuntime = jsRuntime;
             return jsRuntimeObjectRef;
         }
 
@@ -237,6 +237,6 @@ namespace BrowserInterop
         }
     }
 
-    
+
 
 }

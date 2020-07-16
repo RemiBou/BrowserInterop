@@ -14,9 +14,9 @@ namespace BrowserInterop
         {
         }
 
-        internal void SetJsRuntime(IJSRuntime jSRuntime, JsRuntimeObjectRef navigatorRef)
+        internal void SetJsRuntime(IJSRuntime jsRuntime, JsRuntimeObjectRef navigatorRef)
         {
-            this.jSRuntime = jSRuntime;
+            jSRuntime = jsRuntime;
             this.navigatorRef = navigatorRef;
         }
 

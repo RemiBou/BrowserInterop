@@ -20,7 +20,7 @@ namespace BrowserInterop
         internal override void SetJsRuntime(IJSRuntime jsRuntime, JsRuntimeObjectRef navigatorRef)
         {
             base.SetJsRuntime(jsRuntime, navigatorRef);
-            Geolocation = new WindowGeolocation(jsRuntime);
+            Geolocation = new WindowNavigatorGeolocation(jsRuntime);
             Storage = new WindowStorageManager(jsRuntime);
             Connection?.SetJsRuntime(jsRuntime, navigatorRef);
         }
@@ -51,9 +51,9 @@ namespace BrowserInterop
         ///  provides information about the system's battery
         /// </summary>
         /// <returns></returns>
-        public async ValueTask<BatteryManager> GetBattery()
+        public async ValueTask<WindowNavigatorBattery> GetBattery()
         {
-            return await jsRuntime.InvokeAsync<BatteryManager>("browserInterop.navigator.getBattery");
+            return await jsRuntime.InvokeAsync<WindowNavigatorBattery>("browserInterop.navigator.getBattery");
 
         }
 
@@ -77,7 +77,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public int HardwareConcurrency { get; set; }
 
-        public WindowGeolocation Geolocation { get; private set; }
+        public WindowNavigatorGeolocation Geolocation { get; private set; }
 
         /// <summary>
         /// Returns false if the browser enables java

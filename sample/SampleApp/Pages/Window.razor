@@ -183,7 +183,7 @@ Storage Event :
     private TimeSpan? requestIdleCallbackTimeout;
     private HashSet<string> eventTriggered = new HashSet<string>();
 
-    private OnMessageEventPayload<string> onMessageEventPayload;
+    private MessageEvent<string> onMessageEventPayload;
     private string[] beforeInstallPlatforms;
     private bool? beforeInstallAccepted;
     private DeviceMotionEvent deviceMotionEvent;
@@ -302,7 +302,7 @@ Storage Event :
 
         await window.OnScroll(async () => await AddEventHandled("scroll"));
 
-        await window.OnUnload(async () => await AddEventHandled("unload"));  
+        await window.OnUnload(async () => await AddEventHandled("unload"));
 
         await window.OnWheel(async (w) =>
         {

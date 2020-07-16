@@ -1,4 +1,3 @@
-using Microsoft.JSInterop;
 
 using System;
 using System.Threading.Tasks;
@@ -10,7 +9,7 @@ namespace BrowserInterop
     /// </summary>
     public class IdleDeadline : JsObjectWrapperBase
     {
-        
+
         /// <summary>
         /// A Boolean whose value is true if the callback is being executed because the timeout specified when the idle callback was installed has expired.
         /// </summary>
