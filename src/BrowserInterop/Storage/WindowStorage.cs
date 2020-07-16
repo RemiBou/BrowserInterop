@@ -65,6 +65,7 @@ namespace BrowserInterop.Storage
         ///  will add that key to the storage (serialized as json), or update that key's value if it already exists.
         /// </summary>
         /// <param name="keyName"></param>
+        /// <param name="value">Value to be stored (will be serialized in json)</param>
         /// <returns></returns>
         public async ValueTask SetItem(string keyName, object value)
         {

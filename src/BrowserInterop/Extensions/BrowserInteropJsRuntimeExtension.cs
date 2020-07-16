@@ -26,13 +26,10 @@ namespace BrowserInterop.Extensions
         }
 
         /// <summary>
-        /// Get the window js object property value reference
+        /// Get the window object property value reference
         /// </summary>
         /// <param name="jsRuntime">current js runtime</param>
         /// <param name="propertyPath">path of the property</param>
-        /// <param name="jsObjectRef">Ref to the js object from which we'll get the property</param>
-        /// <param name="deep">If true,(default) then the full object is received.await If false, only the object root</param>
-        /// <typeparam name="T"></typeparam>
         /// <returns></returns>
         public static async ValueTask<JsRuntimeObjectRef> GetInstanceProperty(this IJSRuntime jsRuntime, string propertyPath)
         {
@@ -46,8 +43,12 @@ namespace BrowserInterop.Extensions
         /// <param name="jsRuntime">current js runtime</param>
         /// <param name="propertyPath">path of the property</param>
         /// <param name="jsObjectRef">Ref to the js object from which we'll get the property</param>
-        /// <param name="deep">If true,(default) then the full object is received.await If false, only the object root</param>
-        /// <typeparam name="T"></typeparam>
+        /// <param name="serializationSpec">
+        /// An object specifying the member we'll want from the JS object.
+        /// "new { allChild = "*", onlyMember = true, ignore = false }" will get all the fields in allChild,
+        /// the value of "onlyMember" and will ignore "ignore"
+        /// "true" or null will get everything, false will get nothing
+        /// </param>        /// <typeparam name="T"></typeparam>
         /// <returns></returns>
         public static async ValueTask<T> GetInstancePropertyAsync<T>(this IJSRuntime jsRuntime, JsRuntimeObjectRef jsObjectRef, string propertyPath, Object serializationSpec = null)
         {
@@ -61,7 +62,12 @@ namespace BrowserInterop.Extensions
         /// <param name="jsRuntime">current js runtime</param>
         /// <param name="propertyPath">path of the property</param>
         /// <param name="jsObjectRef">Ref to the js object from which we'll get the property</param>
-        /// <param name="deep">If true,(default) then the full object is received.await If false, only the object root</param>
+        /// <param name="serializationSpec">
+        /// An object specifying the member we'll want from the JS object.
+        /// "new { allChild = "*", onlyMember = true, ignore = false }" will get all the fields in allChild,
+        /// the value of "onlyMember" and will ignore "ignore"
+        /// "true" or null will get everything, false will get nothing
+        /// </param>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
         public static async ValueTask<T> GetInstancePropertyWrapperAsync<T>(this IJSRuntime jsRuntime, JsRuntimeObjectRef jsObjectRef, string propertyPath, Object serializationSpec = null) where T : JsObjectWrapperBase
@@ -78,8 +84,9 @@ namespace BrowserInterop.Extensions
         /// Set the js object property value
         /// </summary>
         /// <param name="jsRuntime"></param>
-        /// <param name="propertyPath"></param>
-        /// <typeparam name="T"></typeparam>
+        /// <param name="jsObjectRef">The JS object you want to change</param>
+        /// <param name="propertyPath">The object property name</param>
+        /// <param name="value">The new value (can be a JsRuntimeObjectRef)</param>
         /// <returns></returns>
         public static async ValueTask SetInstanceProperty(this IJSRuntime jsRuntime, JsRuntimeObjectRef jsObjectRef, string propertyPath, object value)
         {
@@ -104,7 +111,7 @@ namespace BrowserInterop.Extensions
         /// <summary>
         /// Call the method on the js instance
         /// </summary>
-        /// <param name="jsRuntime1">Curent JS Runtime</param>
+        /// <param name="jsRuntime">Curent JS Runtime</param>
         /// <param name="windowObject">Reference to the JS instance</param>
         /// <param name="methodName">Methdod name/path </param>
         /// <param name="arguments">method arguments</param>
@@ -117,7 +124,7 @@ namespace BrowserInterop.Extensions
         /// <summary>
         /// Call the method on the js instance and return the result
         /// </summary>
-        /// <param name="jsRuntime1">Curent JS Runtime</param>
+        /// <param name="jsRuntime">Curent JS Runtime</param>
         /// <param name="windowObject">Reference to the JS instance</param>
         /// <param name="methodName">Methdod name/path </param>
         /// <param name="arguments">method arguments</param>
@@ -142,6 +149,12 @@ namespace BrowserInterop.Extensions
         /// </summary>
         /// <param name="jsRuntime">Curent JS Runtime</param>
         /// <param name="jsObject">Reference to the JS instance</param>
+        /// <param name="serializationSpec">
+        /// An object specifying the member we'll want from the JS object.
+        /// "new { allChild = "*", onlyMember = true, ignore = false }" will get all the fields in allChild,
+        /// the value of "onlyMember" and will ignore "ignore"
+        /// "true" or null will get everything, false will get nothing
+        /// </param>
         /// <returns></returns>
         public static async ValueTask<T> GetInstanceContent<T>(this IJSRuntime jsRuntime, JsRuntimeObjectRef jsObject, Object serializationSpec)
         {
@@ -162,8 +175,8 @@ namespace BrowserInterop.Extensions
                 throw new ArgumentNullException(nameof(jsObject));
             }
 
-            T res = await GetInstanceContent<T>(jsRuntime, jsObject.jsObjectRef, serializationSpec);
-            res.SetJsRuntime(jsRuntime, jsObject.jsObjectRef);
+            T res = await GetInstanceContent<T>(jsRuntime, jsObject.JsObjectRef, serializationSpec);
+            res.SetJsRuntime(jsRuntime, jsObject.JsObjectRef);
             return res;
         }
 
@@ -171,7 +184,7 @@ namespace BrowserInterop.Extensions
         /// <summary>
         /// Call the method on the js instance and return the reference to the js object
         /// </summary>
-        /// <param name="jsRuntime1">Curent JS Runtime</param>
+        /// <param name="jsRuntime">Curent JS Runtime</param>
         /// <param name="windowObject">Reference to the JS instance</param>
         /// <param name="methodName">Methdod name/path </param>
         /// <param name="arguments">method arguments</param>

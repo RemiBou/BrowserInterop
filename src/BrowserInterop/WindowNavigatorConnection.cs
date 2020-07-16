@@ -12,10 +12,6 @@ namespace BrowserInterop
         private IJSRuntime jSRuntime;
         private JsRuntimeObjectRef navigatorRef;
 
-        public WindowNavigatorConnection()
-        {
-        }
-
         internal void SetJsRuntime(IJSRuntime jsRuntime, JsRuntimeObjectRef navigatorRef)
         {
             jSRuntime = jsRuntime;
@@ -51,7 +47,7 @@ namespace BrowserInterop
                     "2g" => EffectiveTypeEnum._2G,
                     "3g" => EffectiveTypeEnum._3G,
                     "4g" => EffectiveTypeEnum._4G,
-                    _ => EffectiveTypeEnum.Unknown,
+                    _ => EffectiveTypeEnum.Unknown
                 };
             }
         }
@@ -94,7 +90,7 @@ namespace BrowserInterop
         }
 
         /// <summary>
-        /// toDo will be called when the network informations changes
+        /// will be called when the network information changes
         /// </summary>
         /// <param name="toDo">Action to call</param>
         /// <returns></returns> 

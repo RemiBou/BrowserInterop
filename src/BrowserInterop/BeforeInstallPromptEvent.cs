@@ -20,7 +20,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public async ValueTask<bool> IsAccepted()
         {
-            return await jsRuntime.GetInstancePropertyAsync<string>(jsObjectRef, "userChoice") == "accepted";
+            return await JsRuntime.GetInstancePropertyAsync<string>(JsObjectRef, "userChoice") == "accepted";
         }
 
         /// <summary>
@@ -29,7 +29,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public async ValueTask Prompt()
         {
-            await jsRuntime.InvokeInstanceMethod(jsObjectRef, "prompt");
+            await JsRuntime.InvokeInstanceMethod(JsObjectRef, "prompt");
         }
 
     }

@@ -56,6 +56,7 @@ namespace BrowserInterop.Geolocation
             }
 
             [JSInvokable]
+            // ReSharper disable once UnusedMember.Local
             public async ValueTask Invoke(GeolocationResult result)
             {
                 await callback.Invoke(result);

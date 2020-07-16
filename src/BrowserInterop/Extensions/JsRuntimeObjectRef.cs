@@ -14,10 +14,6 @@ namespace BrowserInterop.Extensions
     {
         internal IJSRuntime JsRuntime { get; set; }
 
-        public JsRuntimeObjectRef()
-        {
-        }
-
         [JsonPropertyName("__jsObjectRefId")]
         public int JsObjectRefId { get; set; }
 

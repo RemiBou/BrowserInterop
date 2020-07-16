@@ -24,7 +24,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public async ValueTask<TimeSpan> TimeRemaining()
         {
-            return TimeSpan.FromMilliseconds(await jsRuntime.InvokeInstanceMethodAsync<double>(jsObjectRef, "timeRemaining"));
+            return TimeSpan.FromMilliseconds(await JsRuntime.InvokeInstanceMethodAsync<double>(JsObjectRef, "timeRemaining"));
         }
     }
 }

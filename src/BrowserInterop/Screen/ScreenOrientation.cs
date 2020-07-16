@@ -72,7 +72,7 @@ namespace BrowserInterop.Screen
                 ScreenOrientationTypeEnum.PortraitSecondary => "portrait-secondary",
                 ScreenOrientationTypeEnum.LandscapePrimary => "landscape-primary",
                 ScreenOrientationTypeEnum.LandscapeSecondary => "landscape-secondary",
-                _ => throw new NotSupportedException($"ScreenOrientationTypeEnum: {newOrientation}"),
+                _ => throw new NotSupportedException($"ScreenOrientationTypeEnum: {newOrientation}")
             });
         }
 

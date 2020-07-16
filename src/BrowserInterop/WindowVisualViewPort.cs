@@ -61,7 +61,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public async ValueTask<IAsyncDisposable> OnResize(Func<ValueTask> todo)
         {
-            return await jsRuntime.AddEventListener(jsObjectRef, "", "resize", CallBackInteropWrapper.Create(todo));
+            return await JsRuntime.AddEventListener(JsObjectRef, "", "resize", CallBackInteropWrapper.Create(todo));
         }
 
         /// <summary>
@@ -71,7 +71,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public async ValueTask<IAsyncDisposable> OnScroll(Func<ValueTask> todo)
         {
-            return await jsRuntime.AddEventListener(jsObjectRef, "", "scroll", CallBackInteropWrapper.Create(todo));
+            return await JsRuntime.AddEventListener(JsObjectRef, "", "scroll", CallBackInteropWrapper.Create(todo));
         }
 
     }

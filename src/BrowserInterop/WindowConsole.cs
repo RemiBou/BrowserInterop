@@ -126,7 +126,7 @@ namespace BrowserInterop
         /// <summary>
         /// Display the HTML element as interactive in the console
         /// </summary>
-        /// <param name="data">the HTML element ref to display</param>
+        /// <param name="element">the HTML element ref to display</param>
         /// <returns></returns>
         public async ValueTask DirXml(ElementReference element)
         {
@@ -245,7 +245,7 @@ namespace BrowserInterop
         ///  the profiling session will be closed when Dispose is called.
         /// You can see a profiling session by going in dev tool => 3 dots menu => more tools => Javascript Profiler
         /// </summary>
-        /// <param name="label">profiler name</param>
+        /// <param name="name">profiler name</param>
         /// <returns></returns>
         public async ValueTask<IAsyncDisposable> Profile(string name = null)
         {
@@ -269,7 +269,7 @@ namespace BrowserInterop
         /// <summary>
         /// Start a timer, it's label and execution time will be shown on the profiling session (only the ones in the Performance tab, not the ones started with the Profile lethod) and on the console
         /// </summary>
-        /// <param name="name">The label displayed</param>
+        /// <param name="label">The label displayed</param>
         /// <returns></returns>
         public async ValueTask TimeStart(string label)
         {
@@ -280,7 +280,7 @@ namespace BrowserInterop
         /// <summary>
         /// End a timer, it's label and execution time will be shown on the profiling (not the one started) session and on the console
         /// </summary>
-        /// <param name="name">The label displayed</param>
+        /// <param name="label">The label displayed</param>
         /// <returns></returns>
         public async ValueTask TimeEnd(string label)
         {
@@ -304,7 +304,7 @@ namespace BrowserInterop
         /// <summary>
         /// Display the given timer time in the console, it must be done when the timer is running
         /// </summary>
-        /// <param name="name">The label displayed</param>
+        /// <param name="label">The label displayed</param>
         /// <returns></returns>
         public async ValueTask TimeLog(string label)
         {
@@ -315,7 +315,7 @@ namespace BrowserInterop
         /// <summary>
         /// Display a marker on the profiling sessions
         /// </summary>
-        /// <param name="name">The label displayed</param>
+        /// <param name="label">The label displayed</param>
         /// <returns></returns>
         public async ValueTask TimeStamp(string label)
         {

@@ -166,12 +166,12 @@ namespace BrowserInterop.Performance
         {
             return type switch
             {
-                Type t when t == typeof(PerformanceMark) => "mark",
-                Type t when t == typeof(PerformanceMeasure) => "measure",
-                Type t when t == typeof(PerformanceFrameTiming) => "frame",
-                Type t when t == typeof(PerformanceNavigationTiming) => "navigation",
-                Type t when t == typeof(PerformanceResourceTiming) => "resource",
-                Type t when t == typeof(PerformancePaintTiming) => "paint",
+                { } t when t == typeof(PerformanceMark) => "mark",
+                { } t when t == typeof(PerformanceMeasure) => "measure",
+                { } t when t == typeof(PerformanceFrameTiming) => "frame",
+                { } t when t == typeof(PerformanceNavigationTiming) => "navigation",
+                { } t when t == typeof(PerformanceResourceTiming) => "resource",
+                { } t when t == typeof(PerformancePaintTiming) => "paint",
                 _ => null
             };
         }
