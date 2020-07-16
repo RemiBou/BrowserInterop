@@ -1,4 +1,5 @@
-﻿using BrowserInterop.Geolocation;
+﻿using BrowserInterop.Extensions;
+using BrowserInterop.Geolocation;
 using BrowserInterop.Storage;
 
 using Microsoft.JSInterop;
@@ -85,7 +86,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public async ValueTask<bool> JavaEnabled()
         {
-            return await jsRuntime.InvokeInstanceMethodAsync<bool>(JsRuntimeObjectRef, "javaEnabled");
+            return await jsRuntime.InvokeInstanceMethodAsync<bool>(jsObjectRef, "javaEnabled");
         }
 
         /// <summary>
@@ -151,7 +152,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public async ValueTask<bool> CanShare(ShareData shareData)
         {
-            return await jsRuntime.HasProperty(JsRuntimeObjectRef, "canShare") && await jsRuntime.InvokeInstanceMethodAsync<bool>(JsRuntimeObjectRef, "canShare", shareData);
+            return await jsRuntime.HasProperty(jsObjectRef, "canShare") && await jsRuntime.InvokeInstanceMethodAsync<bool>(jsObjectRef, "canShare", shareData);
         }
 
         /// <summary>
@@ -160,29 +161,31 @@ namespace BrowserInterop
         /// For example, this API lets webmail sites open mailto: URLs, or VoIP sites open tel: URLs.
         /// </summary>
         /// <param name="protocol">A string containing the protocol the site wishes to handle. For example, you can register to handle SMS text message links by passing the "sms" scheme.</param>
-        /// <param name="url">A string containing the URL of the handler. This URL must include %s, as a placeholder that will be replaced with the escaped URL to be handled.</param>
+        /// <param name="urlPattern">A string containing the URL of the handler. This URL must include %s, as a placeholder that will be replaced with the escaped URL to be handled.</param>
         /// <param name="title">A human-readable title string for the handler. This will be displayed to the user, such as prompting “Allow this site to handle [scheme] links?” or listing registered handlers in the browser’s settings.</param>
         /// <returns></returns>
-        public async ValueTask RegisterProtocolHandler(string protocol, string url, string title)
+#pragma warning disable CA1054 // Les paramètres de Uri ne doivent pas être des chaînes
+        public async ValueTask RegisterProtocolHandler(string protocol, string urlPattern, string title)
+#pragma warning restore CA1054 // Les paramètres de Uri ne doivent pas être des chaînes
         {
             if (string.IsNullOrEmpty(protocol))
             {
-                throw new ArgumentException("Protocol parameter is mandatory", nameof(protocol));
+                throw new ArgumentNullException(nameof(protocol));
             }
 
-            if (string.IsNullOrEmpty(url))
+            if (string.IsNullOrEmpty(urlPattern))
             {
-                throw new ArgumentException("URL parameter is mandatory", nameof(url));
+                throw new ArgumentNullException(nameof(urlPattern));
             }
 
             if (string.IsNullOrEmpty(title))
             {
-                throw new ArgumentException("Title parameter is mandatory", nameof(title));
+                throw new ArgumentNullException(nameof(title));
             }
 
-            if (await jsRuntime.HasProperty(JsRuntimeObjectRef, "registerProtocolHandler"))
+            if (await jsRuntime.HasProperty(jsObjectRef, "registerProtocolHandler"))
             {
-                await jsRuntime.InvokeInstanceMethod(JsRuntimeObjectRef, "registerProtocolHandler", protocol, url, title);
+                await jsRuntime.InvokeInstanceMethod(jsObjectRef, "registerProtocolHandler", protocol, urlPattern, title);
             }
         }
 
@@ -196,9 +199,9 @@ namespace BrowserInterop
         /// <param name="url"></param>
         /// <param name="data"></param>
         /// <returns></returns>
-        public async ValueTask<bool> SendBeacon(string url, object data)
+        public async ValueTask<bool> SendBeacon(Uri url, object data)
         {
-            return await jsRuntime.HasProperty(JsRuntimeObjectRef, "sendBeacon") && await jsRuntime.InvokeInstanceMethodAsync<bool>(JsRuntimeObjectRef, "sendBeacon", url, data);
+            return await jsRuntime.HasProperty(jsObjectRef, "sendBeacon") && await jsRuntime.InvokeInstanceMethodAsync<bool>(jsObjectRef, "sendBeacon", url, data);
         }
 
         /// <summary>
@@ -208,7 +211,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public async ValueTask Share(ShareData shareData)
         {
-            await jsRuntime.InvokeInstanceMethodAsync<bool>(JsRuntimeObjectRef, "share", shareData);
+            await jsRuntime.InvokeInstanceMethodAsync<bool>(jsObjectRef, "share", shareData);
         }
 
         /// <summary>
@@ -218,7 +221,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public async ValueTask Vibrate(IEnumerable<TimeSpan> pattern)
         {
-            await jsRuntime.InvokeInstanceMethodAsync<bool>(JsRuntimeObjectRef, "vibrate", pattern.Select(t => t.TotalMilliseconds).ToArray());
+            await jsRuntime.InvokeInstanceMethodAsync<bool>(jsObjectRef, "vibrate", pattern.Select(t => t.TotalMilliseconds).ToArray());
         }
 
     }

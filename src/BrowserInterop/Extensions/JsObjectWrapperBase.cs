@@ -4,21 +4,21 @@ using Microsoft.JSInterop;
 using System;
 using System.Threading.Tasks;
 
-namespace BrowserInterop
+namespace BrowserInterop.Extensions
 {
     public class JsObjectWrapperBase : IAsyncDisposable
     {
-        public JsRuntimeObjectRef JsRuntimeObjectRef { get; protected set; }
-        protected IJSRuntime jsRuntime;
+        internal JsRuntimeObjectRef jsObjectRef { get; private set; }
+        internal IJSRuntime jsRuntime { get; private set; }
         internal virtual void SetJsRuntime(IJSRuntime jsRuntime, JsRuntimeObjectRef jsObjectRef)
         {
-            JsRuntimeObjectRef = jsObjectRef;
-            this.jsRuntime = jsRuntime;
+            this.jsObjectRef = jsObjectRef ?? throw new ArgumentNullException(nameof(jsObjectRef));
+            this.jsRuntime = jsRuntime ?? throw new ArgumentNullException(nameof(jsRuntime));
         }
 
         public async ValueTask DisposeAsync()
         {
-            await JsRuntimeObjectRef.DisposeAsync();
+            await jsObjectRef.DisposeAsync();
         }
 
     }

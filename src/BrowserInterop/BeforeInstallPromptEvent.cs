@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using BrowserInterop.Extensions;
+
+using System.Threading.Tasks;
 
 namespace BrowserInterop
 {
@@ -18,7 +20,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public async ValueTask<bool> IsAccepted()
         {
-            return (await jsRuntime.GetInstancePropertyAsync<string>(JsRuntimeObjectRef, "userChoice") == "accepted");
+            return await jsRuntime.GetInstancePropertyAsync<string>(jsObjectRef, "userChoice") == "accepted";
         }
 
         /// <summary>
@@ -27,7 +29,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public async ValueTask Prompt()
         {
-            await jsRuntime.InvokeInstanceMethod(JsRuntimeObjectRef, "prompt");
+            await jsRuntime.InvokeInstanceMethod(jsObjectRef, "prompt");
         }
 
     }

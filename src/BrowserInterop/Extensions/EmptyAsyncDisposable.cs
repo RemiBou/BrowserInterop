@@ -2,7 +2,7 @@
 using System;
 using System.Threading.Tasks;
 
-namespace BrowserInterop
+namespace BrowserInterop.Extensions
 {
     internal class EmptyAsyncDisposable : IAsyncDisposable
     {

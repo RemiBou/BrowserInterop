@@ -1,3 +1,5 @@
+using BrowserInterop.Extensions;
+
 using Microsoft.JSInterop;
 
 using System.Threading.Tasks;

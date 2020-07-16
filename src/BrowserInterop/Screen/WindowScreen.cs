@@ -1,3 +1,5 @@
+using BrowserInterop.Extensions;
+
 using Microsoft.JSInterop;
 
 namespace BrowserInterop.Screen

@@ -1,5 +1,7 @@
-﻿using BrowserInterop.Performance;
+﻿using BrowserInterop.Extensions;
+using BrowserInterop.Performance;
 using BrowserInterop.Screen;
+using BrowserInterop.Storage;
 
 using Microsoft.JSInterop;
 
@@ -76,7 +78,7 @@ namespace BrowserInterop
         /// <value></value>
         public async ValueTask<WindowNavigator> Navigator()
         {
-            return await jsRuntime.GetInstancePropertyWrapperAsync<WindowNavigator>(JsRuntimeObjectRef, "navigator");
+            return await jsRuntime.GetInstancePropertyWrapperAsync<WindowNavigator>(jsObjectRef, "navigator");
         }
 
         /// <summary>
@@ -133,7 +135,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public async ValueTask SetName(string name)
         {
-            await jsRuntime.SetInstanceProperty(JsRuntimeObjectRef, "name", name);
+            await jsRuntime.SetInstanceProperty(jsObjectRef, "name", name);
         }
 
         /// <summary>
@@ -142,7 +144,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public async ValueTask<WindowInterop> Opener()
         {
-            return await jsRuntime.GetInstancePropertyWrapperAsync<WindowInterop>(JsRuntimeObjectRef, "opener", WindowInterop.SerializationSpec);
+            return await jsRuntime.GetInstancePropertyWrapperAsync<WindowInterop>(jsObjectRef, "opener", WindowInterop.SerializationSpec);
         }
 
         /// <summary>
@@ -164,7 +166,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public async ValueTask<WindowInterop> Parent()
         {
-            return await jsRuntime.GetInstancePropertyWrapperAsync<WindowInterop>(JsRuntimeObjectRef, "parent", WindowInterop.SerializationSpec);
+            return await jsRuntime.GetInstancePropertyWrapperAsync<WindowInterop>(jsObjectRef, "parent", WindowInterop.SerializationSpec);
         }
 
         /// <summary>
@@ -183,7 +185,7 @@ namespace BrowserInterop
         /// <value></value>
         public async ValueTask<WindowScreen> Screen()
         {
-            return await jsRuntime.GetInstancePropertyWrapperAsync<WindowScreen>(JsRuntimeObjectRef, "screen"); ;
+            return await jsRuntime.GetInstancePropertyWrapperAsync<WindowScreen>(jsObjectRef, "screen"); ;
         }
 
         /// <summary>
@@ -232,7 +234,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public async ValueTask<WindowInterop> Top()
         {
-            return await jsRuntime.GetInstancePropertyWrapperAsync<WindowInterop>(JsRuntimeObjectRef, "top", SerializationSpec);
+            return await jsRuntime.GetInstancePropertyWrapperAsync<WindowInterop>(jsObjectRef, "top", SerializationSpec);
         }
 
         /// <summary>
@@ -241,7 +243,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public async ValueTask<WindowVisualViewPort> VisualViewport()
         {
-            return await jsRuntime.GetInstancePropertyWrapperAsync<WindowVisualViewPort>(JsRuntimeObjectRef, "visualViewport");
+            return await jsRuntime.GetInstancePropertyWrapperAsync<WindowVisualViewPort>(jsObjectRef, "visualViewport");
         }
 
         /// <summary>
@@ -263,7 +265,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public async ValueTask Alert(string message)
         {
-            await jsRuntime.InvokeInstanceMethod(JsRuntimeObjectRef, "alert", message);
+            await jsRuntime.InvokeInstanceMethod(jsObjectRef, "alert", message);
         }
 
         /// <summary>
@@ -272,7 +274,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public async ValueTask Blur()
         {
-            await jsRuntime.InvokeInstanceMethod(JsRuntimeObjectRef, "blur");
+            await jsRuntime.InvokeInstanceMethod(jsObjectRef, "blur");
         }
 
         /// <summary>
@@ -281,7 +283,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public async ValueTask Close()
         {
-            await jsRuntime.InvokeInstanceMethod(JsRuntimeObjectRef, "close");
+            await jsRuntime.InvokeInstanceMethod(jsObjectRef, "close");
         }
 
         /// <summary>
@@ -291,7 +293,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public async ValueTask<bool> Confirm(string message)
         {
-            return await jsRuntime.InvokeInstanceMethodAsync<bool>(JsRuntimeObjectRef, "confirm", message);
+            return await jsRuntime.InvokeInstanceMethodAsync<bool>(jsObjectRef, "confirm", message);
         }
 
         /// <summary>
@@ -300,7 +302,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public async ValueTask Focus()
         {
-            await jsRuntime.InvokeInstanceMethod(JsRuntimeObjectRef, "focus");
+            await jsRuntime.InvokeInstanceMethod(jsObjectRef, "focus");
         }
 
         /// <summary>
@@ -311,7 +313,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public async ValueTask MoveBy(int deltaX, int deltaY)
         {
-            await jsRuntime.InvokeInstanceMethod(JsRuntimeObjectRef, "moveBy", deltaX, deltaY);
+            await jsRuntime.InvokeInstanceMethod(jsObjectRef, "moveBy", deltaX, deltaY);
         }
 
         /// <summary>
@@ -322,7 +324,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public async ValueTask MoveTo(int x, int y)
         {
-            await jsRuntime.InvokeInstanceMethod(JsRuntimeObjectRef, "moveTo", x, y);
+            await jsRuntime.InvokeInstanceMethod(jsObjectRef, "moveTo", x, y);
         }
 
         /// <summary>
@@ -332,10 +334,10 @@ namespace BrowserInterop
         /// <param name="windowName">the name of the browsing context (window, <iframe> or tab) into which to load the specified resource; if the name doesn't indicate an existing context, a new window is created and is given the name specified by windowName.</param>
         /// <param name="windowFeature">comma-separated list of window features given with their corresponding values in the form "name=value". These features include options such as the window's default size and position, whether or not to include scroll bars, and so forth. There must be no whitespace in the string.</param>
         /// <returns></returns>
-        public async ValueTask<WindowInterop> Open(string url, string windowName = null, WindowFeature windowFeature = null)
+        public async ValueTask<WindowInterop> Open(Uri url, string windowName = null, WindowFeature windowFeature = null)
         {
 
-            JsRuntimeObjectRef windowOpenRef = await jsRuntime.InvokeInstanceMethodGetRef(JsRuntimeObjectRef, "open", url, windowName, windowFeature?.GetOpenString());
+            JsRuntimeObjectRef windowOpenRef = await jsRuntime.InvokeInstanceMethodGetRef(jsObjectRef, "open", url, windowName, windowFeature?.GetOpenString());
             WindowInterop windowInterop = await jsRuntime.GetInstanceContent<WindowInterop>(windowOpenRef, SerializationSpec);
             windowInterop.SetJsRuntime(jsRuntime, windowOpenRef);
             return windowInterop;
@@ -350,7 +352,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public async ValueTask PostMessage(object message, string targetOrigin)
         {
-            await jsRuntime.InvokeInstanceMethod(JsRuntimeObjectRef, "postMessage", message, targetOrigin);
+            await jsRuntime.InvokeInstanceMethod(jsObjectRef, "postMessage", message, targetOrigin);
         }
 
         /// <summary>
@@ -362,7 +364,7 @@ namespace BrowserInterop
         public async ValueTask<IAsyncDisposable> OnMessage<T>(Func<MessageEvent<T>, ValueTask> todo)
         {
             return await jsRuntime.AddEventListener(
-                JsRuntimeObjectRef,
+                jsObjectRef,
                  "",
                  "message",
                 CallBackInteropWrapper.Create<JsRuntimeObjectRef>(
@@ -387,7 +389,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public async ValueTask Print()
         {
-            await jsRuntime.InvokeInstanceMethod(JsRuntimeObjectRef, "print");
+            await jsRuntime.InvokeInstanceMethod(jsObjectRef, "print");
         }
 
         /// <summary>
@@ -398,7 +400,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public async ValueTask<string> Prompt(string message, string defaultValue = null)
         {
-            return await jsRuntime.InvokeInstanceMethodAsync<string>(JsRuntimeObjectRef, "prompt", message, defaultValue);
+            return await jsRuntime.InvokeInstanceMethodAsync<string>(jsObjectRef, "prompt", message, defaultValue);
         }
 
         /// <summary>
@@ -408,7 +410,7 @@ namespace BrowserInterop
         /// <returns>The request ID, can be used for cancelling it</returns>
         public async ValueTask<int> RequestAnimationFrame(Func<double, ValueTask> callback)
         {
-            return await jsRuntime.InvokeInstanceMethodAsync<int>(JsRuntimeObjectRef, "requestAnimationFrame", CallBackInteropWrapper.Create(callback));
+            return await jsRuntime.InvokeInstanceMethodAsync<int>(jsObjectRef, "requestAnimationFrame", CallBackInteropWrapper.Create(callback));
         }
 
         /// <summary>
@@ -418,7 +420,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public async ValueTask CancelAnimationFrame(int id)
         {
-            await jsRuntime.InvokeInstanceMethod(JsRuntimeObjectRef, "cancelAnimationFrame", id);
+            await jsRuntime.InvokeInstanceMethod(jsObjectRef, "cancelAnimationFrame", id);
         }
 
         /// <summary>
@@ -428,7 +430,7 @@ namespace BrowserInterop
         /// <returns>The request ID, can be used for cancelling it</returns>
         public async ValueTask<int> RequestIdleCallback(Func<IdleDeadline, ValueTask> callback, RequestIdleCallbackOptions options = null)
         {
-            return await jsRuntime.InvokeInstanceMethodAsync<int>(JsRuntimeObjectRef, "requestIdleCallback", CallBackInteropWrapper.Create<JsRuntimeObjectRef>(async jsRef =>
+            return await jsRuntime.InvokeInstanceMethodAsync<int>(jsObjectRef, "requestIdleCallback", CallBackInteropWrapper.Create<JsRuntimeObjectRef>(async jsRef =>
             {
                 IdleDeadline idleDeadline = await jsRuntime.GetInstanceContent<IdleDeadline>(jsRef, true);
                 idleDeadline.SetJsRuntime(jsRuntime, jsRef);
@@ -443,7 +445,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public async ValueTask CancelIdleCallback(int id)
         {
-            await jsRuntime.InvokeInstanceMethod(JsRuntimeObjectRef, "cancelIdleCallback", id);
+            await jsRuntime.InvokeInstanceMethod(jsObjectRef, "cancelIdleCallback", id);
         }
 
         /// <summary>
@@ -454,7 +456,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public async ValueTask ResizeBy(int xDelta, int yDelta)
         {
-            await jsRuntime.InvokeInstanceMethod(JsRuntimeObjectRef, "resizeBy", xDelta, yDelta);
+            await jsRuntime.InvokeInstanceMethod(jsObjectRef, "resizeBy", xDelta, yDelta);
         }
 
         /// <summary>
@@ -465,7 +467,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public async ValueTask ResizeTo(int width, int height)
         {
-            await jsRuntime.InvokeInstanceMethod(JsRuntimeObjectRef, "resizeTo", width, height);
+            await jsRuntime.InvokeInstanceMethod(jsObjectRef, "resizeTo", width, height);
         }
 
         /// <summary>
@@ -476,7 +478,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public async ValueTask Scroll(int xCoord, int yCoord)
         {
-            await jsRuntime.InvokeInstanceMethod(JsRuntimeObjectRef, "scroll", xCoord, yCoord);
+            await jsRuntime.InvokeInstanceMethod(jsObjectRef, "scroll", xCoord, yCoord);
 
         }
 
@@ -487,7 +489,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public async ValueTask Scroll(ScrollToOptions options)
         {
-            await jsRuntime.InvokeInstanceMethod(JsRuntimeObjectRef, "scroll", options);
+            await jsRuntime.InvokeInstanceMethod(jsObjectRef, "scroll", options);
         }
 
         /// <summary>
@@ -498,7 +500,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public async ValueTask ScrollBy(int xCoord, int yCoord)
         {
-            await jsRuntime.InvokeInstanceMethod(JsRuntimeObjectRef, "scrollBy", xCoord, yCoord);
+            await jsRuntime.InvokeInstanceMethod(jsObjectRef, "scrollBy", xCoord, yCoord);
 
         }
 
@@ -509,7 +511,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public async ValueTask ScrollBy(ScrollToOptions options)
         {
-            await jsRuntime.InvokeInstanceMethod(JsRuntimeObjectRef, "scrollBy", options);
+            await jsRuntime.InvokeInstanceMethod(jsObjectRef, "scrollBy", options);
         }
 
         /// <summary>
@@ -518,7 +520,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public async ValueTask Stop()
         {
-            await jsRuntime.InvokeInstanceMethod(JsRuntimeObjectRef, "stop");
+            await jsRuntime.InvokeInstanceMethod(jsObjectRef, "stop");
 
         }
 
@@ -529,7 +531,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public async ValueTask<IAsyncDisposable> OnAppInstalled(Func<ValueTask> callback)
         {
-            return await jsRuntime.AddEventListener(JsRuntimeObjectRef, "", "appinstalled", CallBackInteropWrapper.Create(callback, serializationSpec: false));
+            return await jsRuntime.AddEventListener(jsObjectRef, "", "appinstalled", CallBackInteropWrapper.Create(callback, serializationSpec: false));
         }
 
         /// <summary>
@@ -539,7 +541,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public async ValueTask<IAsyncDisposable> OnError(Func<ValueTask> callback)
         {
-            return await jsRuntime.AddEventListener(JsRuntimeObjectRef, "", "error", CallBackInteropWrapper.Create(callback, serializationSpec: false));
+            return await jsRuntime.AddEventListener(jsObjectRef, "", "error", CallBackInteropWrapper.Create(callback, serializationSpec: false));
         }
 
         /// <summary>
@@ -549,7 +551,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public async ValueTask<IAsyncDisposable> OnLanguageCHange(Func<ValueTask> callback)
         {
-            return await jsRuntime.AddEventListener(JsRuntimeObjectRef, "", "languagechange", CallBackInteropWrapper.Create(callback, serializationSpec: false));
+            return await jsRuntime.AddEventListener(jsObjectRef, "", "languagechange", CallBackInteropWrapper.Create(callback, serializationSpec: false));
         }
 
         /// <summary>
@@ -559,7 +561,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public async ValueTask<IAsyncDisposable> OnOrientationChange(Func<ValueTask> callback)
         {
-            return await jsRuntime.AddEventListener(JsRuntimeObjectRef, "", "orientationchange", CallBackInteropWrapper.Create(callback, serializationSpec: false));
+            return await jsRuntime.AddEventListener(jsObjectRef, "", "orientationchange", CallBackInteropWrapper.Create(callback, serializationSpec: false));
         }
 
         /// <summary>
@@ -570,7 +572,7 @@ namespace BrowserInterop
         public async ValueTask<IAsyncDisposable> OnBeforeInstallPrompt(Func<BeforeInstallPromptEvent, ValueTask> callback)
         {
             return await jsRuntime.AddEventListener(
-                JsRuntimeObjectRef, "",
+                jsObjectRef, "",
                 "beforeinstallprompt",
                 CallBackInteropWrapper.Create<JsRuntimeObjectRef>(
                     async jsObjectRef =>
@@ -597,7 +599,7 @@ namespace BrowserInterop
         public async ValueTask<IAsyncDisposable> OnHashChange(Func<ValueTask> callback)
         {
             return await jsRuntime.AddEventListener(
-                           JsRuntimeObjectRef, "",
+                           jsObjectRef, "",
                            "hashchange",
                            CallBackInteropWrapper.Create(
                                async () =>
@@ -618,7 +620,7 @@ namespace BrowserInterop
         public async ValueTask<IAsyncDisposable> OnDeviceMotion(Func<DeviceMotionEvent, ValueTask> callback)
         {
             return await jsRuntime.AddEventListener(
-                          JsRuntimeObjectRef, "",
+                          jsObjectRef, "",
                           "devicemotion",
                           CallBackInteropWrapper.Create<DeviceMotionEvent>(
                               async (e) =>
@@ -644,7 +646,7 @@ namespace BrowserInterop
         public async ValueTask<IAsyncDisposable> OnDeviceOrientation(Func<DeviceOrientationEvent, ValueTask> callback)
         {
             return await jsRuntime.AddEventListener(
-                          JsRuntimeObjectRef, "",
+                          jsObjectRef, "",
                           "deviceorientation",
                           CallBackInteropWrapper.Create<DeviceOrientationEvent>(
                               async (e) =>
@@ -670,7 +672,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public async ValueTask<IAsyncDisposable> OnAfterPrint(Func<ValueTask> callback)
         {
-            return await jsRuntime.AddEventListener(JsRuntimeObjectRef, "", "afterprint", CallBackInteropWrapper.Create(callback, serializationSpec: false));
+            return await jsRuntime.AddEventListener(jsObjectRef, "", "afterprint", CallBackInteropWrapper.Create(callback, serializationSpec: false));
         }
 
 
@@ -681,7 +683,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public async ValueTask<IAsyncDisposable> OnBeforePrint(Func<ValueTask> callback)
         {
-            return await jsRuntime.AddEventListener(JsRuntimeObjectRef, "", "beforeprint", CallBackInteropWrapper.Create(callback, serializationSpec: false));
+            return await jsRuntime.AddEventListener(jsObjectRef, "", "beforeprint", CallBackInteropWrapper.Create(callback, serializationSpec: false));
         }
 
         /// <summary>
@@ -692,7 +694,7 @@ namespace BrowserInterop
         public async ValueTask<IAsyncDisposable> OnBeforeUnload(Func<BeforeUnloadEvent, ValueTask> callback)
         {
             return await jsRuntime.AddEventListener(
-                            JsRuntimeObjectRef, "",
+                            jsObjectRef, "",
                             "beforeunload",
                             CallBackInteropWrapper.Create<JsRuntimeObjectRef>(
                                 async (e) =>
@@ -710,7 +712,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public async ValueTask<IAsyncDisposable> OnBlur(Func<ValueTask> callback)
         {
-            return await jsRuntime.AddEventListener(JsRuntimeObjectRef, "", "blur", CallBackInteropWrapper.Create(callback, serializationSpec: false));
+            return await jsRuntime.AddEventListener(jsObjectRef, "", "blur", CallBackInteropWrapper.Create(callback, serializationSpec: false));
         }
 
         /// <summary>
@@ -720,7 +722,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public async ValueTask<IAsyncDisposable> OnClose(Func<ValueTask> callback)
         {
-            return await jsRuntime.AddEventListener(JsRuntimeObjectRef, "", "close", CallBackInteropWrapper.Create(callback, serializationSpec: false));
+            return await jsRuntime.AddEventListener(jsObjectRef, "", "close", CallBackInteropWrapper.Create(callback, serializationSpec: false));
         }
 
 
@@ -732,7 +734,7 @@ namespace BrowserInterop
         public async ValueTask<IAsyncDisposable> OnContextMenu(Func<CancellableEvent, ValueTask> callback)
         {
             return await jsRuntime.AddEventListener(
-                        JsRuntimeObjectRef, "",
+                        jsObjectRef, "",
                         "contextmenu",
                         CallBackInteropWrapper.Create<JsRuntimeObjectRef>(
                             async (e) =>
@@ -750,7 +752,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public async ValueTask<IAsyncDisposable> OnFocus(Func<ValueTask> callback)
         {
-            return await jsRuntime.AddEventListener(JsRuntimeObjectRef, "", "focus", CallBackInteropWrapper.Create(callback, serializationSpec: false));
+            return await jsRuntime.AddEventListener(jsObjectRef, "", "focus", CallBackInteropWrapper.Create(callback, serializationSpec: false));
         }
 
         /// <summary>
@@ -760,7 +762,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public async ValueTask<IAsyncDisposable> OnLoad(Func<ValueTask> callback)
         {
-            return await jsRuntime.AddEventListener(JsRuntimeObjectRef, "", "load", CallBackInteropWrapper.Create(callback, serializationSpec: false));
+            return await jsRuntime.AddEventListener(jsObjectRef, "", "load", CallBackInteropWrapper.Create(callback, serializationSpec: false));
         }
 
         /// <summary>
@@ -770,7 +772,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public async ValueTask<IAsyncDisposable> OnOffline(Func<ValueTask> callback)
         {
-            return await jsRuntime.AddEventListener(JsRuntimeObjectRef, "", "offline", CallBackInteropWrapper.Create(callback, serializationSpec: false));
+            return await jsRuntime.AddEventListener(jsObjectRef, "", "offline", CallBackInteropWrapper.Create(callback, serializationSpec: false));
         }
         /// <summary>
         /// fired when the browser has gained access to the network and the value of Navigator.onLine switches to true.
@@ -779,7 +781,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public async ValueTask<IAsyncDisposable> OnOnline(Func<ValueTask> callback)
         {
-            return await jsRuntime.AddEventListener(JsRuntimeObjectRef, "", "online", CallBackInteropWrapper.Create(callback, serializationSpec: false));
+            return await jsRuntime.AddEventListener(jsObjectRef, "", "online", CallBackInteropWrapper.Create(callback, serializationSpec: false));
         }
 
         /// <summary>
@@ -789,7 +791,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public async ValueTask<IAsyncDisposable> OnPageHide(Func<PageTransitionEvent, ValueTask> callback)
         {
-            return await jsRuntime.AddEventListener(JsRuntimeObjectRef, "", "pagehide", CallBackInteropWrapper.Create<PageTransitionEvent>(callback, serializationSpec: new { persisted = true }));
+            return await jsRuntime.AddEventListener(jsObjectRef, "", "pagehide", CallBackInteropWrapper.Create<PageTransitionEvent>(callback, serializationSpec: new { persisted = true }));
         }
 
 
@@ -800,7 +802,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public async ValueTask<IAsyncDisposable> OnPageShow(Func<PageTransitionEvent, ValueTask> callback)
         {
-            return await jsRuntime.AddEventListener(JsRuntimeObjectRef, "", "pageshow", CallBackInteropWrapper.Create<PageTransitionEvent>(callback, serializationSpec: new { persisted = true }));
+            return await jsRuntime.AddEventListener(jsObjectRef, "", "pageshow", CallBackInteropWrapper.Create<PageTransitionEvent>(callback, serializationSpec: new { persisted = true }));
         }
 
         /// <summary>
@@ -810,7 +812,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public async ValueTask<IAsyncDisposable> OnPopState<T>(Func<T, ValueTask> callback)
         {
-            return await jsRuntime.AddEventListener(JsRuntimeObjectRef, "", "popstate", CallBackInteropWrapper.Create<PopStateEvent<T>>(async p => await callback(p.State), new { state = "*" }));
+            return await jsRuntime.AddEventListener(jsObjectRef, "", "popstate", CallBackInteropWrapper.Create<PopStateEvent<T>>(async p => await callback(p.State), new { state = "*" }));
         }
 
 
@@ -821,7 +823,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public async ValueTask<IAsyncDisposable> OnResize(Func<ValueTask> callback)
         {
-            return await jsRuntime.AddEventListener(JsRuntimeObjectRef, "", "resize", CallBackInteropWrapper.Create(callback, serializationSpec: false));
+            return await jsRuntime.AddEventListener(jsObjectRef, "", "resize", CallBackInteropWrapper.Create(callback, serializationSpec: false));
         }
 
         /// <summary>
@@ -831,7 +833,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public async ValueTask<IAsyncDisposable> OnScroll(Func<ValueTask> callback)
         {
-            return await jsRuntime.AddEventListener(JsRuntimeObjectRef, "", "scroll", CallBackInteropWrapper.Create(callback, serializationSpec: false));
+            return await jsRuntime.AddEventListener(jsObjectRef, "", "scroll", CallBackInteropWrapper.Create(callback, serializationSpec: false));
         }
 
         /// <summary>
@@ -841,12 +843,12 @@ namespace BrowserInterop
         /// <returns></returns>
         public async ValueTask<IAsyncDisposable> OnWheel(Func<WheelEvent, ValueTask> callback)
         {
-            return await jsRuntime.AddEventListener(JsRuntimeObjectRef, "", "wheel", CallBackInteropWrapper.Create(callback, serializationSpec: new { deltaX = true, deltaY = true, deltaZ = true, deltaMode = true }));
+            return await jsRuntime.AddEventListener(jsObjectRef, "", "wheel", CallBackInteropWrapper.Create(callback, serializationSpec: new { deltaX = true, deltaY = true, deltaZ = true, deltaMode = true }));
         }
 
         public async ValueTask<IAsyncDisposable> OnStorage(Func<StorageEvent, ValueTask> callback)
         {
-            return await jsRuntime.AddEventListener(JsRuntimeObjectRef, "", "storage",
+            return await jsRuntime.AddEventListener(jsObjectRef, "", "storage",
                 CallBackInteropWrapper.Create<JsRuntimeObjectRef>(
                     async (jsObject) =>
                     {
@@ -867,7 +869,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public async ValueTask<IAsyncDisposable> OnUnload(Func<ValueTask> callback)
         {
-            return await jsRuntime.AddEventListener(JsRuntimeObjectRef, "", "unload", CallBackInteropWrapper.Create(callback, serializationSpec: false));
+            return await jsRuntime.AddEventListener(jsObjectRef, "", "unload", CallBackInteropWrapper.Create(callback, serializationSpec: false));
         }
     }
 }

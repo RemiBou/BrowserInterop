@@ -1,12 +1,15 @@
 
 using System;
+using System.Globalization;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace BrowserInterop
+namespace BrowserInterop.Extensions
 {
     //from https://github.com/dotnet/corefx/issues/41442#issuecomment-553196880
+#pragma warning disable CA1812 // This is used as a converter 
     internal class HandleSpecialDoublesAsStrings : JsonConverter<double>
+#pragma warning restore CA1812
     {
         public override double Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
@@ -37,7 +40,7 @@ namespace BrowserInterop
             }
             else
             {
-                writer.WriteStringValue(value.ToString());
+                writer.WriteStringValue(value.ToString(CultureInfo.InvariantCulture));
             }
         }
     }

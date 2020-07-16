@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using System.Text.Json.Serialization;
 
 namespace BrowserInterop
@@ -44,7 +45,9 @@ namespace BrowserInterop
         {
             get
             {
-                return Behavior.ToString().ToLower();
+#pragma warning disable CA1308 // Normaliser les chaînes en majuscules
+                return Behavior.ToString().ToLower(CultureInfo.InvariantCulture);
+#pragma warning restore CA1308 // Normaliser les chaînes en majuscules
             }
             set
             {

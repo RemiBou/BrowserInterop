@@ -2,6 +2,7 @@
 @implements IAsyncDisposable
 @inject IJSRuntime jsRuntime;
 @using BrowserInterop
+@using BrowserInterop.Extensions
 @using BrowserInterop.Geolocation;
 @using BrowserInterop.Storage;
 @using System.Globalization
@@ -193,7 +194,7 @@ Method calls
     }
     public async Task SendBeacon()
     {
-        await navigator.SendBeacon("/test", "BLBLA");
+        await navigator.SendBeacon(new Uri("/test"), "BLBLA");
     }
     public async Task RegisterProtocolHandler()
     {

@@ -21,7 +21,7 @@ namespace BrowserInterop.Geolocation
                 1 => GeolocationPositionErrorEnum.PermissionDenied,
                 2 => GeolocationPositionErrorEnum.PositionUnavailable,
                 3 => GeolocationPositionErrorEnum.Timeout,
-                _ => throw new ArgumentOutOfRangeException($"GeolocationPositionError.Code:{Code}")
+                _ => throw new NotSupportedException($"GeolocationPositionError.Code:{Code}")
             };
         }
 

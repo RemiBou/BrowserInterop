@@ -15,6 +15,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{C3339D2A
 EndProject
 Project("{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}") = "BrowserInterop.E2ETests", "test\BrowserInterop.E2ETests\BrowserInterop.E2ETests.njsproj", "{5F60DD1D-13FF-4983-B6BD-A78054A09F8E}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{BEEEB6C2-9BD6-42A6-816D-D05DE0C6F649}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

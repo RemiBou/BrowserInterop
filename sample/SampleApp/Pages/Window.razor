@@ -1,7 +1,9 @@
 @page "/window"
 @inject IJSRuntime jsRuntime;
 @using BrowserInterop
-<iframe id="child-iframe" src="/navigator"></iframe><br/>
+@using BrowserInterop.Extensions
+<iframe id="child-iframe" src="/navigator"></iframe>
+<br />
 <button id="btn-window" @onclick="async() => window = await jsRuntime.Window()">Get window</button>
 
 <button id="btn-window-child-frame-console" @onclick="ChildFrameConsole">Child frame console</button>
@@ -23,7 +25,7 @@
 <button id="btn-window-prompt" @onclick="@(async() => await window.Prompt("message","return"))">Prompt</button>
 <button id="btn-window-cancelAnimationFrame" @onclick="@(async() => await window.CancelAnimationFrame(1))">cancelAnimationFrame</button>
 
-<button id="btn-window-open" @onclick="@(async() => opened = await window.Open("/window", "_blank", new WindowFeature(){ MenuBar = false }))">Open</button>
+<button id="btn-window-open" @onclick="@(async() => opened = await window.Open(new Uri("/window"), "_blank", new WindowFeature(){ MenuBar = false }))">Open</button>
 <button id="btn-window-refresh-opened" @onclick="@(async() => opened = await jsRuntime.GetInstanceContent(opened, null))">Refresh Opened</button>
 <button id="btn-window-resizeBy" @onclick="@(async() => await window.ResizeBy(100,200))">ResizeBy</button>
 <button id="btn-window-resizeTo" @onclick="@(async() => await window.ResizeTo(150,250))">ResizeTo</button>
@@ -32,16 +34,17 @@
 <button id="btn-window-stop" @onclick="@(async() => await window.Stop())">Stop</button>
 
 
-<button id="btn-window-close-opened" @onclick="@(async() => {await opened.Close(); await opened.DisposeAsync();})">Close Opened</button><br/>
+<button id="btn-window-close-opened" @onclick="@(async() => {await opened.Close(); await opened.DisposeAsync();})">Close Opened</button>
+<br />
 Window :
 <ul>
     <li>animationFrame : <span id="window-requestAnimationFrame">@animationFrame</span></li>
     <li>requestIdleCallback : <span id="window-requestIdleCallback">@requestIdleCallback</span></li>
     <li>requestIdleCallbackTimeout : <span id="window-requestIdleCallbackTimeout">@requestIdleCallbackTimeout</span></li>
     <li>InnerHeight: <span id="window-innerHeight">@window?.InnerHeight</span></li>
-    <li>InnerWidth: <span id="window-innerWidth">@window?.InnerWidth</span></li>  
+    <li>InnerWidth: <span id="window-innerWidth">@window?.InnerWidth</span></li>
     <li>OuterHeight: <span id="window-outerHeight">@window?.OuterHeight</span></li>
-    <li>OuterWidth: <span id="window-outerWidth">@window?.OuterWidth</span></li>  
+    <li>OuterWidth: <span id="window-outerWidth">@window?.OuterWidth</span></li>
     <li>Name: <span id="window-name">@window?.Name</span></li>
     <li>Opener Name: <span id="window-opener-name">@opener?.Name</span></li>
     <li>Parent Name: <span id="window-parent-name">@parent?.Name</span></li>
@@ -68,10 +71,10 @@ Visual Viewport :
 </ul>
 WIndow opened :
 <ul>
-      <li>InnerHeight: <span id="opened-innerHeight">@opened?.InnerHeight</span></li>
-    <li>InnerWidth: <span id="opened-innerWidth">@opened?.InnerWidth</span></li>  
+    <li>InnerHeight: <span id="opened-innerHeight">@opened?.InnerHeight</span></li>
+    <li>InnerWidth: <span id="opened-innerWidth">@opened?.InnerWidth</span></li>
     <li>OuterHeight: <span id="opened-outerHeight">@opened?.OuterHeight</span></li>
-    <li>OuterWidth: <span id="opened-outerWidth">@opened?.OuterWidth</span></li>  
+    <li>OuterWidth: <span id="opened-outerWidth">@opened?.OuterWidth</span></li>
     <li>Name: <span id="opened-name">@opened?.Name</span></li>
     <li>ScreenX: <span id="opened-ScreenX">@opened?.ScreenX</span></li>
     <li>ScreenY: <span id="opened-ScreenY">@opened?.ScreenY</span></li>
@@ -88,7 +91,8 @@ PostMessage Payload :
     <li>Source is not null : <span id="window-message-source">@((onMessageEventPayload?.Source != null).ToString().ToLower())</span></li>
 </ul>
 
-Event triggered : <br/>
+Event triggered :
+<br />
 <ul>
     @foreach (var evt in eventTriggered)
     {
@@ -98,61 +102,68 @@ Event triggered : <br/>
 
 Before Install :
 <ul>
-@if(beforeInstallPlatforms != null){
-    <li id="window-event-onbeforeinstallprompt-platforms">@string.Join(",", beforeInstallPlatforms)</li>
-    
-    <li id="window-event-onbeforeinstallprompt-userChoice">@beforeInstallAccepted.ToString().ToLower()</li>
-}
+    @if (beforeInstallPlatforms != null)
+    {
+        <li id="window-event-onbeforeinstallprompt-platforms">@string.Join(",", beforeInstallPlatforms)</li>
+
+        <li id="window-event-onbeforeinstallprompt-userChoice">@beforeInstallAccepted.ToString().ToLower()</li>
+    }
 </ul>
-Device Motion Event : 
+Device Motion Event :
 <ul>
-    @if(deviceMotionEvent != null){
-           <li id="window-event-ondevicemotion-acceleration-x">@deviceMotionEvent.Acceleration.X</li>
-           <li id="window-event-ondevicemotion-acceleration-y">@deviceMotionEvent.Acceleration.Y</li>
-           <li id="window-event-ondevicemotion-acceleration-z">@deviceMotionEvent.Acceleration.Z</li>
-           <li id="window-event-ondevicemotion-accelerationIncludingGravity-x">@deviceMotionEvent.AccelerationIncludingGravity.X</li>
-           <li id="window-event-ondevicemotion-accelerationIncludingGravity-y">@deviceMotionEvent.AccelerationIncludingGravity.Y</li>
-           <li id="window-event-ondevicemotion-accelerationIncludingGravity-z">@deviceMotionEvent.AccelerationIncludingGravity.Z</li>
-           <li id="window-event-ondevicemotion-rotationRate-alpha">@deviceMotionEvent.RotationRate.Alpha</li>
-           <li id="window-event-ondevicemotion-rotationRate-beta">@deviceMotionEvent.RotationRate.Beta</li>
-           <li id="window-event-ondevicemotion-rotationRate-gamma">@deviceMotionEvent.RotationRate.Gamma</li>
-           <li id="window-event-ondevicemotion-interval">@deviceMotionEvent.Interval</li>
+    @if (deviceMotionEvent != null)
+    {
+        <li id="window-event-ondevicemotion-acceleration-x">@deviceMotionEvent.Acceleration.X</li>
+        <li id="window-event-ondevicemotion-acceleration-y">@deviceMotionEvent.Acceleration.Y</li>
+        <li id="window-event-ondevicemotion-acceleration-z">@deviceMotionEvent.Acceleration.Z</li>
+        <li id="window-event-ondevicemotion-accelerationIncludingGravity-x">@deviceMotionEvent.AccelerationIncludingGravity.X</li>
+        <li id="window-event-ondevicemotion-accelerationIncludingGravity-y">@deviceMotionEvent.AccelerationIncludingGravity.Y</li>
+        <li id="window-event-ondevicemotion-accelerationIncludingGravity-z">@deviceMotionEvent.AccelerationIncludingGravity.Z</li>
+        <li id="window-event-ondevicemotion-rotationRate-alpha">@deviceMotionEvent.RotationRate.Alpha</li>
+        <li id="window-event-ondevicemotion-rotationRate-beta">@deviceMotionEvent.RotationRate.Beta</li>
+        <li id="window-event-ondevicemotion-rotationRate-gamma">@deviceMotionEvent.RotationRate.Gamma</li>
+        <li id="window-event-ondevicemotion-interval">@deviceMotionEvent.Interval</li>
 
 
     }
 </ul>
-Device Orientation Event : 
+Device Orientation Event :
 <ul>
-    @if(deviceOrientationEvent != null){
-           <li id="window-event-ondeviceorientation-alpha">@deviceOrientationEvent.Alpha</li>
-           <li id="window-event-ondeviceorientation-beta">@deviceOrientationEvent.Beta</li>
-           <li id="window-event-ondeviceorientation-gamma">@deviceOrientationEvent.Gamma</li>
-           <li id="window-event-ondeviceorientation-absolute">@deviceOrientationEvent.Absolute.ToString().ToLower()</li>
+    @if (deviceOrientationEvent != null)
+    {
+        <li id="window-event-ondeviceorientation-alpha">@deviceOrientationEvent.Alpha</li>
+        <li id="window-event-ondeviceorientation-beta">@deviceOrientationEvent.Beta</li>
+        <li id="window-event-ondeviceorientation-gamma">@deviceOrientationEvent.Gamma</li>
+        <li id="window-event-ondeviceorientation-absolute">@deviceOrientationEvent.Absolute.ToString().ToLower()</li>
 
 
     }
-</ul>  
+</ul>
 Page Hide Event :
 <ul>
-    @if(pageHideTransitionEvent != null){
+    @if (pageHideTransitionEvent != null)
+    {
         <li id="window-event-pagehide-persisted">@pageHideTransitionEvent.Persisted.ToString().ToLower()</li>
     }
 </ul>
 Page Show Event :
 <ul>
-    @if(pageShowTransitionEvent != null){
+    @if (pageShowTransitionEvent != null)
+    {
         <li id="window-event-pageshow-persisted">@pageShowTransitionEvent.Persisted.ToString().ToLower()</li>
     }
 </ul>
 Pop State Event :
 <ul>
-    @if(popState != null){
+    @if (popState != null)
+    {
         <li id="window-event-popstate-test">@popState.Test</li>
     }
 </ul>
 Wheel Event :
 <ul>
-    @if(wheel != null){
+    @if (wheel != null)
+    {
         <li id="window-event-wheel-deltaX">@wheel.DeltaX</li>
         <li id="window-event-wheel-deltaY">@wheel.DeltaY</li>
         <li id="window-event-wheel-deltaZ">@wheel.DeltaZ</li>
@@ -161,7 +172,8 @@ Wheel Event :
 </ul>
 Storage Event :
 <ul>
-    @if(onStorage != null){
+    @if (onStorage != null)
+    {
         <li id="window-event-storage-key">@onStorage.Key</li>
         <li id="window-event-storage-oldValue">@onStorage.OldValue</li>
         <li id="window-event-storage-newValue">@onStorage.NewValue</li>

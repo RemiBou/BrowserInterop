@@ -3,7 +3,7 @@ using Microsoft.JSInterop;
 
 using System.Threading.Tasks;
 
-namespace BrowserInterop
+namespace BrowserInterop.Extensions
 {
 
 

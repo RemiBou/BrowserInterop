@@ -1,8 +1,7 @@
-
 using System;
 using System.Threading.Tasks;
 
-namespace BrowserInterop
+namespace BrowserInterop.Extensions
 {
     internal class ActionAsyncDisposable : IAsyncDisposable
     {

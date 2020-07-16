@@ -1,9 +1,10 @@
+
 using Microsoft.JSInterop;
 
 using System;
 using System.Threading.Tasks;
 
-namespace BrowserInterop
+namespace BrowserInterop.Extensions
 {
     /// <summary>
     /// Wrap a c# action into an object ibvokable by JS

@@ -1,3 +1,5 @@
+using BrowserInterop.Extensions;
+
 using Microsoft.JSInterop;
 
 using System;
@@ -45,7 +47,9 @@ namespace BrowserInterop
         /// <returns></returns>
         public async ValueTask ScrollRestoration(ScrollRestorationEnum value)
         {
-            await jsRuntime.SetInstanceProperty(jsRuntimeObjectRef, "history.scrollRestoration", value.ToString().ToLower());
+#pragma warning disable CA1308 // Normaliser les chaînes en majuscules
+            await jsRuntime.SetInstanceProperty(jsRuntimeObjectRef, "history.scrollRestoration", value.ToString().ToLowerInvariant());
+#pragma warning restore CA1308 // Normaliser les chaînes en majuscules
         }
 
         /// <summary>

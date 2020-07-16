@@ -1,9 +1,11 @@
+using BrowserInterop.Extensions;
+
 using Microsoft.JSInterop;
 
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace BrowserInterop
+namespace BrowserInterop.Storage
 {
     /// <summary>
     /// provides access to a particular domain's session or local storage. It allows, for example, the addition, modification, or deletion of stored data items.

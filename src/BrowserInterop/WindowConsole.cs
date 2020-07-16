@@ -1,8 +1,11 @@
-﻿using Microsoft.AspNetCore.Components;
+﻿using BrowserInterop.Extensions;
+
+using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Threading.Tasks;
 
 namespace BrowserInterop
@@ -15,7 +18,7 @@ namespace BrowserInterop
         /// <summary>
         /// Set to false if you want to disable all the calls to a console function
         /// </summary>
-        public static bool IsEnabled = true;
+        public static bool IsEnabled { get; set; } = true;
         private readonly IJSRuntime jsRuntime;
         private readonly JsRuntimeObjectRef windowObject;
 
@@ -48,7 +51,7 @@ namespace BrowserInterop
         public async ValueTask Assert(bool assertion, string message, params object[] formatParameters)
         {
             if (IsEnabled)
-                await jsRuntime.InvokeInstanceMethod(windowObject, "console.assert", assertion, string.Format(message, formatParameters));
+                await jsRuntime.InvokeInstanceMethod(windowObject, "console.assert", assertion, string.Format(CultureInfo.InvariantCulture, message, formatParameters));
 
         }
 
@@ -105,7 +108,7 @@ namespace BrowserInterop
         public async ValueTask Debug(string message, params object[] formatParameters)
         {
             if (IsEnabled)
-                await jsRuntime.InvokeInstanceMethod(windowObject, "console.debug", string.Format(message, formatParameters));
+                await jsRuntime.InvokeInstanceMethod(windowObject, "console.debug", string.Format(CultureInfo.InvariantCulture, message, formatParameters));
 
         }
 
@@ -152,7 +155,7 @@ namespace BrowserInterop
         public async ValueTask Error(string message, params object[] formatParameters)
         {
             if (IsEnabled)
-                await jsRuntime.InvokeInstanceMethod(windowObject, "console.error", string.Format(message, formatParameters));
+                await jsRuntime.InvokeInstanceMethod(windowObject, "console.error", string.Format(CultureInfo.InvariantCulture, message, formatParameters));
         }
 
         /// <summary>
@@ -213,7 +216,7 @@ namespace BrowserInterop
         public async ValueTask Log(string message, params object[] formatParameters)
         {
             if (IsEnabled)
-                await jsRuntime.InvokeInstanceMethod(windowObject, "console.log", string.Format(message, formatParameters));
+                await jsRuntime.InvokeInstanceMethod(windowObject, "console.log", string.Format(CultureInfo.InvariantCulture, message, formatParameters));
         }
 
         /// <summary>

@@ -12,10 +12,16 @@ namespace BrowserInterop.Performance
         {
             if (!JsonDocument.TryParseValue(ref reader, out JsonDocument jsonDocument))
                 return null;
-
-            string entryTypeStr = jsonDocument.RootElement.GetProperty("entryType").GetString();
-            Type entryType = WindowPerformance.ConvertStringToType(entryTypeStr);
-            return (PerformanceEntry)JsonSerializer.Deserialize(jsonDocument.RootElement.GetRawText(), entryType, options);
+            try
+            {
+                string entryTypeStr = jsonDocument.RootElement.GetProperty("entryType").GetString();
+                Type entryType = WindowPerformance.ConvertStringToType(entryTypeStr);
+                return (PerformanceEntry)JsonSerializer.Deserialize(jsonDocument.RootElement.GetRawText(), entryType, options);
+            }
+            finally
+            {
+                jsonDocument?.Dispose();
+            }
         }
 
         public override void Write(Utf8JsonWriter writer, PerformanceEntry value, JsonSerializerOptions options)

@@ -1,10 +1,11 @@
+
 using Microsoft.JSInterop;
 
 using System;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace BrowserInterop
+namespace BrowserInterop.Extensions
 {
     /// <summary>
     /// Extension to the JSRuntime for using Browser API
@@ -123,32 +124,47 @@ namespace BrowserInterop
         /// <returns></returns>
         public static async ValueTask<T> InvokeInstanceMethodAsync<T>(this IJSRuntime jsRuntime, JsRuntimeObjectRef windowObject, string methodName, params object[] arguments)
         {
+            if (jsRuntime is null)
+            {
+                throw new ArgumentNullException(nameof(jsRuntime));
+            }
+
+            if (windowObject is null)
+            {
+                throw new ArgumentNullException(nameof(windowObject));
+            }
+
             return await jsRuntime.InvokeAsync<T>("browserInterop.callInstanceMethod", new object[] { windowObject, methodName }.Concat(arguments).ToArray());
         }
 
         /// <summary>
         /// Get the js object content
         /// </summary>
-        /// <param name="jsRuntime1">Curent JS Runtime</param>
-        /// <param name="windowObject">Object holding reference to the js object</param>
-        /// <returns></returns>
-        public static async ValueTask<T> GetInstanceContent<T>(this IJSRuntime jsRuntime, T jsObject, Object serializationSpec) where T : JsObjectWrapperBase
-        {
-            T content = await jsRuntime.InvokeAsync<T>("browserInterop.returnInstance", jsObject.JsRuntimeObjectRef, serializationSpec);
-            content.SetJsRuntime(jsRuntime, jsObject.JsRuntimeObjectRef);
-            return content;
-        }
-
-        /// <summary>
-        /// Get the js object content
-        /// </summary>
-        /// <param name="jsRuntime1">Curent JS Runtime</param>
-        /// <param name="windowObject">Reference to the JS instance</param>
+        /// <param name="jsRuntime">Curent JS Runtime</param>
+        /// <param name="jsObject">Reference to the JS instance</param>
         /// <returns></returns>
         public static async ValueTask<T> GetInstanceContent<T>(this IJSRuntime jsRuntime, JsRuntimeObjectRef jsObject, Object serializationSpec)
         {
-            T content = await jsRuntime.InvokeAsync<T>("browserInterop.returnInstance", jsObject, serializationSpec);
-            return content;
+            return await jsRuntime.InvokeAsync<T>("browserInterop.returnInstance", jsObject, serializationSpec);
+        }
+
+        /// <summary>
+        /// Get the js object content updated
+        /// </summary>
+        /// <param name="jsRuntime">Curent JS Runtime</param>
+        /// <param name="jsObject">The JS object for wich you want the content updated</param>
+        /// <param name="serializationSpec"></param>
+        /// <returns></returns>
+        public static async ValueTask<T> GetInstanceContent<T>(this IJSRuntime jsRuntime, T jsObject, Object serializationSpec = null) where T : JsObjectWrapperBase
+        {
+            if (jsObject is null)
+            {
+                throw new ArgumentNullException(nameof(jsObject));
+            }
+
+            T res = await GetInstanceContent<T>(jsRuntime, jsObject.jsObjectRef, serializationSpec);
+            res.SetJsRuntime(jsRuntime, jsObject.jsObjectRef);
+            return res;
         }
 
 
@@ -162,6 +178,11 @@ namespace BrowserInterop
         /// <returns></returns>
         public static async ValueTask<JsRuntimeObjectRef> InvokeInstanceMethodGetRef(this IJSRuntime jsRuntime, JsRuntimeObjectRef windowObject, string methodName, params object[] arguments)
         {
+            if (jsRuntime is null)
+            {
+                throw new ArgumentNullException(nameof(jsRuntime));
+            }
+
             JsRuntimeObjectRef jsRuntimeObjectRef = await jsRuntime.InvokeAsync<JsRuntimeObjectRef>("browserInterop.callInstanceMethodGetRef", new object[] { windowObject, methodName }.Concat(arguments).ToArray());
             jsRuntimeObjectRef.JsRuntime = jsRuntime;
             return jsRuntimeObjectRef;
@@ -209,8 +230,8 @@ namespace BrowserInterop
             }
             catch (TaskCanceledException)
             {
-                //when timeout is reached it raises an exception
-                return await Task.FromResult(default(T));
+                //when timeout is reached, it raises an exception
+                return await Task.FromResult(default(T)).ConfigureAwait(false);
             }
         }
 

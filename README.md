@@ -35,10 +35,10 @@ Reference the needed JS in your index.html (or in your js bundling tool)
 Then in your template enter the API with the Window() extension method like this :
 
 ```c#
-@using BrowserInterop
+@using BrowserInterop.Extensions
 ...
 @code {
-    protected override async Task OnInitializedAsync()
+    protected override async Task OnInitialized()
     {
         var window = await jsRuntime.Window();
         await window.Console.Log("this is a {0}","Log message");
@@ -250,15 +250,15 @@ With the development of the library I needed a few utilities method :
 IJSRuntime jsRuntime;
 // this will get a reference to the js window object that you can use later, it works like ElementReference ofr DotNetRef : you can add it to any method parameter and it 
 // will be changed in the corresponding js object 
-var windowObjectRef = await jsRuntime.GetInstancePropertyAsync<JsRuntimeObjectRef>("window");
+var windowObjectRef = await jsRuntime.GetInstanceProperty<JsRuntimeObjectRef>("window");
 // get the value of window.performance.timeOrigin
-var time = await jsRuntime.GetInstancePropertyAsync<decimal>(windowObjectRef, "performance.timeOrigin");
+var time = await jsRuntime.GetInstanceProperty<decimal>(windowObjectRef, "performance.timeOrigin");
 // set the value of the property window.history.scrollRestoration
-await jsRuntime.SetInstancePropertyAsync(windowObjectRef, "history.scrollRestoration", "auto");
+await jsRuntime.SetInstanceProperty(windowObjectRef, "history.scrollRestoration", "auto");
 //get a reference to window.parent
-var parentRef = await jsRuntime.GetInstancePropertyRefAsync(windowObjectRef, "parent");
+var parentRef = await jsRuntime.GetInstancePropertyRef(windowObjectRef, "parent");
 // call the method window.console.clear with window.console as scope
-await jsRuntime.InvokeInstanceMethodAsync(windowObjectRef, "console.clear");
+await jsRuntime.InvokeInstanceMethod(windowObjectRef, "console.clear");
 // call the method window.history.key(1) with window.history as scope
 await jsRuntime.InvokeInstanceMethodAsync<string>(windowObjectRef, "history.key",1 );
 // will call the method navigator.storage.persist and will return default(bool) if there is no response after 3 secs

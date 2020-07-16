@@ -1,3 +1,5 @@
+using BrowserInterop.Extensions;
+
 using Microsoft.JSInterop;
 
 using System;
@@ -107,9 +109,15 @@ namespace BrowserInterop
     {
         Unknown,
         Slow2G,
+#pragma warning disable CA1707 // Les identificateurs ne doivent pas contenir de traits de soulignement
         _2G,
+#pragma warning restore CA1707 // Les identificateurs ne doivent pas contenir de traits de soulignement
+#pragma warning disable CA1707 // Les identificateurs ne doivent pas contenir de traits de soulignement
         _3G,
+#pragma warning restore CA1707 // Les identificateurs ne doivent pas contenir de traits de soulignement
+#pragma warning disable CA1707 // Les identificateurs ne doivent pas contenir de traits de soulignement
         _4G
+#pragma warning restore CA1707 // Les identificateurs ne doivent pas contenir de traits de soulignement
     }
 
     public enum ConnectionTypeEnum

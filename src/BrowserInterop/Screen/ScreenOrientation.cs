@@ -1,3 +1,5 @@
+using BrowserInterop.Extensions;
+
 using Microsoft.JSInterop;
 
 using System;
@@ -29,7 +31,7 @@ namespace BrowserInterop.Screen
             "portrait-secondary" => ScreenOrientationTypeEnum.PortraitSecondary,
             "landscape-primary" => ScreenOrientationTypeEnum.LandscapePrimary,
             "landscape-secondary" => ScreenOrientationTypeEnum.LandscapeSecondary,
-            _ => throw new ArgumentOutOfRangeException("ScreenOrientationTypeEnum: " + Type)
+            _ => throw new NotSupportedException("ScreenOrientationTypeEnum: " + Type)
         };
 
         /// <summary>
@@ -70,7 +72,7 @@ namespace BrowserInterop.Screen
                 ScreenOrientationTypeEnum.PortraitSecondary => "portrait-secondary",
                 ScreenOrientationTypeEnum.LandscapePrimary => "landscape-primary",
                 ScreenOrientationTypeEnum.LandscapeSecondary => "landscape-secondary",
-                _ => throw new NotImplementedException(),
+                _ => throw new NotSupportedException($"ScreenOrientationTypeEnum: {newOrientation}"),
             });
         }
 
