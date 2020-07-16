@@ -1,9 +1,7 @@
 ﻿using BrowserInterop.Extensions;
 using BrowserInterop.Geolocation;
 using BrowserInterop.Storage;
-
 using Microsoft.JSInterop;
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -41,8 +39,6 @@ namespace BrowserInterop
         public string AppVersion { get; set; }
 
 
-
-
         /// <summary>
         ///  provides information about the system's battery
         /// </summary>
@@ -50,9 +46,7 @@ namespace BrowserInterop
         public async ValueTask<WindowNavigatorBattery> GetBattery()
         {
             return await JsRuntime.InvokeAsync<WindowNavigatorBattery>("browserInterop.navigator.getBattery");
-
         }
-
 
 
         /// <summary>
@@ -81,11 +75,11 @@ namespace BrowserInterop
         /// <returns></returns>
         public async ValueTask<bool> JavaEnabled()
         {
-            return await JsRuntime.InvokeInstanceMethodAsync<bool>(JsObjectRef, "javaEnabled");
+            return await JsRuntime.InvokeInstanceMethod<bool>(JsObjectRef, "javaEnabled");
         }
 
         /// <summary>
-        /// The user prefred language
+        /// The user preferred language
         /// </summary>
         /// <returns></returns>
         public string Language { get; set; }
@@ -129,7 +123,7 @@ namespace BrowserInterop
         public NavigatorPlugin[] Plugins { get; set; }
 
         /// <summary>
-        /// Provides an interface for managing persistance permissions and estimating available storage
+        /// Provides an interface for managing persistence permissions and estimating available storage
         /// </summary>
         /// <value></value>
         public WindowStorageManager Storage { get; private set; }
@@ -147,7 +141,8 @@ namespace BrowserInterop
         /// <returns></returns>
         public async ValueTask<bool> CanShare(ShareData shareData)
         {
-            return await JsRuntime.HasProperty(JsObjectRef, "canShare") && await JsRuntime.InvokeInstanceMethodAsync<bool>(JsObjectRef, "canShare", shareData);
+            return await JsRuntime.HasProperty(JsObjectRef, "canShare") &&
+                   await JsRuntime.InvokeInstanceMethod<bool>(JsObjectRef, "canShare", shareData);
         }
 
         /// <summary>
@@ -159,29 +154,19 @@ namespace BrowserInterop
         /// <param name="urlPattern">A string containing the URL of the handler. This URL must include %s, as a placeholder that will be replaced with the escaped URL to be handled.</param>
         /// <param name="title">A human-readable title string for the handler. This will be displayed to the user, such as prompting “Allow this site to handle [scheme] links?” or listing registered handlers in the browser’s settings.</param>
         /// <returns></returns>
-#pragma warning disable CA1054 // Les paramètres de Uri ne doivent pas être des chaînes
+#pragma warning disable CA1054 
         public async ValueTask RegisterProtocolHandler(string protocol, string urlPattern, string title)
-#pragma warning restore CA1054 // Les paramètres de Uri ne doivent pas être des chaînes
+#pragma warning restore CA1054 
         {
-            if (string.IsNullOrEmpty(protocol))
-            {
-                throw new ArgumentNullException(nameof(protocol));
-            }
+            if (string.IsNullOrEmpty(protocol)) throw new ArgumentNullException(nameof(protocol));
 
-            if (string.IsNullOrEmpty(urlPattern))
-            {
-                throw new ArgumentNullException(nameof(urlPattern));
-            }
+            if (string.IsNullOrEmpty(urlPattern)) throw new ArgumentNullException(nameof(urlPattern));
 
-            if (string.IsNullOrEmpty(title))
-            {
-                throw new ArgumentNullException(nameof(title));
-            }
+            if (string.IsNullOrEmpty(title)) throw new ArgumentNullException(nameof(title));
 
             if (await JsRuntime.HasProperty(JsObjectRef, "registerProtocolHandler"))
-            {
-                await JsRuntime.InvokeInstanceMethod(JsObjectRef, "registerProtocolHandler", protocol, urlPattern, title);
-            }
+                await JsRuntime.InvokeInstanceMethod(JsObjectRef, "registerProtocolHandler", protocol, urlPattern,
+                    title);
         }
 
         /// <summary>
@@ -196,7 +181,8 @@ namespace BrowserInterop
         /// <returns></returns>
         public async ValueTask<bool> SendBeacon(Uri url, object data)
         {
-            return await JsRuntime.HasProperty(JsObjectRef, "sendBeacon") && await JsRuntime.InvokeInstanceMethodAsync<bool>(JsObjectRef, "sendBeacon", url, data);
+            return await JsRuntime.HasProperty(JsObjectRef, "sendBeacon") &&
+                   await JsRuntime.InvokeInstanceMethod<bool>(JsObjectRef, "sendBeacon", url, data);
         }
 
         /// <summary>
@@ -206,7 +192,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public async ValueTask Share(ShareData shareData)
         {
-            await JsRuntime.InvokeInstanceMethodAsync<bool>(JsObjectRef, "share", shareData);
+            await JsRuntime.InvokeInstanceMethod<bool>(JsObjectRef, "share", shareData);
         }
 
         /// <summary>
@@ -216,9 +202,8 @@ namespace BrowserInterop
         /// <returns></returns>
         public async ValueTask Vibrate(IEnumerable<TimeSpan> pattern)
         {
-            await JsRuntime.InvokeInstanceMethodAsync<bool>(JsObjectRef, "vibrate", pattern.Select(t => t.TotalMilliseconds).ToArray());
+            await JsRuntime.InvokeInstanceMethod<bool>(JsObjectRef, "vibrate",
+                pattern.Select(t => t.TotalMilliseconds).ToArray());
         }
-
     }
-
 }

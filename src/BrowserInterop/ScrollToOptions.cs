@@ -22,8 +22,8 @@ namespace BrowserInterop
             Top = top;
             Left = left;
             Behavior = behavior;
-
         }
+
         public int Top { get; set; }
 
         /// <summary>
@@ -40,19 +40,15 @@ namespace BrowserInterop
         public ScrollToOptionsBehaviorEnum Behavior { get; set; }
 
         [JsonPropertyName("behavior")]
-
         public string BehaviorStr
         {
             get
             {
-#pragma warning disable CA1308 // Normaliser les chaînes en majuscules
+#pragma warning disable CA1308 
                 return Behavior.ToString().ToLower(CultureInfo.InvariantCulture);
-#pragma warning restore CA1308 // Normaliser les chaînes en majuscules
+#pragma warning restore CA1308 
             }
-            set
-            {
-                Behavior = Enum.Parse<ScrollToOptionsBehaviorEnum>(value);
-            }
+            set { Behavior = Enum.Parse<ScrollToOptionsBehaviorEnum>(value); }
         }
 
         public enum ScrollToOptionsBehaviorEnum

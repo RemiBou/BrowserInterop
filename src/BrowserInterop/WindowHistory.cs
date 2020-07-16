@@ -1,7 +1,5 @@
 using BrowserInterop.Extensions;
-
 using Microsoft.JSInterop;
-
 using System;
 using System.Threading.Tasks;
 
@@ -28,7 +26,7 @@ namespace BrowserInterop
         /// <value></value>
         public async ValueTask<int> Length()
         {
-            return await jsRuntime.GetInstancePropertyAsync<int>(jsRuntimeObjectRef, "history.length");
+            return await jsRuntime.GetInstanceProperty<int>(jsRuntimeObjectRef, "history.length");
         }
 
         /// <summary>
@@ -37,7 +35,8 @@ namespace BrowserInterop
         /// <returns></returns>
         public async ValueTask<ScrollRestorationEnum> ScrollRestoration()
         {
-            return Enum.Parse<ScrollRestorationEnum>(await jsRuntime.GetInstancePropertyAsync<string>(jsRuntimeObjectRef, "history.scrollRestoration"), true);
+            return Enum.Parse<ScrollRestorationEnum>(
+                await jsRuntime.GetInstanceProperty<string>(jsRuntimeObjectRef, "history.scrollRestoration"), true);
         }
 
         /// <summary>
@@ -47,9 +46,10 @@ namespace BrowserInterop
         /// <returns></returns>
         public async ValueTask ScrollRestoration(ScrollRestorationEnum value)
         {
-#pragma warning disable CA1308 // Normaliser les chaînes en majuscules
-            await jsRuntime.SetInstanceProperty(jsRuntimeObjectRef, "history.scrollRestoration", value.ToString().ToLowerInvariant());
-#pragma warning restore CA1308 // Normaliser les chaînes en majuscules
+#pragma warning disable CA1308 
+            await jsRuntime.SetInstanceProperty(jsRuntimeObjectRef, "history.scrollRestoration",
+                value.ToString().ToLowerInvariant());
+#pragma warning restore CA1308 
         }
 
         /// <summary>
@@ -59,7 +59,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public async ValueTask<T> State<T>()
         {
-            return await jsRuntime.GetInstancePropertyAsync<T>(jsRuntimeObjectRef, "history.state");
+            return await jsRuntime.GetInstanceProperty<T>(jsRuntimeObjectRef, "history.state");
         }
 
         /// <summary>
@@ -101,7 +101,8 @@ namespace BrowserInterop
         /// <returns></returns>
         public async ValueTask PushState(object state, string title, Uri url = null)
         {
-            await jsRuntime.InvokeInstanceMethod(jsRuntimeObjectRef, "history.pushState", state, title, url?.ToString());
+            await jsRuntime.InvokeInstanceMethod(jsRuntimeObjectRef, "history.pushState", state, title,
+                url?.ToString());
         }
 
         /// <summary>
@@ -113,13 +114,16 @@ namespace BrowserInterop
         /// <returns></returns>
         public async ValueTask ReplaceState(object state, string title, Uri url = null)
         {
-            await jsRuntime.InvokeInstanceMethod(jsRuntimeObjectRef, "history.replaceState", state, title, url?.ToString());
+            await jsRuntime.InvokeInstanceMethod(jsRuntimeObjectRef, "history.replaceState", state, title,
+                url?.ToString());
         }
     }
+
     public enum ScrollRestorationEnum
     {
         ///<summary>The location on the page to which the user has scrolled will be restored.</summary>
         Auto,
+
         ///<summary>The location on the page is not restored. The user will have to scroll to the location manually.</summary>
         Manual
     }

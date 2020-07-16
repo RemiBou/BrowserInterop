@@ -21,8 +21,8 @@ namespace BrowserInterop.Geolocation
         [JsonIgnore]
         public TimeSpan? MaximumAgeTimeSpan
         {
-            get => MaximumAge.HasValue ? TimeSpan.FromMilliseconds(MaximumAge.Value) : (TimeSpan?)null;
-            set => MaximumAge = value.HasValue ? value.Value.TotalMilliseconds : (double?)null;
+            get => MaximumAge.HasValue ? TimeSpan.FromMilliseconds(MaximumAge.Value) : (TimeSpan?) null;
+            set => MaximumAge = value?.TotalMilliseconds;
         }
 
         /// <summary>
@@ -38,8 +38,8 @@ namespace BrowserInterop.Geolocation
         [JsonIgnore]
         public TimeSpan? TimeoutTimeSpan
         {
-            get => Timeout.HasValue ? TimeSpan.FromMilliseconds(Timeout.Value) : (TimeSpan?)null;
-            set => Timeout = value.HasValue ? value.Value.TotalMilliseconds : (double?)null;
+            get => Timeout.HasValue ? TimeSpan.FromMilliseconds(Timeout.Value) : (TimeSpan?) null;
+            set => Timeout = value?.TotalMilliseconds;
         }
 
         /// <summary>

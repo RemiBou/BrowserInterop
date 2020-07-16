@@ -1,14 +1,12 @@
 using BrowserInterop.Extensions;
-
 using Microsoft.JSInterop;
-
 using System;
 using System.Threading.Tasks;
 
 namespace BrowserInterop.Storage
 {
     /// <summary>
-    /// provides an interface for managing persistance permissions and estimating available storage
+    /// provides an interface for managing persistence permissions and estimating available storage
     /// </summary>
     public class WindowStorageManager
     {
@@ -31,11 +29,13 @@ namespace BrowserInterop.Storage
         /// <summary>
         /// Requests permission to use persistent storage, and returns  true if permission is granted and box mode is persistent, and false otherwise.
         /// </summary>
-        /// <param name="timeout">In some browser the user will be prompted for validation, this method will return false if the user did not povide an swner before</param>
+        /// <param name="timeout">In some browser the user will be prompted for validation, this method will return false if the user did not provide an answer before</param>
         /// <returns></returns>
         public async ValueTask<bool> Persist(TimeSpan? timeout = null)
         {
-            return await (timeout.HasValue ? jsRuntime.InvokeOrDefaultAsync<bool>("navigator.storage.persist", timeout.Value, null) : jsRuntime.InvokeAsync<bool>("navigator.storage.persist", null));
+            return await (timeout.HasValue
+                ? jsRuntime.InvokeOrDefault<bool>("navigator.storage.persist", timeout.Value, null)
+                : jsRuntime.InvokeAsync<bool>("navigator.storage.persist", null));
         }
 
         /// <summary>
@@ -44,8 +44,9 @@ namespace BrowserInterop.Storage
         /// <returns></returns>
         public async ValueTask<bool> Persisted(TimeSpan? timeout = null)
         {
-            return await (timeout.HasValue ? jsRuntime.InvokeOrDefaultAsync<bool>("navigator.storage.persisted", timeout.Value, null) : jsRuntime.InvokeAsync<bool>("navigator.storage.persisted", null));
+            return await (timeout.HasValue
+                ? jsRuntime.InvokeOrDefault<bool>("navigator.storage.persisted", timeout.Value, null)
+                : jsRuntime.InvokeAsync<bool>("navigator.storage.persisted", null));
         }
-
     }
 }

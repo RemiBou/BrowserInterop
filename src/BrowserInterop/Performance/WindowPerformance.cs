@@ -1,7 +1,5 @@
 using BrowserInterop.Extensions;
-
 using Microsoft.JSInterop;
-
 using System;
 using System.Threading.Tasks;
 
@@ -28,7 +26,7 @@ namespace BrowserInterop.Performance
         /// <value></value>
         public async ValueTask<double> TimeOrigin()
         {
-            return await jsRuntime.GetInstancePropertyAsync<double>(windowRef, "performance.timeOrigin");
+            return await jsRuntime.GetInstanceProperty<double>(windowRef, "performance.timeOrigin");
         }
 
         /// <summary>
@@ -42,7 +40,7 @@ namespace BrowserInterop.Performance
         }
 
         /// <summary>
-        /// emoves the named measure from the browser's performance entry buffer. If the method is called with no arguments, all performance entries with an entry type of "measure" will be removed from the performance entry buffer.
+        /// Removes the named measure from the browser's performance entry buffer. If the method is called with no arguments, all performance entries with an entry type of "measure" will be removed from the performance entry buffer.
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
@@ -67,7 +65,7 @@ namespace BrowserInterop.Performance
         /// <returns></returns>
         public async ValueTask<PerformanceEntry[]> GetEntries()
         {
-            return await jsRuntime.InvokeInstanceMethodAsync<PerformanceEntry[]>(windowRef, "performance.getEntries");
+            return await jsRuntime.InvokeInstanceMethod<PerformanceEntry[]>(windowRef, "performance.getEntries");
         }
 
         /// <summary>
@@ -76,7 +74,8 @@ namespace BrowserInterop.Performance
         /// <returns></returns>
         public async ValueTask<PerformanceEntry[]> GetEntriesByName(string name)
         {
-            return await jsRuntime.InvokeInstanceMethodAsync<PerformanceEntry[]>(windowRef, "performance.getEntriesByName", name);
+            return await jsRuntime.InvokeInstanceMethod<PerformanceEntry[]>(windowRef, "performance.getEntriesByName",
+                name);
         }
 
         /// <summary>
@@ -85,7 +84,8 @@ namespace BrowserInterop.Performance
         /// <returns></returns>
         public async ValueTask<T[]> GetEntriesByName<T>(string name) where T : PerformanceEntry
         {
-            return await jsRuntime.InvokeInstanceMethodAsync<T[]>(windowRef, "performance.getEntriesByName", name, ConvertTypeToString(typeof(T)));
+            return await jsRuntime.InvokeInstanceMethod<T[]>(windowRef, "performance.getEntriesByName", name,
+                ConvertTypeToString(typeof(T)));
         }
 
         /// <summary>
@@ -94,7 +94,8 @@ namespace BrowserInterop.Performance
         /// <returns></returns>
         public async ValueTask<T[]> GetEntriesByType<T>() where T : PerformanceEntry
         {
-            return await jsRuntime.InvokeInstanceMethodAsync<T[]>(windowRef, "performance.getEntriesByType", ConvertTypeToString(typeof(T)));
+            return await jsRuntime.InvokeInstanceMethod<T[]>(windowRef, "performance.getEntriesByType",
+                ConvertTypeToString(typeof(T)));
         }
 
         /// <summary>
@@ -125,7 +126,7 @@ namespace BrowserInterop.Performance
         /// <returns></returns>
         public async ValueTask<double> Now()
         {
-            return await jsRuntime.InvokeInstanceMethodAsync<double>(windowRef, "performance.now");
+            return await jsRuntime.InvokeInstanceMethod<double>(windowRef, "performance.now");
         }
 
         /// <summary>
@@ -145,7 +146,8 @@ namespace BrowserInterop.Performance
         /// <returns></returns>
         public async ValueTask<IAsyncDisposable> OnResourceTimingBufferFull(Func<ValueTask> toDo)
         {
-            return await jsRuntime.AddEventListener(windowRef, "performance", "resourcetimingbufferfull", CallBackInteropWrapper.Create(toDo));
+            return await jsRuntime.AddEventListener(windowRef, "performance", "resourcetimingbufferfull",
+                CallBackInteropWrapper.Create(toDo));
         }
 
         internal static Type ConvertStringToType(string str)

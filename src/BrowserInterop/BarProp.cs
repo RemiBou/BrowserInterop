@@ -1,7 +1,5 @@
 using BrowserInterop.Extensions;
-
 using Microsoft.JSInterop;
-
 using System.Threading.Tasks;
 
 namespace BrowserInterop
@@ -28,7 +26,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public async ValueTask<bool> GetVisible()
         {
-            return await jsRuntime.GetInstancePropertyAsync<bool>(windowRef, $"{propertyName}.visible");
+            return await jsRuntime.GetInstanceProperty<bool>(windowRef, $"{propertyName}.visible");
         }
 
         /// <summary>

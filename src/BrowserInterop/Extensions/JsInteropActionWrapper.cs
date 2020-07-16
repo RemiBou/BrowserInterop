@@ -1,13 +1,11 @@
-
 using Microsoft.JSInterop;
-
 using System;
 using System.Threading.Tasks;
 
 namespace BrowserInterop.Extensions
 {
     /// <summary>
-    /// Wrap a c# action into an object ibvokable by JS
+    /// Wrap a c# action into an object invokable by JS
     /// </summary>
     public class JsInteropActionWrapper
     {
@@ -27,7 +25,7 @@ namespace BrowserInterop.Extensions
     }
 
     /// <summary>
-    /// Wrap a c# action into an object ibvokable by JS
+    /// Wrap a c# action into an object invokable by JS
     /// </summary>
     public class JsInteropActionWrapper<T>
     {

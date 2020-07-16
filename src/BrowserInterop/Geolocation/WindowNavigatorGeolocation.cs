@@ -1,5 +1,4 @@
 ﻿using Microsoft.JSInterop;
-
 using System;
 using System.Threading.Tasks;
 
@@ -21,7 +20,8 @@ namespace BrowserInterop.Geolocation
         /// <returns></returns>
         public async ValueTask<GeolocationResult> GetCurrentPosition(PositionOptions options = null)
         {
-            return await jsRuntime.InvokeAsync<GeolocationResult>("browserInterop.navigator.geolocation.getCurrentPosition", options);
+            return await jsRuntime.InvokeAsync<GeolocationResult>(
+                "browserInterop.navigator.geolocation.getCurrentPosition", options);
         }
 
         /// <summary>
@@ -30,19 +30,21 @@ namespace BrowserInterop.Geolocation
         /// <param name="callback"></param>
         /// <param name="options"></param>
         /// <returns></returns>
-        public async ValueTask<IAsyncDisposable> WatchPosition(Func<GeolocationResult, ValueTask> callback, PositionOptions options = null)
+        public async ValueTask<IAsyncDisposable> WatchPosition(Func<GeolocationResult, ValueTask> callback,
+            PositionOptions options = null)
         {
-            WatchGeolocationWrapper wrapper = new WatchGeolocationWrapper(callback, jsRuntime);
+            var wrapper = new WatchGeolocationWrapper(callback, jsRuntime);
 
-            int watchId = await jsRuntime.InvokeAsync<int>(
+            var watchId = await jsRuntime.InvokeAsync<int>(
                 "browserInterop.navigator.geolocation.watchPosition",
-                 options,
-                  DotNetObjectReference.Create(wrapper));
+                options,
+                DotNetObjectReference.Create(wrapper));
 
             wrapper.SetWatchId(watchId);
 
             return wrapper;
         }
+
         private class WatchGeolocationWrapper : IAsyncDisposable
         {
             private readonly Func<GeolocationResult, ValueTask> callback;

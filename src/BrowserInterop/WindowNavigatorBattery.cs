@@ -1,7 +1,6 @@
 namespace BrowserInterop
 {
     using Extensions;
-
     using System;
     using System.Text.Json.Serialization;
 

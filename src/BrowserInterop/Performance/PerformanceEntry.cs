@@ -13,6 +13,7 @@ namespace BrowserInterop.Performance
         /// </summary>
         /// <value></value>
         public string Name { get; set; }
+
         /// <summary>
         /// the type of performance metric such as, for example, "mark".
         /// </summary>
@@ -34,24 +35,19 @@ namespace BrowserInterop.Performance
 
     public class PerformanceMark : PerformanceEntry
     {
-
     }
-
 
 
     public class PerformanceMeasure : PerformanceEntry
     {
-
     }
 
     public class PerformanceFrameTiming : PerformanceEntry
     {
-
     }
 
     public class PerformancePaintTiming : PerformanceEntry
     {
-
     }
 
     public class PerformanceResourceTiming : PerformanceEntry
@@ -61,76 +57,91 @@ namespace BrowserInterop.Performance
         /// </summary>
         /// <value></value>
         public string InitiatorType { get; set; }
+
         /// <summary>
         /// A string representing the network protocol used to fetch the resource, as identified by the ALPN Protocol ID (RFC7301).
         /// </summary>
         /// <value></value>
         public string NextHopProtocol { get; set; }
+
         /// <summary>
         /// Returns a DOMHighResTimeStamp immediately before dispatching the FetchEvent if a Service Worker thread is already running, or immediately before starting the Service Worker thread if it is not already running. If the resource is not intercepted by a Service Worker the property will always return 0.
         /// </summary>
         /// <value></value>
         public decimal WorkerStart { get; set; }
+
         /// <summary>
         /// A DOMHighResTimeStamp that represents the start time of the fetch which initiates the redirect.
         /// </summary>
         /// <value></value>
         public decimal RedirectStart { get; set; }
+
         /// <summary>
         /// A DOMHighResTimeStamp immediately after receiving the last byte of the response of the last redirect.
         /// </summary>
         /// <value></value>
         public decimal RedirectEnd { get; set; }
+
         /// <summary>
         /// A DOMHighResTimeStamp immediately before the browser starts to fetch the resource.
         /// </summary>
         /// <value></value>
         public decimal FetchStart { get; set; }
+
         /// <summary>
         /// A DOMHighResTimeStamp immediately before the browser starts the domain name lookup for the resource.
         /// </summary>
         /// <value></value>
         public decimal DomainLookupStart { get; set; }
+
         /// <summary>
         /// A DOMHighResTimeStamp representing the time immediately after the browser finishes the domain name lookup for the resource
         /// </summary>
         /// <value></value>
         public decimal DomainLookupEnd { get; set; }
+
         /// <summary>
         /// A DOMHighResTimeStamp immediately before the browser starts to establish the connection to the server to retrieve the resource.
         /// </summary>
         /// <value></value>
         public decimal ConnectStart { get; set; }
+
         /// <summary>
         /// A DOMHighResTimeStamp immediately after the browser finishes establishing the connection to the server to retrieve the resource.
         /// </summary>
         /// <value></value>
         public decimal ConnectEnd { get; set; }
+
         /// <summary>
         /// A DOMHighResTimeStamp immediately before the browser starts the handshake process to secure the current connection.
         /// </summary>
         /// <value></value>
         public decimal SecureConnectionStart { get; set; }
+
         /// <summary>
         /// A DOMHighResTimeStamp immediately before the browser starts requesting the resource from the server
         /// </summary>
         /// <value></value>
         public decimal RequestStart { get; set; }
+
         /// <summary>
         /// A DOMHighResTimeStamp immediately after the browser receives the first byte of the response from the server.
         /// </summary>
         /// <value></value>
         public decimal ResponseStart { get; set; }
+
         /// <summary>
         /// A DOMHighResTimeStamp immediately after the browser receives the last byte of the resource or immediately before the transport connection is closed, whichever comes first.
         /// </summary>
         /// <value></value>
         public decimal ResponseEnd { get; set; }
+
         /// <summary>
         ///  the size (in octets) of the fetched resource. The size includes the response header fields plus the response payload body.
         /// </summary>
         /// <value></value>
         public long TransferSize { get; set; }
+
         /// <summary>
         /// size (in octets) received from the fetch (HTTP or cache) of the message body, after removing any applied content-codings.
         /// </summary>
@@ -148,7 +159,6 @@ namespace BrowserInterop.Performance
         /// </summary>
         /// <value></value>
         public PerformanceServerTiming[] ServerTiming { get; set; }
-
     }
 
     /// <summary>
@@ -161,11 +171,13 @@ namespace BrowserInterop.Performance
         /// </summary>
         /// <value></value>
         public string Description { get; set; }
+
         /// <summary>
         /// the server-specified metric duration, or value 0.0.
         /// </summary>
         /// <value></value>
         public decimal Duration { get; set; }
+
         /// <summary>
         /// server-specified metric name.
         /// </summary>
@@ -188,10 +200,5 @@ namespace BrowserInterop.Performance
         public string Type { get; set; }
         public decimal UnloadEventEnd { get; set; }
         public decimal UnloadEventStart { get; set; }
-
-
-
-
-
     }
 }

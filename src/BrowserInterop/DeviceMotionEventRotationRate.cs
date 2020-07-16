@@ -6,5 +6,4 @@
         public int Beta { get; set; }
         public int Gamma { get; set; }
     }
-
 }

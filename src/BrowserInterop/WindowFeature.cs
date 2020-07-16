@@ -101,7 +101,7 @@ namespace BrowserInterop
         public bool? NoOpener { get; set; }
 
         /// <summary>
-        /// If this feature is set, the request to load the content located at the specified URL will be loaded with the request's referrer set to noreferrer; this prevents the request from sending the URL of the page that initiated the request to the server where the request is sent. In addition, setting this feature also automatically sets noopener. See rel="noreferrer" for additional details and compatibility information. Firefox int?roduced support for noreferrer in Firefox 68.
+        /// If this feature is set, the request to load the content located at the specified URL will be loaded with the request referrer set to noreferrer; this prevents the request from sending the URL of the page that initiated the request to the server where the request is sent. In addition, setting this feature also automatically sets noopener. See rel="noreferrer" for additional details and compatibility information. Firefox introduced support for noreferrer in Firefox 68.
         /// </summary>
         /// <value></value>
         public bool? NoReferrer { get; set; }
@@ -120,7 +120,7 @@ namespace BrowserInterop
 
         /// <summary>
         /// Note: Starting with Mozilla 1.7/Firefox 0.9, this feature requires the UniversalBrowserWrite privilege (bug 244965). Without this privilege, it is ignored.
-        /// If on, the page is loaded as window's only content, without any of the browser's int?erface elements. There will be no context menu defined by default and none of the standard keyboard shortcuts will work.The page is supposed to provide a user int?erface of its own, usually this feature is used to open XUL documents(standard dialogs like the JavaScript Console are opened this way).
+        /// If on, the page is loaded as window's only content, without any of the browser's interface elements. There will be no context menu defined by default and none of the standard keyboard shortcuts will work.The page is supposed to provide a user interface of its own, usually this feature is used to open XUL documents(standard dialogs like the JavaScript Console are opened this way).
         /// </summary>
         /// <value></value>
         public bool? Chrome { get; set; }
@@ -172,7 +172,7 @@ namespace BrowserInterop
 
         internal string GetOpenString()
         {
-            List<string> strs = new List<string>();
+            var strs = new List<string>();
             if (Left.HasValue) strs.Add($"left={Left}");
             if (Top.HasValue) strs.Add($"top={Top}");
             if (Height.HasValue) strs.Add($"height={Height}");

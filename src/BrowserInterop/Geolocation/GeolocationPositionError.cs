@@ -14,16 +14,14 @@ namespace BrowserInterop.Geolocation
         /// Easy access to error code
         /// </summary>
         /// <value></value>
-        public GeolocationPositionErrorEnum CodeEnum
-        {
-            get => Code switch
+        public GeolocationPositionErrorEnum CodeEnum =>
+            Code switch
             {
                 1 => GeolocationPositionErrorEnum.PermissionDenied,
                 2 => GeolocationPositionErrorEnum.PositionUnavailable,
                 3 => GeolocationPositionErrorEnum.Timeout,
                 _ => throw new NotSupportedException($"GeolocationPositionError.Code:{Code}")
             };
-        }
 
         /// <summary>
         ///  the details of the error. Specifications note that this is primarily intended for debugging use and not to be shown directly in a user interface.

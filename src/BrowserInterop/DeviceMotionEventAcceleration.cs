@@ -6,5 +6,4 @@
         public int Y { get; set; }
         public int Z { get; set; }
     }
-
 }

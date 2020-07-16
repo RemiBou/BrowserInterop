@@ -1,15 +1,10 @@
-﻿
-using Microsoft.JSInterop;
-
+﻿using Microsoft.JSInterop;
 using System.Threading.Tasks;
 
 namespace BrowserInterop.Extensions
 {
-
-
     public class CancellableEvent
     {
-
         private readonly IJSRuntime jsRuntime;
         private readonly JsRuntimeObjectRef jsRuntimeObjectRef;
 
@@ -28,7 +23,5 @@ namespace BrowserInterop.Extensions
         {
             await jsRuntime.InvokeInstanceMethod(jsRuntimeObjectRef, "preventDefault");
         }
-
     }
-
 }

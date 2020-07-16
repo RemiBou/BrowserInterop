@@ -1,8 +1,6 @@
 ﻿using BrowserInterop.Extensions;
-
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
-
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -19,6 +17,7 @@ namespace BrowserInterop
         /// Set to false if you want to disable all the calls to a console function
         /// </summary>
         public static bool IsEnabled { get; set; } = true;
+
         private readonly IJSRuntime jsRuntime;
         private readonly JsRuntimeObjectRef windowObject;
 
@@ -29,7 +28,7 @@ namespace BrowserInterop
         }
 
         /// <summary>
-        /// Will print an error with the given objectsin the output if the assertion is not verified
+        /// Will print an error with the given objects in the output if the assertion is not verified
         /// </summary>
         /// <param name="assertion">true or false</param>
         /// <param name="printedObjects">object to print in the console</param>
@@ -51,8 +50,8 @@ namespace BrowserInterop
         public async ValueTask Assert(bool assertion, string message, params object[] formatParameters)
         {
             if (IsEnabled)
-                await jsRuntime.InvokeInstanceMethod(windowObject, "console.assert", assertion, string.Format(CultureInfo.InvariantCulture, message, formatParameters));
-
+                await jsRuntime.InvokeInstanceMethod(windowObject, "console.assert", assertion,
+                    string.Format(CultureInfo.InvariantCulture, message, formatParameters));
         }
 
         /// <summary>
@@ -108,8 +107,8 @@ namespace BrowserInterop
         public async ValueTask Debug(string message, params object[] formatParameters)
         {
             if (IsEnabled)
-                await jsRuntime.InvokeInstanceMethod(windowObject, "console.debug", string.Format(CultureInfo.InvariantCulture, message, formatParameters));
-
+                await jsRuntime.InvokeInstanceMethod(windowObject, "console.debug",
+                    string.Format(CultureInfo.InvariantCulture, message, formatParameters));
         }
 
         /// <summary>
@@ -155,7 +154,8 @@ namespace BrowserInterop
         public async ValueTask Error(string message, params object[] formatParameters)
         {
             if (IsEnabled)
-                await jsRuntime.InvokeInstanceMethod(windowObject, "console.error", string.Format(CultureInfo.InvariantCulture, message, formatParameters));
+                await jsRuntime.InvokeInstanceMethod(windowObject, "console.error",
+                    string.Format(CultureInfo.InvariantCulture, message, formatParameters));
         }
 
         /// <summary>
@@ -165,10 +165,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public async ValueTask GroupStart(string label)
         {
-            if (IsEnabled)
-            {
-                await jsRuntime.InvokeInstanceMethod(windowObject, "console.group", label);
-            }
+            if (IsEnabled) await jsRuntime.InvokeInstanceMethod(windowObject, "console.group", label);
         }
 
 
@@ -183,16 +180,15 @@ namespace BrowserInterop
         }
 
         /// <summary>
-        /// Conveniant method for creating console group with the using syntax : the group will be closed when Dispose is called
+        /// Helper method for creating console group with the using syntax : the group will be closed when Dispose is called
         /// </summary>
         /// <param name="label">group label</param>
         /// <returns></returns>
         public async ValueTask<IAsyncDisposable> Group(string label)
         {
-
             if (!IsEnabled) return EmptyAsyncDisposable.Instance;
             await GroupStart(label);
-            return new ActionAsyncDisposable(() => GroupEnd());
+            return new ActionAsyncDisposable(GroupEnd);
         }
 
         /// <summary>
@@ -216,7 +212,8 @@ namespace BrowserInterop
         public async ValueTask Log(string message, params object[] formatParameters)
         {
             if (IsEnabled)
-                await jsRuntime.InvokeInstanceMethod(windowObject, "console.log", string.Format(CultureInfo.InvariantCulture, message, formatParameters));
+                await jsRuntime.InvokeInstanceMethod(windowObject, "console.log",
+                    string.Format(CultureInfo.InvariantCulture, message, formatParameters));
         }
 
         /// <summary>
@@ -241,7 +238,7 @@ namespace BrowserInterop
         }
 
         /// <summary>
-        /// Conveniant method for profiling with the using syntax :
+        /// Helper method for profiling with the using syntax :
         ///  the profiling session will be closed when Dispose is called.
         /// You can see a profiling session by going in dev tool => 3 dots menu => more tools => Javascript Profiler
         /// </summary>
@@ -255,7 +252,7 @@ namespace BrowserInterop
         }
 
         /// <summary>
-        /// DIsplay object list as a table
+        /// Display object list as a table
         /// </summary>
         /// <param name="objectToDisplay">Objects to display</param>
         /// <param name="columns">Columns to display, if no parameters then all the columns are displayed</param>
@@ -267,7 +264,7 @@ namespace BrowserInterop
         }
 
         /// <summary>
-        /// Start a timer, it's label and execution time will be shown on the profiling session (only the ones in the Performance tab, not the ones started with the Profile lethod) and on the console
+        /// Start a timer, it's label and execution time will be shown on the profiling session (only the ones in the Performance tab, not the ones started with the Profile method) and on the console
         /// </summary>
         /// <param name="label">The label displayed</param>
         /// <returns></returns>
@@ -289,7 +286,7 @@ namespace BrowserInterop
         }
 
         /// <summary>
-        /// Conveniant method for starting and ending a timer around a piece of code with the using syntax :
+        ///  Helper method for starting and ending a timer around a piece of code with the using syntax :
         ///  the timer session will be ended when Dispose is called.
         /// </summary>
         /// <param name="label">The label displayed</param>
@@ -333,6 +330,5 @@ namespace BrowserInterop
             if (IsEnabled)
                 await jsRuntime.InvokeInstanceMethod(windowObject, "console.trace", printedObjects);
         }
-
     }
 }

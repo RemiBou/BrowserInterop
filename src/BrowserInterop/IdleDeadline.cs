@@ -1,6 +1,4 @@
-
 using BrowserInterop.Extensions;
-
 using System;
 using System.Threading.Tasks;
 
@@ -11,7 +9,6 @@ namespace BrowserInterop
     /// </summary>
     public class IdleDeadline : JsObjectWrapperBase
     {
-
         /// <summary>
         /// A Boolean whose value is true if the callback is being executed because the timeout specified when the idle callback was installed has expired.
         /// </summary>
@@ -24,7 +21,8 @@ namespace BrowserInterop
         /// <returns></returns>
         public async ValueTask<TimeSpan> TimeRemaining()
         {
-            return TimeSpan.FromMilliseconds(await JsRuntime.InvokeInstanceMethodAsync<double>(JsObjectRef, "timeRemaining"));
+            return TimeSpan.FromMilliseconds(
+                await JsRuntime.InvokeInstanceMethod<double>(JsObjectRef, "timeRemaining"));
         }
     }
 }

@@ -1,5 +1,4 @@
 using BrowserInterop.Extensions;
-
 using Microsoft.JSInterop;
 
 namespace BrowserInterop.Screen
@@ -9,7 +8,6 @@ namespace BrowserInterop.Screen
     /// </summary>
     public class WindowScreen : JsObjectWrapperBase
     {
-
         /// <summary>
         /// Returns the amount of horizontal space in pixels available to the window.
         /// </summary>
@@ -56,7 +54,6 @@ namespace BrowserInterop.Screen
         {
             base.SetJsRuntime(jsRuntime, screenRef);
             Orientation.SetJsRuntime(jsRuntime, screenRef);
-
         }
     }
 }

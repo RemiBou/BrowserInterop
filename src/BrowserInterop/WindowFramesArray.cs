@@ -1,7 +1,5 @@
 using BrowserInterop.Extensions;
-
 using Microsoft.JSInterop;
-
 using System.Threading.Tasks;
 
 namespace BrowserInterop
@@ -27,15 +25,17 @@ namespace BrowserInterop
         /// <returns></returns>
         public async ValueTask<WindowInterop> Get(int index)
         {
-            return await jsRuntime.GetInstancePropertyWrapperAsync<WindowInterop>(jsRuntimeObjectRef, $"frames[{index}]", WindowInterop.SerializationSpec);
+            return await jsRuntime.GetInstancePropertyWrapper<WindowInterop>(jsRuntimeObjectRef, $"frames[{index}]",
+                WindowInterop.SerializationSpec);
         }
+
         /// <summary>
         /// Count of direct subframes
         /// </summary>
         /// <returns></returns>
         public async ValueTask<int> Length()
         {
-            return await jsRuntime.GetInstancePropertyAsync<int>(jsRuntimeObjectRef, "frames.length");
+            return await jsRuntime.GetInstanceProperty<int>(jsRuntimeObjectRef, "frames.length");
         }
     }
 }

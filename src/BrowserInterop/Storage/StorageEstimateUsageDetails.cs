@@ -6,6 +6,7 @@ namespace BrowserInterop.Storage
     public class StorageEstimateUsageDetails
     {
         public long ApplicationCache { get; set; }
+
         // ReSharper disable once InconsistentNaming
         public long IndexedDB { get; set; }
         public long Caches { get; set; }

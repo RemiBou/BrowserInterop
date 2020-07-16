@@ -23,6 +23,6 @@ namespace BrowserInterop.Geolocation
         /// Represents the time at which the location was retrieved.
         /// </summary>
         /// <value></value>
-        public DateTimeOffset TimestampDateTime { get => DateTimeOffset.FromUnixTimeMilliseconds(Timestamp); }
+        public DateTimeOffset TimestampDateTime => DateTimeOffset.FromUnixTimeMilliseconds(Timestamp);
     }
 }

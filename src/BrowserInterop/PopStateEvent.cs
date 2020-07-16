@@ -4,5 +4,4 @@
     {
         public T State { get; set; }
     }
-
 }

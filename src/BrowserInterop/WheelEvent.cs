@@ -22,9 +22,9 @@ namespace BrowserInterop
 
         public int DeltaMode { get; set; }
 
-        public DeltaModeEnum DeltaModeEnum { get => (DeltaModeEnum)DeltaMode; }
-
+        public DeltaModeEnum DeltaModeEnum => (DeltaModeEnum) DeltaMode;
     }
+
     public enum DeltaModeEnum
     {
         Pixel = 0,

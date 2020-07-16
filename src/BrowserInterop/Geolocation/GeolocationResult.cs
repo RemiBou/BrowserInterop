@@ -1,7 +1,7 @@
 namespace BrowserInterop.Geolocation
 {
     /// <summary>
-    /// Resultof a GetCurrentPosition call
+    /// Result of a GetCurrentPosition call
     /// </summary>
     public class GeolocationResult
     {

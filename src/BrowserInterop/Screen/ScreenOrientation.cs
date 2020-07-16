@@ -1,7 +1,5 @@
 using BrowserInterop.Extensions;
-
 using Microsoft.JSInterop;
-
 using System;
 using System.Threading.Tasks;
 
@@ -53,7 +51,8 @@ namespace BrowserInterop.Screen
         /// <returns></returns>
         public async ValueTask<IAsyncDisposable> OnChange(Func<ValueTask> toDo)
         {
-            return await jsRuntime.AddEventListener(screenRef, "orientation", "change", CallBackInteropWrapper.Create(toDo));
+            return await jsRuntime.AddEventListener(screenRef, "orientation", "change",
+                CallBackInteropWrapper.Create(toDo));
         }
 
         /// <summary>
@@ -87,7 +86,7 @@ namespace BrowserInterop.Screen
     }
 
     /// <summary>
-    /// Enum values for window.screen.orientaiton.type
+    /// Enum values for window.screen.orientation.type
     /// </summary>
     public enum ScreenOrientationTypeEnum
     {

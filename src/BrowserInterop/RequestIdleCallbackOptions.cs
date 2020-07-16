@@ -7,11 +7,12 @@ namespace BrowserInterop
         public RequestIdleCallbackOptions(TimeSpan timeout)
         {
             Timeout = timeout.TotalMilliseconds;
-
         }
+
         public RequestIdleCallbackOptions()
         {
         }
+
         public double Timeout { get; set; }
     }
 }

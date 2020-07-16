@@ -1,8 +1,5 @@
-﻿
-using BrowserInterop.Extensions;
-
+﻿using BrowserInterop.Extensions;
 using Microsoft.JSInterop;
-
 using System.Threading.Tasks;
 
 namespace BrowserInterop
@@ -27,8 +24,5 @@ namespace BrowserInterop
         {
             await jsRuntime.SetInstanceProperty(jsRuntimeObjectRef, "returnValue", false);
         }
-
-
-
     }
 }

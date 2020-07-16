@@ -1,6 +1,4 @@
-
 using Microsoft.JSInterop;
-
 using System;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
@@ -13,7 +11,9 @@ namespace BrowserInterop.Extensions
     public class CallBackInteropWrapper
     {
         [JsonPropertyName("__isCallBackWrapper")]
+        // ReSharper disable once UnusedMember.Global
         public string IsCallBackWrapper { get; set; } = "";
+
         public object SerializationSpec { get; set; }
 
         public bool GetJsObjectRef { get; set; }
@@ -21,11 +21,10 @@ namespace BrowserInterop.Extensions
 
         private CallBackInteropWrapper()
         {
-
         }
 
         /// <summary>
-        /// Create js interop xrapper for this c# action.static 
+        /// Create js interop wrapper for this c# action 
         /// </summary>
         /// <param name="callback"></param>
         /// <param name="serializationSpec">
@@ -36,9 +35,10 @@ namespace BrowserInterop.Extensions
         /// </param>
         /// <param name="getJsObjectRef">If true (default false) the call back will get the js object ref instead of the js object content</param>
         /// <returns>A wrapper for the event handling</returns>
-        public static CallBackInteropWrapper Create<T>(Func<T, ValueTask> callback, object serializationSpec = null, bool getJsObjectRef = false)
+        public static CallBackInteropWrapper Create<T>(Func<T, ValueTask> callback, object serializationSpec = null,
+            bool getJsObjectRef = false)
         {
-            CallBackInteropWrapper res = new CallBackInteropWrapper
+            var res = new CallBackInteropWrapper
             {
                 CallbackRef = DotNetObjectReference.Create(new JsInteropActionWrapper<T>(callback)),
                 SerializationSpec = serializationSpec,
@@ -48,7 +48,7 @@ namespace BrowserInterop.Extensions
         }
 
         /// <summary>
-        /// Create js interop xrapper for this c# action.static 
+        /// Create js interop wrapper for this c# action 
         /// </summary>
         /// <param name="callback"></param>
         /// <param name="serializationSpec">
@@ -59,9 +59,10 @@ namespace BrowserInterop.Extensions
         /// </param>
         /// <param name="getJsObjectRef">If true (default false) the call back will get the js object ref instead of the js object content</param>
         /// <returns>Object that needs to be send to js interop api call</returns>
-        public static CallBackInteropWrapper Create(Func<ValueTask> callback, object serializationSpec = null, bool getJsObjectRef = false)
+        public static CallBackInteropWrapper Create(Func<ValueTask> callback, object serializationSpec = null,
+            bool getJsObjectRef = false)
         {
-            CallBackInteropWrapper res = new CallBackInteropWrapper
+            var res = new CallBackInteropWrapper
             {
                 CallbackRef = DotNetObjectReference.Create(new JsInteropActionWrapper(callback)),
                 SerializationSpec = serializationSpec,
@@ -72,5 +73,4 @@ namespace BrowserInterop.Extensions
 
         public object CallbackRef { get; set; }
     }
-
 }

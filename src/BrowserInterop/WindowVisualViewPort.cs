@@ -1,6 +1,4 @@
-
 using BrowserInterop.Extensions;
-
 using System;
 using System.Threading.Tasks;
 
@@ -11,7 +9,6 @@ namespace BrowserInterop
     /// </summary>
     public class WindowVisualViewPort : JsObjectWrapperBase
     {
-
         /// <summary>
         /// Returns the offset of the left edge of the visual viewport from the left edge of the layout viewport in CSS pixels.
         /// </summary>
@@ -73,6 +70,5 @@ namespace BrowserInterop
         {
             return await JsRuntime.AddEventListener(JsObjectRef, "", "scroll", CallBackInteropWrapper.Create(todo));
         }
-
     }
 }

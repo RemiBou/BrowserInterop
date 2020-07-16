@@ -1,7 +1,5 @@
 using BrowserInterop.Extensions;
-
 using Microsoft.JSInterop;
-
 using System;
 using System.Threading.Tasks;
 
@@ -57,6 +55,7 @@ namespace BrowserInterop
         /// </summary>
         /// <returns></returns>
         public double Rtt { get; set; }
+
         /// <summary>
         /// Returns true if the user has set a reduced data usage option on the user agent.
         /// </summary>
@@ -96,7 +95,8 @@ namespace BrowserInterop
         /// <returns></returns> 
         public async ValueTask<IAsyncDisposable> OnChange(Func<ValueTask> toDo)
         {
-            return await jSRuntime.AddEventListener(navigatorRef, "connection", "change", CallBackInteropWrapper.Create(toDo));
+            return await jSRuntime.AddEventListener(navigatorRef, "connection", "change",
+                CallBackInteropWrapper.Create(toDo));
         }
     }
 
@@ -105,15 +105,15 @@ namespace BrowserInterop
     {
         Unknown,
         Slow2G,
-#pragma warning disable CA1707 // Les identificateurs ne doivent pas contenir de traits de soulignement
+#pragma warning disable CA1707 
         _2G,
-#pragma warning restore CA1707 // Les identificateurs ne doivent pas contenir de traits de soulignement
-#pragma warning disable CA1707 // Les identificateurs ne doivent pas contenir de traits de soulignement
+#pragma warning restore CA1707 
+#pragma warning disable CA1707 
         _3G,
-#pragma warning restore CA1707 // Les identificateurs ne doivent pas contenir de traits de soulignement
-#pragma warning disable CA1707 // Les identificateurs ne doivent pas contenir de traits de soulignement
+#pragma warning restore CA1707 
+#pragma warning disable CA1707 
         _4G
-#pragma warning restore CA1707 // Les identificateurs ne doivent pas contenir de traits de soulignement
+#pragma warning restore CA1707 
     }
 
     public enum ConnectionTypeEnum

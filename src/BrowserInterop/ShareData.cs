@@ -21,8 +21,8 @@ namespace BrowserInterop
         /// URL to be shared.
         /// </summary>
         /// <value></value>
-#pragma warning disable CA1056 // Les propriétés Uri ne doivent pas être des chaînes
+#pragma warning disable CA1056 
         public string Url { get; set; }
-#pragma warning restore CA1056 // Les propriétés Uri ne doivent pas être des chaînes
+#pragma warning restore CA1056 
     }
 }
