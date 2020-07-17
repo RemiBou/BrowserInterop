@@ -6,8 +6,8 @@
     <PackageId>BrowserInterop</PackageId>
     <Authors>Rémi BOURGAREL</Authors>
     <Company>Rémi BOURGAREL</Company>
-    <PackageVersion>0.1.7</PackageVersion>
-    <PackageDescription>Library  wrapping Blazor JSInterop call for browser API : console, navigator, battery, geolocation, storage (local, session), history, screen, performance, window ... see repository README for list of supported API</PackageDescription>
+    <PackageVersion>1.0.0</PackageVersion>
+    <PackageDescription>Library  wrapping Blazor JSInterop call for browser API : console, navigator, battery, geolocation, storage (local, session), history, screen, performance, window, event ... see wiki for list of supported API</PackageDescription>
     <Copyright>Rémi BOURGAREL</Copyright>
     <PackageTags>blazor; browser; navigator; geolocation; console; jsinterop</PackageTags>
     <RepositoryUrl>https://github.com/RemiBou/BrowserInterop</RepositoryUrl>

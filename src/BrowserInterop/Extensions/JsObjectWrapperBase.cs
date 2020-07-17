@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace BrowserInterop.Extensions
 {
-    public class JsObjectWrapperBase : IAsyncDisposable
+    public abstract class JsObjectWrapperBase : IAsyncDisposable
     {
         internal JsRuntimeObjectRef JsObjectRef { get; private set; }
         internal IJSRuntime JsRuntime { get; private set; }
