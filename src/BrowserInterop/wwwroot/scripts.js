@@ -177,7 +177,9 @@ browserInterop = new (function () {
             return data;
         }
         var res = (Array.isArray(data)) ? [] : {};
-        serializationSpec = serializationSpec ?? "*";
+        if (!serializationSpec) {
+            serializationSpec = "*";
+        }
         for (var i in data) {
             var currentMember = data[i];
 
