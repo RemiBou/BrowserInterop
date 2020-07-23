@@ -6,8 +6,8 @@ namespace BrowserInterop.Extensions
 {
     public abstract class JsObjectWrapperBase : IAsyncDisposable
     {
-        internal JsRuntimeObjectRef JsObjectRef { get; private set; }
-        internal IJSRuntime JsRuntime { get; private set; }
+        public JsRuntimeObjectRef JsObjectRef { get; private set; }
+        public IJSRuntime JsRuntime { get; private set; }
 
         internal virtual void SetJsRuntime(IJSRuntime jsRuntime, JsRuntimeObjectRef jsObjectRef)
         {
