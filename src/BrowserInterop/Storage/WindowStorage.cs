@@ -35,7 +35,7 @@ namespace BrowserInterop.Storage
         /// <returns></returns>
         public async ValueTask<int> Length()
         {
-            return await jsRuntime.GetInstanceProperty<int>(await GetJsRuntimeObjectRef(), "length");
+            return await jsRuntime.GetInstanceProperty<int>(await GetJsRuntimeObjectRef().ConfigureAwait(false), "length").ConfigureAwait(false);
         }
 
         /// <summary>
@@ -45,7 +45,7 @@ namespace BrowserInterop.Storage
         /// <returns></returns>
         public async ValueTask<string> Key(int index)
         {
-            return await jsRuntime.InvokeInstanceMethod<string>(await GetJsRuntimeObjectRef(), "key", index);
+            return await jsRuntime.InvokeInstanceMethod<string>(await GetJsRuntimeObjectRef().ConfigureAwait(false), "key", index).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -56,7 +56,7 @@ namespace BrowserInterop.Storage
         public async ValueTask<T> GetItem<T>(string keyName)
         {
             var strValue =
-                await jsRuntime.InvokeInstanceMethod<string>(await GetJsRuntimeObjectRef(), "getItem", keyName);
+                await jsRuntime.InvokeInstanceMethod<string>(await GetJsRuntimeObjectRef().ConfigureAwait(false), "getItem", keyName).ConfigureAwait(false);
             return JsonSerializer.Deserialize<T>(strValue);
         }
 
@@ -68,8 +68,8 @@ namespace BrowserInterop.Storage
         /// <returns></returns>
         public async ValueTask SetItem(string keyName, object value)
         {
-            await jsRuntime.InvokeInstanceMethod(await GetJsRuntimeObjectRef(), "setItem", keyName,
-                JsonSerializer.Serialize(value));
+            await jsRuntime.InvokeInstanceMethod(await GetJsRuntimeObjectRef().ConfigureAwait(false), "setItem", keyName,
+                JsonSerializer.Serialize(value)).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -79,7 +79,7 @@ namespace BrowserInterop.Storage
         /// <returns></returns>
         public async ValueTask RemoveItem(string keyName)
         {
-            await jsRuntime.InvokeInstanceMethod(await GetJsRuntimeObjectRef(), "removeItem", keyName);
+            await jsRuntime.InvokeInstanceMethod(await GetJsRuntimeObjectRef().ConfigureAwait(false), "removeItem", keyName).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -88,13 +88,13 @@ namespace BrowserInterop.Storage
         /// <returns></returns>
         public async ValueTask Clear()
         {
-            await jsRuntime.InvokeInstanceMethod(await GetJsRuntimeObjectRef(), "clear");
+            await jsRuntime.InvokeInstanceMethod(await GetJsRuntimeObjectRef().ConfigureAwait(false), "clear").ConfigureAwait(false);
         }
 
 
         private async ValueTask<JsRuntimeObjectRef> GetJsRuntimeObjectRef()
         {
-            return jsRuntimeObjectRef ??= await jsRuntime.GetInstancePropertyRef(windowRuntimeObjectRef, memberName);
+            return jsRuntimeObjectRef ??= await jsRuntime.GetInstancePropertyRef(windowRuntimeObjectRef, memberName).ConfigureAwait(false);
         }
     }
 }

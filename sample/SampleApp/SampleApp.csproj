@@ -15,4 +15,10 @@
 
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Update="Pages\Extension.razor">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+  </ItemGroup>
+
 </Project>

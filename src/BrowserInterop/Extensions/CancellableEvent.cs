@@ -21,7 +21,7 @@ namespace BrowserInterop.Extensions
         /// <returns></returns>
         public async ValueTask PreventDefault()
         {
-            await jsRuntime.InvokeInstanceMethod(jsRuntimeObjectRef, "preventDefault");
+            await jsRuntime.InvokeInstanceMethod(jsRuntimeObjectRef, "preventDefault").ConfigureAwait(false);
         }
     }
 }

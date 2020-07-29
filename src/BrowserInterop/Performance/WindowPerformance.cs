@@ -26,7 +26,7 @@ namespace BrowserInterop.Performance
         /// <value></value>
         public async ValueTask<double> TimeOrigin()
         {
-            return await jsRuntime.GetInstanceProperty<double>(windowRef, "performance.timeOrigin");
+            return await jsRuntime.GetInstanceProperty<double>(windowRef, "performance.timeOrigin").ConfigureAwait(false);
         }
 
         /// <summary>
@@ -36,7 +36,7 @@ namespace BrowserInterop.Performance
         /// <returns></returns>
         public async ValueTask ClearMarks(string name = null)
         {
-            await jsRuntime.InvokeInstanceMethod(windowRef, "performance.clearMarks", name);
+            await jsRuntime.InvokeInstanceMethod(windowRef, "performance.clearMarks", name).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -46,7 +46,7 @@ namespace BrowserInterop.Performance
         /// <returns></returns>
         public async ValueTask ClearMeasures(string name = null)
         {
-            await jsRuntime.InvokeInstanceMethod(windowRef, "performance.clearMeasures", name);
+            await jsRuntime.InvokeInstanceMethod(windowRef, "performance.clearMeasures", name).ConfigureAwait(false);
         }
 
 
@@ -56,7 +56,7 @@ namespace BrowserInterop.Performance
         /// <returns></returns>
         public async ValueTask ClearResourceTimings()
         {
-            await jsRuntime.InvokeInstanceMethod(windowRef, "performance.clearResourceTimings");
+            await jsRuntime.InvokeInstanceMethod(windowRef, "performance.clearResourceTimings").ConfigureAwait(false);
         }
 
         /// <summary>
@@ -65,7 +65,7 @@ namespace BrowserInterop.Performance
         /// <returns></returns>
         public async ValueTask<PerformanceEntry[]> GetEntries()
         {
-            return await jsRuntime.InvokeInstanceMethod<PerformanceEntry[]>(windowRef, "performance.getEntries");
+            return await jsRuntime.InvokeInstanceMethod<PerformanceEntry[]>(windowRef, "performance.getEntries").ConfigureAwait(false);
         }
 
         /// <summary>
@@ -75,7 +75,7 @@ namespace BrowserInterop.Performance
         public async ValueTask<PerformanceEntry[]> GetEntriesByName(string name)
         {
             return await jsRuntime.InvokeInstanceMethod<PerformanceEntry[]>(windowRef, "performance.getEntriesByName",
-                name);
+                name).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -85,7 +85,7 @@ namespace BrowserInterop.Performance
         public async ValueTask<T[]> GetEntriesByName<T>(string name) where T : PerformanceEntry
         {
             return await jsRuntime.InvokeInstanceMethod<T[]>(windowRef, "performance.getEntriesByName", name,
-                ConvertTypeToString(typeof(T)));
+                ConvertTypeToString(typeof(T))).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -95,7 +95,7 @@ namespace BrowserInterop.Performance
         public async ValueTask<T[]> GetEntriesByType<T>() where T : PerformanceEntry
         {
             return await jsRuntime.InvokeInstanceMethod<T[]>(windowRef, "performance.getEntriesByType",
-                ConvertTypeToString(typeof(T)));
+                ConvertTypeToString(typeof(T))).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -105,7 +105,7 @@ namespace BrowserInterop.Performance
         /// <returns></returns>
         public async ValueTask Mark(string name)
         {
-            await jsRuntime.InvokeInstanceMethod(windowRef, "performance.mark", name);
+            await jsRuntime.InvokeInstanceMethod(windowRef, "performance.mark", name).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -117,7 +117,7 @@ namespace BrowserInterop.Performance
         /// <returns></returns>
         public async ValueTask Measure(string name, string startMark = null, string endMark = null)
         {
-            await jsRuntime.InvokeInstanceMethod(windowRef, "performance.measure", name, startMark, endMark);
+            await jsRuntime.InvokeInstanceMethod(windowRef, "performance.measure", name, startMark, endMark).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -126,7 +126,7 @@ namespace BrowserInterop.Performance
         /// <returns></returns>
         public async ValueTask<double> Now()
         {
-            return await jsRuntime.InvokeInstanceMethod<double>(windowRef, "performance.now");
+            return await jsRuntime.InvokeInstanceMethod<double>(windowRef, "performance.now").ConfigureAwait(false);
         }
 
         /// <summary>
@@ -136,7 +136,7 @@ namespace BrowserInterop.Performance
         /// <returns></returns>
         public async ValueTask SetResourceTimingBufferSize(long maxSize)
         {
-            await jsRuntime.InvokeInstanceMethod(windowRef, "performance.setResourceTimingBufferSize", maxSize);
+            await jsRuntime.InvokeInstanceMethod(windowRef, "performance.setResourceTimingBufferSize", maxSize).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -147,7 +147,7 @@ namespace BrowserInterop.Performance
         public async ValueTask<IAsyncDisposable> OnResourceTimingBufferFull(Func<ValueTask> toDo)
         {
             return await jsRuntime.AddEventListener(windowRef, "performance", "resourcetimingbufferfull",
-                CallBackInteropWrapper.Create(toDo));
+                CallBackInteropWrapper.Create(toDo)).ConfigureAwait(false);
         }
 
         internal static Type ConvertStringToType(string str)

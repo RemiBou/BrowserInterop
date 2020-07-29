@@ -17,6 +17,7 @@
   <PropertyGroup Condition="'$(Configuration)' == 'Release'" />
   <ItemGroup>
     <Content Include="cypress.json" />
+    <Content Include="cypress\integration\window_extensions.spec.js" />
     <Content Include="package-lock.json" />
     <Content Include="package.json" />
     <Content Include="cypress\fixtures\example.json" />
@@ -35,7 +36,6 @@
   <ItemGroup>
     <Folder Include="cypress" />
     <Folder Include="cypress\fixtures" />
-    <Folder Include="cypress\integration" />
     <Folder Include="cypress\plugins" />
     <Folder Include="cypress\support" />
   </ItemGroup>

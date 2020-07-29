@@ -52,7 +52,7 @@ namespace BrowserInterop.Screen
         public async ValueTask<IAsyncDisposable> OnChange(Func<ValueTask> toDo)
         {
             return await jsRuntime.AddEventListener(screenRef, "orientation", "change",
-                CallBackInteropWrapper.Create(toDo));
+                CallBackInteropWrapper.Create(toDo)).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -72,7 +72,7 @@ namespace BrowserInterop.Screen
                 ScreenOrientationTypeEnum.LandscapePrimary => "landscape-primary",
                 ScreenOrientationTypeEnum.LandscapeSecondary => "landscape-secondary",
                 _ => throw new NotSupportedException($"ScreenOrientationTypeEnum: {newOrientation}")
-            });
+            }).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -81,7 +81,7 @@ namespace BrowserInterop.Screen
         /// <returns></returns>
         public async ValueTask Unlock()
         {
-            await jsRuntime.InvokeInstanceMethod(screenRef, "orientation.unlock");
+            await jsRuntime.InvokeInstanceMethod(screenRef, "orientation.unlock").ConfigureAwait(false);
         }
     }
 

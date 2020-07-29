@@ -1,0 +1,37 @@
+﻿@page "/extension"
+@inject IJSRuntime JsRuntime
+@if (testObject != null)
+{
+    <button type="button" id="btn-extension-callbacktest" @onclick="TestMethod"></button>
+    <button type="button" id="btn-extension-callbacktestrefresh" @onclick="async () => lastValue = await testObject.LastValue()"></button>
+    <span id="extension-callback-lastvalue">@lastValue</span>
+}   
+@code{
+    TestObject testObject;
+    int lastValue;  
+
+    private async Task TestMethod()
+    {
+        await testObject.TestCallBack(i => new ValueTask<int>(i * 2));
+    }  
+    protected override async Task OnInitializedAsync()
+    {
+        testObject = await JsRuntime.GetWindowPropertyWrapper<Extension.TestObject>("testObject", "*");
+    }
+    private class  TestObject : JsObjectWrapperBase
+    {
+        public async ValueTask TestCallBack(Func<int, ValueTask<int>> callback)
+        {
+            await JsRuntime.InvokeInstanceMethod(
+                JsObjectRef,
+                "testCallback",
+                CallBackInteropWrapper.CreateWithResult(callback));
+        }
+
+        public async ValueTask<int> LastValue()
+        {
+            return await JsRuntime.GetInstanceProperty<int>(JsObjectRef, "lastValue");
+        }
+    }
+
+}
