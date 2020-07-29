@@ -26,7 +26,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public async ValueTask<bool> GetVisible()
         {
-            return await jsRuntime.GetInstanceProperty<bool>(windowRef, $"{propertyName}.visible");
+            return await jsRuntime.GetInstanceProperty<bool>(windowRef, $"{propertyName}.visible").ConfigureAwait(false);
         }
 
         /// <summary>
@@ -36,7 +36,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public async ValueTask SetVisible(bool visible)
         {
-            await jsRuntime.SetInstanceProperty(windowRef, $"{propertyName}.visible", visible);
+            await jsRuntime.SetInstanceProperty(windowRef, $"{propertyName}.visible", visible).ConfigureAwait(false);
         }
     }
 }

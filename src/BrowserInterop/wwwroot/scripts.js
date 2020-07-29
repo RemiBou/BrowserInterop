@@ -49,7 +49,7 @@ browserInterop = new (function () {
                         args.push(me.storeObjectRef(element));
                     }
                 }
-                netObjectRef.invokeMethodAsync('Invoke', ...args);
+                return netObjectRef.invokeMethodAsync('Invoke', ...args);
             };
         } else {
             return value;
@@ -99,7 +99,6 @@ browserInterop = new (function () {
         return res;
     }
     this.getInstanceProperty = function (instance, propertyPath) {
-        console.debug("getInstanceProperty",instance, propertyPath)
         if (propertyPath === '') {
             return instance;
         }

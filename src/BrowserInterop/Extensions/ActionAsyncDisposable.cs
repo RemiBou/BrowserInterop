@@ -14,7 +14,7 @@ namespace BrowserInterop.Extensions
 
         public async ValueTask DisposeAsync()
         {
-            await todoOnDispose();
+            await todoOnDispose().ConfigureAwait(false);
         }
     }
 }

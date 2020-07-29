@@ -18,6 +18,18 @@
         <a href="" class="reload">Reload</a>
         <a class="dismiss">🗙</a>
     </div>
+    <script type="text/javascript">
+        window.testObject = {
+            testCallback : function(csharpCallBack){
+               csharpCallBack(2).then(
+                   res => {
+                       window.testObject.lastValue = res;
+                   }
+               ); 
+            },
+            lastValue : 0
+        }
+    </script>
     <script src="_framework/blazor.webassembly.js"></script>
     <script src="_content/BrowserInterop/scripts.js"></script>
 </body>

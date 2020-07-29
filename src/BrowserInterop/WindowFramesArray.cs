@@ -26,7 +26,7 @@ namespace BrowserInterop
         public async ValueTask<WindowInterop> Get(int index)
         {
             return await jsRuntime.GetInstancePropertyWrapper<WindowInterop>(jsRuntimeObjectRef, $"frames[{index}]",
-                WindowInterop.SerializationSpec);
+                WindowInterop.SerializationSpec).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -35,7 +35,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public async ValueTask<int> Length()
         {
-            return await jsRuntime.GetInstanceProperty<int>(jsRuntimeObjectRef, "frames.length");
+            return await jsRuntime.GetInstanceProperty<int>(jsRuntimeObjectRef, "frames.length").ConfigureAwait(false);
         }
     }
 }

@@ -26,7 +26,7 @@ namespace BrowserInterop
         /// <value></value>
         public async ValueTask<int> Length()
         {
-            return await jsRuntime.GetInstanceProperty<int>(jsRuntimeObjectRef, "history.length");
+            return await jsRuntime.GetInstanceProperty<int>(jsRuntimeObjectRef, "history.length").ConfigureAwait(false);
         }
 
         /// <summary>
@@ -36,7 +36,7 @@ namespace BrowserInterop
         public async ValueTask<ScrollRestorationEnum> ScrollRestoration()
         {
             return Enum.Parse<ScrollRestorationEnum>(
-                await jsRuntime.GetInstanceProperty<string>(jsRuntimeObjectRef, "history.scrollRestoration"), true);
+                await jsRuntime.GetInstanceProperty<string>(jsRuntimeObjectRef, "history.scrollRestoration").ConfigureAwait(false), true);
         }
 
         /// <summary>
@@ -48,7 +48,7 @@ namespace BrowserInterop
         {
 #pragma warning disable CA1308 
             await jsRuntime.SetInstanceProperty(jsRuntimeObjectRef, "history.scrollRestoration",
-                value.ToString().ToLowerInvariant());
+                value.ToString().ToLowerInvariant()).ConfigureAwait(false);
 #pragma warning restore CA1308 
         }
 
@@ -59,7 +59,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public async ValueTask<T> State<T>()
         {
-            return await jsRuntime.GetInstanceProperty<T>(jsRuntimeObjectRef, "history.state");
+            return await jsRuntime.GetInstanceProperty<T>(jsRuntimeObjectRef, "history.state").ConfigureAwait(false);
         }
 
         /// <summary>
@@ -68,7 +68,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public async ValueTask Back()
         {
-            await jsRuntime.InvokeInstanceMethod(jsRuntimeObjectRef, "history.back");
+            await jsRuntime.InvokeInstanceMethod(jsRuntimeObjectRef, "history.back").ConfigureAwait(false);
         }
 
         /// <summary>
@@ -77,7 +77,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public async ValueTask Forward()
         {
-            await jsRuntime.InvokeInstanceMethod(jsRuntimeObjectRef, "history.forward");
+            await jsRuntime.InvokeInstanceMethod(jsRuntimeObjectRef, "history.forward").ConfigureAwait(false);
         }
 
         /// <summary>
@@ -87,7 +87,7 @@ namespace BrowserInterop
         /// <returns></returns>
         public async ValueTask Go(int delta = 0)
         {
-            await jsRuntime.InvokeInstanceMethod(jsRuntimeObjectRef, "history.go", delta);
+            await jsRuntime.InvokeInstanceMethod(jsRuntimeObjectRef, "history.go", delta).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -102,7 +102,7 @@ namespace BrowserInterop
         public async ValueTask PushState(object state, string title, Uri url = null)
         {
             await jsRuntime.InvokeInstanceMethod(jsRuntimeObjectRef, "history.pushState", state, title,
-                url?.ToString());
+                url?.ToString()).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -115,7 +115,7 @@ namespace BrowserInterop
         public async ValueTask ReplaceState(object state, string title, Uri url = null)
         {
             await jsRuntime.InvokeInstanceMethod(jsRuntimeObjectRef, "history.replaceState", state, title,
-                url?.ToString());
+                url?.ToString()).ConfigureAwait(false);
         }
     }
 

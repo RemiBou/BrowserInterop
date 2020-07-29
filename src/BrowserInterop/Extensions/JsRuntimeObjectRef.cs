@@ -16,7 +16,7 @@ namespace BrowserInterop.Extensions
 
         public async ValueTask DisposeAsync()
         {
-            await JsRuntime.InvokeVoidAsync("browserInterop.removeObjectRef", JsObjectRefId);
+            await JsRuntime.InvokeVoidAsync("browserInterop.removeObjectRef", JsObjectRefId).ConfigureAwait(false);
         }
     }
 }
