@@ -13,37 +13,37 @@ namespace BrowserInterop
         /// Returns the offset of the left edge of the visual viewport from the left edge of the layout viewport in CSS pixels.
         /// </summary>
         /// <value></value>
-        public int OffsetLeft { get; set; }
+        public double OffsetLeft { get; set; }
 
         /// <summary>
         /// Returns the offset of the top edge of the visual viewport from the top edge of the layout viewport in CSS pixels.
         /// </summary>
         /// <value></value>
-        public int OffsetTop { get; set; }
+        public double OffsetTop { get; set; }
 
         /// <summary>
         /// Returns the x coordinate relative to the initial containing block origin of the top edge of the visual viewport in CSS pixels.
         /// </summary>
         /// <value></value>
-        public int PageLeft { get; set; }
+        public double PageLeft { get; set; }
 
         /// <summary>
         /// Returns the y coordinate relative to the initial containing block origin of the top edge of the visual viewport in CSS pixels.
         /// </summary>
         /// <value></value>
-        public int PageTop { get; set; }
+        public double PageTop { get; set; }
 
         /// <summary>
         /// Returns the width of the visual viewport in CSS pixels.
         /// </summary>
         /// <value></value>
-        public int Width { get; set; }
+        public double Width { get; set; }
 
         /// <summary>
         /// Returns the width of the visual viewport in CSS pixels.
         /// </summary>
         /// <value></value>
-        public int Height { get; set; }
+        public double Height { get; set; }
 
         /// <summary>
         /// Returns the pinch-zoom scaling factor applied to the visual viewport.

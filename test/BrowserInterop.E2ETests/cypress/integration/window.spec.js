@@ -343,3 +343,4 @@ context('window.navigator', () => {
         });
     windowEventTest('unload');
 });
+

@@ -23,7 +23,7 @@ namespace BrowserInterop.Storage
         /// <returns></returns>
         public async ValueTask<StorageEstimate> Estimate()
         {
-            return await jsRuntime.InvokeAsync<StorageEstimate>("navigator.storage.estimate");
+            return await jsRuntime.InvokeAsync<StorageEstimate>("navigator.storage.estimate").ConfigureAwait(false);
         }
 
         /// <summary>
@@ -35,7 +35,7 @@ namespace BrowserInterop.Storage
         {
             return await (timeout.HasValue
                 ? jsRuntime.InvokeOrDefault<bool>("navigator.storage.persist", timeout.Value, null)
-                : jsRuntime.InvokeAsync<bool>("navigator.storage.persist", null));
+                : jsRuntime.InvokeAsync<bool>("navigator.storage.persist", null)).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -46,7 +46,7 @@ namespace BrowserInterop.Storage
         {
             return await (timeout.HasValue
                 ? jsRuntime.InvokeOrDefault<bool>("navigator.storage.persisted", timeout.Value, null)
-                : jsRuntime.InvokeAsync<bool>("navigator.storage.persisted", null));
+                : jsRuntime.InvokeAsync<bool>("navigator.storage.persisted", null)).ConfigureAwait(false);
         }
     }
 }
