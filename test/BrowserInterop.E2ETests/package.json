@@ -15,7 +15,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "cypress": "^5.0.0",
+    "cypress": "^5.1.0",
     "cypress-terminal-report": "^1.4.2",
     "start-server-and-test": "^1.11.3",
     "wait-on": "^5.2.0"
