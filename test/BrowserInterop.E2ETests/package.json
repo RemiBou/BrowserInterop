@@ -17,7 +17,7 @@
   "devDependencies": {
     "cypress": "^5.2.0",
     "cypress-terminal-report": "^1.4.2",
-    "start-server-and-test": "^1.11.4",
+    "start-server-and-test": "^1.11.5",
     "wait-on": "^5.2.0"
   }
 }
