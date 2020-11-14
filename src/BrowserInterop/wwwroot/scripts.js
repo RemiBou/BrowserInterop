@@ -188,7 +188,7 @@ browserInterop = new (function () {
             var currentMemberSpec;
             if (serializationSpec != "*") {
                 currentMemberSpec = Array.isArray(data) ? serializationSpec : serializationSpec[i];
-                if (!currentMemberSpec) {
+                if (currentMemberSpec === undefined) {
                     continue;
                 }
             } else {
