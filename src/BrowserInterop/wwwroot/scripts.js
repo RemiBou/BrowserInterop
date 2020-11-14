@@ -1,5 +1,29 @@
 
 browserInterop = new (function () {
+
+    // Returns a function, that, as long as it continues to be invoked, will not
+    // be triggered. The function will be called after it stops being called for
+    // N milliseconds. If `immediate` is passed, trigger the function on the
+    // leading edge, instead of the trailing.
+    this.debounce = function (func, wait, immediate, triggerPermanent) {
+        var timeout;
+        return function () {
+            var context = this, args = arguments;
+            var later = function () {
+                timeout = null;
+                if (!immediate) func.apply(context, args);
+            };
+            var callNow = immediate && !timeout;
+
+            if (!triggerPermanent || !timeout) {
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            }
+            if (callNow) func.apply(context, args);
+        };
+    };
+
+
     var jsObjectRefs = {};
     var jsObjectRefId = 0;
     var me = this;
@@ -36,7 +60,7 @@ browserInterop = new (function () {
 
             var netObjectRef = value.callbackRef;
 
-            return function () {
+            var callback =  function () {
                 var args = [];
                 if (!value.getJsObjectRef) {
                     for (let index = 0; index < arguments.length; index++) {
@@ -51,6 +75,14 @@ browserInterop = new (function () {
                 }
                 return netObjectRef.invokeMethodAsync('Invoke', ...args);
             };
+
+            if (value.debounce != undefined) {
+                return me.debounce(callback, value.debounce, value.immediate, value.triggerPermanent);
+            }
+            else {
+                return callback;
+            }
+
         } else {
             return value;
         }
