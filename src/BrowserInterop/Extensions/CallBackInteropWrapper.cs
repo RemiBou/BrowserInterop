@@ -35,6 +35,12 @@ namespace BrowserInterop.Extensions
         /// or if it should be postponed until no event is incomming within one debounce time period.
         /// </summary>
         public bool TriggerPermanent { get; set; }
+
+        /// <summary>
+        /// Determines whether default values of the serialized callback data shall be transmitted
+        /// </summary>
+        public bool IncludeDefaults { get; set; }
+
         private CallBackInteropWrapper()
         {
         }

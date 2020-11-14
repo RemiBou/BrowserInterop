@@ -65,7 +65,7 @@ browserInterop = new (function () {
                 if (!value.getJsObjectRef) {
                     for (let index = 0; index < arguments.length; index++) {
                         const element = arguments[index];
-                        args.push(me.getSerializableObject(element, [], value.serializationSpec));
+                        args.push(me.getSerializableObject(element, [], value.serializationSpec,value.includeDefaults));
                     }
                 } else {
                     for (let index = 0; index < arguments.length; index++) {
@@ -191,7 +191,7 @@ browserInterop = new (function () {
     this.callInstanceMethodGetRef = function (instance, methodPath, ...args) {
         return this.storeObjectRef(this.callInstanceMethod(instance, methodPath, ...args));
     };
-    this.getSerializableObject = function (data, alreadySerialized, serializationSpec) {
+    this.getSerializableObject = function (data, alreadySerialized, serializationSpec, includeDefaults) {
         if (serializationSpec === false) {
             return undefined;
         }
@@ -220,7 +220,7 @@ browserInterop = new (function () {
             var currentMemberSpec;
             if (serializationSpec != "*") {
                 currentMemberSpec = Array.isArray(data) ? serializationSpec : serializationSpec[i];
-                if (currentMemberSpec == null || currentMemberSpec === undefined) {
+                if ((!includeDefaults && !currentMemberSpec) || (currentMemberSpec === undefined)) {
                     continue;
                 }
             } else {
@@ -236,7 +236,7 @@ browserInterop = new (function () {
                     for (var j = 0; j < currentMember.length; j++) {
                         const arrayItem = currentMember[j];
                         if (typeof arrayItem === 'object') {
-                            res[i].push(me.getSerializableObject(arrayItem, alreadySerialized, currentMemberSpec));
+                            res[i].push(me.getSerializableObject(arrayItem, alreadySerialized, currentMemberSpec, includeDefaults));
                         } else {
                             res[i].push(arrayItem);
                         }
@@ -246,7 +246,7 @@ browserInterop = new (function () {
                     if (currentMember.length === 0) {
                         res[i] = [];
                     } else {
-                        res[i] = me.getSerializableObject(currentMember, alreadySerialized, currentMemberSpec);
+                        res[i] = me.getSerializableObject(currentMember, alreadySerialized, currentMemberSpec, includeDefaults);
                     }
                 }
 
