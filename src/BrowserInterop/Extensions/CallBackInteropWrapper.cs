@@ -18,7 +18,23 @@ namespace BrowserInterop.Extensions
 
         public bool GetJsObjectRef { get; set; }
 
+        /// <summary>
+        /// Adds javascript side debounce to the callback (in milliseconds)
+        /// see https://davidwalsh.name/javascript-debounce-function
+        /// </summary>
+        public double? Debounce { get; set; }
 
+        /// <summary>
+        /// Determines whether the callback should be invoked at the first occurrance 
+        /// or if the invocation shall be postponed until the debounce timeout is expired.
+        /// </summary>
+        public bool Immediate { get; set; }
+
+        /// <summary>
+        /// Determines whether the callback shall be invoked always when the debounce time is expired
+        /// or if it should be postponed until no event is incomming within one debounce time period.
+        /// </summary>
+        public bool TriggerPermanent { get; set; }
         private CallBackInteropWrapper()
         {
         }
