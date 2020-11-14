@@ -220,7 +220,7 @@ browserInterop = new (function () {
             var currentMemberSpec;
             if (serializationSpec != "*") {
                 currentMemberSpec = Array.isArray(data) ? serializationSpec : serializationSpec[i];
-                if (currentMemberSpec === undefined) {
+                if (currentMemberSpec == null || currentMemberSpec === undefined) {
                     continue;
                 }
             } else {
