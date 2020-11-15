@@ -60,20 +60,41 @@ browserInterop = new (function () {
 
             var netObjectRef = value.callbackRef;
 
-            var callback =  function () {
-                var args = [];
-                if (!value.getJsObjectRef) {
-                    for (let index = 0; index < arguments.length; index++) {
-                        const element = arguments[index];
-                        args.push(me.getSerializableObject(element, [], value.serializationSpec,value.includeDefaults));
+            var callback =  async function (...args) {
+              
+                if (value.getArgumentsSerializationAndRef) {
+                    var passedArgs = args.map(arg => {
+                        return {
+                            Reference: me.storeObjectRef(arg),
+                            Data: me.getSerializableObject(arg, [], value.serializationSpec, value.includeDefaults)
+                        }
+                    });
+                    try {
+                        var result = await netObjectRef.invokeMethodAsync('Invoke', ...passedArgs);
+                        return result;
                     }
-                } else {
-                    for (let index = 0; index < arguments.length; index++) {
-                        const element = arguments[index];
-                        args.push(me.storeObjectRef(element));
+                    finally {
+                        passedArgs.forEach(arg => me.removeObjectRef(arg.Reference));
                     }
                 }
-                return netObjectRef.invokeMethodAsync('Invoke', ...args);
+                else {
+                    var passedArgs = [];
+                    if (!value.getJsObjectRef) {
+                        for (let index = 0; index < arguments.length; index++) {
+                            const element = arguments[index];
+                            passedArgs.push(me.getSerializableObject(element, [], value.serializationSpec, value.includeDefaults));
+                        }
+                    } else {
+                        for (let index = 0; index < arguments.length; index++) {
+                            const element = arguments[index];
+                            passedArgs.push(me.storeObjectRef(element));
+                        }
+                    }
+
+                    var result = await netObjectRef.invokeMethodAsync('Invoke', ...passedArgs);
+                    return result;
+
+                }
             };
 
             if (value.debounce != undefined) {
