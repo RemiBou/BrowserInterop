@@ -191,6 +191,9 @@ browserInterop = new (function () {
         var res = me.getSerializableObject(data, [], serializationSpec);
         return res;
     };
+    this.callInstanceAction = function (instance, methodPath, ...args) {
+        this.callInstanceMethod(instance, methodPath, ...args);
+    }
     this.callInstanceMethod = function (instance, methodPath, ...args) {
         if (methodPath.indexOf('.') >= 0) {
             //if it's a method call on a child object we get this child object so the method call will happen in the context of the child object

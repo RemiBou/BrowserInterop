@@ -151,7 +151,7 @@ namespace BrowserInterop.Extensions
         public static async ValueTask InvokeInstanceMethod(this IJSRuntime jsRuntime, JsRuntimeObjectRef windowObject,
             string methodName, params object[] arguments)
         {
-            await jsRuntime.InvokeVoidAsync("browserInterop.callInstanceMethod",
+            await jsRuntime.InvokeVoidAsync("browserInterop.callInstanceAction",
                 new object[] {windowObject, methodName}.Concat(arguments).ToArray()).ConfigureAwait(false);
         }
 
