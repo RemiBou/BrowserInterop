@@ -215,6 +215,13 @@ browserInterop = new (function () {
     this.callInstanceMethodGetRef = function (instance, methodPath, ...args) {
         return this.storeObjectRef(this.callInstanceMethod(instance, methodPath, ...args));
     };
+    this.callInstanceMethodGetRefs = function (instance, methodPath, ...args) {
+
+        var objects = this.callInstanceMethod(instance, methodPath, ...args);
+        var references = objects.map(arg => me.storeObjectRef(arg));
+        return references;
+    };
+
     this.getSerializableObject = function (data, alreadySerialized, serializationSpec, includeDefaults) {
         if (serializationSpec === false) {
             return undefined;
