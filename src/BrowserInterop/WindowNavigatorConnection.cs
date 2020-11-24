@@ -1,6 +1,7 @@
 using BrowserInterop.Extensions;
 using Microsoft.JSInterop;
 using System;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace BrowserInterop
@@ -26,6 +27,7 @@ namespace BrowserInterop
         /// Returns the maximum downlink speed, in megabits per second (Mbps), for the underlying connection technology.
         /// </summary>
         /// <returns></returns>
+        [JsonConverter(typeof(HandleSpecialDoublesAsStrings))]
         public double DownlinkMax { get; set; }
 
 

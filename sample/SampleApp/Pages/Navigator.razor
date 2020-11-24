@@ -8,6 +8,7 @@
 @using System.Globalization
 <h1>Navigator API Interop Demo</h1>
 <h2>Navigator : </h2>
+<button type="button" id="btn-refresh" @onclick="Refresh">Refresh</button>
 @if (navigator != null)
 {
     <ul>
@@ -172,6 +173,11 @@ Method calls
                 StateHasChanged();
             });
         }
+    }
+
+    public async Task Refresh()
+    {
+        navigator = await window.Navigator();
     }
     public async Task Vibrate()
     {

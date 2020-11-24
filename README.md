@@ -49,3 +49,33 @@ Then in your template enter the API with the Window() extension method like this
 
 [==> More documentation and information on the wiki](https://github.com/RemiBou/BrowserInterop/wiki)
 
+## Development
+
+If you wish to improve this library here are a couple of things that might help you
+### Environment
+
+For working on this project you need the following tools installed on your machine :
+
+- .NET SDK 3.1.202
+- npm
+
+### Projects
+
+This repo is organised in 3 projects :
+- src/BrowserInterop : the C# project for the netsstandard2.0 library
+- sample/SampleApp : a sample app showing how to use BrowserInterop
+- tests/BrowserInterop.E2ETests : the test suite, done with cypressio. All tests are located in cypress/integration folder.
+
+### Run the test suite
+
+- Run the app in sample/SampleApp :
+```
+dotnet watch run
+```
+- Open cypress Console in tests/BrowserInterop.E2ETests :
+```
+npm install
+npm run-script start
+```
+
+

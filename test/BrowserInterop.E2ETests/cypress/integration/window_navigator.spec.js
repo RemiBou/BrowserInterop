@@ -3,12 +3,15 @@
 context('window.navigator', () => {
     before(() => {
         cy.visit('/navigator')
+        cy.window().then(w => {
+        });
     })
 
     // https://on.cypress.io/interacting-with-elements
 
     it('window.navigator properties', () => {
         cy.window().then(w => {
+
             cy.get("#navigator-app-code-name").should('have.text', w.navigator.appCodeName);
             cy.get("#navigator-app-name").should('have.text', w.navigator.appName);
             cy.get("#navigator-app-version").should('have.text', w.navigator.appVersion);
@@ -29,34 +32,27 @@ context('window.navigator', () => {
     });
     it('window.navigator.connection properties', () => {
         cy.window().then(w => {
-            if ('connection' in w.navigator) {
-                if ('downlinkMax' in w.navigator.connection) {// this property is not available in every browser
-                    cy.get("#navigator-connection-downlinkmax").should('have.text', w.navigator.connection.downlinkMax.toString());
-                }
-                cy.get("#navigator-connection-downlink").should('have.text', w.navigator.connection.downlink.toString());
-                cy.get("#navigator-connection-effectiveType").should('have.text', w.navigator.connection.effectiveType.toString());
-                cy.get("#navigator-connection-rtt").should('have.text', w.navigator.connection.rtt.toString());
-                cy.get("#navigator-connection-saveData").should('have.text', w.navigator.connection.saveData.toString());
-                cy.get("#navigator-connection-type").should('have.text', w.navigator.connection.type ? w.navigator.connection.type : '');
-                cy.get("#navigator-connection-event-change-handled").should('have.text', '0').then(() => {
-                    w.navigator.connection.dispatchEvent(new Event("change"));
-                    cy.get("#navigator-connection-event-change-handled").should('have.text', '1').then(() => {
-                        cy.get("#navigator-connection-event-change-stop").click().then(() => {
-                            w.navigator.connection.dispatchEvent(new Event("change"));
-                            cy.get("#navigator-connection-event-change-handled").should('have.text', '1');
-                        });
+            w.navigator.connection.downlinkMax = w.Infinity;
+            cy.get("#btn-refresh").click()
+            cy.get("#navigator-connection-downlinkmax").should('have.text', w.navigator.connection.downlinkMax.toString());
+
+            cy.get("#navigator-connection-downlink").should('have.text', w.navigator.connection.downlink.toString());
+            cy.get("#navigator-connection-effectiveType").should('have.text', w.navigator.connection.effectiveType.toString());
+            cy.get("#navigator-connection-rtt").should('have.text', w.navigator.connection.rtt.toString());
+            cy.get("#navigator-connection-saveData").should('have.text', w.navigator.connection.saveData.toString());
+            cy.get("#navigator-connection-type").should('have.text', w.navigator.connection.type ? w.navigator.connection.type : '');
+            cy.get("#navigator-connection-event-change-handled").should('have.text', '0').then(() => {
+                w.navigator.connection.dispatchEvent(new Event("change"));
+                cy.get("#navigator-connection-event-change-handled").should('have.text', '1').then(() => {
+                    cy.get("#navigator-connection-event-change-stop").click().then(() => {
+                        w.navigator.connection.dispatchEvent(new Event("change"));
+                        cy.get("#navigator-connection-event-change-handled").should('have.text', '1');
                     });
                 });
-            } else {
-                cy.get("#navigator-connection-downlink").should('not.exist');
-                cy.get("#navigator-connection-effectiveType").should('not.exist');
-                cy.get("#navigator-connection-rtt").should('not.exist');
-                cy.get("#navigator-connection-saveData").should('not.exist');
-                cy.get("#navigator-connection-type").should('not.exist');
-                cy.get("#navigator-connection-event-change-handled").should('not.exist');
-            }
+            });
         });
     });
+
     it('navigator plugins', () => {
         cy.window().then(w => {
             for (let index = 0; index < w.navigator.plugins.length; index++) {
@@ -108,7 +104,7 @@ context('window.navigator', () => {
                 }
             };
             cy.stub(w.navigator.geolocation, "getCurrentPosition", (cb, err, opt) => {
-                expect(opt).to.deep.equal({ maximumAge: 3600000, timeout: 60000, enableHighAccuracy: true });
+                expect(opt).to.deep.equal({maximumAge: 3600000, timeout: 60000, enableHighAccuracy: true});
                 return cb(coordinates);
             });
             var watchCallBack;
@@ -162,7 +158,9 @@ context('window.navigator', () => {
     it('navigator other methods', function () {
         cy.window().then(w => {
             if (!w.navigator.canShare) {
-                w.navigator.canShare = function (data) { return true; };
+                w.navigator.canShare = function (data) {
+                    return true;
+                };
             }
             cy.spyFix(w.navigator, 'canShare', w);
             cy.get("#navigator-canShare-button").click().then(() => {
@@ -172,7 +170,9 @@ context('window.navigator', () => {
 
 
             if (!w.navigator.share) {
-                w.navigator.share = function (data) { return true; }
+                w.navigator.share = function (data) {
+                    return true;
+                }
             }
             cy.spyFix(w.navigator, 'share', w);
             cy.get("#navigator-share").click().then(() => {
