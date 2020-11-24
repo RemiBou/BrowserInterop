@@ -21,9 +21,9 @@ namespace BrowserInterop.Geolocation
         public async ValueTask<GeolocationResult> GetCurrentPosition(PositionOptions options = null)
         {
             return await jsRuntime.InvokeAsync<GeolocationResult>(
-                "browserInterop.navigator.geolocation.getCurrentPosition", options);
+                "browserInterop.navigator.geolocation.getCurrentPosition", options).ConfigureAwait(false);
         }
-
+ 
         /// <summary>
         ///  register a handler function that will be called automatically each time the position of the device changes. 
         /// </summary>
@@ -38,7 +38,7 @@ namespace BrowserInterop.Geolocation
             var watchId = await jsRuntime.InvokeAsync<int>(
                 "browserInterop.navigator.geolocation.watchPosition",
                 options,
-                DotNetObjectReference.Create(wrapper));
+                DotNetObjectReference.Create(wrapper)).ConfigureAwait(false);
 
             wrapper.SetWatchId(watchId);
 
@@ -61,7 +61,7 @@ namespace BrowserInterop.Geolocation
             // ReSharper disable once UnusedMember.Local
             public async ValueTask Invoke(GeolocationResult result)
             {
-                await callback.Invoke(result);
+                await callback.Invoke(result).ConfigureAwait(false);
             }
 
             internal void SetWatchId(int watchId)
@@ -71,7 +71,7 @@ namespace BrowserInterop.Geolocation
 
             public async ValueTask DisposeAsync()
             {
-                await jsRuntime.InvokeVoidAsync("navigator.geolocation.clearWatch", watchId);
+                await jsRuntime.InvokeVoidAsync("navigator.geolocation.clearWatch", watchId).ConfigureAwait(false);
             }
         }
     }

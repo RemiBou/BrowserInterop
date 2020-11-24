@@ -18,6 +18,7 @@ namespace BrowserInterop.Extensions
         public async ValueTask DisposeAsync()
         {
             await JsObjectRef.DisposeAsync().ConfigureAwait(false);
+            GC.SuppressFinalize(this);
         }
     }
 }
