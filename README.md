@@ -26,9 +26,10 @@ First install the package
 dotnet add package BrowserInterop
 ```
 
-Reference the needed JS in your index.html (or in your js bundling tool)
+Reference the needed JS in your index.html after the blazor.webassembly.js (or in your js bundling tool)
 
 ```html
+    <script src="_framework/blazor.webassembly.js"></script>
     <script src="_content/BrowserInterop/scripts.js"></script>
 ```
 
