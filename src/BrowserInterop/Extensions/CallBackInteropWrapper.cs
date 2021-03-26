@@ -68,6 +68,8 @@ namespace BrowserInterop.Extensions
             {
                 SerializationSpec = serializationSpec,
                 GetJsObjectRef = getJsObjectRef,
+                HasResult = typeof(TResult)!=typeof(object),
+                HasParameter= typeof(T)!=typeof(object),
                 GetArgumentsSerializationAndRef = typeof(ICallbackReferenceData).IsAssignableFrom(typeof(T))
             };
             return res;
@@ -88,15 +90,11 @@ namespace BrowserInterop.Extensions
         public static CallBackInteropWrapper Create<T>(Func<T, ValueTask> callback, object serializationSpec = null,
             bool getJsObjectRef = false)
         {
-            var dotnetCallback = DotNetObjectReference.Create(new JsInteropActionWrapper<T>(callback));
-            var res = new CallBackInteropWrapper(dotnetCallback)
-            {
-                SerializationSpec = serializationSpec,
-                GetJsObjectRef = getJsObjectRef,
-                GetArgumentsSerializationAndRef = typeof(ICallbackReferenceData).IsAssignableFrom(typeof(T))
-                
-            };
-            return res;
+            return CreateWithResult<T, object>(async p => {
+                await callback(p).ConfigureAwait(false);
+                return null;
+            },serializationSpec,getJsObjectRef);
+           
         }
 
         /// <summary>
@@ -114,13 +112,10 @@ namespace BrowserInterop.Extensions
         public static CallBackInteropWrapper Create(Func<ValueTask> callback, object serializationSpec = null,
             bool getJsObjectRef = false)
         {
-            var dotnetCallback = DotNetObjectReference.Create(new JsInteropActionWrapper(callback));
-            var res = new CallBackInteropWrapper(dotnetCallback)
-            {
-                SerializationSpec = serializationSpec,
-                GetJsObjectRef = getJsObjectRef
-            };
-            return res;
+            return CreateWithResult<object, object>(async _ => {
+                await callback().ConfigureAwait(false);
+                return null;
+            }, serializationSpec, getJsObjectRef);
         }
 
         public void Dispose()
@@ -131,6 +126,8 @@ namespace BrowserInterop.Extensions
 
 
         public object CallbackRef { get;  } // we must keep it as a object, otherwise its not serialized.
+        public bool HasResult { get; private set; }
+        public bool HasParameter { get; private set; }
     }
     internal interface ICallbackReferenceData
     {
