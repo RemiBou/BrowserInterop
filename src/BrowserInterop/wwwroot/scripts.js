@@ -63,15 +63,24 @@ browserInterop = new (function () {
             var callback =  async function (...args) {
               
                 if (value.getArgumentsSerializationAndRef) {
-                    var passedArgs = args.map(arg => {
-                        return {
-                            Reference: me.storeObjectRef(arg),
-                            Data: me.getSerializableObject(arg, [], value.serializationSpec, value.includeDefaults)
-                        }
-                    });
+                    var passedArgs = [];
+
+                    if (value.hasParameter) {
+                         passedArgs = args.map(arg => {
+                            return {
+                                Reference: me.storeObjectRef(arg),
+                                Data: me.getSerializableObject(arg, [], value.serializationSpec, value.includeDefaults)
+                            }
+                        });
+                    }
+                   
+                    var argsObject = passedArgs.length == 0 ? null : passedArgs.length == 1 ? passedArgs[0] : passedArgs;
                     try {
-                        var result = await netObjectRef.invokeMethodAsync('Invoke', ...passedArgs);
+                        var result = await netObjectRef.invokeMethodAsync('Invoke', argsObject);
                         return result;
+                    }
+                    catch (e) {
+                        console.error(e);
                     }
                     finally {
                         passedArgs.forEach(arg => me.removeObjectRef(arg.Reference));
@@ -79,19 +88,23 @@ browserInterop = new (function () {
                 }
                 else {
                     var passedArgs = [];
-                    if (!value.getJsObjectRef) {
-                        for (let index = 0; index < arguments.length; index++) {
-                            const element = arguments[index];
-                            passedArgs.push(me.getSerializableObject(element, [], value.serializationSpec, value.includeDefaults));
-                        }
-                    } else {
-                        for (let index = 0; index < arguments.length; index++) {
-                            const element = arguments[index];
-                            passedArgs.push(me.storeObjectRef(element));
+
+                    if (value.hasParameter) {
+                        if (!value.getJsObjectRef) {
+                            for (let index = 0; index < arguments.length; index++) {
+                                const element = arguments[index];
+                                passedArgs.push(me.getSerializableObject(element, [], value.serializationSpec, value.includeDefaults));
+                            }
+                        } else {
+                            for (let index = 0; index < arguments.length; index++) {
+                                const element = arguments[index];
+                                passedArgs.push(me.storeObjectRef(element));
+                            }
                         }
                     }
+                    var argsObject = passedArgs.length == 0 ? null : passedArgs.length == 1 ? passedArgs[0] : passedArgs;
 
-                    var result = await netObjectRef.invokeMethodAsync('Invoke', ...passedArgs);
+                    var result = await netObjectRef.invokeMethodAsync('Invoke', argsObject);
                     return result;
 
                 }
